@@ -1,6 +1,6 @@
 <table class="table table-bordered table-striped">
   <% @tickets.each do |ticket| %>
-  <tr>
+  <tr class="clickable" data-href="<%= ticket_path(ticket) %>">
     <td><%= ticket.title %></td>
   </tr>
   <% end %>
@@ -10,3 +10,8 @@
   </tr>
   <% end %>
 </table>
+
+<%= content_for :actions do %>
+  <%= link_to 'add a new ticket', new_ticket_path, :class => 'btn btn-primary' %>
+
+<% end %>
