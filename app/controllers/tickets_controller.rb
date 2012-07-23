@@ -23,10 +23,19 @@ class TicketsController < ApplicationController
   end
 
   def edit
-
+    @ticket = Ticket.find(params[:id])
   end
 
   def update
+    @ticket = Ticket.find(params[:id])
+
+    if @ticket.update_attributes(params[:ticket])
+      flash[:info] = "Ticket was updated"
+      redirect_to ticket_path(@ticket)
+    else
+      flash[:alert] = "Ticket could not be updated"
+      render :template => 'edit'
+    end
 
   end
 
