@@ -1,25 +1,42 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
-development:
-  adapter: sqlite3
-  database: db/development.sqlite3
-  pool: 5
-  timeout: 5000
+common: &common
+  adapter: postgresql
+  username: conductor
+  password: conductor
+  template: template0
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
-test:
-  adapter: sqlite3
-  database: db/test.sqlite3
-  pool: 5
-  timeout: 5000
+development:
+  <<: *common
+  database: conductor_dev
+
+test: &test
+  <<: *common
+  database: conductor_test
+
+staging:
+  <<: *common
+  database: conductor
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
+  <<: *common
+  database: conductor
+
+
+
+#create a new DB
+#$ sudo -u postgres createdb conductor
+
+#create a new user
+#$ sudo -u postgres createuser conductor
+
+#set the password
+#$ sudo -u postgres psql
+#postgres-# \password conductor
+
+#set /etc/postgresql/8.4/main/pg_hba.conf access from "ident" to "md5" and restart postgres
+
+#test the connection
+#psql -Uconductor conductor
+
+#install the new DB
+#export RAILS_ENV=foo ; rake db:create
+
