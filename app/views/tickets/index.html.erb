@@ -1,2 +1,12 @@
-sadads
-sd
+<table class="table table-bordered table-striped">
+  <% @tickets.each do |ticket| %>
+  <tr>
+    <td><%= ticket.title %></td>
+  </tr>
+  <% end %>
+  <% if @tickets.count == 0 %>
+  <tr>
+    <td>There are no tickets</td>
+  </tr>
+  <% end %>
+</table>

@@ -14,10 +14,10 @@
 ActiveRecord::Schema.define(:version => 20120723164714) do
 
   create_table "tickets", :force => true do |t|
-    t.string   "title",       :null => false
-    t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.string   "title",      :null => false
+    t.text     "body"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end
