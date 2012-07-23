@@ -12,7 +12,7 @@ class TicketsController < ApplicationController
   end
 
   def create
-    @ticket = Ticket.build(params[:ticket])
+    @ticket = Ticket.new(params[:ticket])
     if @ticket.save
       flash[:info] = "Ticket was added"
       redirect_to ticket_path(@ticket)

@@ -1,0 +1,21 @@
+<ul class="nav nav-pills nav-stacked">
+  <% if action_name != 'index' %>
+    <li>
+      <%= link_to 'back to tickets', tickets_path %>
+    </li>
+  <% end %>
+  <% if action_name == 'show' %>
+    <li>
+      <%= link_to 'edit this ticket', edit_ticket_path(@ticket) %>
+    </li>
+    <li>
+      <%= link_to 'remove this ticket', ticket_path(@ticket), :method => :delete %>
+    </li>
+  <% end %>
+  <% if action_name != 'new' %>
+    <li>
+      <%= link_to 'add a new ticket', new_ticket_path %>
+    </li>
+  <% end %>
+</ul>
+
