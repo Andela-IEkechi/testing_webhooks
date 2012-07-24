@@ -1,12 +1,12 @@
 <table class="table table-bordered table-striped">
-  <% @tickets.each do |ticket| %>
-  <tr class="clickable" data-href="<%= ticket_path(ticket) %>">
-    <td><%= ticket.title %></td>
+  <% @projects.each do |projects| %>
+  <tr class="clickable" data-href="<%= project_path(projects) %>">
+    <td><%= projects.title %></td>
   </tr>
   <% end %>
-  <% if @tickets.count == 0 %>
+  <% if @projects.count == 0 %>
   <tr>
-    <td>There are no tickets</td>
+    <td>There are no projects</td>
   </tr>
   <% end %>
 </table>

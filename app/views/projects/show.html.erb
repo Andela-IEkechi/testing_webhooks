@@ -1,7 +1,12 @@
 <div class="well">
-  <h3><%= @ticket.title %></h3>
-  <div>
-    <%= @ticket.body %>
-  </div>
+  <h3><%= @project.title %></h3>
+  <ul>
+    <% @project.features.each do |feature| %>
+      <li><%= feature.title %></li>
+    <% end %>
+    <% if @project.features.count == 0   %>
+      <li>There are no features</li>
+    <% end %>
+  </ul>
 </div>
 

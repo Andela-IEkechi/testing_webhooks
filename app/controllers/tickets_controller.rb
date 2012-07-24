@@ -18,7 +18,7 @@ class TicketsController < ApplicationController
       redirect_to ticket_path(@ticket)
     else
       flash[:alert] = "Ticket could not be created"
-      render :template => 'new'
+      render :action => 'new'
     end
   end
 
@@ -34,7 +34,7 @@ class TicketsController < ApplicationController
       redirect_to ticket_path(@ticket)
     else
       flash[:alert] = "Ticket could not be updated"
-      render :template => 'edit'
+      render :action => 'edit'
     end
 
   end
