@@ -12,6 +12,9 @@ Conductor::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+  resources :projects do
+    resources :features
+  end
   resources :tickets
 
   # Sample resource route with options:
