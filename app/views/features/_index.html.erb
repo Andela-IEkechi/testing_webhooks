@@ -1,0 +1,12 @@
+<table class="table table-bordered table-striped">
+  <% features.each do |feature| %>
+  <tr class="clickable" data-href="<%= project_feature_path(feature.project, feature) %>">
+    <td><%= feature.title %></td>
+  </tr>
+  <% end %>
+  <% if features.count == 0 %>
+  <tr>
+    <td>There are no features</td>
+  </tr>
+  <% end %>
+</table>

@@ -1,10 +1,6 @@
 class FeaturesController < ApplicationController
   before_filter :load_project
 
-  def index
-    @features = @project.features.all
-  end
-
   def show
     @feature = @project.features.find(params[:id])
   end
