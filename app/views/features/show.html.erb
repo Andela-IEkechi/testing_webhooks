@@ -3,5 +3,8 @@
   <div>
     <%= @feature.description %>
   </div>
+
+  <h3>Tickets</h3>
+  <%= render :partial => "/tickets/index", :locals => {:tickets => @feature.tickets } %>
 </div>
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120724122647) do
+ActiveRecord::Schema.define(:version => 20120802105207) do
 
   create_table "features", :force => true do |t|
     t.string   "title",       :null => false
@@ -29,11 +29,12 @@ ActiveRecord::Schema.define(:version => 20120724122647) do
   end
 
   create_table "tickets", :force => true do |t|
-    t.string   "title",      :null => false
+    t.string   "title",           :null => false
     t.text     "body"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "feature_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "ticketable_id",   :null => false
+    t.string   "ticketable_type", :null => false
   end
 
 end

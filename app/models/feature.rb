@@ -1,6 +1,6 @@
 class Feature < ActiveRecord::Base
-	belongs_to :project
-  has_many :tickets
+	belongs_to :project #not optional
+  has_many :tickets, :as => :ticketable
 
   attr_accessible :title, :description, :due_on
 

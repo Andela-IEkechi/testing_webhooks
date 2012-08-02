@@ -1,8 +1,8 @@
 <ul class="nav nav-pills nav-stacked">
   <% if action_name != 'index' %>
     <li>
-      <% if @ticket.feature%>
-        <%= link_to 'back to feature', project_feature_path(@ticket.feature.project, @ticket.feature) %>
+      <% if @ticket.ticketable %>
+        <%= link_to "back to #{@ticket.ticketable_type.downcase}", parent_path(@ticket) %>
       <% else %>
         <%= link_to 'back to tickets', tickets_path %>
       <% end %>

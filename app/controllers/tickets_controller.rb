@@ -1,8 +1,8 @@
 class TicketsController < ApplicationController
-  before_filter :load_project, :load_feature, :load_ticket
+  before_filter :load_ticketable, :load_ticket
 
 	def index
-      @tickets = @feature.tickets if @feature
+      @tickets = @ticketable.tickets if @ticketable
       @tickets ||= Ticket.all
 	end
 
@@ -41,27 +41,28 @@ class TicketsController < ApplicationController
   end
 
   private
-
-  def load_project
-    @project = Project.find(params[:project_id]) if params[:project_id]
-    @project ||= nil
-  end
-
-  def load_feature
-    @feature = @project.features.find(params[:feature_id]) if @project && params[:feature_id]
-    @feature ||= Feature.find(params[:feature_id]) if params[:feature_id]
-    @feature ||= nil
+  def load_ticketable
+    if params[:ticketable_type] && params[:ticketable_id]
+      #ticketable_type == 'Project / Feature ' etc
+      ticketable_type = params[:ticketable_type].constantize
+      @ticketable = ticketable_type.find(params[:ticketable_id])
+    elsif params[:feature_id]
+      @ticketable = Feature.find(params[:feature_id])
+    elsif params[:project_id]
+      @ticketable = Project.find(params[:project_id])
+    else
+      @ticketable = nil
+    end
   end
 
   def load_ticket
-    if params[:id]
-      @ticket = @feature.tickets.find(params[:id]) if @feature
-      @ticket ||= Ticket.find(params[:id])
-    elsif params[:ticket]
-      @ticket = @feature.tickets.build(params[:ticket]) if @feature
+    if params[:id] #show/edit
+      @ticket = Ticket.find(params[:id])
+    elsif params[:ticket] #create/update
+      @ticket = @ticketable.tickets.build(params[:ticket]) if @ticketable
       @ticket ||= Ticket.new(params[:ticket])
-    else
-      @ticket = @feature.tickets.build() if @feature
+    else #new
+      @ticket = @ticketable.tickets.build() if @ticketable
       @ticket ||= Ticket.new()
     end
   end

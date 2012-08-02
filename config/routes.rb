@@ -16,6 +16,7 @@ Conductor::Application.routes.draw do
     resources :features do
       resources :tickets
     end
+    resources :tickets
   end
   resources :tickets
 
