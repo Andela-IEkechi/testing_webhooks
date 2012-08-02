@@ -14,6 +14,9 @@ class Project < ActiveRecord::Base
     title
   end
 
+  def project
+    self
+  end
 
   private
   def default_statuses

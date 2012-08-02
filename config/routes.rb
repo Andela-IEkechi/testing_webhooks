@@ -18,7 +18,9 @@ Conductor::Application.routes.draw do
     end
     resources :tickets
   end
-  resources :tickets
+  resources :tickets do
+    resources :comments
+  end
 
   # Sample resource route with options:
   #   resources :products do

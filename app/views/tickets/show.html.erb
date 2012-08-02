@@ -4,5 +4,10 @@
   <div>
     <%= @ticket.body %>
   </div>
+
 </div>
+
+<%= render :partial => '/comments/comment', :collection => @ticket.comments %>
+
+<%= render :partial => '/comments/new', :locals => {:comment => @ticket.comments.build()} %>
 

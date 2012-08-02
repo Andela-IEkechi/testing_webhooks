@@ -1,0 +1,9 @@
+<%= simple_form_for([comment.ticket, comment], :html => {:class=>'form-horizontal'}) do |f| %>
+  <%= f.input :body, :input_html => {:class => 'span12', :rows => 10}%>
+  <%= f.input :status do %>
+    <%= f.select :status_id, comment.ticket.ticketable.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
+  <% end %>
+  <div class="form-actions">
+    <%= f.submit :class=>'pull-right' %>
+  </div>
+<% end %>

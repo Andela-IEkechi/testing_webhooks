@@ -25,4 +25,8 @@ describe TicketStatus do
     nameless_status.name = "something"
     nameless_status.should be_valid
   end
+
+  it "responds with it's name for to_s" do
+    @closed_status.to_s.should eq(@closed_status.name)
+  end
 end

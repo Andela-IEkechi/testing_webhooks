@@ -6,4 +6,8 @@ class TicketStatus < ActiveRecord::Base
 
   validates :name, :presence => true, :uniqueness => {:scope => :project_id}
   validates :project_id, :presence => true
+
+  def to_s
+    name
+  end
 end
