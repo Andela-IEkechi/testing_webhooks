@@ -9,7 +9,7 @@
       <%= link_to 'edit this project', edit_project_path(@project) %>
     </li>
     <li>
-      <%= link_to 'remove this project', project_path(@project), :method => :delete %>
+      <%= link_to 'remove this project', project_path(@project), :method => :delete, :confirm => "Are you sure you want to delete this project?" %>
     </li>
     <li>
       <%= link_to 'add a new feature', new_project_feature_path(@project) %>

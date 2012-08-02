@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe Ticket do
   before(:each) do
-    @ticket = Ticket.new()
-    @ticket.title = "A testing ticket"
+    @project = Project.create(:title => "example")
+    @status = @project.ticket_statuses.create(:name => 'open')
+    @ticket = @project.tickets.create(:title => "A testing ticket", :status_id => @status)
+
   end
 
   it "has an optional body" do
@@ -16,5 +18,10 @@ describe Ticket do
 
   it "reports it's title on to_s" do
     @ticket.to_s.should eq(@ticket.title)
+  end
+
+  it "must have a status" do
+    @ticket.status = nil
+    @ticket.should_not be_valid
   end
 end
