@@ -38,3 +38,16 @@ gem 'bootstrap-sass'
 
 # To use debugger
 # gem 'debugger'
+
+group :development do
+  gem 'rspec-rails'
+  gem 'guard'
+  gem 'guard-rspec'
+end
+
+group :test do
+  gem 'rspec'
+  gem 'rb-fsevent'
+  gem 'spork-rails'
+  gem 'guard-spork'
+end
