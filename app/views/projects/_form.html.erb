@@ -1,5 +1,14 @@
-<%= simple_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
+<%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'span12'} %>
+  <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
+    <%= ts_form.input :name %>
+    <%= ts_form.link_to_remove "Remove this status", :class => 'btn btn-mini' %>
+  <% end %>
+  <%= f.input :ticket_statuses, :label => false do %>
+    <%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-mini btn-success' %>
+  <% end %>
+
+
   <div class="form-actions">
     <%= f.submit :class=>'pull-right' %>
   </div>
