@@ -49,6 +49,7 @@ class TicketsController < ApplicationController
 
   def load_feature
     @feature = @project.features.find(params[:feature_id]) if @project && params[:feature_id]
+    @feature ||= Feature.find(params[:feature_id]) if params[:feature_id]
     @feature ||= nil
   end
 
@@ -58,7 +59,7 @@ class TicketsController < ApplicationController
       @ticket ||= Ticket.find(params[:id])
     elsif params[:ticket]
       @ticket = @feature.tickets.build(params[:ticket]) if @feature
-      @ticket ||= Ticket.new(params[:ticket]) if params[:tickets]
+      @ticket ||= Ticket.new(params[:ticket])
     else
       @ticket = @feature.tickets.build() if @feature
       @ticket ||= Ticket.new()

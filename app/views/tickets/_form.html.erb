@@ -1,6 +1,7 @@
 <%= simple_form_for(@ticket, :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'span12'} %>
   <%= f.input :body, :input_html => {:class => 'span12', :rows => 10}%>
+  <%= hidden_field_tag :feature_id, @ticket.feature_id%>
   <div class="form-actions">
     <%= f.submit :class=>'pull-right' %>
   </div>
