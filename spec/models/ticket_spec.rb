@@ -5,15 +5,6 @@ describe Ticket do
     @project = Project.create(:title => "example")
     @status = @project.ticket_statuses.create(:name => 'open')
     @ticket = @project.tickets.create(:title => "A testing ticket", :status => @status)
-
-  end
-
-  it "has an optional body" do
-    @ticket.body = nil
-    @ticket.should be_valid
-
-    @ticket.body = 'a nice ticket body'
-    @ticket.should be_valid
   end
 
   it "reports it's title on to_s" do
@@ -23,6 +14,20 @@ describe Ticket do
   it "must have a status" do
     @ticket.status = nil
     @ticket.should_not be_valid
+  end
+
+  it "must have a first comment after created" do    
+    @tikcet.should have(1).comments
+  end
+
+  it "first comment must have tikcet body" do    
+    body = 'tikcet body as comment'
+    ticket_with_body = @project.tickets.create(:title => "A testing ticket", :status => @status, :body => body)
+    ticket_with_body.comments.first.body.should eq(body)  
+  end
+
+  it "first comment must have tikcet status" do    
+    @ticket.status.should eq(@status)
   end
 
   it "can have many comments" do
@@ -36,12 +41,6 @@ describe Ticket do
     #add a comment with an alternate status
     alternate = @project.ticket_statuses.create(:name => "alternate")
     comment = @ticket.comments.create(:status => alternate)
-    @ticket.current_status.should eq(alternate)
-  end
-
-  it "should report its own status if it has no comments"  do
-    @ticket.comments.delete_all
-    @ticket.should have(0).comments
-    @ticket.current_status.should eq(@ticket.status)
+    @ticket.status.should eq(alternate)
   end
 end
