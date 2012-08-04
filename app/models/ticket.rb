@@ -1,8 +1,10 @@
-class Ticket < ActiveRecord::Base
+class Ticket < ActiveRecord::Base  
+  after_save :create_comment
   belongs_to :ticketable, :polymorphic => true
   belongs_to :status, :class_name => 'TicketStatus'
   has_many   :comments, :order => :id
 
+  attr_accessor :body, :status_id
   attr_accessible :title, :body, :status_id, :comments_attributes, :status
   accepts_nested_attributes_for :comments
 
@@ -15,8 +17,12 @@ class Ticket < ActiveRecord::Base
     title
   end
 
-  #the status of the most recent comment
-  def current_status
-    (comments.count > 0) && comments.with_status.last.status || status
+  private
+  def create_comment
+    p 'XXXXXXXXXXXXXXXXXXXxx'
+    p self.body
+    p self.status
+    self.comments.create(:body => self.body, :status => self.status)
+    self.save!
   end
 end

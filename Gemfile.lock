@@ -102,6 +102,7 @@ GEM
     rb-fsevent (0.9.1)
     rb-inotify (0.8.8)
       ffi (>= 0.5.0)
+    rb-readline (0.4.2)
     rdoc (3.12)
       json (~> 1.4)
     rspec (2.11.0)
@@ -163,6 +164,7 @@ DEPENDENCIES
   pg
   rails (= 3.2.6)
   rb-fsevent
+  rb-readline
   rspec
   rspec-rails
   sass-rails (~> 3.2.3)
