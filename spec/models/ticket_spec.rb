@@ -21,7 +21,7 @@ describe Ticket do
   end
 
   it "first comment must have tikcet body" do    
-    body = 'tikcet body as comment'
+    body = 'ticket body as comment'
     ticket_with_body = @project.tickets.create(:title => "A testing ticket", :status => @status, :body => body)
     ticket_with_body.comments.first.body.should eq(body)  
   end
