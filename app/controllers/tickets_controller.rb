@@ -49,6 +49,7 @@ class TicketsController < ApplicationController
     elsif params[:feature_id]
       @ticketable = Feature.find(params[:feature_id])
       @feature = @ticketable
+      @project = @feature.project
     elsif params[:project_id]
       @ticketable = Project.find(params[:project_id])
       @project = @ticketable
