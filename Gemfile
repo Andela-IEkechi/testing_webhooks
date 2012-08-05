@@ -52,4 +52,5 @@ group :test do
   gem 'rb-fsevent'
   gem 'spork-rails'
   gem 'guard-spork'
+  gem 'factory_girl_rails'
 end

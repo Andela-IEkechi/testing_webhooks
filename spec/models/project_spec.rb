@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Project do
   before(:each) do
-    @project = Project.new()
+    @project = FactoryGirl.create(:project)
   end
 
   it "gives it's title on to_s" do
