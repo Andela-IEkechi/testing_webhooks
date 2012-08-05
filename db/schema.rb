@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120802155541) do
+ActiveRecord::Schema.define(:version => 20120805141436) do
 
   create_table "comments", :force => true do |t|
     t.integer  "ticket_id",  :null => false
@@ -36,18 +36,26 @@ ActiveRecord::Schema.define(:version => 20120802155541) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "sprints", :force => true do |t|
+    t.date     "due_on",     :null => false
+    t.string   "name",       :null => false
+    t.integer  "project_id", :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id", :null => false
     t.string  "name"
   end
 
   create_table "tickets", :force => true do |t|
-    t.string   "title",           :null => false
-    t.text     "body"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.integer  "ticketable_id",   :null => false
-    t.string   "ticketable_type", :null => false
+    t.string   "title",                          :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.integer  "ticketable_id",                  :null => false
+    t.string   "ticketable_type",                :null => false
+    t.integer  "cost",            :default => 0
   end
 
 end

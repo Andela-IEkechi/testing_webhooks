@@ -40,11 +40,11 @@ gem 'bootstrap-sass'
 # To use debugger
 # gem 'debugger'
 
-group :development do
+group :development,:test do
   gem 'rspec-rails'
-  gem 'guard'
   gem 'guard-rspec'
   gem 'rb-readline'
+  gem 'factory_girl_rails'
 end
 
 group :test do
@@ -52,5 +52,7 @@ group :test do
   gem 'rb-fsevent'
   gem 'spork-rails'
   gem 'guard-spork'
-  gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'capybara'
+  gem 'database_cleaner'
 end
