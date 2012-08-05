@@ -1,5 +1,8 @@
 class Ticket < ActiveRecord::Base
-  belongs_to :ticketable, :polymorphic => true
+  belongs_to :project #always
+  belongs_to :feature #optional
+  belongs_to :sprint  #optional
+
   belongs_to :status, :class_name => 'TicketStatus'
   has_many   :comments, :order => :id
 
@@ -7,8 +10,9 @@ class Ticket < ActiveRecord::Base
   accepts_nested_attributes_for :comments
 
   validates :title, :presence => true
-  validates :ticketable_type, :presence => true
-  validates :ticketable_id, :presence => true
+  validates :project_id, :presence => true
+  validates :status_id, :presence => true
+  validates :cost, :inclusion => {:in => [0,1,2,3]}
 
   def to_s
     title

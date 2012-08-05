@@ -18,7 +18,7 @@ class ProjectsController < ApplicationController
       redirect_to project_path(@project)
     else
       flash[:alert] = "Project could not be created"
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -28,21 +28,23 @@ class ProjectsController < ApplicationController
 
   def update
     @project = Project.find(params[:id])
-
     if @project.update_attributes(params[:project])
       flash[:info] = "Project was updated"
       redirect_to project_path(@project)
     else
       flash[:alert] = "Project could not be updated"
-      render :action => 'edit'
+      render 'edit'
     end
 
   end
 
   def destroy
     @project = Project.find(params[:id])
-    @project.delete
-    redirect_to projects_path()
+    if @project.delete
+      redirect_to projects_path()
+    else
+      redirect_to project_path(@project)
+    end
   end
 end
 

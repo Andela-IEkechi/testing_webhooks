@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe Ticket do
   before(:each) do
-    @project = Project.create(:title => "example")
-    @status = @project.ticket_statuses.create(:name => 'open')
-    #@ticket = @project.tickets.create(:title => "A testing ticket", :status => @status)
-    @ticket = @project.tickets.create(:title => "A testing ticket")
+    @ticket = create(:ticket)
+  end
+
+  it "should have a working factory" do
+    @ticket.status.should_not be_nil
   end
 
   it "reports it's title on to_s" do
@@ -17,12 +18,6 @@ describe Ticket do
     @ticket.should_not be_valid
   end
 
-  it "first comment must have ticket body" do
-    body = 'ticket body as comment'
-    ticket_with_body = @project.tickets.create(:title => "A testing ticket", :status => @status, :comments_attributes => [{ :body => body}])
-    ticket_with_body.comments.first.body.should eq(body)
-  end
-
   it "can have many comments" do
     first = @ticket.comments.create(:body => 'first comment')
     second = @ticket.comments.create(:body => 'second comment')
@@ -30,10 +25,25 @@ describe Ticket do
   end
 
   it 'should report the status of the last comment, as its own status' do
-    @ticket.current_status.should eq(@status)
-    #add a comment with an alternate status
-    alternate = @project.ticket_statuses.create(:name => "alternate")
-    comment = @ticket.comments.create(:status => alternate)
-    @ticket.current_status.should eq(alternate)
+    alt_status = create(:ticket_status, :project => @ticket.project)
+    create(:comment, :status => alt_status, :ticket => @ticket)
+    @ticket.reload
+    @ticket.current_status.should eq(alt_status)
+  end
+
+  it "should have a cost assigned" do
+    @ticket.cost.should_not be_nil
+  end
+
+  it "should have a cost between 0 and 3" do
+    (0..3).each do |l|
+      @ticket.cost = l
+      @ticket.should be_valid
+    end
+  end
+
+  it "should have a cost no greater than 3" do
+      @ticket.cost = 4
+      @ticket.should_not be_valid
   end
 end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Project do
   before(:each) do
-    @project = FactoryGirl.create(:project)
+    @project = create(:project)
   end
 
   it "gives it's title on to_s" do
@@ -18,4 +18,11 @@ describe Project do
     project.ticket_statuses.collect(&:name).include?('closed').should be_true
   end
 
+  it "should have a unique title" do
+    duplicate = build(:project, :title => @project.title)
+    duplicate.should_not be_valid
+  end
+
+  pending "should have a unique name for the project owner's account"
+  pending "should allow a user to have projects of the same name, for diffent owner accounts"
 end

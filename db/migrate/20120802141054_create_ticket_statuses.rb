@@ -4,5 +4,9 @@ class CreateTicketStatuses < ActiveRecord::Migration
       t.references :project, :null => false
       t.string :name
     end
+
+    change_table :tickets do |t|
+      t.references :status
+    end
   end
 end

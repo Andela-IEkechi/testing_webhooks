@@ -2,31 +2,61 @@ require 'spec_helper'
 
 describe TicketStatus do
   before(:each) do
-    @project = Project.create(:title => "example")
-    @open_status = @project.ticket_statuses.create(:name => "open")
-    @closed_status = @project.ticket_statuses.create(:name => "closed")
+    @status = create(:ticket_status)
+  end
+
+  it "should have a working factory" do
+    @status.should_not be_nil
   end
 
   it "belongs to a project" do
-    orphan_status = TicketStatus.new(:name => 'orphan')
-    orphan_status.should_not be_valid
+    @status.project = nil
+    @status.should_not be_valid
   end
 
-  it "should be unique per project" do
-    duplicate = @project.ticket_statuses.build(:name => @closed_status.name)
+  it "should have a name" do
+    @status.name = nil
+    @status.should_not be_valid
+    @status.name = "something"
+    @status.should be_valid
+  end
+
+  it "should have a unique name in it's project" do
+    duplicate = build(:ticket_status, :project =>@status.project, :name => @status.name)
     duplicate.should_not be_valid
     duplicate.name = "something else"
     duplicate.should be_valid
   end
 
-  it "should have a name" do
-    nameless_status = @project.ticket_statuses.build()
-    nameless_status.should_not be_valid
-    nameless_status.name = "something"
-    nameless_status.should be_valid
+  it "responds with it's name for to_s" do
+    @status.to_s.should eq(@status.name)
   end
 
-  it "responds with it's name for to_s" do
-    @closed_status.to_s.should eq(@closed_status.name)
+  it "should know about tickets that use it" do
+    @status.should have(0).tickets
+    create(:ticket, :status => @status)
+    @status.reload
+    @status.should have(1).tickets
+  end
+
+  it "should know about comments that use it" do
+    @status.should have(0).comments
+    comment = create(:comment, :status => @status)
+    @status.reload
+    @status.should have(1).comments
+  end
+
+  it "should not be deleted if it is in use" do
+    @status.should have(0).tickets
+    create(:ticket, :status => @status)
+    @status.reload
+    @status.should have(1).tickets
+    expect {
+      @status.destroy
+    }.to change(TicketStatus, :count).by(0)
+    expect {
+      @status.tickets.find_each(&:destroy)
+      @status.destroy
+    }.to change(TicketStatus, :count).by(-1)
   end
 end
