@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(:version => 20120802155541) do
     t.datetime "updated_at",      :null => false
     t.integer  "ticketable_id",   :null => false
     t.string   "ticketable_type", :null => false
-    t.integer  "status_id",       :null => false
   end
 
 end

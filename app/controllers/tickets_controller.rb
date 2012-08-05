@@ -10,6 +10,7 @@ class TicketsController < ApplicationController
   end
 
   def new
+    @ticket.comments.build()
   end
 
   def create
@@ -17,6 +18,8 @@ class TicketsController < ApplicationController
       flash[:info] = "Ticket was added"
       redirect_to ticket_path(@ticket)
     else
+      @project ||= @ticket.ticketable if @ticket.ticketable_type == 'Project'
+      @feature ||= @ticket.ticketable if @ticket.ticketable_type == 'Feature'
       flash[:alert] = "Ticket could not be created"
       render :action => 'new'
     end

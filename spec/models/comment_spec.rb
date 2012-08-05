@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Comment do
   before(:each) do
     @project = Project.create(:title => 'example project')
-    @ticket = @project.tickets.create(:title => 'example ticket', :body => 'a ticket body', :status_id => @project.ticket_statuses.first)
+    @ticket = @project.tickets.create(:title => 'example ticket', :body => 'a ticket body')
     @comment = @ticket.comments.create()
   end
 

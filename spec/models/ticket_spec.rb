@@ -4,7 +4,8 @@ describe Ticket do
   before(:each) do
     @project = Project.create(:title => "example")
     @status = @project.ticket_statuses.create(:name => 'open')
-    @ticket = @project.tickets.create(:title => "A testing ticket", :status => @status)
+    #@ticket = @project.tickets.create(:title => "A testing ticket", :status => @status)
+    @ticket = @project.tickets.create(:title => "A testing ticket")
   end
 
   it "reports it's title on to_s" do
@@ -16,18 +17,10 @@ describe Ticket do
     @ticket.should_not be_valid
   end
 
-  it "must have a first comment after created" do    
-    @tikcet.should have(1).comments
-  end
-
-  it "first comment must have tikcet body" do    
+  it "first comment must have ticket body" do
     body = 'ticket body as comment'
-    ticket_with_body = @project.tickets.create(:title => "A testing ticket", :status => @status, :body => body)
-    ticket_with_body.comments.first.body.should eq(body)  
-  end
-
-  it "first comment must have tikcet status" do    
-    @ticket.status.should eq(@status)
+    ticket_with_body = @project.tickets.create(:title => "A testing ticket", :status => @status, :comments_attributes => [{ :body => body}])
+    ticket_with_body.comments.first.body.should eq(body)
   end
 
   it "can have many comments" do
@@ -37,10 +30,10 @@ describe Ticket do
   end
 
   it 'should report the status of the last comment, as its own status' do
-    @ticket.status.should eq(@status)
+    @ticket.current_status.should eq(@status)
     #add a comment with an alternate status
     alternate = @project.ticket_statuses.create(:name => "alternate")
     comment = @ticket.comments.create(:status => alternate)
-    @ticket.status.should eq(alternate)
+    @ticket.current_status.should eq(alternate)
   end
 end
