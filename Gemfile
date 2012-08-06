@@ -6,9 +6,10 @@ gem 'rails', '3.2.7'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
-gem 'thin'
 gem 'simple_form'
 gem 'nested_form'
+gem 'devise'
+gem 'omniauth-github'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -45,6 +46,7 @@ group :development,:test do
   gem 'guard-rspec'
   gem 'rb-readline'
   gem 'factory_girl_rails'
+  gem 'thin'
 end
 
 group :test do
