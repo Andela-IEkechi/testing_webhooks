@@ -2,12 +2,16 @@
 
 FactoryGirl.define do
   factory :user do
-    email Faker::Lorem.email()
+    email Faker::Internet.email()
 
-    factory :confirmed_user do
-      after(:create) do |user|
-        user.confirm!
-      end
+    before(:create) do |user|
+      pass = Faker::Lorem.words(6)
+      user.password = pass
+      user.password_confirmation = pass
+    end
+
+    after(:create) do |user|
+      user.confirm!
     end
   end
 end

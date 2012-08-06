@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe User do
+describe User,:focus => true do
 
   context "when confirmed" do
     before(:each) do
-      @user = create(:confirmed_user)
+      @user = create(:user)
     end
     it "should be able to have many projects" do
       create(:project, :user => @user)
