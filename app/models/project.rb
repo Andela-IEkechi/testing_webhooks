@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   after_create :default_statuses
 
+  belongs_to :user
   has_many :features
   has_many :tickets
   has_many :sprints, :order => :due_on

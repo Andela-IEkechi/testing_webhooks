@@ -2,6 +2,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :project #always
   belongs_to :feature #optional
   belongs_to :sprint  #optional
+  belongs_to :user #optional, who it's assigned to
 
   belongs_to :status, :class_name => 'TicketStatus'
   has_many   :comments, :order => :id

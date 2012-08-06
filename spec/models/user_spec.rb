@@ -1,5 +1,16 @@
 require 'spec_helper'
 
 describe User do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  context "when confirmed" do
+    before(:each) do
+      @user = create(:confirmed_user)
+    end
+    it "should be able to have many projects" do
+      create(:project, :user => @user)
+      create(:project, :user => @user)
+      @user.reload
+      @user.should have(2).projects
+    end
+  end
 end
