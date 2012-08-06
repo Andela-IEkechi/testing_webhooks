@@ -4,6 +4,7 @@
 			<a class="brand" href="#">
 				Conductor
 			</a>
+			<% if user_signed_in? %>
 			<ul class="nav">
 				<li>
 					<%= link_to "Home", root_path %>
@@ -14,8 +15,9 @@
 				<li>
 					<%= link_to "Tickets", tickets_path %>
 				</li>
-				
+
 			</ul>
-		</div>	
+			<% end %>
+		</div>
 	</div>
 </div>

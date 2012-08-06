@@ -12,6 +12,7 @@
       <%= render :partial => '/layouts/header' %>
     </div>
     <div class="row-fluid">
+      <% if user_signed_in? %>
       <div class="span9">
         <%= render :partial => '/shared/flash_messages' %>
         <%= yield %>
@@ -19,6 +20,15 @@
       <div class="span3">
         <%= render :partial => 'actions' %>
       </div>
+      <% else %>
+      <div class="span4">
+        &nbsp;
+      </div>
+      <div class="span4">
+        <%= render :partial => '/shared/flash_messages' %>
+        <%= yield %>
+      </div>
+      <% end %>
     </div>
     <div class="row-fluid">
       <%= render :partial => '/layouts/footer' %>
