@@ -1,7 +1,11 @@
+<%= yield :form_heading %>
+
 <%= simple_form_for([@feature.project,@feature], :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'span12'} %>
   <%= f.input :description, :input_html => {:class => 'span12'}%>
   <div class="form-actions">
-    <%= f.submit :class=>'pull-right' %>
+    <%= f.submit :class=>'btn' %>
+    <%= link_to 'cancel', project_feature_path(@project, @feature), :class => 'btn' unless @feature.new_record? %>
+    <%= link_to 'cancel', project_path(@project), :class => 'btn' if @feature.new_record? %>
   </div>
 <% end %>

@@ -18,7 +18,7 @@
       <%= link_to 'add a new ticket', new_project_ticket_path(@project) %>
     </li>
   <% end %>
-  <% if action_name != 'new' %>
+  <% if action_name == 'index' %>
     <li>
       <%= link_to 'add a new project', new_project_path %>
     </li>

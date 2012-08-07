@@ -1,3 +1,5 @@
-<h3><%= @ticket.parent %></h3>
+<% content_for :form_heading do %>
+  <h3>Create a new ticket for <%= @ticket.parent %></h3>
+<% end %>
 
 <%= render :partial => 'form' %>
