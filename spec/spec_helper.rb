@@ -27,6 +27,8 @@ Spork.prefork do
     # config.mock_with :rr
 
     config.include FactoryGirl::Syntax::Methods
+    config.include Devise::TestHelpers, :type => :controller
+    config.include ControllerMacros, :type => :controller
 
     config.filter_run :focus => true
     config.run_all_when_everything_filtered = true
@@ -49,6 +51,7 @@ Spork.prefork do
     # the seed, which is printed after each run.
     #     --seed 1234
     config.order = "random"
+
   end
 
 end

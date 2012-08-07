@@ -1,7 +1,9 @@
 class TicketsController < ApplicationController
   load_and_authorize_resource :project
-  load_and_authorize_resource :feature
+  load_and_authorize_resource :feature, :through => :project
   load_and_authorize_resource :ticket
+
+  before_filter :set_parents, :only => [:new, :create]
 
 	def index
       @tickets = @feature.tickets if @feature
@@ -10,6 +12,7 @@ class TicketsController < ApplicationController
 	end
 
   def show
+    redirect_to parent_path()
   end
 
   def new
@@ -19,12 +22,10 @@ class TicketsController < ApplicationController
   def create
     if @ticket.save
       flash[:info] = "Ticket was added"
-      redirect_to ticket_path(@ticket)
+      redirect_to show_path
     else
-      @project ||= @ticket.ticketable if @ticket.ticketable_type == 'Project'
-      @feature ||= @ticket.ticketable if @ticket.ticketable_type == 'Feature'
       flash[:alert] = "Ticket could not be created"
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -37,12 +38,31 @@ class TicketsController < ApplicationController
       redirect_to ticket_path(@ticket)
     else
       flash[:alert] = "Ticket could not be updated"
-      render :action => 'edit'
+      render 'edit'
     end
 
   end
 
   def destroy
+  end
 
+  private
+
+  def set_parents
+    #must have a project to make a new ticket, optionally has a feature also
+    @ticket.project = @project
+    @ticket.feature = @feature
+  end
+
+  def parent_path
+    return project_feature_path(@ticket.project, @ticket.feature) if @ticket.feature
+    return project_path(@ticket.project) if @ticket.project
+    tickets_path()
+  end
+
+  def show_path
+    return project_feature_ticket_path(@ticket.project, @ticket.feature, @ticket) if @ticket.feature
+    return project_ticket_path(@ticket.project, @ticket) if @ticket.project
+    ticket_path(@ticket)
   end
 end

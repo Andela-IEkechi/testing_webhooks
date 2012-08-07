@@ -20,5 +20,9 @@ FactoryGirl.define do
         ticket.save!
       end
     end
+
+    factory :invalid_ticket do
+      title nil
+    end
   end
 end

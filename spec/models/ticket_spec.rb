@@ -15,6 +15,12 @@ describe Ticket do
     feature_ticket.feature.should_not be_nil
   end
 
+  it "should have a working factory that sets the status" do
+    ticket = create(:ticket)
+    ticket.should_not be_nil
+    ticket.status.should_not be_nil
+  end
+
   it "reports it's title on to_s" do
     @ticket.to_s.should eq(@ticket.title)
   end

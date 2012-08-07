@@ -7,7 +7,8 @@ class Ticket < ActiveRecord::Base
   belongs_to :status, :class_name => 'TicketStatus'
   has_many   :comments, :order => :id
 
-  attr_accessible :title, :body, :status_id, :comments_attributes, :status
+  attr_accessible :title, :body, :cost, :comments_attributes
+  attr_accessible :status_id, :feature_id, :project_id
   accepts_nested_attributes_for :comments
 
   validates :title, :presence => true

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User, :focus => true do
+describe User do
 
   it "should have a working factory" do
     user = create(:user)

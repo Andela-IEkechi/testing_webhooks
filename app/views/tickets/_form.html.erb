@@ -1,4 +1,4 @@
-<%= simple_form_for(@ticket, :html => {:class=>'form-horizontal'}) do |f| %>
+<%= simple_form_for([@ticket.parent, @ticket], :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'span12'} %>
   <%= f.simple_fields_for :comments do |c| %>
     <%= c.input :body, :input_html => {:class => 'span12', :rows => 10}%>
@@ -7,8 +7,6 @@
     <% end %>
   <% end %>
 
-  <%= hidden_field_tag :ticketable_type, @ticket.ticketable_type %>
-  <%= hidden_field_tag :ticketable_id, @ticket.ticketable_id %>
   <div class="form-actions">
     <%= f.submit :class=>'pull-right' %>
   </div>
