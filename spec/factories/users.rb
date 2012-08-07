@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :user do
-    email Faker::Internet.email()
+    sequence(:email) {Faker::Internet.email()}
 
     before(:create) do |user|
       pass = Faker::Lorem.words(6)

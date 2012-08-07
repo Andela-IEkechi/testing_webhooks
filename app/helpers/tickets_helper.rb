@@ -1,13 +1,10 @@
 module TicketsHelper
 
   def parent_path(ticket)
-    case ticket.ticketable_type
-    when 'Project'
-      project_path(ticket.ticketable)
-    when 'Feature'
-      project_feature_path(ticket.ticketable.project, ticket.ticketable)
-    else
-      tickets_path()
-    end
+    return project_path(ticket.project) if ticket.project
+    return project_feature_path(ticket.project, ticket.feature) if ticket.feature
+    tickets_path()
   end
+
+
 end

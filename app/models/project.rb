@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   attr_accessible :title, :ticket_statuses_attributes
   accepts_nested_attributes_for :ticket_statuses
 
-  validates :title, :presence => true, :uniqueness => true #must be unique for the project owner
+  validates :title, :presence => true, :uniqueness => {:scope => :user_id}
 
   def to_s
     title

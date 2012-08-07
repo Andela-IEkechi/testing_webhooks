@@ -23,4 +23,7 @@ class Ticket < ActiveRecord::Base
     (comments.count > 0) && comments.with_status.last.status || status
   end
 
+  def parent
+    feature || project
+  end
 end

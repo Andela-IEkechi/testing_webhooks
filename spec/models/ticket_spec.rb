@@ -9,6 +9,12 @@ describe Ticket do
     @ticket.status.should_not be_nil
   end
 
+  it "should have a working factory for feature tickets" do
+    feature_ticket= create(:ticket_for_feature)
+    feature_ticket.should_not be_nil
+    feature_ticket.feature.should_not be_nil
+  end
+
   it "reports it's title on to_s" do
     @ticket.to_s.should eq(@ticket.title)
   end
@@ -45,5 +51,14 @@ describe Ticket do
   it "should have a cost no greater than 3" do
       @ticket.cost = 4
       @ticket.should_not be_valid
+  end
+
+  it "should return the project as the parent, if there is no feature" do
+    @ticket.parent.should == @ticket.project
+  end
+
+  it "should return the feature as the parent, if there is one" do
+    feature_ticket = create(:ticket_for_feature)
+    feature_ticket.parent.should == feature_ticket.feature
   end
 end

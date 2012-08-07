@@ -4,14 +4,21 @@ FactoryGirl.define do
     sequence(:cost)  {|n| n % 3}
     association(:project)
 
-    after(:build) do |this|
+    after(:build) do |ticket|
       #add a mandatory status, unless it's passed in
-      this.status = this.status || this.project.ticket_statuses.first
+      ticket.status = ticket.status || ticket.project.ticket_statuses.first
     end
-    before(:create) do |this|
+    before(:create) do |ticket|
       #add a mandatory status, unless it's passed in
-      this.status = this.status || this.project.ticket_statuses.first
+      ticket.status = ticket.status || ticket.project.ticket_statuses.first
     end
 
+    factory :ticket_for_feature do
+      #make sure the feature belongs to the project
+      after(:create) do |ticket|
+        ticket.feature = create(:feature, :project => ticket.project)
+        ticket.save!
+      end
+    end
   end
 end
