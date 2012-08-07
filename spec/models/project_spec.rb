@@ -48,4 +48,41 @@ describe Project do
     duplicate = build(:project, :user => sue, :title => project_one.title)
     duplicate.should be_valid
   end
+
+  it "should delete related features when it's destroyed" do
+    expect {
+      create(:feature, :project => @project)
+      create(:feature, :project => @project)
+    }.to change(Feature, :count).by(2)
+    expect {
+      @project.destroy
+    }.to change(Feature,:count).by(-2)
+  end
+
+  it "should delete related tickets when it's destroyed" do
+    expect {
+      create(:ticket, :project => @project)
+      create(:ticket, :project => @project)
+    }.to change(Ticket, :count).by(2)
+    expect {
+      @project.destroy
+    }.to change(Ticket,:count).by(-2)
+  end
+
+  it "should delete related sprints when it's destroyed" do
+    expect {
+      create(:sprint, :project => @project)
+      create(:sprint, :project => @project)
+    }.to change(Sprint, :count).by(2)
+    expect {
+      @project.destroy
+    }.to change(Sprint,:count).by(-2)
+  end
+
+  it "should delete related ticket_statuses when it's destroyed" do
+    @project.should have_at_least(1).ticket_statuses
+    expect {
+      @project.destroy
+    }.to change(TicketStatus,:count).by(-2) #two default statuses
+  end
 end

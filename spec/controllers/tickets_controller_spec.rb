@@ -57,8 +57,11 @@ describe TicketsController do
 
       it "redirect to the :edit action" do
         response.should be_redirect
-        parent_path = project_feature_path(@ticket.project, @ticket.feature) if @ticket.feature
-        parent_path = project_path(@ticket.project) if @ticket.project
+        if @feature
+          parent_path = project_feature_path(@ticket.project, @ticket.feature)
+        else
+          parent_path = project_path(@ticket.project)
+        end
         parent_path ||= tickets_path()
         response.should redirect_to(parent_path)
       end
@@ -109,7 +112,7 @@ describe TicketsController do
       end
     end
 
-    describe "POST #create", :focus => true do
+    describe "POST #create" do
       context "with valid attributes" do
         it "saves a new ticket to the database" do
           expect {
@@ -155,20 +158,21 @@ describe TicketsController do
       end
     end
 
-    describe "POST #update", :focus => true do
+    describe "POST #update" do
       context "with valid attributes" do
         before(:each) do
           @attrs = attributes_for(:ticket)
         end
 
-        it "updates a ticket to the database" do
+        it "updates a ticket in the database" do
           expect {
             if @feature
               post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => @attrs
             else
               post :update, :project_id => @project.id, :id => @ticket, :ticket => @attrs
             end
-          }.to change(Ticket, :count).by(1)
+            @ticket.reload
+          }.to change(@ticket, :updated_at)
         end
 
         it "redirects to show the ticket" do
@@ -184,15 +188,67 @@ describe TicketsController do
         end
       end
       context "with invalid attributes" do
-        it "does not update the ticket in the database"
-        it "re-renders the :edit template"
+        before(:each) do
+          @attrs = attributes_for(:invalid_ticket)
+        end
+
+        it "does not update the ticket in the database" do
+          updated_before = @ticket.updated_at
+          if @feature
+            post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => @attrs
+          else
+            post :update, :project_id => @project.id, :id => @ticket, :ticket => @attrs
+          end
+          @ticket.reload
+          @ticket.updated_at.to_s.should == updated_before.to_s
+        end
+
+        it "re-renders the :edit template" do
+          if @feature
+            post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => attributes_for(:invalid_ticket, :project_id => @project.id, :feature_id => @feature.id, :status_id => @project.ticket_statuses.first.id)
+          else
+            post :update, :project_id => @project.id, :id => @ticket, :ticket => attributes_for(:invalid_ticket, :project_id => @project.id, :status_id => @project.ticket_statuses.first.id)
+          end
+          response.should render_template(:edit)
+        end
       end
     end
 
     describe "DELETE #destroy" do
-      it "deletes a ticket from the database"
-      it "redirects to the ticket index"
-      it "also deletes related comments"
+      it "deletes a ticket from the database" do
+        expect {
+          if @feature
+            delete :destroy, :id => @ticket, :project_id => @project, :feature_id => @feature.id
+          else
+            delete :destroy, :id => @ticket, :project_id => @project
+          end
+        }.to change(Ticket, :count).by(-1)
+      end
+
+      it "redirects to the ticket index" do
+        if @feature
+          delete :destroy, :id => @ticket, :project_id => @project, :feature_id => @feature.id
+          response.should redirect_to(project_feature_path(@project, @feature))
+        else
+          delete :destroy, :id => @ticket, :project_id => @project
+          response.should redirect_to(project_path(@project))
+        end
+      end
+
+      it "deletes related comments" do
+        expect {
+          create(:comment, :ticket => @ticket)
+          create(:comment, :ticket => @ticket)
+        }.to change(Comment, :count).by(2)
+        @ticket.reload
+        expect {
+          if @feature
+            delete :destroy, :id => @ticket, :project_id => @project, :feature_id => @feature.id
+          else
+            delete :destroy, :id => @ticket, :project_id => @project
+          end
+        }.to change(Comment,:count).by(-2)
+      end
     end
   end
 

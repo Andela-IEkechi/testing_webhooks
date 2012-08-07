@@ -1,16 +1,19 @@
 require 'spec_helper'
 
 describe ProjectsController do
+  before (:each) do
+    login_user
+    #create a project we can assign tickets to
+    @project = create(:project, :user => @user)
+  end
+
   describe "GET #index" do
     before(:each) do
-      create(:project)
-      create(:project)
-
       get :index
     end
 
     it "populates an array of projects" do
-      assigns(:projects).should have(2).entries
+      assigns(:projects).should have_at_least(1).items
     end
 
     it "renders the :index template" do
@@ -20,7 +23,6 @@ describe ProjectsController do
 
   describe "GET #show" do
     before(:each) do
-      @project = create(:project)
       get :show, :id => @project
     end
 
@@ -49,7 +51,6 @@ describe ProjectsController do
 
   describe "GET #edit" do
     before(:each) do
-      @project = create(:project)
       get :edit, :id => @project
     end
 
@@ -66,7 +67,7 @@ describe ProjectsController do
     context "with valid attributes" do
       it "saves a new project to the database" do
         expect {
-          post :create, :project => attributes_for(:project)
+          post :create, :project => attributes_for(:project, :user_id => @user.id)
         }.to change(Project, :count).by(1)
       end
 
@@ -95,10 +96,6 @@ describe ProjectsController do
   end
 
   describe "POST #update" do
-    before(:each) do
-      @project = create(:project)
-    end
-
     context "with valid attributes" do
       before(:each) do
         @attrs = attributes_for(:project)
@@ -122,7 +119,7 @@ describe ProjectsController do
     end
     context "with invalid attributes" do
       before(:each) do
-        create(:project, :title => 'duplicate')
+        create(:project, :title => 'duplicate', :user => @user)
         @attrs = attributes_for(:invalid_project, :title => 'duplicate')
       end
 
@@ -146,10 +143,6 @@ describe ProjectsController do
   end
 
   describe "DELETE #destroy" do
-    before(:each) do
-      @project = create(:project)
-    end
-
     it "deletes a project from the database" do
       expect {
         delete :destroy, :id => @project

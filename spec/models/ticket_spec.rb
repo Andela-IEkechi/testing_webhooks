@@ -5,24 +5,35 @@ describe Ticket do
     @ticket = create(:ticket)
   end
 
-  it "should have a working factory" do
-    @ticket.status.should_not be_nil
-  end
+  context "has factories that" do
+    it "should create a valid ticket" do
+      @ticket.status.should_not be_nil
+    end
 
-  it "should have a working factory for feature tickets" do
-    feature_ticket= create(:ticket_for_feature)
-    feature_ticket.should_not be_nil
-    feature_ticket.feature.should_not be_nil
-  end
+    it "should create a valid ticket belonging to a feature" do
+      feature_ticket= create(:ticket_for_feature)
+      feature_ticket.should_not be_nil
+      feature_ticket.feature.should_not be_nil
+    end
 
-  it "should have a working factory that sets the status" do
-    ticket = create(:ticket)
-    ticket.should_not be_nil
-    ticket.status.should_not be_nil
+    it "should create a valid ticket that also sets the status" do
+      @ticket.status.should_not be_nil
+    end
+
+    it "should create and invalid ticket" do
+      ticket = build(:invalid_ticket)
+      ticket.should_not be_valid
+    end
   end
 
   it "reports it's title on to_s" do
     @ticket.to_s.should eq(@ticket.title)
+  end
+
+  it "should have a title of at least 3 characters" do
+    @ticket.should be_valid
+    @ticket.title = 'xx'
+    @ticket.should_not be_valid
   end
 
   it "must have a status" do
@@ -34,6 +45,16 @@ describe Ticket do
     first = @ticket.comments.create(:body => 'first comment')
     second = @ticket.comments.create(:body => 'second comment')
     @ticket.should have(2).comments
+  end
+
+  it "should delete related comments when it's destroyed" do
+    expect {
+      create(:comment, :ticket => @ticket)
+      create(:comment, :ticket => @ticket)
+    }.to change(Comment, :count).by(2)
+    expect {
+      @ticket.destroy
+    }.to change(Comment,:count).by(-2)
   end
 
   it 'should report the status of the last comment, as its own status' do

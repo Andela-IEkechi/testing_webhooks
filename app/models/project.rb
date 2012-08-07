@@ -2,13 +2,12 @@ class Project < ActiveRecord::Base
   after_create :default_statuses
 
   belongs_to :user
-  has_many :features
-  has_many :tickets
-  has_many :sprints, :order => :due_on
+  has_many :features, :dependent => :destroy
+  has_many :tickets, :dependent => :destroy
+  has_many :sprints, :order => :due_on, :dependent => :destroy
+  has_many :ticket_statuses, :dependent => :destroy
 
-  has_many :ticket_statuses
-
-  attr_accessible :title, :ticket_statuses_attributes
+  attr_accessible :title, :ticket_statuses_attributes, :user_id
   accepts_nested_attributes_for :ticket_statuses
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}

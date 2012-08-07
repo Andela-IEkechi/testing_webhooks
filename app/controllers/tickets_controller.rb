@@ -35,7 +35,7 @@ class TicketsController < ApplicationController
   def update
     if @ticket.update_attributes(params[:ticket])
       flash[:info] = "Ticket was updated"
-      redirect_to ticket_path(@ticket)
+      redirect_to show_path
     else
       flash[:alert] = "Ticket could not be updated"
       render 'edit'
@@ -44,6 +44,12 @@ class TicketsController < ApplicationController
   end
 
   def destroy
+    delete_path = parent_path()
+    if @ticket.destroy
+      redirect_to delete_path
+    else
+      redirect_to show_path
+    end
   end
 
   private

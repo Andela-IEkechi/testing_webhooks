@@ -22,7 +22,7 @@ FactoryGirl.define do
     end
 
     factory :invalid_ticket do
-      title nil
+      title "no" #too short
     end
   end
 end
