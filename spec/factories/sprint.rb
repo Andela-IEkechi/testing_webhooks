@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :sprint do
-    sequence(:name) {|n| "sprint-#{n}" }
+    sequence(:title) {|n| "sprint-#{n}" }
     sequence(:due_on) {|n| Date.today + n.days}
     association :project
 

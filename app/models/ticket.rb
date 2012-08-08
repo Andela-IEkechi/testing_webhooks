@@ -6,7 +6,7 @@ class Ticket < ActiveRecord::Base
 
   belongs_to :status, :class_name => 'TicketStatus'
 
-  has_paper_trail
+  has_paper_trail :on => [:update]
 
   attr_accessible :title, :body, :cost
   attr_accessible :status_id, :feature_id, :project_id, :sprint_id
