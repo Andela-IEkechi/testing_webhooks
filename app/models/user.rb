@@ -16,9 +16,8 @@ class User < ActiveRecord::Base
     if confirmed?
       email
     else
-      "#{email} (new)"
+      "#{email} (invited)"
     end
-
   end
 
   def self.new_with_session(params, session)
