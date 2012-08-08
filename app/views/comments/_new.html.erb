@@ -3,6 +3,12 @@
   <%= f.input :status do %>
     <%= f.select :status_id, comment.ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
   <% end %>
+  <%= f.input :feature do %>
+    <%= f.select :feature_id, comment.ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
+  <% end %>
+  <%= f.input :sprint do %>
+    <%= f.select :sprint_id, comment.ticket.project.sprints.all.map { |s| [s.title, s.id] }, :include_blank => '- unassigned -'  %>
+  <% end %>
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
     <%= link_to 'cancel', project_feature_path(comment.ticket.project, comment.ticket.feature), :class => 'btn' if comment.ticket.belongs_to_feature? && !comment.ticket.belongs_to_sprint? %>
