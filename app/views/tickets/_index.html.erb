@@ -2,7 +2,8 @@
   <% tickets.each do |ticket| %>
   <tr class="clickable" data-href="<%= ticket_path(ticket) %>">
     <td><%= ticket.title %></td>
-    <td><%= ticket.status %></td>
+    <td title="status"><%= ticket.status %></td>
+    <td title="cost"><%= ticket.cost %></td>
   </tr>
   <% end %>
   <% if tickets.count == 0 %>

@@ -23,7 +23,7 @@
     <%= f.select :sprint_id, @ticket.project.sprints.all.map { |s| [s.title, s.id] }, :include_blank => '- unassigned -'  %>
   <% end %>
   <%= f.input :user do %>
-    <%= f.select :user_id, @ticket.project.users.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
+    <%= f.select :user_id, @ticket.project.participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
   <%= f.input :project_id, :as => :hidden %>

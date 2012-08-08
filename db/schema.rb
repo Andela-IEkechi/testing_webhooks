@@ -44,7 +44,8 @@ ActiveRecord::Schema.define(:version => 20120808133310) do
 
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id", :null => false
-    t.string  "name"
+    t.string  "name",       :null => false
+    t.string  "nature",     :null => false
   end
 
   create_table "tickets", :force => true do |t|

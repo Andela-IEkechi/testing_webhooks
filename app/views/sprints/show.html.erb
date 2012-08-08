@@ -3,6 +3,9 @@
   <div>
     <%= @sprint.due_on %>
   </div>
+  <div>
+    total cost: <%= @sprint.cost %>
+  </div>
 
   <h3>Tickets</h3>
   <%= render :partial => "/tickets/index", :locals => {:tickets => @sprint.tickets } %>

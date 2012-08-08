@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   has_many :projects, :dependent => :destroy #projects we own
   has_many :tickets, :through => :projects #tickets we are assigned to
-  has_and_belongs_to_many :projects
+  has_and_belongs_to_many :participations, :association_foreign_key => 'project_id', :class_name => 'Project'
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :lockable, :timeoutable
