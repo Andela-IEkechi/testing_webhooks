@@ -1,10 +1,35 @@
 <%
-  this_version = version
-  this_version = version.reify if version.class.name == 'Version'
+  if version.is_a?(Ticket)
+    ticket = version
+    changeset = {}
+    #if there is a version, inspect it
+    if ticket.versions.count > 0
+      last = ticket.versions.last.reify
+      [:status_id, :feature_id, :sprint_id, :user_id].each do |value|
+        now = ticket.send(value)
+        was = last.send(value)
+        changeset[value] = [now, was] if now != was
+      end
+    end
+  else
+    ticket = version.reify
+    changeset = version.previous.changeset if version.previous
+  end
+  changeset ||= {}
 %>
 <div class="well">
-  <p><%= this_version.body %></p>
-  <p><%= this_version.status %></p>
-  <p><%= this_version.feature %></p>
-  <p><%= this_version.sprint %></p>
+  <p><%= ticket.body %></p>
+  <% if changeset[:status_id] %>
+    <p>status changed to <b><%= ticket.status %></b></p>
+  <% end %>
+  <% if changeset[:feature_id] %>
+   <p>feature changed to <b><%= ticket.feature %></b></p>
+  <% end %>
+  <% if changeset[:sprint_id] %>
+    <p>status changed to <b><%= ticket.sprint %></b></p>
+  <% end %>
+  <% if changeset[:user_id] %>
+    <p>user changed to <b><%= ticket.user %></b></p>
+  <% end %>
+  <%= changeset %>
 </div>

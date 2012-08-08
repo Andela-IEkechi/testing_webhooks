@@ -5,6 +5,8 @@ class CreateTickets < ActiveRecord::Migration
       t.text  :body
       t.references :project, :null => false
       t.references :feature
+      t.references :sprint
+      t.references :user
       t.integer :cost, :default => 0
       t.timestamps
     end

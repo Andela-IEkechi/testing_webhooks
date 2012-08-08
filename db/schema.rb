@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120808115956) do
+ActiveRecord::Schema.define(:version => 20120808133310) do
 
   create_table "features", :force => true do |t|
     t.string   "title",       :null => false
@@ -27,6 +27,11 @@ ActiveRecord::Schema.define(:version => 20120808115956) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "user_id",    :null => false
+  end
+
+  create_table "projects_users", :id => false, :force => true do |t|
+    t.integer "project_id"
+    t.integer "user_id"
   end
 
   create_table "sprints", :force => true do |t|
@@ -47,11 +52,12 @@ ActiveRecord::Schema.define(:version => 20120808115956) do
     t.text     "body"
     t.integer  "project_id",                :null => false
     t.integer  "feature_id"
+    t.integer  "sprint_id"
+    t.integer  "user_id"
     t.integer  "cost",       :default => 0
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
     t.integer  "status_id"
-    t.integer  "sprint_id"
   end
 
   create_table "users", :force => true do |t|
@@ -80,12 +86,13 @@ ActiveRecord::Schema.define(:version => 20120808115956) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "versions", :force => true do |t|
-    t.string   "item_type",  :null => false
-    t.integer  "item_id",    :null => false
-    t.string   "event",      :null => false
+    t.string   "item_type",      :null => false
+    t.integer  "item_id",        :null => false
+    t.string   "event",          :null => false
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
+    t.text     "object_changes"
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"

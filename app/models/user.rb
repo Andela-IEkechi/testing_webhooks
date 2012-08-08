@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_many :projects, :dependent => :destroy #projects we own
   has_many :tickets, :through => :projects #tickets we are assigned to
+  has_and_belongs_to_many :projects
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :lockable, :timeoutable

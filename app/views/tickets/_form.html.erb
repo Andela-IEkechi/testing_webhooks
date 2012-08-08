@@ -22,10 +22,14 @@
   <%= f.input :sprint do %>
     <%= f.select :sprint_id, @ticket.project.sprints.all.map { |s| [s.title, s.id] }, :include_blank => '- unassigned -'  %>
   <% end %>
+  <%= f.input :user do %>
+    <%= f.select :user_id, @ticket.project.users.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
+  <% end %>
 
   <%= f.input :project_id, :as => :hidden %>
   <%= f.input :feature_id, :as => :hidden %>
   <%= f.input :sprint_id, :as => :hidden %>
+  <%= f.input :user_id, :as => :hidden %>
 
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>

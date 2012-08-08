@@ -6,6 +6,7 @@ class Project < ActiveRecord::Base
   has_many :tickets, :dependent => :destroy
   has_many :sprints, :order => :due_on, :dependent => :destroy
   has_many :ticket_statuses, :dependent => :destroy
+  has_and_belongs_to_many :users
 
   attr_accessible :title, :ticket_statuses_attributes, :user_id
   accepts_nested_attributes_for :ticket_statuses
