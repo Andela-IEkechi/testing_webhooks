@@ -2,33 +2,52 @@ require 'spec_helper'
 
 describe User do
 
-  it "should have a working factory" do
-    user = create(:user)
-    user.should_not be_nil
-  end
+  context "it has factories that" do
+    it "should have a working factory" do
+      user = create(:user)
+      user.should_not be_nil
+    end
 
-  it "should have a factory the uses a different email every time" do
-    joe = create(:user)
-    sue = create(:user)
-    joe.email.should_not == sue.email
+    it "should have a factory the uses a different email every time" do
+      joe = create(:user)
+      sue = create(:user)
+      joe.email.should_not == sue.email
+    end
   end
 
   context "when confirmed" do
     before(:each) do
       @user = create(:user)
     end
-    it "should be able to have many projects" do
+    it "should be able to own many projects" do
       create(:project, :user => @user)
       create(:project, :user => @user)
       @user.reload
       @user.should have(2).projects
     end
 
-    it "should have access to all the tickets under all it's projects" do
+    it "should have access to all the tickets under all it's own projects" do
       project = create(:project_with_tickets, :user => @user)
       project.should have_at_least(1).tickets
       @user.reload
       @user.should have(project.tickets.count).tickets
     end
+
+    it "should report it's email as to_s"
+    it "should have access to all the tickets under all the projects it participates in"
   end
+
+  context "when not confirmed" do
+    before(:each) do
+      @user = create(:unconfirmed_user)
+    end
+
+    it "should be token authenticatable"
+
+    it "should report it's email and (invite) as to_s" do
+      @user.to_s.should eq("#{@user.email (invited)}")
+    end
+  end
+
+  it "should be able to participate in projects"
 end
