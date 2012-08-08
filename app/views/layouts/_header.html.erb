@@ -15,7 +15,11 @@
 				<li>
 					<%= link_to "My Tickets", tickets_path() %>
 				</li>
-
+				<% if @project %>
+				<li>
+					<%= link_to "Access", access_project_path(@project) %>
+				</li>
+				<% end %>
 			</ul>
 			<% end %>
 		</div>

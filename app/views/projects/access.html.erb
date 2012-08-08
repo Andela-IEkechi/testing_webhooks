@@ -1,0 +1,11 @@
+<h3>Manage acccess for this project</h3>
+
+<%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
+  <%= f.association :participants, :as => :check_boxes, :collection=>@participants %>
+
+  <div class="form-actions">
+    <%= f.submit :class=>'btn' %>
+    <%= link_to 'cancel', project_path(@project), :class => 'btn' %>
+  </div>
+<% end %>
+

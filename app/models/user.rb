@@ -12,6 +12,9 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :provider, :uid
 
+  def to_s
+    email
+  end
 
   def self.new_with_session(params, session)
     super.tap do |user|
