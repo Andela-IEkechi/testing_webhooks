@@ -15,13 +15,23 @@ class Comment < ActiveRecord::Base
 
   scope :with_status, lambda { {:conditions => ["status_id IS NOT NULL"]} }
 
+  def predecessor
+    @predecessor ||= self.ticket.comments.select{|c|c.id < id}.last
+    @predecessor ||= self.ticket
+  end
+
+  def changed_status?
+    if predecessor
+      predecessor.status.id != status.id
+    else
+      ticket.status != status.id
+    end
+  end
+
   private
   def set_ticket_values
-    p "feature_id: #{feature_id}"
-    p "sprint_id: #{sprint_id}"
     self.ticket.feature_id = feature_id
     self.ticket.sprint_id = sprint_id
-    p "setting sprint #{self.ticket.sprint_id}, feature #{self.ticket.feature_id} "
     self.ticket.save!
   end
 end

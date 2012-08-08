@@ -1,2 +1,6 @@
-<div><%= comment.body %></div>
-<div><%= comment.status %></div>
+<div class="well">
+  <% if comment.changed_status? %>
+  <div>changed status from <b><%= comment.predecessor.status %></b> to <b><%= comment.status %></b></div>
+  <% end %>
+  <div><%= comment.body %></div>
+</div>
