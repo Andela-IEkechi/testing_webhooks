@@ -9,7 +9,7 @@ class Ticket < ActiveRecord::Base
   has_paper_trail :on => [:update]
 
   attr_accessible :title, :body, :cost
-  attr_accessible :status_id, :feature_id, :project_id, :sprint_id
+  attr_accessible :status_id, :feature_id, :project_id, :sprint_id, :user_id
 
   COST = [0,1,2,3]
 
