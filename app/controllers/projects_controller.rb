@@ -42,9 +42,5 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def access
-    #get all the users accross all the projects to select from
-    @participants = current_user.projects.collect(&:participants).flatten.uniq
-  end
 end
 

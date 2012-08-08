@@ -8,8 +8,8 @@ class Project < ActiveRecord::Base
   has_many :ticket_statuses, :dependent => :destroy
   has_and_belongs_to_many :participants, :association_foreign_key => 'user_id', :class_name => 'User'
 
-  attr_accessible :title, :ticket_statuses_attributes, :user_id, :participant_ids
-  accepts_nested_attributes_for :ticket_statuses
+  attr_accessible :title, :ticket_statuses_attributes, :user_id, :participant_ids, :participants_attributes
+  accepts_nested_attributes_for :ticket_statuses, :participants
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}
 

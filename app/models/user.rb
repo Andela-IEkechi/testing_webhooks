@@ -4,16 +4,21 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :participations, :association_foreign_key => 'project_id', :class_name => 'Project'
 
   # Include default devise modules. Others available are:
-  # :token_authenticatable, :lockable, :timeoutable
+  #  :lockable, :timeoutable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, :confirmable
+         :omniauthable, :confirmable,:token_authenticatable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :provider, :uid
 
   def to_s
-    email
+    if confirmed?
+      email
+    else
+      "#{email} (new)"
+    end
+
   end
 
   def self.new_with_session(params, session)

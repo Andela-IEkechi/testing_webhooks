@@ -20,9 +20,7 @@ Conductor::Application.routes.draw do
   end
 
   resources :projects do
-    member do
-      get 'access'
-    end
+    resource  :access
     resources :features
     resources :sprints
   end
