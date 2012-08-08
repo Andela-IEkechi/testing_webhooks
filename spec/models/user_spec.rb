@@ -2,6 +2,11 @@ require 'spec_helper'
 
 describe User do
 
+  shared_examples "a project participant" do
+    it "that can to participate in projects"
+    it "that can all the tickets for all the projects it participates in"
+  end
+
   context "it has factories that" do
     it "should have a working factory" do
       user = create(:user)
@@ -19,6 +24,9 @@ describe User do
     before(:each) do
       @user = create(:user)
     end
+
+    it_behaves_like "a project participant"
+
     it "should be able to own many projects" do
       create(:project, :user => @user)
       create(:project, :user => @user)
@@ -34,7 +42,6 @@ describe User do
     end
 
     it "should report it's email as to_s"
-    it "should have access to all the tickets under all the projects it participates in"
   end
 
   context "when not confirmed" do
@@ -42,12 +49,14 @@ describe User do
       @user = create(:unconfirmed_user)
     end
 
+    it_behaves_like "a project participant"
+
     it "should be token authenticatable"
 
     it "should report it's email and (invite) as to_s" do
       @user.to_s.should eq("#{@user.email (invited)}")
     end
+
   end
 
-  it "should be able to participate in projects"
 end
