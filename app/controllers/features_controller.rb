@@ -34,7 +34,7 @@ class FeaturesController < ApplicationController
 
   def destroy
     if @feature.destroy
-      redirect_to project_features_path(@project)
+      redirect_to project_path(@project)
     else
       redirect_to project_feature_path(@project, @feature)
     end

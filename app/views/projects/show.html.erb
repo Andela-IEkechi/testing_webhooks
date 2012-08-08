@@ -5,7 +5,7 @@
   <%= render :partial => "/features/index", :locals => {:features => @project.features } %>
 
   <h3>Tickets</h3>
-  <%= render :partial => "/tickets/index", :locals => {:tickets => @project.tickets } %>
+  <%= render :partial => "/tickets/index", :locals => {:tickets => @project.tickets.unassigned } %>
 
 </div>
 

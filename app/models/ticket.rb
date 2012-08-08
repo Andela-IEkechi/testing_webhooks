@@ -18,6 +18,8 @@ class Ticket < ActiveRecord::Base
   validates :status_id, :presence => true
   validates :cost, :inclusion => {:in => COST}
 
+  scope :unassigned, where(:sprint_id => nil, :feature_id => nil)
+
   def to_s
     title
   end
