@@ -1,6 +1,6 @@
 <div class="well">
   <h3><%= @ticket.title %></h3>
-  <h4><%= @ticket.ticketable %></h4>
+  <h4><%= @ticket.parent %></h4>
   <div>
     <%= @ticket.body %>
   </div>
@@ -9,5 +9,5 @@
 
 <%= render :partial => '/comments/comment', :collection => @ticket.comments %>
 
-<%= render :partial => '/comments/new', :locals => {:comment => @ticket.comments.build()} %>
+<%= render :partial => '/comments/new', :locals => {:comment => @ticket.comments.build(:status_id => @ticket.current_status.id)} %>
 

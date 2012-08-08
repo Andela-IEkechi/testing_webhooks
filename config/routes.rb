@@ -13,20 +13,15 @@ Conductor::Application.routes.draw do
   # This route can be invoked with purchase_url(:id => product.id)
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
-  resources :users do
-    resources :tickets
+  resources :users
+
+  resources :tickets do
+    resources :comments
   end
 
   resources :projects do
-    resources :tickets
-
-    resources :features do
-      resources :tickets
-    end
-
-    resources :sprints do
-      resources :tickets
-    end
+    resources :features
+    resources :sprints
   end
 
 

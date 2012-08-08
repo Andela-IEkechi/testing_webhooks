@@ -1,9 +1,12 @@
 <%= simple_form_for([comment.ticket, comment], :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.input :body, :input_html => {:class => 'span12', :rows => 10}%>
   <%= f.input :status do %>
-    <%= f.select :status_id, comment.ticket.ticketable.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
+    <%= f.select :status_id, comment.ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
   <% end %>
   <div class="form-actions">
-    <%= f.submit :class=>'pull-right' %>
+    <%= f.submit :class=>'btn' %>
+    <%= link_to 'cancel', project_feature_path(comment.ticket.project, comment.ticket.feature), :class => 'btn' if comment.ticket.belongs_to_feature? && !comment.ticket.belongs_to_sprint? %>
+    <%= link_to 'cancel', project_sprint_path(comment.ticket.project, comment.ticket.sprint), :class => 'btn' if !comment.ticket.belongs_to_feature? && comment.ticket.belongs_to_sprint? %>
+    <%= link_to 'cancel', project_path(comment.ticket.project), :class => 'btn' if !comment.ticket.belongs_to_feature? && !comment.ticket.belongs_to_sprint? %>
   </div>
 <% end %>

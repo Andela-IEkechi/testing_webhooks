@@ -1,16 +1,14 @@
 class FeaturesController < ApplicationController
-  before_filter :load_project
+  load_and_authorize_resource :project
+  load_and_authorize_resource :feature, :through => :project
 
   def show
-    @feature = @project.features.find(params[:id])
   end
 
   def new
-    @feature = @project.features.build()
   end
 
   def create
-    @feature = @project.features.build(params[:feature])
     if @feature.save
       flash[:info] = "Feature was added"
       redirect_to project_path(@feature.project)
@@ -21,12 +19,9 @@ class FeaturesController < ApplicationController
   end
 
   def edit
-    @feature = @project.features.find(params[:id])
   end
 
   def update
-    @feature = @project.features.find(params[:id])
-
     if @feature.update_attributes(params[:feature])
       flash[:info] = "Feature was updated"
       redirect_to project_feature_path(@feature.project,@feature)
@@ -38,12 +33,11 @@ class FeaturesController < ApplicationController
   end
 
   def destroy
-
+    if @feature.destroy
+      redirect_to project_features_path(@project)
+    else
+      redirect_to project_feature_path(@project, @feature)
+    end
   end
 
-  private
-
-  def load_project
-    @project = Project.find(params[:project_id])
-  end
 end

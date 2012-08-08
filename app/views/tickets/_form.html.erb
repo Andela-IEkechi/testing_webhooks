@@ -1,15 +1,20 @@
 <%= yield :form_heading %>
 
-<%= simple_form_for([@ticket.parent, @ticket], :html => {:class=>'form-horizontal'}) do |f| %>
+<%= simple_form_for(@ticket, :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'span12'} %>
-  <%= f.simple_fields_for :comments do |c| %>
-    <%= c.input :body, :input_html => {:class => 'span12', :rows => 10}%>
-    <%= c.input :status do %>
-      <%= c.select :status_id, @project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
-    <% end %>
+  <%= f.input :body, :input_html => {:class => 'span12', :rows => 10}%>
+  <%= f.input :status do %>
+    <%= f.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
   <% end %>
 
+  <%= f.input :project_id, :as => :hidden %>
+  <%= f.input :feature_id, :as => :hidden %>
+  <%= f.input :sprint_id, :as => :hidden %>
+
   <div class="form-actions">
-    <%= f.submit :class=>'pull-right' %>
+    <%= f.submit :class=>'btn' %>
+    <%= link_to 'cancel', project_feature_path(@ticket.project, @ticket.feature), :class => 'btn' if @ticket.belongs_to_feature? && !@ticket.belongs_to_sprint? %>
+    <%= link_to 'cancel', project_sprint_path(@ticket.project, @ticket.sprint), :class => 'btn' if !@ticket.belongs_to_feature? && @ticket.belongs_to_sprint? %>
+    <%= link_to 'cancel', project_path(@ticket.project), :class => 'btn' if !@ticket.belongs_to_feature? && !@ticket.belongs_to_sprint? %>
   </div>
 <% end %>

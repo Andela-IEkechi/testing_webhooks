@@ -15,7 +15,7 @@
       <%= link_to 'add a new feature', new_project_feature_path(@project) %>
     </li>
     <li>
-      <%= link_to 'add a new ticket', new_project_ticket_path(@project) %>
+      <%= link_to 'add a new ticket', new_ticket_path(:project_id => @project) %>
     </li>
   <% end %>
   <% if action_name == 'index' %>

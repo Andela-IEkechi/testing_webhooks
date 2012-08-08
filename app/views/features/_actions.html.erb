@@ -9,10 +9,10 @@
       <%= link_to 'edit this feature', edit_project_feature_path(@feature.project,@feature) %>
     </li>
     <li>
-      <%= link_to 'remove this feature', project_feature_path(@feature.project,@feature), :method => :delete %>
+      <%= link_to 'remove this feature', project_feature_path(@feature.project,@feature), :method => :delete, :confirm => "Are you sure you want to delete this feature?" %>
     </li>
     <li>
-      <%= link_to 'add a new ticket', new_project_feature_ticket_path(@feature.project, @feature) %>
+      <%= link_to 'add a new ticket', new_ticket_path(:feature_id => @feature) %>
     </li>
   <% end %>
   <% if action_name == 'index' %>

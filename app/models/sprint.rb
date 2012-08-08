@@ -1,6 +1,7 @@
 class Sprint < ActiveRecord::Base
   belongs_to :project
-  has_many :tickets #tickets are tied to a project, so we dont destroy them if a sprint is removed
+
+  include TicketHolder
 
   attr_accessible :name, :due_on
 

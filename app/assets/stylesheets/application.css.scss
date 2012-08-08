@@ -1,2 +1,12 @@
 @import "bootstrap";
+@import "projects";
 @import "tickets";
+@import "features";
+@import "sprints";
+@import "users";
+@import "comments";
+
+tr[data-href] {
+  cursor: pointer;
+
+}

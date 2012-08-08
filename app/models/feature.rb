@@ -1,6 +1,7 @@
 class Feature < ActiveRecord::Base
 	belongs_to :project #not optional
-  has_many :tickets #tickets are tied to a project, so we dont destroy them if a feature is removed
+
+  include TicketHolder
 
   attr_accessible :title, :description, :due_on
 
@@ -9,4 +10,5 @@ class Feature < ActiveRecord::Base
   def to_s
     title
   end
+
 end

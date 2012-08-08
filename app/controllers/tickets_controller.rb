@@ -12,17 +12,15 @@ class TicketsController < ApplicationController
 	end
 
   def show
-    redirect_to parent_path()
   end
 
   def new
-    @ticket.comments.build()
   end
 
   def create
     if @ticket.save
-      flash[:info] = "Ticket was added"
-      redirect_to show_path
+      flash.keep[:info] = "Ticket was added"
+      redirect_to ticket_path(@ticket, :project_id => @project, :feature_id => @feature)
     else
       flash[:alert] = "Ticket could not be created"
       render 'new'
@@ -35,7 +33,7 @@ class TicketsController < ApplicationController
   def update
     if @ticket.update_attributes(params[:ticket])
       flash[:info] = "Ticket was updated"
-      redirect_to show_path
+      redirect_to ticket_path(@ticket, :project_id => @project, :feature_id => @feature)
     else
       flash[:alert] = "Ticket could not be updated"
       render 'edit'
@@ -48,7 +46,8 @@ class TicketsController < ApplicationController
     if @ticket.destroy
       redirect_to delete_path
     else
-      redirect_to show_path
+      flash[:alert] = "Ticket could not be deleted"
+      render 'show'
     end
   end
 
@@ -56,8 +55,8 @@ class TicketsController < ApplicationController
 
   def set_parents
     #must have a project to make a new ticket, optionally has a feature also
-    @ticket.project = @project
-    @ticket.feature = @feature
+    @ticket.project = @project if @project
+    @ticket.feature = @feature if @feature
   end
 
   def parent_path
@@ -66,9 +65,4 @@ class TicketsController < ApplicationController
     tickets_path()
   end
 
-  def show_path
-    return project_feature_ticket_path(@ticket.project, @ticket.feature, @ticket) if @ticket.feature
-    return project_ticket_path(@ticket.project, @ticket) if @ticket.project
-    ticket_path(@ticket)
-  end
 end

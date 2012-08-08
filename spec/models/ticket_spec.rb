@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ticket do
+describe Ticket , :focus => true do
   before(:each) do
     @ticket = create(:ticket)
   end
@@ -11,9 +11,15 @@ describe Ticket do
     end
 
     it "should create a valid ticket belonging to a feature" do
-      feature_ticket= create(:ticket_for_feature)
+      feature_ticket = create(:ticket_for_feature)
       feature_ticket.should_not be_nil
       feature_ticket.feature.should_not be_nil
+    end
+
+    it "should create a valid ticket belonging to a sprint" do
+      sprint_ticket = create(:ticket_for_sprint)
+      sprint_ticket.should_not be_nil
+      sprint_ticket.sprint.should_not be_nil
     end
 
     it "should create a valid ticket that also sets the status" do
@@ -23,6 +29,17 @@ describe Ticket do
     it "should create and invalid ticket" do
       ticket = build(:invalid_ticket)
       ticket.should_not be_valid
+    end
+
+  end
+
+  it "should have a default cost of 0" do
+    @ticket.cost.should == 0
+  end
+
+  it "should be valid when cost is in #{Ticket::COST}" do
+    Ticket::COST.each do |cost|
+      create(:ticket, :cost => cost).should_not be_nil
     end
   end
 
@@ -80,12 +97,29 @@ describe Ticket do
       @ticket.should_not be_valid
   end
 
-  it "should return the project as the parent, if there is no feature" do
+  it "should return the project as the parent, if there is no feature or sprint" do
     @ticket.parent.should == @ticket.project
+    @ticket.should be_belongs_to_project
   end
 
-  it "should return the feature as the parent, if there is one" do
+  it "should return the feature as the parent, if there is no sprint" do
     feature_ticket = create(:ticket_for_feature)
     feature_ticket.parent.should == feature_ticket.feature
+    feature_ticket.should be_belongs_to_feature
+  end
+
+  it "should not return the feature as the parent, if there is a sprint" do
+    feature_ticket = create(:ticket_for_feature)
+    sprint = create(:sprint, :project => feature_ticket.project)
+    feature_ticket.sprint = sprint
+    feature_ticket.save
+    feature_ticket.parent.should != feature_ticket.feature
+    feature_ticket.should be_belongs_to_feature
+  end
+
+  it "should return the sprint as the parent, if there is one" do
+    sprint_ticket = create(:ticket_for_sprint)
+    sprint_ticket.parent.should == sprint_ticket.sprint
+    sprint_ticket.should be_belongs_to_sprint
   end
 end

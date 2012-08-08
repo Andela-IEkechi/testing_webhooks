@@ -1,9 +1,8 @@
 class CommentsController < ApplicationController
-  before_filter :load_ticket, :load_comment
+  load_and_authorize_resource :ticket
+  load_and_authorize_resource :comment, :through => :ticket
 
   def index
-      @comments = @ticket.comments if @ticket
-      @comments ||= Comment.all
   end
 
   def create
@@ -31,24 +30,12 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-  end
-
-  private
-  def load_ticket
-    if params[:ticket_id]
-      @ticket = Ticket.find(params[:ticket_id])
+    if @comment.destroy
+      redirect_to ticket_path(@ticket)
+    else
+      flash[:alert] = "Comment could not be deleted"
+      redirect_to ticket_path(@ticket)
     end
   end
 
-  def load_comment
-    if params[:id] #show/edit
-      @comment = Comment.find(params[:id])
-    elsif params[:comment] #create/update
-      @comment = @ticket.comments.build(params[:comment]) if @ticket
-      @comment ||= Comment.new(params[:comment])
-    else #new
-      @comment = @ticket.comments.build() if @ticket
-      @comment ||= Comment.new()
-    end
-  end
 end

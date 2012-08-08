@@ -51,13 +51,13 @@ ActiveRecord::Schema.define(:version => 20120806182646) do
   end
 
   create_table "tickets", :force => true do |t|
-    t.string   "title",      :null => false
+    t.string   "title",                     :null => false
     t.text     "body"
-    t.integer  "project_id", :null => false
+    t.integer  "project_id",                :null => false
     t.integer  "feature_id"
-    t.integer  "cost"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "cost",       :default => 0
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.integer  "status_id"
     t.integer  "sprint_id"
   end
