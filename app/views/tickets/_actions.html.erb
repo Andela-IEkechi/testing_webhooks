@@ -15,7 +15,7 @@
       <%= link_to 'edit this ticket', edit_ticket_path(@ticket) %>
     </li>
     <li>
-      <%= link_to 'remove this ticket', ticket_path(@ticket), :method => :delete, :confirm => "Are you sure you want to remove this ticket?" %>
+      <%= link_to 'remove this ticket', ticket_path(@ticket), :method => :delete, :data => {:confirm => "Are you sure you want to remove this ticket?"} %>
     </li>
   <% end %>
   <% if action_name != 'new' %>

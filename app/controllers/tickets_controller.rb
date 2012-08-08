@@ -1,6 +1,7 @@
 class TicketsController < ApplicationController
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project
+  load_and_authorize_resource :sprint, :through => :project
   load_and_authorize_resource :ticket
 
   before_filter :set_parents, :only => [:new, :create]
@@ -57,12 +58,13 @@ class TicketsController < ApplicationController
     #must have a project to make a new ticket, optionally has a feature also
     @ticket.project = @project if @project
     @ticket.feature = @feature if @feature
+    @ticket.sprint  = @sprint  if @sprint
   end
 
   def parent_path
-    return project_feature_path(@ticket.project, @ticket.feature) if @ticket.feature
-    return project_path(@ticket.project) if @ticket.project
-    tickets_path()
+    return project_sprint_path(@ticket.project, @ticket.sprint) if @ticket.belongs_to_sprint?
+    return project_feature_path(@ticket.project, @ticket.feature) if @ticket.belongs_to_feature?
+    project_path(@ticket.project)
   end
 
 end

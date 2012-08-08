@@ -1,0 +1,13 @@
+<table class="table table-bordered table-striped">
+  <% sprints.each do |sprint| %>
+  <tr class="clickable" data-href="<%= project_sprint_path(sprint.project, sprint) %>">
+    <td><%= sprint.title %></td>
+    <td><%= sprint.tickets.count %></td>
+  </tr>
+  <% end %>
+  <% if sprints.count == 0 %>
+  <tr>
+    <td>There are no sprints</td>
+  </tr>
+  <% end %>
+</table>

@@ -7,6 +7,13 @@
     <%= f.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
   <% end %>
 
+  <%= f.input :feature do %>
+    <%= f.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
+  <% end %>
+  <%= f.input :sprint do %>
+    <%= f.select :sprint_id, @ticket.project.sprints.all.map { |s| [s.title, s.id] }, :include_blank => '- unassigned -'  %>
+  <% end %>
+
   <%= f.input :project_id, :as => :hidden %>
   <%= f.input :feature_id, :as => :hidden %>
   <%= f.input :sprint_id, :as => :hidden %>

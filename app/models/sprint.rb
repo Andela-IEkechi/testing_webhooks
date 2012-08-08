@@ -3,12 +3,16 @@ class Sprint < ActiveRecord::Base
 
   include TicketHolder
 
-  attr_accessible :name, :due_on
+  attr_accessible :title, :due_on
 
   validates :project_id, :presence => true
-  validates :name, :presence => true, :uniqueness => {:scope => :project_id}
+  validates :title, :presence => true, :uniqueness => {:scope => :project_id}
 
   def cost
     tickets.sum(&:cost)
+  end
+
+  def to_s
+    title
   end
 end

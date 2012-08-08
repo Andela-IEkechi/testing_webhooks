@@ -1,0 +1,10 @@
+<div class="well">
+  <h3><%= @sprint.title %></h3>
+  <div>
+    <%= @sprint.due_on %>
+  </div>
+
+  <h3>Tickets</h3>
+  <%= render :partial => "/tickets/index", :locals => {:tickets => @sprint.tickets } %>
+</div>
+

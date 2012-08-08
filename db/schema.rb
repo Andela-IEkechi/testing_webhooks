@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(:version => 20120806182646) do
 
   create_table "sprints", :force => true do |t|
     t.date     "due_on",     :null => false
-    t.string   "name",       :null => false
+    t.string   "title",      :null => false
     t.integer  "project_id", :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

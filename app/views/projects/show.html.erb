@@ -4,6 +4,9 @@
   <h3>Features</h3>
   <%= render :partial => "/features/index", :locals => {:features => @project.features } %>
 
+  <h3>Sprints</h3>
+  <%= render :partial => "/sprints/index", :locals => {:sprints => @project.sprints } %>
+
   <h3>Tickets</h3>
   <%= render :partial => "/tickets/index", :locals => {:tickets => @project.tickets.unassigned } %>
 
