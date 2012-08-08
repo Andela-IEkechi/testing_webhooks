@@ -12,6 +12,8 @@ class Ability
     #   end
 
     can :manage, Project, :user_id => user.id
+    can :read, Project, :participants => {:id => user.id}
+
     can :manage, Feature
     can :manage, Sprint
     can :manage, Ticket
