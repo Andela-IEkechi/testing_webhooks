@@ -15,12 +15,26 @@
 				<li>
 					<%= link_to "My Tickets", tickets_path() %>
 				</li>
-				<% if @project %>
+				<% if @project && can?(:manage, @project) %>
 				<li>
 					<%= link_to "Access", edit_project_access_path(@project) %>
 				</li>
 				<% end %>
 			</ul>
+
+			<div class="dropdown pull-right">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				  <%= current_user.email%>
+				  <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+				  <li>
+				    <%= link_to destroy_user_session_path, :method => :delete do%>
+				      logout
+				    <% end %>
+				  </li>
+				</ul>
+      </div>
 			<% end %>
 		</div>
 	</div>
