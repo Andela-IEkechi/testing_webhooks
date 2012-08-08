@@ -1,7 +1,13 @@
-<%= yield :form_heading %>
+<% if comment %>
+  <%
+    @ticket.body = ''
+  %>
+<% else %>
+  <%= yield :form_heading %>
+<% end %>
 
 <%= simple_form_for(@ticket, :html => {:class=>'form-horizontal'}) do |f| %>
-  <%= f.input :title, :input_html => {:class => 'span12'} %>
+  <%= f.input :title, :input_html => {:class => 'span12'} unless comment%>
   <%= f.input :body, :input_html => {:class => 'span12', :rows => 10}%>
   <%= f.input :status do %>
     <%= f.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>

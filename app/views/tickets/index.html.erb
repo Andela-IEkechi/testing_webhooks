@@ -1,12 +1,1 @@
-<table class="table table-bordered table-striped">
-  <% @tickets.each do |ticket| %>
-  <tr class="clickable" data-href="<%= ticket_path(ticket) %>">
-    <td><%= ticket.title %></td>
-  </tr>
-  <% end %>
-  <% if @tickets.count == 0 %>
-  <tr>
-    <td>There are no tickets</td>
-  </tr>
-  <% end %>
-</table>
+<%= render :partial => 'index', :collection => @tickets %>

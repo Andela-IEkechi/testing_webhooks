@@ -123,6 +123,9 @@ GEM
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
     orm_adapter (0.4.0)
+    paper_trail (2.6.3)
+      activerecord (~> 3.0)
+      railties (~> 3.0)
     pg (0.14.0)
     polyglot (0.3.3)
     rack (1.4.1)
@@ -228,6 +231,7 @@ DEPENDENCIES
   jquery-rails
   nested_form
   omniauth-github
+  paper_trail
   pg
   rails (= 3.2.7)
   rb-fsevent

@@ -1,0 +1,10 @@
+<%
+  this_version = version
+  this_version = version.reify if version.class.name == 'Version'
+%>
+<div class="well">
+  <p><%= this_version.body %></p>
+  <p><%= this_version.status %></p>
+  <p><%= this_version.feature %></p>
+  <p><%= this_version.sprint %></p>
+</div>

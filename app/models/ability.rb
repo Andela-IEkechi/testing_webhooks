@@ -15,7 +15,6 @@ class Ability
     can :manage, Feature
     can :manage, Sprint
     can :manage, Ticket
-    can :manage, Comment
 
     #
     # The first argument to `can` is the action you are giving the user permission to do.
