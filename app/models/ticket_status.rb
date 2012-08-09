@@ -19,7 +19,7 @@ class TicketStatus < ActiveRecord::Base
 
   def check_for_tickets
     if tickets.count > 0
-      errors.add(:base, "cannot delete ticket status while tickets exist")
+      errors.add(:base, "cannot delete a ticket status while tickets refer to it")
       return false
     end
   end

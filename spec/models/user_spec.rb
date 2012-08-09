@@ -54,7 +54,7 @@ describe User do
     it "should be token authenticatable"
 
     it "should report it's email and (invite) as to_s" do
-      @user.to_s.should eq("#{@user.email (invited)}")
+      @user.to_s.should eq("#{@user.email} (invited)")
     end
 
   end

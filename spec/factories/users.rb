@@ -13,5 +13,12 @@ FactoryGirl.define do
     after(:create) do |user|
       user.confirm!
     end
+
+    factory :unconfirmed_user do
+      after(:create) do |user|
+        user.confirmed_at = nil
+        user.save
+      end
+    end
   end
 end

@@ -9,13 +9,13 @@ describe Sprint do
     @sprint.should_not be_nil
   end
 
-  it "must have a name" do
-    @sprint.name = nil
+  it "must have a title" do
+    @sprint.title = nil
     @sprint.should_not be_valid
   end
 
-  it "must have unique name in the project" do
-    dup_sprint = build(:sprint, :name => @sprint.name, :project => @sprint.project)
+  it "must have unique title in the project" do
+    dup_sprint = build(:sprint, :title => @sprint.title, :project => @sprint.project)
     dup_sprint.should_not be_valid
   end
 

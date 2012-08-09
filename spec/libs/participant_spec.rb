@@ -8,6 +8,6 @@ describe Participant do
 
   it "should invite users who are new to a project"
   it "should not invite users who were already part of a project"
-  it "should not invite cunconfirmed users"
+  it "should not invite unconfirmed users"
 
 end

@@ -1,7 +1,7 @@
 module Participant
 
   #figure out which participants not know to the app and make users for them (triggering an invite email)
-  def create_from_params(project, participants_attrs)
+  def self.create_from_params(project, participants_attrs={})
     new_user_ids = []
     #for each new participant, look them up first, they might be a user already
     participants_attrs.each do |token, attrs|
@@ -12,17 +12,17 @@ module Participant
         #we have to set a pasword, so we just make it the same as the token
         user.password = user.password_confirmation = user.authentication_token
         user.save #this should trigger emails to the user if they are new
-        new_user_ids << user.id
       end
+      new_user_ids << user.id
     end if participants_attrs
     new_user_ids
   end
 
-  def notify(project, updated_participant_ids)
+  def self.notify(project, updated_participant_ids=[])
       #send out notifications to all the newly assigned participants
-      new_participants.each do |id|
+      updated_participant_ids.each do |id|
         user = User.find(id)
-        AccessMailer.project_access_notification(user, project).deliver if user.confirmed?
+        AccessMailer.project_access_notification(user, project).deliver if user.confirmed? && !project.participant_ids.include?(id)
       end
   end
 

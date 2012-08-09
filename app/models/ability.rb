@@ -12,7 +12,8 @@ class Ability
     #   end
 
     can :manage, Project, :user_id => user.id
-    can :read, Project, :participants => {:id => user.id}
+    can :create, Project if user.confirmed?
+    can :read, Project #we refine the perms in the controller, it's too trickey here :(
 
     can :manage, Feature
     can :manage, Sprint

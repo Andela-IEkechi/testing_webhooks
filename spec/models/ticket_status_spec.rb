@@ -39,13 +39,6 @@ describe TicketStatus do
     @status.should have(1).tickets
   end
 
-  it "should know about comments that use it" do
-    @status.should have(0).comments
-    comment = create(:comment, :status => @status)
-    @status.reload
-    @status.should have(1).comments
-  end
-
   it "should not be deleted if it is in use" do
     @status.should have(0).tickets
     create(:ticket, :status => @status)
