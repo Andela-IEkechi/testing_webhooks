@@ -55,15 +55,8 @@ describe TicketsController do
         end
       end
 
-      it "redirect to the :edit action" do
-        response.should be_redirect
-        if @feature
-          parent_path = project_feature_path(@ticket.project, @ticket.feature)
-        else
-          parent_path = project_path(@ticket.project)
-        end
-        parent_path ||= tickets_path()
-        response.should redirect_to(parent_path)
+      it "renders the :show template" do
+        response.should render_template(:show)
       end
     end
 
@@ -128,11 +121,11 @@ describe TicketsController do
           if @feature
             post :create, :project_id => @project.id, :feature_id => @feature.id, :ticket => attributes_for(:ticket, :project_id => @project.id, :feature_id => @feature.id, :status_id => @project.ticket_statuses.first.id)
             response.should be_redirect
-            response.should redirect_to(project_feature_ticket_path(@project, @feature, assigns(:ticket).id))
+            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project, :feature_id => @feature))
           else
             post :create, :project_id => @project.id, :ticket => attributes_for(:ticket, :project_id => @project.id, :status_id => @project.ticket_statuses.first.id)
             response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id))
+            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project))
           end
         end
       end
@@ -179,11 +172,11 @@ describe TicketsController do
           if @feature
             post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(project_feature_ticket_path(@project, @feature, assigns(:ticket).id))
+            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project, :feature_id => @feature))
           else
             post :update, :project_id => @project.id, :id => @ticket, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id))
+            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project))
           end
         end
       end
@@ -233,21 +226,6 @@ describe TicketsController do
           delete :destroy, :id => @ticket, :project_id => @project
           response.should redirect_to(project_path(@project))
         end
-      end
-
-      it "deletes related comments" do
-        expect {
-          create(:comment, :ticket => @ticket)
-          create(:comment, :ticket => @ticket)
-        }.to change(Comment, :count).by(2)
-        @ticket.reload
-        expect {
-          if @feature
-            delete :destroy, :id => @ticket, :project_id => @project, :feature_id => @feature.id
-          else
-            delete :destroy, :id => @ticket, :project_id => @project
-          end
-        }.to change(Comment,:count).by(-2)
       end
     end
   end
