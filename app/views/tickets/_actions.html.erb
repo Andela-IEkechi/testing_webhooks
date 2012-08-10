@@ -22,7 +22,7 @@
   <% end %>
   <% if action_name != 'new' %>
     <li>
-      <%= link_to 'add a new ticket', new_ticket_path() %>
+      <%= link_to 'add a new ticket', new_ticket_path(:project_id => @ticket.project) %>
     </li>
   <% end %>
 </ul>

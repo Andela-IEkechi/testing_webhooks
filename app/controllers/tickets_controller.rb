@@ -16,9 +16,14 @@ class TicketsController < ApplicationController
   end
 
   def new
+    @ticket.comments.build(:user_id => current_user.id)
   end
 
   def create
+    p @ticket.attributes
+    @ticket.valid?
+    p @ticket.errors
+
     if @ticket.save
       flash.keep[:info] = "Ticket was added"
       redirect_to ticket_path(@ticket, :project_id => @project, :feature_id => @feature)

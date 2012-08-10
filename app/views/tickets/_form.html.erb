@@ -1,30 +1,34 @@
 <%
   comment ||= false
 %>
-<% if comment %>
-  <%
-    @ticket.body = ''
-  %>
-<% else %>
+<% unless comment %>
   <%= yield :form_heading %>
 <% end %>
 
 <%= simple_form_for(@ticket, :html => {:class=>'form-horizontal'}) do |f| %>
-  <%= f.input :title, :input_html => {:class => 'span12'} unless comment%>
-  <%= f.input :body, :input_html => {:class => 'span12', :rows => 10}%>
-  <%= f.input :status do %>
-    <%= f.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
-  <% end %>
-  <%= f.input :cost, :collection => Ticket::COST %>
+  <%= f.simple_fields_for :comments do |c_f| %>
+    <%= c_f.input :title, :input_html => {:class => 'span12'} unless comment%>
+    <%= c_f.input :body, :as => :text, :input_html => {:class => 'span12', :rows => 10}%>
+    <%= c_f.input :status do %>
+      <%= c_f.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
+    <% end %>
+    <%= c_f.input :cost, :collection => Ticket::COST, :include_blank => '- unknown -' %>
 
-  <%= f.input :feature do %>
-    <%= f.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
-  <% end %>
-  <%= f.input :sprint do %>
-    <%= f.select :sprint_id, @ticket.project.sprints.all.map { |s| [s.title, s.id] }, :include_blank => '- unassigned -'  %>
-  <% end %>
-  <%= f.input :user do %>
-    <%= f.select :user_id, @ticket.project.participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
+    <% unless @ticket.new_record? && !@feature %>
+      <%= c_f.input :feature do %>
+        <%= c_f.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
+      <% end %>
+    <% end %>
+    <% unless @ticket.new_record? && !@sprint %>
+      <%= c_f.input :sprint do %>
+        <%= c_f.select :sprint_id, @ticket.project.sprints.all.map { |s| [s.title, s.id] }, :include_blank => '- unassigned -'  %>
+      <% end %>
+    <% end %>
+    <%= c_f.input :assigned_to do %>
+      <%= c_f.select :assignee_id, @ticket.project.participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
+    <% end %>
+
+    <%= c_f.input :user_id, :as => :hidden %>
   <% end %>
 
   <%= f.input :project_id, :as => :hidden %>

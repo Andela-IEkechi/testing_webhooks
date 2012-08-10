@@ -1,0 +1,37 @@
+<%
+  changeset = {}
+  previous = comment.previous
+
+  #get what changed
+  [:status_id, :feature_id, :sprint_id, :assignee_id, :cost].each do |attr|
+    now = comment.send(attr)
+    if previous
+      was = previous.send(attr)
+      changeset[attr] = [now] if now != was
+    else
+      changeset[attr] = [now]
+    end
+  end
+  changeset[:user] = comment.user.to_s
+%>
+<div class="well">
+  <% if changeset[:user] %>
+    <p>updated by <b><%= changeset[:user] %></b></p>
+  <% end %>
+  <% if changeset[:status_id] %>
+    <p>status changed to <b><%= comment.status %></b></p>
+  <% end %>
+  <% if changeset[:feature_id] %>
+    <p>now part of feature: <b><%= comment.feature || 'none' %></b></p>
+  <% end %>
+  <% if changeset[:sprint_id] %>
+    <p>now part of sprint: <b><%= comment.sprint || 'none' %></b></p>
+  <% end %>
+  <% if changeset[:user_id] %>
+    <p>assigned to: <b><%= comment.user || 'none' %></b></p>
+  <% end %>
+  <% if changeset[:cost] %>
+    <p>cost updated to: <b><%= comment.cost %></b></p>
+  <% end %>
+  <p><%= comment.body %></p>
+</div>

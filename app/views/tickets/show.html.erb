@@ -3,8 +3,7 @@
   <h4><%= @ticket.parent %></h4>
 </div>
 
-<%= render :partial => 'version', :collection => @ticket.versions %>
-<%= render :partial => 'version', :object => @ticket %>
+<%= render :partial => '/comments/comment', :collection => @ticket.comments %>
 
-<%= render :partial => 'form', :locals => {:comment => true} %>
+<%= render :partial => 'form', :locals => {:comment => true}%>
 

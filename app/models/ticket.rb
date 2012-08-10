@@ -1,42 +1,70 @@
 class Ticket < ActiveRecord::Base
   belongs_to :project #always
-  belongs_to :feature #optional
-  belongs_to :sprint  #optional
-  belongs_to :user #optional, who it's assigned to
+  has_many :comments, :order => :id
 
-  belongs_to :status, :class_name => 'TicketStatus'
-
-  has_paper_trail :on => [:update]
-
-  attr_accessible :title, :body, :cost
-  attr_accessible :status_id, :feature_id, :project_id, :sprint_id, :user_id
+  attr_accessible :project_id, :comments_attributes
+  accepts_nested_attributes_for :comments
 
   COST = [0,1,2,3]
 
-  validates :title, :presence => true, :length => {:minimum => 3}
   validates :project_id, :presence => true
-  validates :status_id, :presence => true
-  validates :cost, :inclusion => {:in => COST}
 
-  scope :unassigned, where(:sprint_id => nil, :feature_id => nil)
+  scope :unassigned, lambda{ parent.is_a? Project}
 
   def to_s
     title
   end
 
   def parent
-    sprint || feature || project
+    get_last(:parent) || project
   end
 
   def belongs_to_feature?
-    feature != nil
+    get_last(:belongs_to_feature?)
   end
 
   def belongs_to_sprint?
-    sprint != nil
+    get_last(:belongs_to_sprint?)
   end
 
-  def belongs_to_project?
-    project != nil
+  def assigned?
+    get_last(:assigned?)
+  end
+
+  def title
+    get_current(:title)
+  end
+
+  def body
+    get_current(:body)
+  end
+
+  def sprint
+    get_last(:sprint)
+  end
+
+  def feature
+    get_last(:feature)
+  end
+
+  def user
+    get_last(:user)
+  end
+
+  def status
+    get_last(:status)
+  end
+
+  def cost
+    get_last(:cost)
+  end
+
+  private
+  def get_current(attr)
+    attr = attr.to_sym
+    comments.collect(&attr).compact.last
+  end
+  def get_last(attr)
+    comments.last.try(attr)
   end
 end
