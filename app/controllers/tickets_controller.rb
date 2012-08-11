@@ -13,27 +13,35 @@ class TicketsController < ApplicationController
 	end
 
   def show
+    #create a new comment, but dont tell the ticket about it, or it will render
+    @comment = Comment.new(
+      :ticket_id => @ticket.id,
+      :status_id => @ticket.status.try(:id),
+      :feature_id => @ticket.feature.try(:id),
+      :sprint_id => @ticket.sprint.try(:id),
+      :assignee_id => @ticket.assignee.try(:id),
+      :cost => @ticket.cost
+      )
   end
 
   def new
-    @ticket.comments.build(:user_id => current_user.id)
+    @comment = @ticket.comments.build()
   end
 
   def create
-    p @ticket.attributes
-    @ticket.valid?
-    p @ticket.errors
-
+    @ticket.comments.first.user = current_user
     if @ticket.save
       flash.keep[:info] = "Ticket was added"
-      redirect_to ticket_path(@ticket, :project_id => @project, :feature_id => @feature)
+      redirect_to ticket_path(@ticket, :project_id => @project.id, :feature_id => @feature.id)
     else
       flash[:alert] = "Ticket could not be created"
+      @comment = Comment.new(:ticket_id => @ticket.id)
       render 'new'
     end
   end
 
   def edit
+    @comment = @ticket.comments.first
   end
 
   def update

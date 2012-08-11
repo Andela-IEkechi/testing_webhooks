@@ -1,13 +1,13 @@
 class Comment < ActiveRecord::Base
   belongs_to :ticket #always
-  has_one :project, :through => :ticket
+  has_one    :project, :through => :ticket
   belongs_to :feature #optional
   belongs_to :sprint  #optional
   belongs_to :assignee, :class_name => 'User' #optional, who it's assigned to
   belongs_to :status, :class_name => 'TicketStatus'
   belongs_to :user #always, who made the comment
 
-  attr_accessible :title, :body, :cost
+  attr_accessible :body, :cost
   attr_accessible :status_id, :feature_id, :ticket_id, :sprint_id, :user_id, :assignee_id
 
   #we can't enforce this in the model, or nested create fails : validates :ticket_id, :presence => true

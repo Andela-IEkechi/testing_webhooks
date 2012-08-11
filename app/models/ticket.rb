@@ -2,7 +2,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :project #always
   has_many :comments, :order => :id
 
-  attr_accessible :project_id, :comments_attributes
+  attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
 
   COST = [0,1,2,3]
@@ -19,22 +19,6 @@ class Ticket < ActiveRecord::Base
     get_last(:parent) || project
   end
 
-  def belongs_to_feature?
-    get_last(:belongs_to_feature?)
-  end
-
-  def belongs_to_sprint?
-    get_last(:belongs_to_sprint?)
-  end
-
-  def assigned?
-    get_last(:assigned?)
-  end
-
-  def title
-    get_current(:title)
-  end
-
   def body
     get_current(:body)
   end
@@ -45,6 +29,10 @@ class Ticket < ActiveRecord::Base
 
   def feature
     get_last(:feature)
+  end
+
+  def assignee
+    get_last(:assignee)
   end
 
   def user

@@ -1,13 +1,13 @@
 <ul class="nav nav-pills nav-stacked">
   <% if action_name != 'index' %>
     <li>
-      <% if @ticket.belongs_to_sprint? %>
+      <% if @ticket.sprint %>
         <%= link_to 'back to sprint', project_sprint_path(@ticket.project, @ticket.sprint) %>
       <% end %>
-      <% if @ticket.belongs_to_feature? %>
+      <% if @ticket.feature %>
         <%= link_to "back to feature", project_feature_path(@ticket.project, @ticket.feature) %>
       <% end %>
-      <% unless @ticket.belongs_to_feature? || @ticket.belongs_to_sprint? %>
+      <% unless @ticket.feature || @ticket.sprint %>
         <%= link_to 'back to project', project_path(@ticket.project) %>
       <% end %>
     </li>
