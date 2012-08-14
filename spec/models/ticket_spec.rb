@@ -66,6 +66,20 @@ describe Ticket do
       @ticket.sprint.should eq(@sprint)
     end
 
+    it "reports the id of the feature it's assigned to, or nil" do
+      @ticket.feature_id.should be_nil
+      @ticket.comments << create(:comment, :ticket => @ticket, :feature => @feature)
+      @ticket.save
+      @ticket.feature_id.should eq(@feature.id)
+    end
+
+    it "reports the id of the sprint it's assigned to, or nil" do
+      @ticket.sprint_id.should be_nil
+      @ticket.comments << create(:comment, :ticket => @ticket, :sprint => @sprint)
+      @ticket.save
+      @ticket.sprint_id.should eq(@sprint.id)
+    end
+
   end
 
 end

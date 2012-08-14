@@ -27,9 +27,15 @@ class Ticket < ActiveRecord::Base
   def sprint
     get_last(:sprint)
   end
+  def sprint_id
+    get_last(:sprint) && get_last(:sprint).id || nil
+  end
 
   def feature
     get_last(:feature)
+  end
+  def feature_id
+    get_last(:feature) && get_last(:feature).id || nil
   end
 
   def assignee

@@ -4,8 +4,6 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :sprint, :through => :project
   load_and_authorize_resource :ticket
 
-  before_filter :set_parents, :only => [:new, :create]
-
 	def index
       @tickets = @feature.tickets if @feature
       @tickets ||= @project.tickets if @project
@@ -25,17 +23,22 @@ class TicketsController < ApplicationController
   end
 
   def new
-    #@comment = @ticket.comments.build()
+    #must have a project to make a new ticket, optionally has a feature/sprint also
+    @ticket.project = @project
+    @comment = @ticket.comments.build()
+    @comment.feature = @feature
+    @comment.sprint  = @sprint
   end
 
   def create
+    @ticket.comments.build() unless @ticket.comments.first
     @ticket.comments.first.user = current_user
+
     if @ticket.save
       flash.keep[:info] = "Ticket was added"
-      redirect_to ticket_path(@ticket, :project_id => @project.id, :feature_id => @feature.id)
+      redirect_to ticket_path(@ticket, :project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
     else
       flash[:alert] = "Ticket could not be created"
-      @comment = Comment.new(:ticket_id => @ticket.id)
       render 'new'
     end
   end
@@ -67,17 +70,9 @@ class TicketsController < ApplicationController
 
   private
 
-  def set_parents
-    #must have a project to make a new ticket, optionally has a feature also
-    @ticket.project = @project if @project
-    @comment = @ticket.comments.build()
-    @comment.feature = @feature if @feature
-    @comment.sprint  = @sprint  if @sprint
-  end
-
   def parent_path
-    return project_sprint_path(@ticket.project, @ticket.sprint) if @ticket.belongs_to_sprint?
-    return project_feature_path(@ticket.project, @ticket.feature) if @ticket.belongs_to_feature?
+    return project_sprint_path(@ticket.project, @ticket.sprint) if @ticket.sprint
+    return project_feature_path(@ticket.project, @ticket.feature) if @ticket.feature
     project_path(@ticket.project)
   end
 

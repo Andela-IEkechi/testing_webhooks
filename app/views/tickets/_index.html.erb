@@ -1,6 +1,6 @@
 <table class="table table-bordered table-striped">
   <% tickets.each do |ticket| %>
-  <tr class="clickable" data-href="<%= ticket_path(ticket, :project_id => ticket.project_id) %>">
+  <tr class="clickable" data-href="<%= ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id || nil) %>">
     <td><%= ticket.title %></td>
     <td title="status"><%= ticket.status %></td>
     <td title="cost"><%= ticket.cost %></td>
