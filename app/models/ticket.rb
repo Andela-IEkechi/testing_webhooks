@@ -8,6 +8,7 @@ class Ticket < ActiveRecord::Base
   COST = [0,1,2,3]
 
   validates :project_id, :presence => true
+  validates :title, :length => {:minimum => 3}
 
   scope :unassigned, lambda{ parent.is_a? Project}
 
@@ -55,4 +56,5 @@ class Ticket < ActiveRecord::Base
   def get_last(attr)
     comments.last.try(attr)
   end
+
 end

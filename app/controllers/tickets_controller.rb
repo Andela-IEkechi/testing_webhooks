@@ -25,7 +25,7 @@ class TicketsController < ApplicationController
   end
 
   def new
-    @comment = @ticket.comments.build()
+    #@comment = @ticket.comments.build()
   end
 
   def create
@@ -70,8 +70,9 @@ class TicketsController < ApplicationController
   def set_parents
     #must have a project to make a new ticket, optionally has a feature also
     @ticket.project = @project if @project
-    @ticket.feature = @feature if @feature
-    @ticket.sprint  = @sprint  if @sprint
+    @comment = @ticket.comments.build()
+    @comment.feature = @feature if @feature
+    @comment.sprint  = @sprint  if @sprint
   end
 
   def parent_path
