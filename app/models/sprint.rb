@@ -15,4 +15,10 @@ class Sprint < ActiveRecord::Base
   def to_s
     title
   end
+
+  def assigned_tickets
+    tickets.collect do |ticket|
+      ticket if ticket.sprint_id == self.id
+    end.compact
+  end
 end
