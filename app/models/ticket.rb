@@ -2,6 +2,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :project #always
   has_many :comments, :order => :id
 
+
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
 
@@ -27,6 +28,7 @@ class Ticket < ActiveRecord::Base
   def sprint
     get_last(:sprint)
   end
+
   def sprint_id
     get_last(:sprint) && get_last(:sprint).id || nil
   end
@@ -34,6 +36,7 @@ class Ticket < ActiveRecord::Base
   def feature
     get_last(:feature)
   end
+
   def feature_id
     get_last(:feature) && get_last(:feature).id || nil
   end
@@ -55,10 +58,15 @@ class Ticket < ActiveRecord::Base
   end
 
   private
+
+  #this returns the CURRENTLY SET VALUE, in the history for this ticket
+  #ie, the value the last time it was set, even if that was 5 comments ago
   def get_current(attr)
     attr = attr.to_sym
     comments.collect(&attr).compact.last
   end
+
+  #this returns the values as set in the last comment
   def get_last(attr)
     comments.last.try(attr)
   end
