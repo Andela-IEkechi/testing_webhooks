@@ -56,5 +56,6 @@ class ProjectsController < ApplicationController
       @project = nil unless (@project.user_id == current_user.id) || @project.participants.include?(current_user)
     end
   end
+
 end
 
