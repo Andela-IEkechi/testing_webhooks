@@ -28,6 +28,16 @@ describe Project do
     project.ticket_statuses.collect(&:name).include?('closed').should be_true
   end
 
+  it "should have an owner" do
+    project = create(:project)
+    project.user.should_not be_nil
+  end
+
+  it "should have a sprint duration" do
+      project = create(:project)
+      project.sprint_duration.should_not be_nil
+  end
+
   it "should not allow duplicate titles for the same user" do
     joe = create(:user)
     project_one = create(:project, :user => joe)
@@ -85,4 +95,16 @@ describe Project do
       @project.destroy
     }.to change(TicketStatus,:count).by(-2) #two default statuses
   end
+
+  it "should have an API key to allow external parties to interface with it" do
+    @project.api_key.should_not be_nil
+  end
+
 end
+
+=begin
+  should define 0 or more features (see feature section below for detail)
+  should define 0 or more sprints (see sprint section below for detail)
+  should define 0 or more tickets (see ticket section below for detail)
+  can be deleted
+=end

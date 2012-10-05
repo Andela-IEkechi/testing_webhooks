@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ProjectsController do
+describe ProjectsController, :focus => true do
   before (:each) do
     login_user
     #create a project we can assign tickets to
