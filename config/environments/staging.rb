@@ -74,5 +74,8 @@ Conductor::Application.configure do
     :password  => ENV["cb7fae88-04ef-44e9-9d33-b848e302e3a2"]
   }
 
-
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default :charset => "utf-8"
 end
