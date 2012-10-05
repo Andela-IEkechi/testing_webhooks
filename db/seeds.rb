@@ -16,6 +16,9 @@ joe.confirm!
 sue = User.create(:email => 'sue@example.com', :password => 'secret', :password_confirmation => 'secret')
 sue.confirm!
 
+greg = User.create(:email => 'greg@shuntyard.co.za', :password => 'Password1', :password_confirmation => 'Password1')
+greg.confirm!
+
 #create some projects
 Project.find_each(&:destroy)
 mhp = jlr.projects.create(:title => "Manhattan Project")
