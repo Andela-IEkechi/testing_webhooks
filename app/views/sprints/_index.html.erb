@@ -2,7 +2,7 @@
   <% sprints.each do |sprint| %>
   <tr class="clickable" data-href="<%= project_sprint_path(sprint.project, sprint) %>">
     <td><%= sprint.title %></td>
-    <td><%= sprint.tickets.count %></td>
+    <td><%= sprint.assigned_tickets.count %></td>
   </tr>
   <% end %>
   <% if sprints.count == 0 %>
