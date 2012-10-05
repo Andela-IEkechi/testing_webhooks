@@ -49,6 +49,7 @@ group :development,:test do
   gem 'rb-readline'
   gem 'factory_girl_rails'
   gem 'thin'
+  gem 'faker'
 end
 
 group :test do
@@ -56,7 +57,6 @@ group :test do
   gem 'rb-fsevent'
   gem 'spork-rails'
   gem 'guard-spork'
-  gem 'faker'
   gem 'capybara'
   gem 'database_cleaner'
 end
