@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sprint, :focus => true do
+describe Sprint do
   before(:each) do
     @sprint = create(:sprint)
   end
