@@ -43,12 +43,18 @@ gem 'bootstrap-sass'
 # To use debugger
 # gem 'debugger'
 
+gem 'thin'
+
+group :development,:test do
+  gem 'heroku'
+end
+
 group :development,:test do
   gem 'rspec-rails'
   gem 'guard-rspec'
   gem 'rb-readline'
   gem 'factory_girl_rails'
-  gem 'thin'
+  gem 'faker'
 end
 
 group :test do
@@ -56,7 +62,6 @@ group :test do
   gem 'rb-fsevent'
   gem 'spork-rails'
   gem 'guard-spork'
-  gem 'faker'
   gem 'capybara'
   gem 'database_cleaner'
 end

@@ -1,4 +1,9 @@
 <div class="container-fluid">
   <footer class="footer">
+    <% if Rails.env.staging? || Rails.env.development? %>
+    <%= Rails.env %>
+    <% else %>
+      not staging/dev, wtf?
+    <% end %>
   </footer>
 </div>
