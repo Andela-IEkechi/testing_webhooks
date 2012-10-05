@@ -44,6 +44,10 @@ gem 'bootstrap-sass'
 # gem 'debugger'
 
 group :development,:test do
+  gem 'heroku'
+end
+
+group :development,:test do
   gem 'rspec-rails'
   gem 'guard-rspec'
   gem 'rb-readline'
