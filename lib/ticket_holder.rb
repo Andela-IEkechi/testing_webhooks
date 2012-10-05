@@ -8,7 +8,7 @@ module TicketHolder
 
     before_destroy :orphan_comments!
 
-    def orphan_tickets!
+    def orphan_comments!
       self.comments.each do |comment|
         comment.feature = nil
         comment.sprint = nil
