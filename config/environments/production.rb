@@ -65,5 +65,12 @@ Conductor::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  config.action_mailer.default_url_options = { :host => 'www.conductor-app.com' }
+  config.action_mailer.default_url_options = { :host => 'www.conductor-app.co.za' }
+
+  config.action_mailer.smtp_settings = {
+    :address   => "smtp.mandrillapp.com",
+    :port      => 587,
+    :user_name => "mandrill@shuntyard.co.za",
+    :password  => "cb7fae88-04ef-44e9-9d33-b848e302e3a2"
+  }
 end
