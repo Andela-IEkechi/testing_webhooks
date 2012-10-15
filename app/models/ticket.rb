@@ -45,8 +45,16 @@ class Ticket < ActiveRecord::Base
     get_last(:assignee)
   end
 
+  def assignee_id
+    get_last(:assignee) && get_last(:assignee).id || nil
+  end
+
   def user
     get_last(:user)
+  end
+
+  def user_id
+    get_last(:user) && get_last(:user).id || nil
   end
 
   def status

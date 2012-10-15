@@ -44,9 +44,12 @@ gem 'bootstrap-sass'
 # gem 'debugger'
 
 gem 'thin'
+gem 'rake'
 
 group :development,:test do
   gem 'heroku'
+  gem 'capistrano'
+  gem 'capistrano-ext'
 end
 
 group :development,:test do

@@ -1,1 +1,9 @@
-<%= render :partial => 'index', :collection => @tickets %>
+<%
+  projects = @tickets.collect{|t|t.project}.uniq.sort
+%>
+<div class="well">
+<% projects.each do |project| %>
+  <h3><%= project.title %></h3>
+  <%= render :partial => 'index', :locals => {:tickets => @tickets.select{|t| t.project_id == project.id && t.assignee_id == current_user.id }}%>
+<% end %>
+</div>
