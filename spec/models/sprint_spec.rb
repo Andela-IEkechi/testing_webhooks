@@ -49,15 +49,21 @@ describe Sprint do
       @sprint.cost.should == @sprint.tickets.sum(&:cost)
     end
 
-    it "should not allow the same ticket to be assigned multiple times" do
+    it "should not report the same ticket as assigned multiple times", :focus => true do
+      @sprint.assigned_tickets.count.should eq(0)
       commentor = create(:user)
       bad_ticket = create(:ticket, :project => @sprint.project)
-      create(:comment, :ticket => bad_ticket, :sprint_id => @sprint.id)
+
+      create(:comment, :ticket => bad_ticket, :sprint => @sprint)
       bad_ticket.should be_valid
-      @sprint.should have(1).assigned_tickets
-      create(:comment, :ticket => bad_ticket, :sprint_id => @sprint.id)
+      @sprint.reload
+      @sprint.assigned_tickets.count.should eq(1)
+
+      create(:comment, :ticket => bad_ticket, :sprint => @sprint)
       bad_ticket.should be_valid
-      @sprint.should have(1).assigned_tickets
+      @sprint.reload
+      @sprint.assigned_tickets.count.should eq(1)
     end
+
   end
 end

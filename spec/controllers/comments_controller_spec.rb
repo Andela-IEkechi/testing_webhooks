@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CommentsController, :focus => true do
+describe CommentsController do
 
   before (:each) do
     @comment = create(:comment)
@@ -18,7 +18,7 @@ describe CommentsController, :focus => true do
 
   it "should always have a body" do
     @comment = create(:comment_with_body)
-    @comment.body.should_not be_nil 
+    @comment.body.should_not be_nil
   end
 
   it "should have 0 or more attachments"
@@ -35,16 +35,16 @@ describe CommentsController, :focus => true do
 
     it "should not belong to a feature" do
       comment = create(:comment, :feature => nil)
-      comment.feature.should be_nil 
+      comment.feature.should be_nil
     end
 
     it "should belong to a sprint" do
-      @comment.sprint.should_not be_nil 
+      @comment.sprint.should_not be_nil
     end
 
     it "should not belong to a sprint" do
       comment = create(:comment, :sprint => nil)
-      comment.sprint.should be_nil 
+      comment.sprint.should be_nil
     end
 
     it "should have a cost" do

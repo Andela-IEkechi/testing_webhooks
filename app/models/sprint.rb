@@ -19,6 +19,6 @@ class Sprint < ActiveRecord::Base
   def assigned_tickets
     tickets.collect do |ticket|
       ticket if ticket.sprint_id == self.id
-    end.compact
+    end.compact.uniq
   end
 end
