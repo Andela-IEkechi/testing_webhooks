@@ -17,3 +17,4 @@
 *.sublime-project
 *.sublime-workspace
 .listen_test
+*.swp
