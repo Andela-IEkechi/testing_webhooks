@@ -27,8 +27,8 @@
   <% if changeset[:sprint_id] %>
     <p>now part of sprint: <b><%= comment.sprint || 'none' %></b></p>
   <% end %>
-  <% if changeset[:user_id] %>
-    <p>assigned to: <b><%= comment.user || 'none' %></b></p>
+  <% if changeset[:assignee_id] %>
+    <p>assigned to: <b><%= comment.assignee || 'none' %></b></p>
   <% end %>
   <% if changeset[:cost] %>
     <p>cost updated to: <b><%= comment.cost %></b></p>
