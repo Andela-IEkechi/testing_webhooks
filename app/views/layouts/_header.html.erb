@@ -17,7 +17,7 @@
 				</li>
 				<% if @project && !@project.new_record? && can?(:manage, @project) %>
 				<li class="heading">
-					<%= link_to @project.title, edit_project_access_path(@project) %>
+					<%= link_to @project.title, edit_project_path(@project) %>
 				</li>
 				<% end %>
 			</ul>

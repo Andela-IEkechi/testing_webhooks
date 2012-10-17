@@ -10,7 +10,7 @@ class FeaturesController < ApplicationController
 
   def create
     if @feature.save
-      flash[:info] = "Feature was added"
+      flash[:notice] = "Feature was added"
       redirect_to project_path(@feature.project)
     else
       flash[:alert] = "Feature could not be created"
@@ -23,7 +23,7 @@ class FeaturesController < ApplicationController
 
   def update
     if @feature.update_attributes(params[:feature])
-      flash[:info] = "Feature was updated"
+      flash[:notice] = "Feature was updated"
       redirect_to project_feature_path(@feature.project,@feature)
     else
       flash[:alert] = "Feature could not be updated"

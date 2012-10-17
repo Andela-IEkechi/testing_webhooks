@@ -11,7 +11,7 @@ class SprintsController < ApplicationController
 
   def create
     if @sprint.save
-      flash[:info] = "Feature was added"
+      flash[:notice] = "Feature was added"
       redirect_to project_path(@sprint.project)
     else
       flash[:alert] = "Feature could not be created"
@@ -24,7 +24,7 @@ class SprintsController < ApplicationController
 
   def update
     if @sprint.update_attributes(params[:sprint])
-      flash[:info] = "Feature was updated"
+      flash[:notice] = "Feature was updated"
       redirect_to project_sprint_path(@sprint.project,@sprint)
     else
       flash[:alert] = "Feature could not be updated"

@@ -13,7 +13,7 @@ class ProjectsController < ApplicationController
 
   def create
     if @project.save
-      flash[:info] = "Project was added"
+      flash[:notice] = "Project was added"
       redirect_to project_path(@project)
     else
       flash[:alert] = "Project could not be created"
@@ -26,8 +26,8 @@ class ProjectsController < ApplicationController
 
   def update
     if @project.update_attributes(params[:project])
-      flash[:info] = "Project was updated"
-      redirect_to project_path(@project)
+      flash[:notice] = "Project was updated"
+      redirect_to edit_project_path(@project)
     else
       flash[:alert] = "Project could not be updated"
       render 'edit'

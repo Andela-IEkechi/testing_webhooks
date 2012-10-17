@@ -49,7 +49,7 @@ class TicketsController < ApplicationController
 
   def update
     if @ticket.update_attributes(params[:ticket])
-      flash[:info] = "Ticket was updated"
+      flash[:notice] = "Ticket was updated"
       redirect_to ticket_path(@ticket, :project_id => @project, :feature_id => @feature)
     else
       flash[:alert] = "Ticket could not be updated"

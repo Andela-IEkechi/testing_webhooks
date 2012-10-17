@@ -13,11 +13,11 @@ class AccessesController < ApplicationController
 
     if @project.update_attributes(params[:project])
       Participant::notify(@project, params[:project][:participant_ids])
-      flash[:notify] = "Project access updated"
-      redirect_to edit_project_access_path(@project)
+      flash[:notice] = "Project access updated"
+      redirect_to edit_project_path(@project)
     else
       flash[:alert] = "Project access could not be updated"
-      render 'edit'
+      render '/projects/edit'
     end
   end
 end
