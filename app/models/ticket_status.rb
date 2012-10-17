@@ -5,11 +5,8 @@ class TicketStatus < ActiveRecord::Base
 
   attr_accessible :name, :nature #cant use "type"
 
-  NATURES = ['open', 'closed']
-
   validates :name, :presence => true, :uniqueness => {:scope => :project_id}
   validates :project_id, :presence => true
-  validates :nature, :inclusion => {:in => NATURES}
 
   def to_s
     name

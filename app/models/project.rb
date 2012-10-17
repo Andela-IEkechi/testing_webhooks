@@ -21,8 +21,8 @@ class Project < ActiveRecord::Base
   private
   def default_statuses
     #when we create a new project, we make sure we create at least two statuses for the tickets in the project
-    self.ticket_statuses.create(:name => 'new', :nature => TicketStatus::NATURES.first)
-    self.ticket_statuses.create(:name => 'closed', :nature => TicketStatus::NATURES.last)
+    self.ticket_statuses.create(:name => 'new')
+    self.ticket_statuses.create(:name => 'closed')
   end
 
   def set_api_key

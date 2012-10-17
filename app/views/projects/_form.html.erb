@@ -4,7 +4,7 @@
   <%= f.input :title, :input_html => {:class => 'span4'} %>
   <% unless @project.new_record? %>
     <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
-      <%= ts_form.input :name, :label => 'Ticket status'%>
+      <%= ts_form.input :name%>
       <%= ts_form.link_to_remove "Remove this status", :class => 'btn btn-mini' %>
     <% end %>
     <%= f.input :ticket_statuses, :label => false do %>
