@@ -6,7 +6,7 @@ module Participant
     #for each new participant, look them up first, they might be a user already
     participants_attrs.each do |token, attrs|
       user = User.find_by_email(attrs[:email].downcase)
-      unless user || attrs[:email].blank?
+      unless user || attrs[:email].blank? || attrs[:_destroy] == '1'
         user = User.new(:email => attrs[:email].downcase)
         user.reset_authentication_token #so they can log in from the link we email them
         #we have to set a pasword, so we just make it the same as the token
