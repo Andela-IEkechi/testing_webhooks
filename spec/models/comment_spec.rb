@@ -2,9 +2,18 @@ require 'spec_helper'
 
 describe Comment do
 
-  context "has a factory that" do
+  context "has a factory that"  do
     it "should create a valid comment" do
-      create(:comment).should_not be_nil
+      comment = create(:comment)
+      comment.should_not be_nil
+      comment.should be_valid
+    end
+
+    it "should create a valid comment with a body" do
+      comment = create(:comment_with_body)
+      comment.should_not be_nil
+      comment.should be_valid
+      comment.body.should_not be_blank
     end
   end
 
@@ -42,6 +51,35 @@ describe Comment do
     it "should have a cost no greater than 3" do
         @comment.cost = 4
         @comment.should_not be_valid
+    end
+  end
+
+  context 'contains body markup that' do
+    before(:each) do
+      @comment = build(:comment, :status => create(:ticket_status))
+    end
+
+    it 'can be plain text' do
+      @comment.body = "plain text"
+      @comment.should be_valid
+    end
+
+    it 'can be markdown flavoured text' do
+      @comment.body = "#markdown text"
+      @comment.should be_valid
+    end
+
+    it 'stores the parsed parkdown' do
+      @comment.body = "#markdown text"
+      @comment.rendered_body.should be_blank
+      @comment.save
+      @comment.rendered_body.should_not be_blank
+    end
+
+    it 'has markdown text which is converted to HTML ' do
+      @comment.body = "# markdown text #"
+      @comment.save
+      @comment.rendered_body.should eq('<h1>markdown text</h1>')
     end
 
   end
