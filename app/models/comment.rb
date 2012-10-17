@@ -41,4 +41,8 @@ class Comment < ActiveRecord::Base
     return ticket.comments.last if self.new_record?
     ticket.comments.select{|c| c.id < self.id}.last
   end
+
+  def html
+    rendered_body || ''
+  end
 end
