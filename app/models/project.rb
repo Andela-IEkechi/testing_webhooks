@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   before_create :set_api_key
-  after_create :default_statuses
+  after_create :default_statuses, :owner_participation
 
   belongs_to :user
   has_many :features, :dependent => :destroy
@@ -28,5 +28,9 @@ class Project < ActiveRecord::Base
   def set_api_key
     require 'digest/sha1'
     self.api_key = Digest::SHA1.hexdigest Time.now.to_s
+  end
+
+  def owner_participation
+    Participant::set_owner_as_participant(self)
   end
 end

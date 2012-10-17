@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121017155750) do
+ActiveRecord::Schema.define(:version => 20121017190945) do
 
   create_table "comments", :force => true do |t|
     t.integer  "ticket_id",                    :null => false
