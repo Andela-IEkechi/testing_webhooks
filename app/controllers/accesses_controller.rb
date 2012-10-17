@@ -11,7 +11,6 @@ class AccessesController < ApplicationController
     params[:project][:participant_ids] = params[:project][:participant_ids].collect(&:to_i).select{|x| x > 0} + new_user_ids
     params[:project][:participant_ids].uniq!
 
-    p "params[:project][:participant_ids] #{params[:project][:participant_ids]}"
     Participant::notify(@project, params[:project][:participant_ids])
 
     if @project.update_attributes(params[:project])
