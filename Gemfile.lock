@@ -187,6 +187,7 @@ GEM
     rb-readline (0.4.2)
     rdoc (3.12)
       json (~> 1.4)
+    redcarpet (2.1.1)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rspec (2.11.0)
@@ -270,6 +271,7 @@ DEPENDENCIES
   rake
   rb-fsevent
   rb-readline
+  redcarpet
   rspec
   rspec-rails
   sass-rails (~> 3.2.3)

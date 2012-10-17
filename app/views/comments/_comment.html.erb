@@ -33,5 +33,5 @@
   <% if changeset[:cost] %>
     <p>cost updated to: <b><%= comment.cost %></b></p>
   <% end %>
-  <p><%= comment.body %></p>
+  <p><%= comment.html.html_safe %></p>
 </div>

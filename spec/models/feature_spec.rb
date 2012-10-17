@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Feature, :focus => true do
+describe Feature do
   before(:each) do
     @feature = create(:feature)
   end

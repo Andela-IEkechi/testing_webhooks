@@ -16,8 +16,8 @@
 					<%= link_to "My Tickets", tickets_path() %>
 				</li>
 				<% if @project && !@project.new_record? && can?(:manage, @project) %>
-				<li>
-					<%= link_to "Access", edit_project_access_path(@project) %>
+				<li class="heading">
+					<%= link_to @project.title, edit_project_access_path(@project) %>
 				</li>
 				<% end %>
 			</ul>

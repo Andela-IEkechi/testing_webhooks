@@ -5,16 +5,15 @@ FactoryGirl.define do
     association(:ticket)
     association(:feature)
     association(:sprint)
+    association(:user)
     cost 0
 
     before(:create) do |comment|
       comment.status = create(:ticket_status, :project => comment.ticket.project)
-      comment.user = create(:user)
     end
 
     factory :comment_with_body do
-      body Faker::Lorem.paragraph()
+      body {Faker::Lorem.paragraph()}
     end
-
   end
 end
