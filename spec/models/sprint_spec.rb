@@ -31,10 +31,27 @@ describe Sprint do
     @sprint.should_not be_valid
   end
 
+  context "without tickets" do
+
+    it "should have a 0 cost if there are no tickets" do
+      @sprint.should have(0).tickets
+      @sprint.cost.should eq(0)
+    end
+
+  end
+
   context "with tickets" do
     before(:each) do
       create(:ticket, :project => @sprint.project)
       create(:ticket, :project => @sprint.project)
+    end
+
+    it "should report on the assigned tickets" do
+      @sprint.project.tickets.each do |ticket|
+        create(:comment, :sprint => @sprint)
+      end
+      @sprint.reload
+      @sprint.assigned_tickets.count.should eq(@sprint.project.tickets.count)
     end
 
     it "must be able to contain tickets" do
@@ -42,14 +59,14 @@ describe Sprint do
     end
 
     it "must sum the costs of all the tickets in it" do
-      @sprint.tickets.each do |ticket|
+      @sprint.assigned_tickets.each do |ticket|
         ticket.comments.create(:sprint => @sprint, :cost => 2)
       end
-      @sprint.cost.should eq(@sprint.tickets.count * 2)
-      @sprint.cost.should == @sprint.tickets.sum(&:cost)
+      @sprint.cost.should eq(@sprint.assigned_tickets.count * 2)
+      @sprint.cost.should == @sprint.assigned_tickets.sum(&:cost)
     end
 
-    it "should not report the same ticket as assigned multiple times", :focus => true do
+    it "should not report the same ticket as assigned multiple times" do
       @sprint.assigned_tickets.count.should eq(0)
       commentor = create(:user)
       bad_ticket = create(:ticket, :project => @sprint.project)

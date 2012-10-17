@@ -16,6 +16,15 @@ module TicketHolder
       end
     end
 
+    def cost
+      self.assigned_tickets.sum(&:cost)
+    end
+
+    def assigned_tickets
+      tickets.select do |ticket|
+        eval("ticket.#{self.class.name.foreign_key}") == self.id #rely on ticket to say if we are still assigned
+      end.uniq.compact
+    end
   end
 
 end

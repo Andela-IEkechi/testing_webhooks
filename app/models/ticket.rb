@@ -2,7 +2,6 @@ class Ticket < ActiveRecord::Base
   belongs_to :project #always
   has_many :comments, :order => :id
 
-
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
 

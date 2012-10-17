@@ -1,5 +1,5 @@
 class Sprint < ActiveRecord::Base
-  belongs_to :project
+  belongs_to :project #not optional
 
   include TicketHolder
 
@@ -7,18 +7,10 @@ class Sprint < ActiveRecord::Base
 
   validates :project_id, :presence => true
   validates :title, :presence => true, :uniqueness => {:scope => :project_id}
-
-  def cost
-    tickets.sum(&:cost)
-  end
+  validates :due_on, :presence => true
 
   def to_s
     title
   end
 
-  def assigned_tickets
-    tickets.collect do |ticket|
-      ticket if ticket.sprint_id == self.id
-    end.compact.uniq
-  end
 end
