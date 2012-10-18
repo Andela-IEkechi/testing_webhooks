@@ -100,6 +100,29 @@ describe Project do
     @project.api_key.should_not be_nil
   end
 
+  context "with participants" do
+    it "should have the project owner as a participant" do
+      @project.participants.should have(1).participant
+      @project.participants.first.id.should eq(@project.user.id)
+    end
+
+    it "should allow multiple participants" do
+      @project.participants << create(:user)
+      @project.participants << create(:user)
+      @project.participants.should have(3).participants
+    end
+
+    it "should sort participants by email ASC" do
+      ##NOTE, the :order directive on project.participants seems to have no effect!
+      4.times do
+        @project.participants << create(:user)
+      end
+      participant_emails = @project.ordered_participants.collect(&:email)
+      ordered_emails = @project.participants.all.sort{|a,b| a.email <=> b.email}.collect(&:email)
+      participant_emails.should == ordered_emails
+    end
+
+  end
 end
 
 =begin
