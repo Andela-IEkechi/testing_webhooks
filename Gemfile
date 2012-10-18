@@ -12,7 +12,11 @@ gem 'devise'
 gem 'cancan'
 gem 'omniauth-github'
 gem 'paper_trail'
+
+#comment body markup
 gem 'redcarpet'
+gem 'pygmentize'
+
 
 # Gems used only for assets and not required
 # in production environments by default.

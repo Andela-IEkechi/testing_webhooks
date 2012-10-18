@@ -156,6 +156,7 @@ GEM
       railties (~> 3.0)
     pg (0.14.0)
     polyglot (0.3.3)
+    pygmentize (0.0.3)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -267,6 +268,7 @@ DEPENDENCIES
   omniauth-github
   paper_trail
   pg
+  pygmentize
   rails (= 3.2.7)
   rake
   rb-fsevent
