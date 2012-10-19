@@ -1,9 +1,32 @@
 <div class="well">
   <h3><%= @ticket.title %></h3>
   <h4><%= @ticket.parent %></h4>
+
+  <% if ((@ticket.feature != nil) || (@ticket.sprint != nil))%>
+    <div id="button">
+        <%= link_to "View Git flow commands"%>
+        <div id='commands' style="display: none">git flow feature start <%= @ticket.parent.to_s.gsub(' ','_').downcase %> </br>
+          git push --set-upstream feature/<%= @ticket.parent.to_s.gsub(' ','_').downcase %>
+        </div>
+    </div>
+    <% else %>
+     <div id="button">
+        <%= link_to "View Git flow commands"%>
+        <div id='commands' style="display: none">git flow hotfix start <%= @ticket.title.gsub(' ','_').downcase %> </br>
+          git push --set-upstream hotfix/<%= @ticket.title.gsub(' ','_').downcase %>
+        </div>
+    </div>
+  <% end %>
 </div>
 
 <%= render :partial => '/comments/comment', :collection => @ticket.comments %>
 
 <%= render :partial => '/comments/form' %>
+
+<%= javascript_tag do %>
+   $("#button").click(function(){
+  $("#commands").toggle();
+  return false
+});
+  <%end %>
 
