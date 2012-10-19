@@ -5,17 +5,21 @@
   <% if ((@ticket.feature != nil) || (@ticket.sprint != nil))%>
     <div id="button">
         <%= link_to "View Git flow commands"%>
-        <div id='commands' style="display: none">git flow feature start <%= @ticket.parent.to_s.gsub(' ','_').downcase %> </br>
+    </div>
+        <div id='commands' style="display: none">
+          <h5>Git Flow commands:</h5>
+          git flow feature start <%= @ticket.parent.to_s.gsub(' ','_').downcase %> </br>
           git push --set-upstream feature/<%= @ticket.parent.to_s.gsub(' ','_').downcase %>
         </div>
-    </div>
     <% else %>
      <div id="button">
         <%= link_to "View Git flow commands"%>
-        <div id='commands' style="display: none">git flow hotfix start <%= @ticket.title.gsub(' ','_').downcase %> </br>
+    </div>
+        <div id='commands' style="display: none">
+          <h5>Git Flow commands:</h5>
+          git flow hotfix start <%= @ticket.title.gsub(' ','_').downcase %> </br>
           git push --set-upstream hotfix/<%= @ticket.title.gsub(' ','_').downcase %>
         </div>
-    </div>
   <% end %>
 </div>
 
@@ -25,6 +29,7 @@
 
 <%= javascript_tag do %>
    $("#button").click(function(){
+   $(this).hide();
   $("#commands").toggle();
   return false
 });
