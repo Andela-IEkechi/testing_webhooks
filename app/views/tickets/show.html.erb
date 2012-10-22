@@ -27,23 +27,19 @@
 
 <%= render :partial => '/comments/form' %>
 
+<%= javascript_tag do %>
+$("#button").click(function(e){
+  e.preventDefault(); 
+  var anchor = $("#button").children().first("a"); 
 
-
-  <%= javascript_tag do %>
-  $("#button").click(function(e){
-    e.preventDefault(); 
-    var anchor = $("#button").children().first("a"); 
-
-    $("#commands").toggle();
-      if ( 'View Git flow commands' == anchor.html() )
-      {
-        anchor.html("Hide Git flow commands");
-      }
-      else
-      { 
-        anchor.html("View Git flow commands");
-      }
-  });
-  <%end %>
-
-
+  $("#commands").toggle();
+    if ( 'View Git flow commands' == anchor.html() )
+    {
+      anchor.html("Hide Git flow commands");
+    }
+    else
+    { 
+      anchor.html("View Git flow commands");
+    }
+});
+<%end %>
