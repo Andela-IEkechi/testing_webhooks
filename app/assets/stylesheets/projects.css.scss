@@ -2,6 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+a, a:hover {
+	color: #7ab42e;
+}
 
 ul.nav {
   li.heading {
@@ -11,4 +14,34 @@ ul.nav {
       font-size: 15px;
     }
   }
+}
+
+.navbar .brand {
+	background-image: url('logo_tunnel_small.png');
+    background-repeat: no-repeat;
+    background-position: 10px 7px;
+    padding-left: 40px;
+    padding-top: 11px;
+    font-family: 'logofont', arial;
+    text-transform: uppercase;
+    font-size: 19px;
+    color: #fff;
+}
+
+.navbar-inner {
+	background-color: black;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(#222));
+	background-image: -o-linear-gradient(top, #000, #222);
+	background-image: linear-gradient(top, #000, #222);
+}
+
+.footer {
+	margin: 60px auto;
+	width: auto;
+	text-align: center;
+	height: 40px;
+	vertical-align: middle;
+	line-height: 40px;
+	border-top: 1px dashed #ABABAB;
+	border-bottom: 1px dashed #ABABAB;
 }
