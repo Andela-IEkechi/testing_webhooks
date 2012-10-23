@@ -4,5 +4,8 @@ FactoryGirl.define do
   factory :comment_asset, :class => 'Comment::Asset' do
     association :comment
 
+    factory :comment_asset_with_no_comment do
+      comment nil
+    end
   end
 end
