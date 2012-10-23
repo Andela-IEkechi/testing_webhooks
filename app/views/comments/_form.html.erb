@@ -10,3 +10,5 @@
     <%= link_to 'cancel', project_path(@ticket.project), :class => 'btn' if !@ticket.feature && !@ticket.sprint %>
   </div>
 <% end %>
+
+<%= render :partial => '/comments/upload_form' %>
