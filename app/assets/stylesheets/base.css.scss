@@ -54,7 +54,7 @@ abbr[title] {
   }
 }
 
-/*margin centering won't work without a fixed width, unfloated parent, currently cause by row-fluid*/
+/*margin centering won't work without a fixed width & unfloated parent - float currently cause by row-fluid*/
 .centered {
   text-align: center;
   margin: 30px auto;
