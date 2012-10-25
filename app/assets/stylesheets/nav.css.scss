@@ -27,6 +27,22 @@ ul.nav {
 	background-image: linear-gradient(top, #000, #222);
 }
 
+span.navico {
+    display: inline-block;
+    padding: 8px 10px 6px;
+    margin: 0 15px 0 0;
+    border-right: 1px solid #DDDDDD;
+  }
+
+
+.nav-stacked li {
+  border: 1px solid #ddd;
+  padding: 0px;
+  a {
+    margin: 0px;
+  }
+}
+
 #side-nav {
   border-left: 1px solid #DDDDDD;
   border-right: 1px solid #DDDDDD;
@@ -38,12 +54,7 @@ ul.nav {
   list-style: none;
   border-bottom: 1px solid #DDDDDD;
   }
-  li .navlink span.navico {
-    display: inline-block;
-    padding: 8px 10px 6px;
-    margin: 0 15px 0 0;
-    border-right: 1px solid #DDDDDD;
-  }
+  li .navlink
   li:nth-child(2n) {
   background-color:#F5F5F5;
   }
