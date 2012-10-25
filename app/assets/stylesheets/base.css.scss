@@ -5,8 +5,19 @@
   advancedAntiAliasing: true;
 }
 
+p, b {
+  font-family: arial;
+}
+
 a, a:hover {
 	color: #579803;
+}
+
+h3 {
+  border: 1px solid #DDDDDD;
+  padding:9px 10px;
+
+  background-color: white;
 }
 
 /*have to list them all otherwise bootstrap overwrites by dint of specificity*/
