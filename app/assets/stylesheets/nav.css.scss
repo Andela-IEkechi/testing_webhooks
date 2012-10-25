@@ -30,46 +30,18 @@ ul.nav {
 span.navico {
     display: inline-block;
     padding: 8px 10px 6px;
-    margin: 0 15px 0 0;
-    border-right: 1px solid #DDDDDD;
+    margin: 6px 15px 5px 0;
+    border-right: 1px solid #ddd;
   }
 
-
-.nav-stacked li {
-  border: 1px solid #ddd;
-  padding: 0px;
-  a {
-    margin: 0px;
-  }
-}
-
-#side-nav {
-  border-left: 1px solid #DDDDDD;
-  border-right: 1px solid #DDDDDD;
-  border-top: 1px solid #DDDDDD;
+.nav-stacked {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-top: 1px solid #ddd;
   li {
-  line-height: 25px;
-  padding: 3px 10px;
-  font-size: 1em;
-  list-style: none;
-  border-bottom: 1px solid #DDDDDD;
+    border-bottom: 1px solid #ddd;
   }
-  li .navlink
   li:nth-child(2n) {
-  background-color:#F5F5F5;
-  }
-  li:hover {
-  background-color:#f0f6ed;
-  }
-  li:nth-child(2n-1) {
-  background-color:#ffffff7;
-  }
-  .navlink, a {
-  color: #555555;
-  text-decoration: none;
-  &:hover {
-    color: #579803;
-    text-decoration: none;
-    }
+  background-color:#f9f9f9;
   }
 }
