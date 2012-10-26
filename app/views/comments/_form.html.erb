@@ -1,8 +1,9 @@
 <%= yield :form_heading %>
 
 <%= simple_nested_form_for([@ticket, @comment], :html => {:class=>'form-horizontal'}) do |f| %>
-  <%= render :partial => '/comments/form_fields', :locals => {:comment_form => f} %>
-
+  <div class="row">
+    <%= render :partial => '/comments/form_fields', :locals => {:comment_form => f} %>
+  </div>
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
     <%= link_to 'cancel', project_feature_path(@ticket.project, @ticket.feature), :class => 'btn' if @ticket.feature && !@ticket.sprint %>
