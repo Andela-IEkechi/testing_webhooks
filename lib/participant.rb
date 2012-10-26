@@ -18,10 +18,6 @@ module Participant
     new_user_ids.compact
   end
 
-  def self.set_owner_as_participant(project)
-    project.participants << project.user
-  end
-
   def self.notify(project, updated_participant_ids=[])
       #send out notifications to all the newly assigned participants
       updated_participant_ids.each do |id|

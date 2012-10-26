@@ -8,6 +8,7 @@ class Comment < ActiveRecord::Base
   belongs_to :assignee, :class_name => 'User' #optional, who it's assigned to
   belongs_to :status, :class_name => 'TicketStatus'
   belongs_to :user #always, who made the comment
+  has_many   :assets
 
   attr_accessible :body, :cost, :rendered_body
   attr_accessible :status_id, :feature_id, :ticket_id, :sprint_id, :user_id, :assignee_id

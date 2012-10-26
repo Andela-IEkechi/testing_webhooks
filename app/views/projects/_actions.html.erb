@@ -1,11 +1,4 @@
 <ul class="nav nav-stacked">
-  <% if action_name != 'index' %>
-    <li>
-      <%= link_to projects_path do %>
-        <span class="navico"><i class="icon-arrow-left navico"></i></span>back to projects
-      <% end %>
-    </li>
-  <% end %>
   <% if action_name == 'show' %>
     <li>
       <%= link_to edit_project_path(@project) do %>
@@ -33,13 +26,4 @@
       <% end %>
     </li>
   <% end %>
-  <% if action_name == 'index' %>
-    <li>
-      <%= link_to new_project_path do %>
-        <span class="navico"><i class="icon-plus"></i></span>add a new project
-      <% end %>
-    </li>
-  <% end %>
-
 </ul>
-

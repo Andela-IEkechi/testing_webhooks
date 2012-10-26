@@ -15,5 +15,5 @@
     <% end %>
   <% end %>
   <%= comment_form.input :assigned_to do %>
-    <%= comment_form.select :assignee_id, @ticket.project.participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
+    <%= comment_form.select :assignee_id, @ticket.project.ordered_participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
   <% end %>

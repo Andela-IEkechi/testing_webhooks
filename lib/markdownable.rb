@@ -8,8 +8,10 @@ module Markdownable
   private
   def render_body
     return if self.body.blank?
-    extensions = {fenced_code_blocks: true, autolink: true, space_after_headers: true}
-    redcarpet = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions)
+    renderer = PygmentizeHTML
+    extensions = {fenced_code_blocks: true}
+    redcarpet = Redcarpet::Markdown.new(renderer, extensions)
     self.rendered_body = redcarpet.render(self.body).strip
   end
 end
+

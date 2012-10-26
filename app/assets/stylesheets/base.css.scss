@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'logofont';
-  src: local('BELCESUB.TTF'); 
+  src: local('BELCESUB.TTF');
   src: url('/fonts/BELCESUB.TTF');
   advancedAntiAliasing: true;
 }
@@ -80,4 +80,9 @@ abbr[title] {
 	line-height: 40px;
 	border-top: 1px dashed #ABABAB;
 	border-bottom: 1px dashed #ABABAB;
+}
+
+
+td.count {
+  width: 40px;
 }
