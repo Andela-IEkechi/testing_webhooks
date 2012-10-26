@@ -7,8 +7,9 @@
 			<ul class="nav">
 				<li>
 					<div class="btn-group">
-					  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-					    <%= @project || 'Projects' %>
+					  <a class="btn dropdown-toggle btn-inverse" data-toggle="dropdown" href="#">
+					    <%= @project || 'Projects' unless @project && @project.new_record? %>
+					    <%= 'New project' if @project && @project.new_record? %>
 					    <span class="caret"></span>
 					  </a>
 					  <ul class="dropdown-menu">
@@ -17,6 +18,10 @@
 									<%= link_to project.title, project_path(project) %>
 								</li>
   						<% end %>
+  						<li class="divider"></li>
+					    <li>
+					      <%= link_to 'new project', new_project_path %>
+    					</li>
 					  </ul>
 					</div>
 				</li>
