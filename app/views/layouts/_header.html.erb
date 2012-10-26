@@ -1,14 +1,10 @@
 <div class="navbar">
 	<div class="navbar-inner">
 		<div class="container">
-			<a class="brand" href="#">
-				Conductor
-			</a>
+			<%= link_to "Conductor", root_path, :class=>'brand' %>
+
 			<% if user_signed_in? %>
 			<ul class="nav">
-				<li>
-					<%= link_to "Home", root_path %>
-				</li>
 				<li>
 					<%= link_to "My Projects", projects_path() %>
 				</li>
