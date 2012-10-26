@@ -1,10 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.7'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
@@ -12,11 +8,18 @@ gem 'devise'
 gem 'cancan'
 gem 'omniauth-github'
 gem 'paper_trail'
+gem 'thin'
+gem 'rake'
 
 #comment body markup
 gem 'redcarpet'
 gem 'pygmentize'
 
+gem 'jquery-rails'
+gem 'bootstrap-sass'
+
+#file uploads
+gem 'carrierwave'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -30,37 +33,10 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
-gem 'bootstrap-sass'
-
-#file uploads
-gem 'carrierwave'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'debugger'
-
-gem 'thin'
-gem 'rake'
-
 group :development,:test do
   gem 'heroku'
   gem 'capistrano'
   gem 'capistrano-ext'
-end
-
-group :development,:test do
   gem 'rspec-rails'
   gem 'guard-rspec'
   gem 'rb-readline'
@@ -75,4 +51,8 @@ group :test do
   gem 'guard-spork'
   gem 'capybara'
   gem 'database_cleaner'
+end
+
+group :development do
+  gem 'rails-footnotes', '>= 3.7.5.rc4'
 end
