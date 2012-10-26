@@ -1,25 +1,23 @@
   <div class="span7">
-  <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span12', :rows => 12}%>
-
+    <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span12', :rows => 12}%>
   </div>
   <div class="span5">
-  <%= comment_form.input :status do %>
-    <%= comment_form.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
-  <% end %>
-  <%= comment_form.input :cost, :collection => Ticket::COST, :include_blank => '- unknown -' %>
-
-  <% unless @ticket.new_record? && !@feature %>
-    <%= comment_form.input :feature do %>
-      <%= comment_form.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
+    <%= comment_form.input :status do %>
+      <%= comment_form.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
     <% end %>
-  <% end %>
-  <% unless @ticket.new_record? && !@sprint %>
-    <%= comment_form.input :sprint do %>
-      <%= comment_form.select :sprint_id, @ticket.project.sprints.all.map { |s| [s.title, s.id] }, :include_blank => '- unassigned -'  %>
-    <% end %>
-  <% end %>
-  <%= comment_form.input :assigned_to do %>
-    <%= comment_form.select :assignee_id, @ticket.project.ordered_participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
-  <% end %>
+    <%= comment_form.input :cost, :collection => Ticket::COST, :include_blank => '- unknown -' %>
 
+    <% unless @ticket.new_record? && !@feature %>
+      <%= comment_form.input :feature do %>
+        <%= comment_form.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
+      <% end %>
+    <% end %>
+    <% unless @ticket.new_record? && !@sprint %>
+      <%= comment_form.input :sprint do %>
+        <%= comment_form.select :sprint_id, @ticket.project.sprints.all.map { |s| [s.title, s.id] }, :include_blank => '- unassigned -'  %>
+      <% end %>
+    <% end %>
+    <%= comment_form.input :assigned_to do %>
+      <%= comment_form.select :assignee_id, @ticket.project.ordered_participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
+    <% end %>
   </div>
