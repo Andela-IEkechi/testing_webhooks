@@ -34,4 +34,7 @@
     <p>cost updated to: <b><%= comment.cost %></b></p>
   <% end %>
   <p><%= comment.html.html_safe %></p>
+  <% comment.assets.each do |asset| %>
+    <%= link_to asset.name, asset.file_url %>  
+  <% end %> 
 </div>
