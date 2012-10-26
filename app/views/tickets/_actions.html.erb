@@ -1,28 +1,40 @@
-<ul class="nav nav-pills nav-stacked">
+<ul class="nav nav-stacked">
   <% if action_name != 'index' %>
     <li>
       <% if @ticket.sprint %>
-        <%= link_to 'back to sprint', project_sprint_path(@ticket.project, @ticket.sprint) %>
+        <%= link_to project_sprint_path(@ticket.project, @ticket.sprint) do %>
+        <span class="navico"><i class="icon-arrow-left navico"></i></span>back to sprint
+        <% end %>
       <% end %>
       <% if @ticket.feature %>
-        <%= link_to "back to feature", project_feature_path(@ticket.project, @ticket.feature) %>
+        <%= link_to project_feature_path(@ticket.project, @ticket.feature) do %>
+        <span class="navico"><i class="icon-arrow-left navico"></i></span>back to feature
+        <% end %>
       <% end %>
       <% unless @ticket.feature || @ticket.sprint %>
-        <%= link_to 'back to project', project_path(@ticket.project) %>
+        <%= link_to project_path(@ticket.project) do %>
+        <span class="navico"><i class="icon-arrow-left navico"></i></span>back to project
+        <% end %>
       <% end %>
     </li>
   <% end %>
   <% if action_name == 'show' %>
     <li>
-      <%= link_to 'edit this ticket', edit_ticket_path(@ticket) %>
+      <%= link_to edit_ticket_path(@ticket) do %>
+      <span class="navico"><i class="icon-edit navico"></i></span>edit this ticket
+      <% end %> 
     </li>
     <li>
-      <%= link_to 'remove this ticket', ticket_path(@ticket), :method => :delete, :data => {:confirm => "Are you sure you want to remove this ticket?"} %>
+      <%= link_to ticket_path(@ticket), :method => :delete, :data => {:confirm => "Are you sure you want to remove this ticket?"} do %>
+      <span class="navico"><i class="icon-trash navico"></i></span>remove this ticket
+      <% end %> 
     </li>
   <% end %>
   <% if action_name != 'new' && action_name != 'index' %>
     <li>
-      <%= link_to 'add a new ticket', new_ticket_path(:project_id => @ticket.project) %>
+      <%= link_to new_ticket_path(:project_id => @ticket.project) do %>
+      <span class="navico"><i class="icon-plus navico"></i></span>add a new ticket 
+      <% end %>     
     </li>
   <% end %>
 </ul>
