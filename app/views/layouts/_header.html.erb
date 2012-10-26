@@ -6,16 +6,23 @@
 			<% if user_signed_in? %>
 			<ul class="nav">
 				<li>
-					<%= link_to "My Projects", projects_path() %>
+					<div class="btn-group">
+					  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+					    <%= @project || 'Projects' %>
+					    <span class="caret"></span>
+					  </a>
+					  <ul class="dropdown-menu">
+							<% current_user.projects.each do |project| %>
+								<li>
+									<%= link_to project.title, project_path(project) %>
+								</li>
+  						<% end %>
+					  </ul>
+					</div>
 				</li>
 				<li>
 					<%= link_to "My Tickets", tickets_path() %>
 				</li>
-				<% if @project && !@project.new_record? && can?(:manage, @project) %>
-				<li class="heading">
-					<%= link_to @project.title, edit_project_path(@project) %>
-				</li>
-				<% end %>
 			</ul>
 
 			<div class="dropdown pull-right">

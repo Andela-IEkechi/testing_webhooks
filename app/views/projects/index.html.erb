@@ -1,7 +1,7 @@
 <table class="table table-bordered table-striped">
-  <% @projects.each do |projects| %>
-  <tr class="clickable" data-href="<%= project_path(projects) %>">
-    <td><%= projects.title %></td>
+  <% @projects.each do |project| %>
+  <tr class="clickable" data-href="<%= project_path(project) %>">
+    <td><%= project.title %></td>
   </tr>
   <% end %>
   <% if @projects.count == 0 %>
