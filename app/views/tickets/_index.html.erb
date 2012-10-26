@@ -3,10 +3,17 @@
 %>
 <table class="table table-bordered table-striped">
   <% tickets.each do |ticket| %>
-  <tr class="clickable" data-href="<%= ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id || nil) %>">
-    <td><%= ticket.title %></td>
-    <td title="status"><%= ticket.status %></td>
-    <td title="cost"><%= ticket.cost %></td>
+  <tr>
+    <td><%= ticket.id %></td>
+    <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
+    <td class="ticket-info">
+      <div class="pull-right">
+        <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
+        <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
+        <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
+      </div>
+    </td>
+    <td class="count" title="cost of this ticket"><%= ticket.cost %></td>
   </tr>
   <% end %>
   <% if tickets.count == 0 %>

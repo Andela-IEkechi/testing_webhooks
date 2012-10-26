@@ -3,7 +3,7 @@ class AccessesController < ApplicationController
 
   def edit
     #get all the users accross all the projects to select from
-    @participants = current_user.projects.collect(&:participants).flatten.uniq
+    @participants = current_user.projects.collect(&:participants).flatten.uniq.sort{|a,b| a.email <=> b.email}
   end
 
   def update
