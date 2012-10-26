@@ -1,11 +1,12 @@
 <div class="well">
-  <h3><%= @sprint.title %></h3>
-  <div>
-    <%= @sprint.due_on %>
-  </div>
-  <div>
-    total cost: <%= @sprint.cost %>
-  </div>
+  <h3><%= @sprint.title %>
+    <small>
+      due on <b><%= @sprint.due_on %></b>
+    </small>
+    <small>
+      at a cost of <b><%= @sprint.cost %></b>
+    </small>
+  </h3>
 
   <h3>Tickets</h3>
   <%= render :partial => "/tickets/index", :locals => {:tickets => @sprint.assigned_tickets } %>
