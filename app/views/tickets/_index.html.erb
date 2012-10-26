@@ -6,6 +6,8 @@
   <tr>
     <td><%= ticket.id %></td>
     <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
+    <td title="sprint"><%= ticket.sprint || '' %></td>
+    <td title="feature"><%= ticket.feature || '' %></td>
     <td title="status"><%= ticket.status %></td>
     <td title="cost"><%= ticket.cost %></td>
   </tr>
