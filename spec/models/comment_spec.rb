@@ -22,8 +22,16 @@ describe Comment do
       @comment = create(:comment)
     end
 
-    it "should have a default cost of 0" do
-      @comment.cost.should == 0
+    # it "should have a default cost of 0" do
+    #   @comment.cost.should == 0
+    # end
+
+    it "should not have a default cost of 0", :focus => true do
+      @comment.cost.should != 0
+    end
+
+    it "should have a default cost of 1", :focus => true do
+      @comment.cost.should == 1
     end
 
     it "should be valid when cost is in #{Ticket::COST}" do
@@ -41,8 +49,8 @@ describe Comment do
       @comment.cost.should_not be_nil
     end
 
-    it "should have a cost between 0 and 3" do
-      (0..3).each do |l|
+    it "should have a cost between 1 and 3" do
+      (1..3).each do |l|
         @comment.cost = l
         @comment.should be_valid
       end

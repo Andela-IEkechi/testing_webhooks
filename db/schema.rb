@@ -37,12 +37,10 @@ ActiveRecord::Schema.define(:version => 20121017190945) do
   end
 
   create_table "projects", :force => true do |t|
-    t.string   "title",                          :null => false
-    t.integer  "sprint_duration", :default => 5
-    t.string   "api_key",                        :null => false
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-    t.integer  "user_id",                        :null => false
+    t.string   "title",      :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "user_id",    :null => false
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
