@@ -27,7 +27,7 @@ describe Comment do
     # end
 
     it "should not have a default cost of 0", :focus => true do
-      @comment.cost.should != 0
+      @comment.cost.should_not eq(0)
     end
 
     it "should have a default cost of 1", :focus => true do
