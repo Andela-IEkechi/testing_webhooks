@@ -2,3 +2,25 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.ticket-info {
+  width: 335px;
+
+}
+.label-ticket {
+  width:100px;
+  display: inline-block;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.label-missing {
+  width:100px;
+  display: inline-block;
+  background: none;
+}
+.label-feature {
+  background-color: green;
+}
+.label-sprint {
+  background-color: darkcyan;
+}

@@ -7,13 +7,14 @@ class CommentsController < ApplicationController
 
   def create
     @comment.user = current_user
+
     if @comment.save
       flash.keep[:notice] = "Comment was added"
-      redirect_to ticket_path(@comment.ticket, :project_id => @comment.ticket.project, :feature_id => @comment.feature)
     else
       flash[:alert] = "Comment could not be created"
       @ticket = @comment.ticket
-      render '/tickets/show'
     end
+   
+   redirect_to ticket_path(@comment.ticket, :project_id => @comment.ticket.project, :feature_id => @comment.feature)
   end
 end
