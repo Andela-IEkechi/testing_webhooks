@@ -3,7 +3,7 @@
   previous = comment.previous
 
   #get what changed
-  [:status_id, :feature_id, :sprint_id, :assignee_id, :cost].each do |attr|
+  [:status_id, :feature_id, :sprint_id, :assignee_id, :cost, :assets].each do |attr|
     now = comment.send(attr)
     if previous
       was = previous.send(attr)
@@ -13,7 +13,9 @@
     end
   end
   changeset[:user] = comment.user.to_s
+
 %>
+
 <div class="well">
   <% if changeset[:user] %>
     <p>updated by <b><%= changeset[:user] %></b></p>
@@ -34,4 +36,10 @@
     <p>cost updated to: <b><%= comment.cost %></b></p>
   <% end %>
   <p><%= comment.html.html_safe %></p>
+  <% if changeset[:assets] %>
+    <p>New assets added:</p>
+    <% comment.assets.each do |asset| %>
+      <%= link_to asset.name, asset.file_url %><br />
+    <% end %> 
+  <% end %>
 </div>

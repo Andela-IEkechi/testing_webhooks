@@ -10,8 +10,10 @@ class Comment < ActiveRecord::Base
   belongs_to :user #always, who made the comment
   has_many   :assets
 
+  accepts_nested_attributes_for :assets
+
   attr_accessible :body, :cost, :rendered_body
-  attr_accessible :status_id, :feature_id, :ticket_id, :sprint_id, :user_id, :assignee_id
+  attr_accessible :status_id, :feature_id, :ticket_id, :sprint_id, :user_id, :assignee_id, :assets_attributes
 
   #we can't enforce this in the model, or nested create fails : validates :ticket_id, :presence => true
   validates :status_id, :presence => true
