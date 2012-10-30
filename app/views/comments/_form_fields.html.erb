@@ -24,9 +24,8 @@
     <%= comment_form.select :assignee_id, @ticket.project.ordered_participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
-  <%= comment_form.simple_fields_for :assets, @comment.assets.build() do |a_f| %>
-    <%= a_f.file_field :file %><br />
-    <%= a_f.link_to_remove "Remove this asset" %>
+  <%= comment_form.simple_fields_for :assets, [] do |a_f| %>
+    <%= a_f.file_field :payload %> <%= a_f.link_to_remove "Remove this asset" %>
   <% end %>
-  <p><%= comment_form.link_to_add "Add an asset", :assets %></p>
+  <%= comment_form.link_to_add "Add an asset", :assets %>
 </div>

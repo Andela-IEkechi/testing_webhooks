@@ -13,7 +13,6 @@
     end
   end
   changeset[:user] = comment.user.to_s
-
 %>
 
 <div class="well">
@@ -36,10 +35,7 @@
     <p>cost updated to: <b><%= comment.cost %></b></p>
   <% end %>
   <p><%= comment.html.html_safe %></p>
-  <% if changeset[:assets] %>
-    <p>New assets added:</p>
-    <% comment.assets.each do |asset| %>
-      <%= link_to asset.name, asset.file_url %><br />
-    <% end %> 
+  <% comment.assets && comment.assets.each do |asset| %>
+    <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
   <% end %>
 </div>
