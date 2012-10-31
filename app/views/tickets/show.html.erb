@@ -2,13 +2,16 @@
   <h3><%= @ticket.title %></h3>
   <h4><%= @ticket.parent %></h4>
 
-  <div id="git-hint">
-    <%= link_to "View Git flow commands"%>
-  </div>
+  <h5  id='git-commands-toggle'>Show git flow commands</h5>
   <div id='git-commands' style="display: none">
-    <h5>Git Flow commands:</h5>
-    git flow feature start <%= @ticket.sanitized_title %> </br>
-    git push --set-upstream feature/<%= @ticket.sanitized_title %>
+    <h5>Hide git flow commands</h5>
+    <code>
+      git flow feature start <%= @ticket.sanitized_title %>
+    </code>
+    <br>
+    <code>
+      git push --set-upstream feature/<%= @ticket.sanitized_title %>
+    </code>
   </div>
 </div>
 
@@ -16,19 +19,3 @@
 
 <%= render :partial => '/comments/form' %>
 
-<%= javascript_tag do %>
-$("#git-hint").click(function(e){
-  e.preventDefault();
-  var anchor = $("#git-hint").children().first("a");
-
-  $("#git-commands").toggle();
-    if ( 'View Git flow commands' == anchor.html() )
-    {
-      anchor.html("Hide Git flow commands");
-    }
-    else
-    {
-      anchor.html("View Git flow commands");
-    }
-});
-<%end %>
