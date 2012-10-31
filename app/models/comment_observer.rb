@@ -6,9 +6,11 @@ class CommentObserver < ActiveRecord::Observer
   def after_create(record)
     return if CommentObserver.disable_notifications
 
-    #send an email to ticket stakeholders
-    TicketMailer.ticket_comment_notification(record.ticket.assignees.collect(&:email).uniq, record).deliver
-
+    #send an email to ticket
+    if (record.ticket.assignees.size > 0)
+      recipients = record.ticket.assignees.collect(&:email).uniq
+      TicketMailer.ticket_comment_notification(recipients, record).deliver
+    end
   end
 end
 
