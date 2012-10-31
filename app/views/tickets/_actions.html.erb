@@ -1,7 +1,7 @@
 <ul class="nav nav-pills nav-stacked">
   <% if action_name != 'index' %>
     <li>
-      <%= link_to 'back to project', project_path(@feature.project) %>
+      <%= link_to 'back to project', project_path(@ticket.project) %>
     </li>
     <li>
       <% if @ticket.sprint %>
