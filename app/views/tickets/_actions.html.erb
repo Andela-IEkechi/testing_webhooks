@@ -2,16 +2,11 @@
   <% if action_name != 'index' %>
     <li>
       <%= link_to 'back to project', project_path(@ticket.project) %>
-    </li>
-    <li>
       <% if @ticket.sprint %>
         <%= link_to 'back to sprint', project_sprint_path(@ticket.project, @ticket.sprint) %>
       <% end %>
       <% if @ticket.feature %>
         <%= link_to "back to feature", project_feature_path(@ticket.project, @ticket.feature) %>
-      <% end %>
-      <% unless @ticket.feature || @ticket.sprint %>
-        <%= link_to 'back to project', project_path(@ticket.project) %>
       <% end %>
     </li>
   <% end %>
