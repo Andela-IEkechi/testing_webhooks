@@ -1,6 +1,18 @@
 <div class="well">
   <h3><%= @ticket.title %></h3>
   <h4><%= @ticket.parent %></h4>
+
+  <h5  id='git-commands-toggle'>Show git flow commands</h5>
+  <div id='git-commands' style="display: none">
+    <h5>Hide git flow commands</h5>
+    <code>
+      git flow feature start <%= @ticket.sanitized_title %>
+    </code>
+    <br>
+    <code>
+      git push --set-upstream feature/<%= @ticket.sanitized_title %>
+    </code>
+  </div>
 </div>
 
 <%= render :partial => '/comments/comment', :collection => @ticket.comments %>
