@@ -1,0 +1,7 @@
+<p><%= @comment.user %> has updated this ticket:</p>
+
+<div>
+  <%= @comment.html.html_safe %>
+</div>
+
+<p><%= link_to @comment.ticket, ticket_url(@comment.ticket) %></p>

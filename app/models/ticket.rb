@@ -68,6 +68,10 @@ class Ticket < ActiveRecord::Base
     get_last(:cost)
   end
 
+  def assignees
+    comments.collect(&:assignee).uniq
+  end
+
   private
 
   #this returns the CURRENTLY SET VALUE, in the history for this ticket

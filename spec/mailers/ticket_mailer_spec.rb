@@ -1,5 +1,5 @@
-require 'spec_helper'
+require "spec_helper"
 
-describe UserObserver do
+describe TicketMailer do
   pending "add some examples to (or delete) #{__FILE__}"
 end
