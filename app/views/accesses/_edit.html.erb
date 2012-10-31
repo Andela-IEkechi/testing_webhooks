@@ -1,7 +1,7 @@
 <h3>Access control</h3>
 
 <%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
-  <%= f.association :participants, :as => :check_boxes, :collection=>@participants %>
+  <%= f.association :participants, :as => :check_boxes, :collection=>@project.ordered_participants %>
   <%= f.simple_fields_for :participants, [] do |p_form| %>
     <%= p_form.input :email %>
     <%= p_form.link_to_remove "Remove this invitation", :class => 'btn btn-mini' %>
