@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20121023084048) do
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
-    t.string   "file"
+    t.string   "payload"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

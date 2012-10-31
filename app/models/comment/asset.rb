@@ -1,11 +1,12 @@
 class Comment::Asset < ActiveRecord::Base
   belongs_to      :comment
   has_one         :ticket, :through => :comment
-  mount_uploader  :file, FileUploader
-  attr_accessible :file
+  mount_uploader  :payload, FileUploader
 
-  # TODO: find better way to do this
+  attr_accessible :payload
+
   def name
-    file.path.split("/").last
+    payload && payload.filename && payload.filename.split('/').last
   end
+
 end

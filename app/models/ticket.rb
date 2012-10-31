@@ -1,6 +1,6 @@
 class Ticket < ActiveRecord::Base
   belongs_to :project #always
-  has_many :comments, :order => :id
+  has_many :comments, :include => :assets, :order => :id
 
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
@@ -14,6 +14,10 @@ class Ticket < ActiveRecord::Base
 
   def to_s
     title
+  end
+
+  def sanitized_title
+    title.gsub(' ','_').downcase
   end
 
   def parent

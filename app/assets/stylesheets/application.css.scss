@@ -1,3 +1,4 @@
+@import "login";
 @import "bootstrap";
 @import "base";
 @import "nav";
@@ -8,3 +9,8 @@
 @import "bootstrap-datepicker";
 @import "login";
 @import "pygments";
+
+
+td.count {
+  width: 40px;
+}
