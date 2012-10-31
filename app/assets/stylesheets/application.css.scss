@@ -1,3 +1,4 @@
+@import "login";
 @import "bootstrap";
 @import "projects";
 @import "tickets";
@@ -5,7 +6,9 @@
 @import "sprints";
 @import "users";
 @import "bootstrap-datepicker";
+@import "pygments";
 
-tr[data-href] {
-  cursor: pointer;
+
+td.count {
+  width: 40px;
 }

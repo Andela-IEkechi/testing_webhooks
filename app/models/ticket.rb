@@ -1,11 +1,11 @@
 class Ticket < ActiveRecord::Base
   belongs_to :project #always
-  has_many :comments, :order => :id
+  has_many :comments, :include => :assets, :order => :id
 
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
 
-  COST = [0,1,2,3]
+  COST = [1,2,3]
 
   validates :project_id, :presence => true
   validates :title, :length => {:minimum => 3}

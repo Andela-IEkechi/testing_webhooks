@@ -17,6 +17,7 @@ guard 'rspec', :cli => "--drb", :version => 2 do
   watch(%r{^spec/models/.+_spec\.rb$})
   watch(%r{^spec/controllers/.+_spec\.rb$})
   watch(%r{^spec/libs/.+_spec\.rb$})
+  watch(%r{^spec/uploaders/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
 
   # Rails example

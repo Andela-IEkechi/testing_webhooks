@@ -1,9 +1,4 @@
 <ul class="nav nav-pills nav-stacked">
-  <% if action_name != 'index' %>
-    <li>
-      <%= link_to 'back to projects', projects_path %>
-    </li>
-  <% end %>
   <% if action_name == 'show' %>
     <li>
       <%= link_to 'edit this project', edit_project_path(@project) %>
@@ -21,11 +16,5 @@
       <%= link_to 'add a new ticket', new_ticket_path(:project_id => @project) %>
     </li>
   <% end %>
-  <% if action_name == 'index' %>
-    <li>
-      <%= link_to 'add a new project', new_project_path %>
-    </li>
-  <% end %>
 </ul>
-
 
