@@ -16,11 +16,6 @@
         <span class="navico"><i class="icon-arrow-left navico"></i></span>back to feature
         <% end %>
       <% end %>
-      <% unless @ticket.feature || @ticket.sprint %>
-        <%= link_to project_path(@ticket.project) do %>
-        <span class="navico"><i class="icon-arrow-left navico"></i></span>back to project
-        <% end %>
-      <% end %>
     </li>
   <% end %>
   <% if action_name == 'show' %>
@@ -42,6 +37,5 @@
       <% end %>
     </li>
   <% end %>
-
 </ul>
 

@@ -80,3 +80,8 @@ Conductor::Application.configure do
   }
 
 end
+
+Conductor::Application.config.middleware.use ExceptionNotifier,
+  :email_prefix => "[Exception] ",
+  :sender_address => %{"notifier" <notifier@conductor-app-staging.herokuapp.com>},
+  :exception_recipients => %w{support@shuntyard.co.za}
