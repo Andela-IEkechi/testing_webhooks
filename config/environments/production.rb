@@ -75,7 +75,7 @@ Conductor::Application.configure do
   }
 end
 
-Wami::Application.config.middleware.use ExceptionNotifier,
+Conductor::Application.config.middleware.use ExceptionNotifier,
   :email_prefix => "[Exception] ",
   :sender_address => %{"notifier" <notifier@conductor-app.co.za>},
   :exception_recipients => %w{support@shuntyard.co.za}
