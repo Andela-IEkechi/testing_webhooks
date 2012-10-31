@@ -18,3 +18,4 @@
 *.sublime-workspace
 .listen_test
 *.swp
+public/uploads
