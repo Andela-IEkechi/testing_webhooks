@@ -1,7 +1,8 @@
 <table class="table table-bordered table-striped">
   <% sprints.each do |sprint| %>
   <tr class="clickable" data-href="<%= project_sprint_path(sprint.project, sprint) %>">
-    <td><%= sprint.title %></td>
+    <td><%= sprint.title  %></td>
+    <td class="due">Due on: <%= sprint.due_on %></td>
     <td><%= sprint.assigned_tickets.count %></td>
   </tr>
   <% end %>
