@@ -69,7 +69,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def assignees
-    comments.collect(&:assignee).uniq
+    comments.collect(&:assignee).compact.uniq
   end
 
   private
