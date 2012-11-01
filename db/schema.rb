@@ -65,11 +65,6 @@ ActiveRecord::Schema.define(:version => 20121023084048) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "ticket_files", :force => true do |t|
-    t.boolean "file_processed", :default => false
-    t.string  "file"
-  end
-
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id", :null => false
     t.string  "name",       :null => false

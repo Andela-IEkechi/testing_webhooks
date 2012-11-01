@@ -2,10 +2,26 @@ ul.nav {
   li.heading {
     padding-left: 50px;
     a {
-      color:#f0f0f0;
+      color:#fff;
       font-size: 15px;
     }
   }
+}
+
+.navbar .nav > li > a {
+  color: white;
+  text-shadow: none;
+  font-size: 15px;
+  &:hover {
+    color: #ABFF3D;
+  }
+}
+
+.green-caret
+{
+border-top-color: #A9FD3C !important;
+border-bottom-color: #A9FD3C !important;
+margin-left: 5px;
 }
 
 .navbar .brand {
