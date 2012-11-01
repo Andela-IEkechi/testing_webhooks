@@ -13,14 +13,14 @@ a, a:hover {
 	color: #579803;
 }
 
-h1 {
+h1, h3 {
   border: 1px solid #ddd;
   padding:9px 20px;
   background-color: white;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 25px;
-  color: #579803;
-  font-variant: small-caps;
+  color: #3C8029;
+
 }
 
 /*have to list them all otherwise bootstrap overwrites by dint of specificity*/
