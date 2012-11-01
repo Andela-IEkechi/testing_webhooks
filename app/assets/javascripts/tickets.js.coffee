@@ -13,3 +13,6 @@ $ ->
   $("#git-commands").click ->
     $('#git-commands-toggle').show();
     $('#git-commands').hide();
+  
+  $("#git-commands code").click (event) ->
+    event.stopPropagation();
