@@ -1,7 +1,5 @@
-@import "login";
 @import "bootstrap";
 @import "base";
-@import "nav";
 @import "tickets";
 @import "features";
 @import "sprints";
@@ -9,7 +7,7 @@
 @import "bootstrap-datepicker";
 @import "login";
 @import "pygments";
-
+@import "nav";
 
 td.count {
   width: 40px;
