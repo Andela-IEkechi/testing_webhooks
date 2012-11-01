@@ -16,10 +16,6 @@ class Ticket < ActiveRecord::Base
     title
   end
 
-  def sanitized_title
-    title.gsub(' ','_').downcase
-  end
-
   def parent
     get_last(:parent) || project
   end

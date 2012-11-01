@@ -7,11 +7,11 @@
   <div id='git-commands' style="display: none">
     <h5>Hide git flow commands</h5>
     <code>
-      git flow feature start <%= @ticket.sanitized_title %>
+      git flow feature start con<%= @ticket.id %>
     </code>
     <br>
     <code>
-      git push --set-upstream feature/<%= @ticket.sanitized_title %>
+      git push --set-upstream feature/con<%= @ticket.id %>
     </code>
   </div>
 </div>
