@@ -56,6 +56,7 @@ group :test do
   gem 'guard-spork'
   gem 'capybara'
   gem 'database_cleaner'
+  gem 'rb-inotify'
 end
 
 group :development do

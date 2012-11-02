@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :ticket_statuses, :participants
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}
-  validates :api_key, :presence => true
+  validates :api_key, :presence => true, :on => :update
 
   def to_s
     title
