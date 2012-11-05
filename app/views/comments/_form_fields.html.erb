@@ -27,7 +27,7 @@
   <div class="attach-asset">
     <%= comment_form.link_to_add "Add an asset", :assets %>
     <%= comment_form.simple_fields_for :assets, [] do |a_f| %>
-      <%= a_f.file_field :payload %> <%= a_f.link_to_remove "Remove this asset" %>
+      <%= a_f.file_field :payload %> <%= a_f.link_to_remove do %><i class="icon-trash"></i><% end %>
     <% end %>
   </div>
 
