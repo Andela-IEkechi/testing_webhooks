@@ -2,7 +2,8 @@
   <% sprints.each do |sprint| %>
   <tr>
     <td><%= link_to sprint.title, project_sprint_path(sprint.project, sprint) %></td>
-    <td title="due date"><%= sprint.due_on.to_s(:long) %></td>
+    <td class="date" title="due date"><%= sprint.due_on.to_s(:long) %></td>
+    <td class="count" title="sprint cost"><%= sprint.cost %></td>
     <td class="count" title="tickets in this sprint"><%= sprint.assigned_tickets.count %></td>
   </tr>
   <% end %>
