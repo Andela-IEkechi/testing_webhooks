@@ -4,7 +4,7 @@
 <table class="table table-bordered table-striped">
   <% tickets.each do |ticket| %>
   <tr>
-    <td># <%= ticket.id %></td>
+    <td class="span1"># <%= ticket.id %></td>
     <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
     <td class="ticket-info">
       <div class="pull-right">
