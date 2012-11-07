@@ -4,11 +4,11 @@
   <%= f.input :title, :input_html => {:class => 'span4'} %>
   <% unless @project.new_record? %>
     <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
-      <%= ts_form.input :name%>
-      <%= ts_form.link_to_remove "Remove this status", :class => 'btn btn-mini' %>
+      <%= ts_form.input :name, :input_html => {:class => 'span4'} %>
+      <%= ts_form.link_to_remove "", :class => 'icon-trash', :title => 'Remove this status' %>
     <% end %>
     <%= f.input :ticket_statuses, :label => false do %>
-      <%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-mini btn-success' %>
+      <%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-success' %>
     <% end %>
   <% end %>
 
