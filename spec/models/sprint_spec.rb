@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sprint do
+describe Sprint, :focus => true do
   before(:each) do
     @sprint = create(:sprint)
   end
@@ -9,20 +9,20 @@ describe Sprint do
     @sprint.should_not be_nil
   end
 
-  it "must have a title" do
-    @sprint.title = nil
+  it "must have a goal" do
+    @sprint.goal = nil
     @sprint.should_not be_valid
   end
 
-  it "must have unique title in the project" do
-    dup_sprint = build(:sprint, :title => @sprint.title, :project => @sprint.project)
+  it "must have unique goal in the project" do
+    dup_sprint = build(:sprint, :goal => @sprint.goal, :project => @sprint.project)
     dup_sprint.should_not be_valid
   end
 
-  it "can have a duplicate title across projects" do
+  it "can have a duplicate goal across projects" do
     other_project = create(:project)
-    dup_sprint = create(:sprint, :title => @sprint.title, :project => other_project)
-    @sprint.title.should eq(dup_sprint.title)
+    dup_sprint = create(:sprint, :goal => @sprint.goal, :project => other_project)
+    @sprint.goal.should eq(dup_sprint.goal)
     dup_sprint.should be_valid
   end
 

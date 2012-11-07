@@ -102,16 +102,16 @@ describe Project do
     }.to change(TicketStatus,:count).by(-2) #two default statuses
   end
 
-  it "should have an API key to allow external parties to interface with it", :focus => true  do
+  it "should have an API key to allow external parties to interface with it" do
     @project.api_key.should_not be_nil
   end
 
-  it "should not have an API key", :focus => true do
+  it "should not have an API key" do
     project_without_api = build(:no_api_project)
     project_without_api.api_key.should be_nil
   end
 
-  it "should generate an api_key on create", :focus => true do
+  it "should generate an api_key on create" do
     project_without_api = create(:no_api_project)
     project_without_api.api_key.should_not be_blank
   end
