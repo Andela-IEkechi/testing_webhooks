@@ -4,7 +4,7 @@
   <%= f.association :participants, :as => :check_boxes, :collection=>@project.ordered_participants %>
   <%= f.simple_fields_for :participants, [] do |p_form| %>
     <%= p_form.input :email %>
-    <%= p_form.link_to_remove "Remove this invitation", :class => 'btn btn-mini' %>
+    <%= p_form.link_to_remove "Remove this invitation", :class => 'icon-trash' %>
   <% end %>
   <%= f.input :participants, :label => false do %>
     <%= f.link_to_add "Invite a user", :participants, :class => 'btn btn-success' %>
