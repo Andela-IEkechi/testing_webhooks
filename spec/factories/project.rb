@@ -14,5 +14,9 @@ FactoryGirl.define do
         project.save!
       end
     end
+
+    factory :no_api_project do
+      api_key nil
+    end
   end
 end

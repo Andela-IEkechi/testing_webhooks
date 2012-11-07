@@ -13,7 +13,7 @@
 					    <span class="caret"></span>
 					  </a>
 					  <ul class="dropdown-menu">
-							<% current_user.projects.each do |project| %>
+							<% current_user.participations.each do |project| %>
 								<li>
 									<%= link_to project.title, project_path(project) %>
 								</li>
