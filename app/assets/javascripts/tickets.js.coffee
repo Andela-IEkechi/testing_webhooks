@@ -16,3 +16,17 @@ $ ->
   
   $("#git-commands code").click (event) ->
     event.stopPropagation();
+
+
+
+  $("#state-picker li").click ->
+   # alert($(this).parent().prev().html());
+    button = $(this).parent().prev();
+    child = button.children();
+    button.html($(this).html());
+    button.append(child);
+
+  $("#ticket-search").click ->
+    choice = $('#state-picker').prev().text();
+    $('tr[data-state="'+choice+'"]').show();
+    $('tr[data-state!="'+choice+'"]').hide();
