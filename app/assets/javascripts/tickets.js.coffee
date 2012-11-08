@@ -17,8 +17,12 @@ $ ->
   $("#git-commands code").click (event) ->
     event.stopPropagation();
 
-  $("#state-picker li").click ->
+  $(".ticket-filter #state-picker li").click ->
     choice = $(this).html();
-    $('tr[data-state="'+choice+'"]').show();
-    $('tr[data-state!="'+choice+'"]').hide();
+    $('.ticket-filter tr[data-state="'+choice+'"]').show();
+    $('.ticket-filter tr[data-state!="'+choice+'"]').hide();
+
+  $(".ticket-filter #state-picker li:contains('All')").click ->
+    $('.ticket-filter tr').show();
+
     
