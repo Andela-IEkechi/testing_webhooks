@@ -9,7 +9,7 @@
 
   <div class="pull-right input-append">
       <div class="btn-group">
-      <input id="appendedDropdownButton" type="text" class="span7" placeholder="Filter">
+      <input id="search_input" type="text" class="span7" placeholder="Filter">
         <button class="btn dropdown-toggle" data-toggle="dropdown">
           State
           <span class="caret"></span>
@@ -23,9 +23,9 @@
       </div>
   </div>
 
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped" id="ticket-list">
   <% tickets.each do |ticket| %>
-    <tr data-state="<%= ticket.status %>">
+    <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
       <td><%= ticket.id %></td>
       <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
       <td class="ticket-info">

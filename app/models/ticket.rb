@@ -68,6 +68,10 @@ class Ticket < ActiveRecord::Base
     comments.collect(&:assignee).compact.uniq
   end
 
+  def filter_summary
+    [id, title, feature && feature.title, sprint && sprint.title, status].join("").downcase
+  end
+
   private
 
   #this returns the CURRENTLY SET VALUE, in the history for this ticket
