@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sprint, :focus => true do
+describe Sprint do
   before(:each) do
     @sprint = create(:sprint)
   end
@@ -80,6 +80,62 @@ describe Sprint, :focus => true do
       bad_ticket.should be_valid
       @sprint.reload
       @sprint.assigned_tickets.count.should eq(1)
+    end
+
+    it "should respond to open", :focus => true do
+      @sprint.should respond_to(:open?)
+    end
+
+    it "should be open if it's still running", :focus => true do
+      @sprint.due_on = 5.days.from_now
+      @sprint.should be_open
+    end
+    
+    it "should be open if it has open tickets", :focus => true do
+      ticket = @sprint.project.tickets.first
+      @sprint.tickets << ticket
+      ticket.comments.last.status.open=true
+      @sprint.should be_open
+    end
+
+    it "should respond to closed", :focus => true do
+      @sprint.should respond_to(:closed?)
+    end
+
+    it "should be closed if its not running and has no open tickets", :focus => true do
+      ticket = @sprint.project.tickets.first
+      @sprint.tickets << ticket
+
+      @sprint.due_on = 5.days.from_now
+      #running with an open ticket!
+      ticket.comments.last.status.open=true
+      @sprint.should_not be_closed
+
+      #running with a closed ticket!
+      ticket.comments.last.status.open=false
+      @sprint.should_not be_closed
+
+
+      @sprint.due_on = 5.days.ago
+      #not running with an open ticket!
+      ticket.comments.last.status.open=true
+      @sprint.should_not be_closed
+
+      #not running with a closed ticket!
+      ticket.comments.last.status.open=false
+      @sprint.should be_closed
+
+    end
+
+    it "should respond to running", :focus => true do
+      @sprint.should respond_to(:running?)
+    end
+
+    it "should be running if due date is in the future", :focus => true do
+      @sprint.due_on = 5.days.ago
+      @sprint.should_not be_running
+      @sprint.due_on = 5.days.from_now
+      @sprint.should be_running
     end
 
   end
