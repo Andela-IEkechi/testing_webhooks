@@ -18,7 +18,6 @@ describe Ticket do
   end
 
   context "validates that" do
-
     it "should have a title of at least 3 characters" do
       @ticket.should be_valid
       @ticket.title = 'xx'
@@ -32,6 +31,27 @@ describe Ticket do
 
   it "should have comments" do
     @ticket.should respond_to(:comments)
+  end
+
+  context "filter summary" do  
+    it "should be present", :focus => true do
+      @ticket.should respond_to :filter_summary
+    end
+
+    it "should not be empty", :focus => true do
+      @ticket.filter_summary.should_not be_blank
+    end
+
+    it "should be unique", :focus => true do
+      ticket1 = create(:ticket)
+      ticket2 = create(:ticket, :title => ticket1.title)
+      ticket1.filter_summary.should_not eq(ticket2.filter_summary)  
+    end
+
+    it "should be lower case", :focus => true do
+      @ticket.title = 'UPPER CASE TITLE'
+      @ticket.filter_summary.should eq(@ticket.filter_summary.downcase)
+    end
   end
 
   context "belongs to a parent" do

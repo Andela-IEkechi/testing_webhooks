@@ -5,3 +5,9 @@
 
 $ ->
   $('.datepicker').datepicker({format: 'yyyy-mm-dd'})
+
+  $('#sprint-list tr[data-state="closed"]').hide();
+
+  $("#show_closed_sprints").change ->
+    $('#sprint-list tr[data-state="closed"]').show() if this.checked
+    $('#sprint-list tr[data-state="closed"]').hide() unless this.checked
