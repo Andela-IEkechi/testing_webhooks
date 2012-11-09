@@ -5,10 +5,10 @@
 
 $ ->
   $('.datepicker').datepicker({format: 'yyyy-mm-dd'})
-
-  $("#show-closed").toggle (->
-    $(this).html "Hide Closed Sprints"
-    $("#closed-sprints").toggle()
-    ), ->
-      $(this).html "Show Closed Sprints"
-      $("#closed-sprints").toggle()
+  $('#sprint-list tr[data-state="closed"]').hide();
+  
+  $("#sprint-list #show_closed_sprints").toggle (->
+    if $(this).is(:checked)
+      $('#sprint-list tr[data-state="closed"]').show();
+    else
+      $('#sprint-list tr[data-state="closed"]').hide();
