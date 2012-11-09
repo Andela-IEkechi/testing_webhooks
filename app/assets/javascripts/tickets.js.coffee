@@ -13,3 +13,16 @@ $ ->
   $("#git-commands").click ->
     $('#git-commands-toggle').show();
     $('#git-commands').hide();
+  
+  $("#git-commands code").click (event) ->
+    event.stopPropagation();
+
+  $(".ticket-filter #state-picker li").click ->
+    choice = $(this).html();
+    $('.ticket-filter tr[data-state="'+choice+'"]').show();
+    $('.ticket-filter tr[data-state!="'+choice+'"]').hide();
+
+  $(".ticket-filter #state-picker li:contains('All')").click ->
+    $('.ticket-filter tr').show();
+
+    

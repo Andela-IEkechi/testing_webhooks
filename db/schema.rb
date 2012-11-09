@@ -66,8 +66,9 @@ ActiveRecord::Schema.define(:version => 20121107104614) do
   end
 
   create_table "ticket_statuses", :force => true do |t|
-    t.integer "project_id", :null => false
-    t.string  "name",       :null => false
+    t.integer "project_id",                   :null => false
+    t.string  "name",                         :null => false
+    t.boolean "open",       :default => true
   end
 
   create_table "tickets", :force => true do |t|
