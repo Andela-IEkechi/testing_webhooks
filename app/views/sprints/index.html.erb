@@ -1,7 +1,7 @@
 <table class="table table-bordered table-striped">
   <% @sprints.each do |sprint| %>
   <tr class="clickable" data-href="<%= sprint_path(sprint) %>">
-    <td><%= sprint.title %></td>
+    <td><%= sprint.goal %></td>
   </tr>
   <% end %>
   <% if @sprints.count == 0 %>

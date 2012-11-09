@@ -32,6 +32,23 @@ describe TicketStatus do
     @status.to_s.should eq(@status.name)
   end
 
+  it "should respond to :open", :focus => true do
+    @status.should respond_to :open
+  end
+
+  it "should be closable", :focus => true do
+    @status.open.should eq(true)
+    @status.close!
+    @status.open.should eq(false)
+  end
+
+  it "should be openable", :focus => true do
+    @status.open = false
+    @status.open.should eq(false)
+    @status.open!
+    @status.open.should eq(true)
+  end
+
   it "should know about tickets that use it" do
     @status.should have(0).tickets
     create(:ticket, :status => @status)
