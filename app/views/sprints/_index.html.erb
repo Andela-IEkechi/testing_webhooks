@@ -1,6 +1,7 @@
 <table class="table table-bordered table-striped">
   <% sprints.each do |sprint| %>
   <tr>
+    <td title="sprint number"><%= sprint.id %></td>
     <td><%= link_to sprint.goal, project_sprint_path(sprint.project, sprint) %></td>
     <td title="due date"><%= sprint.due_on.to_s(:long) %></td>
     <td class="count" title="tickets in this sprint"><%= sprint.assigned_tickets.count %></td>
