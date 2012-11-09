@@ -1,6 +1,7 @@
 class Ticket < ActiveRecord::Base
   belongs_to :project #always
   has_many :comments, :include => :assets, :order => :id
+  #Status is linked through comments
 
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
@@ -66,6 +67,10 @@ class Ticket < ActiveRecord::Base
 
   def assignees
     comments.collect(&:assignee).compact.uniq
+  end
+
+  def open?
+    ticket_s
   end
 
   private

@@ -3,7 +3,7 @@ class TicketStatus < ActiveRecord::Base
   has_many :tickets, :foreign_key => 'status_id'
   before_destroy :check_for_tickets
 
-  attr_accessible :name, :nature, :open #cant use "type"
+  attr_accessible :name, :open #cant use "type"
 
   validates :name, :presence => true, :uniqueness => {:scope => :project_id}
   validates :project_id, :presence => true
