@@ -9,20 +9,20 @@ describe Sprint do
     @sprint.should_not be_nil
   end
 
-  it "must have a title" do
-    @sprint.title = nil
+  it "must have a goal" do
+    @sprint.goal = nil
     @sprint.should_not be_valid
   end
 
-  it "must have unique title in the project" do
-    dup_sprint = build(:sprint, :title => @sprint.title, :project => @sprint.project)
+  it "must have unique goal in the project" do
+    dup_sprint = build(:sprint, :goal => @sprint.goal, :project => @sprint.project)
     dup_sprint.should_not be_valid
   end
 
-  it "can have a duplicate title across projects" do
+  it "can have a duplicate goal across projects" do
     other_project = create(:project)
-    dup_sprint = create(:sprint, :title => @sprint.title, :project => other_project)
-    @sprint.title.should eq(dup_sprint.title)
+    dup_sprint = create(:sprint, :goal => @sprint.goal, :project => other_project)
+    @sprint.goal.should eq(dup_sprint.goal)
     dup_sprint.should be_valid
   end
 
@@ -80,6 +80,62 @@ describe Sprint do
       bad_ticket.should be_valid
       @sprint.reload
       @sprint.assigned_tickets.count.should eq(1)
+    end
+
+    it "should respond to open", :focus => true do
+      @sprint.should respond_to(:open?)
+    end
+
+    it "should be open if it's still running", :focus => true do
+      @sprint.due_on = 5.days.from_now
+      @sprint.should be_open
+    end
+    
+    it "should be open if it has open tickets", :focus => true do
+      ticket = @sprint.project.tickets.first
+      @sprint.tickets << ticket
+      ticket.comments.last.status.open=true
+      @sprint.should be_open
+    end
+
+    it "should respond to closed", :focus => true do
+      @sprint.should respond_to(:closed?)
+    end
+
+    it "should be closed if its not running and has no open tickets", :focus => true do
+      ticket = @sprint.project.tickets.first
+      @sprint.tickets << ticket
+
+      @sprint.due_on = 5.days.from_now
+      #running with an open ticket!
+      ticket.comments.last.status.open=true
+      @sprint.should_not be_closed
+
+      #running with a closed ticket!
+      ticket.comments.last.status.open=false
+      @sprint.should_not be_closed
+
+
+      @sprint.due_on = 5.days.ago
+      #not running with an open ticket!
+      ticket.comments.last.status.open=true
+      @sprint.should_not be_closed
+
+      #not running with a closed ticket!
+      ticket.comments.last.status.open=false
+      @sprint.should be_closed
+
+    end
+
+    it "should respond to running", :focus => true do
+      @sprint.should respond_to(:running?)
+    end
+
+    it "should be running if due date is in the future", :focus => true do
+      @sprint.due_on = 5.days.ago
+      @sprint.should_not be_running
+      @sprint.due_on = 5.days.from_now
+      @sprint.should be_running
     end
 
   end

@@ -1,5 +1,5 @@
-if Rails.env.production?
-  CarrierWave.configure do |config|
+CarrierWave.configure do |config|
+  if Rails.env.production?
     config.fog_credentials = {
       :provider               => 'AWS',       # required
       :aws_access_key_id      => 'AKIAJ3XPAWJPN6KR2QPQ',       # required
@@ -10,12 +10,10 @@ if Rails.env.production?
     config.fog_public     = true                                   # optional, defaults to true
     config.fog_attributes = {'Cache-Control'=>'max-age=315576000'}  # optional, defaults to {}
     #config.asset_host     = 'https://assets.example.com'            # optional, defaults to nil
-  end
-elsif Rails.env.test?
-  config.storage = :file
-  config.enable_processing = false
-else #dev and staging
-  CarrierWave.configure do |config|
+  elsif Rails.env.test?
+    config.storage = :file
+    config.enable_processing = false
+  else #dev and staging
     config.fog_credentials = {
       :provider               => 'AWS',       # required
       :aws_access_key_id      => 'AKIAJ3XPAWJPN6KR2QPQ',       # required
@@ -28,4 +26,3 @@ else #dev and staging
     #config.asset_host     = 'https://assets.example.com'            # optional, defaults to nil
   end
 end
-
