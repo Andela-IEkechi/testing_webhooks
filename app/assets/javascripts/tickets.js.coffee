@@ -32,3 +32,5 @@ $ ->
       $('#ticket-list tr[data-state!="'+choice+'"]').hide();
       $('#ticket-list tr:visible:not([data-search*="'+query+'"])').hide() if query;
 
+  $(".ticket-filter #state-picker li:contains('All')").click ->
+    $('.ticket-filter tr').show();

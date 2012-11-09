@@ -1,6 +1,7 @@
 class Ticket < ActiveRecord::Base
   belongs_to :project #always
   has_many :comments, :include => :assets, :order => :id
+  #Status is linked through comments
 
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
@@ -70,6 +71,10 @@ class Ticket < ActiveRecord::Base
 
   def filter_summary
     [id, title, feature && feature.title, sprint && sprint.title, status].join("").downcase
+  end
+  
+  def open?
+    ticket_s
   end
 
   private
