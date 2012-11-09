@@ -7,23 +7,24 @@
   <% state << ticket.status if !state.include? ticket.status %>
 <% end %>
 
-  <div class="pull-right input-append">
-      <div class="btn-group">
-      <input id="search_input" type="text" class="span7" placeholder="Filter">
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-          State
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" id="state-picker">
-          <% state.each do |st| %>
-            <li><%= st %></li>
-          <% end %>
-          <li>All</li>        
-        </ul>
-      </div>
+<div class="pull-right input-append">
+  <div class="btn-group">
+    <input id="search_input" type="text" class="span8" placeholder="Filter">
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      State
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" id="state-picker">
+      <% state.each do |st| %>
+      <li><%= st %></li>
+      <% end %>
+      <li>All</li>        
+    </ul>
   </div>
+</div>
 
 <table class="table table-bordered table-striped" id="ticket-list">
+
   <% tickets.each do |ticket| %>
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
       <td><%= ticket.id %></td>
