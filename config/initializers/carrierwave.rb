@@ -1,5 +1,5 @@
-if Rails.env.production?
-  CarrierWave.configure do |config|
+CarrierWave.configure do |config|
+  if Rails.env.production?
     config.fog_credentials = {
       :provider               => 'AWS',       # required
       :aws_access_key_id      => 'AKIAJ3XPAWJPN6KR2QPQ',       # required
@@ -30,4 +30,3 @@ else #dev and staging
     #config.asset_host     = 'https://assets.example.com'            # optional, defaults to nil
   end
 end
-

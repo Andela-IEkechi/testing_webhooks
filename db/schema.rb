@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121023084048) do
+ActiveRecord::Schema.define(:version => 20121107082914) do
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
@@ -65,14 +65,10 @@ ActiveRecord::Schema.define(:version => 20121023084048) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "ticket_files", :force => true do |t|
-    t.boolean "file_processed", :default => false
-    t.string  "file"
-  end
-
   create_table "ticket_statuses", :force => true do |t|
-    t.integer "project_id", :null => false
-    t.string  "name",       :null => false
+    t.integer "project_id",                   :null => false
+    t.string  "name",                         :null => false
+    t.boolean "open",       :default => true
   end
 
   create_table "tickets", :force => true do |t|
