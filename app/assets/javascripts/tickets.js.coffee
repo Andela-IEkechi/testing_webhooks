@@ -17,12 +17,18 @@ $ ->
   $("#git-commands code").click (event) ->
     event.stopPropagation();
 
-  $(".ticket-filter #state-picker li").click ->
+  $("#state-picker li").click ->
+    button = $(this).parent().prev();
+    child = button.children();
+    button.html($(this).html());
+    button.append(child);
     choice = $(this).html();
-    $('.ticket-filter tr[data-state="'+choice+'"]').show();
-    $('.ticket-filter tr[data-state!="'+choice+'"]').hide();
+    query = $("#search_input").val().toLowerCase();
+    if choice is 'All'
+      $('#ticket-list tr').show();
+      $('#ticket-list tr:not([data-search*="'+query+'"])').hide() if query;   
+    else
+      $('#ticket-list tr[data-state="'+choice+'"]').show();
+      $('#ticket-list tr[data-state!="'+choice+'"]').hide();
+      $('#ticket-list tr:visible:not([data-search*="'+query+'"])').hide() if query;
 
-  $(".ticket-filter #state-picker li:contains('All')").click ->
-    $('.ticket-filter tr').show();
-
-    
