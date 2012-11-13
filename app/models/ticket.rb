@@ -72,7 +72,7 @@ class Ticket < ActiveRecord::Base
   def filter_summary
     [id, title, feature && feature.title, sprint && sprint.goal, status].join("").downcase
   end
-  
+
   def open?
     ticket_s
   end
