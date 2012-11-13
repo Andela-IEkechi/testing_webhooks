@@ -10,7 +10,7 @@
         <% end %>
       </td>
       <td title="due date"><%= sprint.due_on.to_s(:long) %></td>
-      <td class="count" title="tickets in this sprint"><%= sprint.assigned_tickets.count %></td>
+      <td class="count" title="tickets in this sprint"><span class="badge badge-important"><%= sprint.assigned_tickets.count %></span></td>
     </tr>
   <% end %>
   <% if sprints.count == 0 %>
