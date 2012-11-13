@@ -2,7 +2,7 @@
   tickets ||= @tickets
 %>
 
-<% state = Array.new %> 
+<% state = Array.new %>
 <% tickets.each do |ticket| %>
   <% state << ticket.status if !state.include? ticket.status %>
 <% end %>
@@ -18,7 +18,7 @@
       <% state.each do |st| %>
       <li><%= st %></li>
       <% end %>
-      <li>All</li>        
+      <li>All</li>
     </ul>
   </div>
 </div>
@@ -36,7 +36,7 @@
         <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
       </div>
     </td>
-    <td class="count" title="cost of this ticket"><%= ticket.cost %></td>
+    <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= ticket.cost %></span></td>
   </tr>
   <% end %>
   <% if tickets.count == 0 %>
