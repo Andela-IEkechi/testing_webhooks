@@ -2,7 +2,7 @@
   <% features.each do |feature| %>
   <tr>
     <td><%= link_to feature.title, project_feature_path(feature.project, feature) %></td>
-    <td class="count" title="tickets in this feature"><%= feature.assigned_tickets.count %></td>
+    <td class="count" title="tickets in this feature"><span class="badge badge-info"><%= feature.assigned_tickets.count %></span></td>
   </tr>
   <% end %>
   <% if features.count == 0 %>

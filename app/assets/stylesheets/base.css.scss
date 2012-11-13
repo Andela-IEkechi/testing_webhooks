@@ -23,7 +23,6 @@ h1, h3 {
 
 }
 
-/*have to list them all otherwise bootstrap overwrites by dint of specificity*/
 input:focus, textarea:focus {
     border: 1px solid #92e12a !important;
     box-shadow: none !important;
