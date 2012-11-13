@@ -16,6 +16,6 @@
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
     <%= link_to 'cancel', project_path(@project), :class => 'btn' unless @project.new_record? %>
-    <%= link_to 'cancel', projects_path(), :class => 'btn' if @project.new_record? %>
+    <%= link_to 'cancel', root_path(), :class => 'btn' if @project.new_record? %>
   </div>
 <% end %>
