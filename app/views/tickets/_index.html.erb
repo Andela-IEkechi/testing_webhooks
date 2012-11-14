@@ -24,7 +24,7 @@
 </div>
 
 <table class="table table-bordered table-striped" id="ticket-list">
-
+  <!--title row -->
   <% tickets.each do |ticket| %>
   <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
     <td class="span1"><%= ticket.id %></td>

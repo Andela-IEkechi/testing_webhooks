@@ -30,10 +30,7 @@ input:focus, textarea:focus {
   }
 
 abbr[title] {
-  cursor: help;
-  border-bottom: 0;
-  color: #92e12a;
-  font-weight: bold;
+  display: none;
 }
 
 .btn-maincolor {
@@ -57,18 +54,10 @@ abbr[title] {
   margin: 30px auto;
 }
 
-.footer {
-	margin: 60px auto;
-	width: auto;
-	text-align: center;
-	height: 40px;
-	vertical-align: middle;
-	line-height: 40px;
-	border-top: 1px dashed #ABABAB;
-	border-bottom: 1px dashed #ABABAB;
-}
-
-
 td.count {
   width: 40px;
+}
+
+td.date {
+  width: 275px;
 }

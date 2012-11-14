@@ -2,7 +2,7 @@ ul.nav {
   li.heading {
     padding-left: 50px;
     a {
-      color:#fff;
+      color:#f0f0f0;
       font-size: 15px;
     }
   }
@@ -35,21 +35,21 @@ ul.nav {
 
 .green-caret
 {
-border-top-color: #A9FD3C !important;
-border-bottom-color: #A9FD3C !important;
-margin-left: 5px;
+  border-top-color: #A9FD3C !important;
+  border-bottom-color: #A9FD3C !important;
+  margin-left: 5px;
 }
 
 .navbar .brand {
 	background-image: url('logo_tunnel_small.png');
-    background-repeat: no-repeat;
-    background-position: 10px 7px;
-    padding-left: 40px;
-    padding-top: 11px;
-    font-family: 'logofont', arial;
-    text-transform: uppercase;
-    font-size: 19px;
-    color: #fff;
+  background-repeat: no-repeat;
+  background-position: 10px 7px;
+  padding-left: 40px;
+  padding-top: 11px;
+  font-family: 'logofont', arial;
+  text-transform: uppercase;
+  font-size: 19px;
+  color: #fff;
 }
 
 .navbar-inner {
@@ -60,10 +60,10 @@ margin-left: 5px;
 }
 
 span.navico {
-    display: inline-block;
-    padding: 8px 10px 6px;
-    margin: 6px 15px 5px 0;
-    border-right: 1px solid #ddd;
+  display: inline-block;
+  padding: 8px 10px 6px;
+  margin: 6px 15px 5px 0;
+  border-right: 1px solid #ddd;
   }
 
 .nav-stacked {
@@ -76,4 +76,15 @@ span.navico {
   li:nth-child(2n) {
   background-color:#f9f9f9;
   }
+}
+
+.footer {
+  margin: 60px auto;
+  width: auto;
+  text-align: center;
+  height: 40px;
+  vertical-align: middle;
+  line-height: 40px;
+  border-top: 1px dashed #ABABAB;
+  border-bottom: 1px dashed #ABABAB;
 }
