@@ -20,7 +20,6 @@ h1, h3 {
   font-size: 20px;
   line-height: 25px;
   color: #A5A5A5;
-
 }
 
 input:focus, textarea:focus {
@@ -28,6 +27,11 @@ input:focus, textarea:focus {
     box-shadow: none !important;
     outline: none !important;
   }
+
+input[type=checkbox] {
+    position: relative;
+    top: -3px;
+}
 
 abbr[title] {
   display: none;

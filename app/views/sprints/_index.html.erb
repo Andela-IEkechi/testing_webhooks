@@ -1,4 +1,4 @@
-<label class="pull-right">Show Closed Sprints<%= check_box_tag :show_closed_sprints, true %></label>
+<label class="pull-right">Show Closed Sprints &nbsp;<%= check_box_tag :show_closed_sprints, true %></label>
 <table class="table table-bordered table-striped" id="sprint-list">
   <% sprints.each do |sprint| %>
     <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
