@@ -1,0 +1,90 @@
+ul.nav {
+  li.heading {
+    padding-left: 50px;
+    a {
+      color:#f0f0f0;
+      font-size: 15px;
+    }
+  }
+}
+
+.login {
+  font-size: 12px;
+  line-height: 24px;
+}
+
+.navbar .nav > li > a {
+  color: white;
+  text-shadow: none;
+  font-size: 15px;
+  &:hover, 
+  &:active,
+  &:focus {
+    color: #ABFF3D;
+  }
+}
+
+.dropdown-menu li > a {
+  &:hover,
+  &:active {
+  background-color: #F0F0F0;
+  background-image: none;
+  color: black;
+  }
+}
+
+.green-caret
+{
+  border-top-color: #A9FD3C !important;
+  border-bottom-color: #A9FD3C !important;
+  margin-left: 5px;
+}
+
+.navbar .brand {
+	background-image: url('logo_tunnel_small.png');
+  background-repeat: no-repeat;
+  background-position: 10px 7px;
+  padding-left: 40px;
+  padding-top: 11px;
+  font-family: 'logofont', arial;
+  text-transform: uppercase;
+  font-size: 19px;
+  color: #fff;
+}
+
+.navbar-inner {
+	background-color: black;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(#222));
+	background-image: -o-linear-gradient(top, #000, #222);
+	background-image: linear-gradient(top, #000, #222);
+}
+
+span.navico {
+  display: inline-block;
+  padding: 8px 10px 6px;
+  margin: 6px 15px 5px 0;
+  border-right: 1px solid #ddd;
+  }
+
+.nav-stacked {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  li {
+    border-bottom: 1px solid #ddd;
+  }
+  li:nth-child(2n) {
+  background-color:#f9f9f9;
+  }
+}
+
+.footer {
+  margin: 60px auto;
+  width: auto;
+  text-align: center;
+  height: 40px;
+  vertical-align: middle;
+  line-height: 40px;
+  border-top: 1px dashed #ABABAB;
+  border-bottom: 1px dashed #ABABAB;
+}

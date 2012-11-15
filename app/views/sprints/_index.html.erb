@@ -1,10 +1,17 @@
-<table class="table table-bordered table-striped">
+<label class="pull-right">Show Closed Sprints &nbsp;<%= check_box_tag :show_closed_sprints, true %></label>
+<table class="table table-bordered table-striped" id="sprint-list">
   <% sprints.each do |sprint| %>
-  <tr>
-    <td><%= link_to sprint.title, project_sprint_path(sprint.project, sprint) %></td>
-    <td title="due date"><%= sprint.due_on.to_s(:long) %></td>
-    <td class="count" title="tickets in this sprint"><%= sprint.assigned_tickets.count %></td>
-  </tr>
+    <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
+      <td title="sprint number"><%= sprint.id %></td>
+      <td>
+        <%= link_to sprint.goal, project_sprint_path(sprint.project, sprint) %>
+        <% if (sprint.closed?) %>
+          <span class="label label-ticket pull-right">Closed</span>
+        <% end %>
+      </td>
+      <td title="due date"><%= sprint.due_on.to_s(:long) %></td>
+      <td class="count" title="tickets in this sprint"><span class="badge badge-important"><%= sprint.assigned_tickets.count %></span></td>
+    </tr>
   <% end %>
   <% if sprints.count == 0 %>
   <tr>
@@ -12,3 +19,8 @@
   </tr>
   <% end %>
 </table>
+
+
+
+
+ 

@@ -5,16 +5,19 @@
   <% unless @project.new_record? %>
     <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
       <%= ts_form.input :name%>
-      <%= ts_form.link_to_remove "Remove this status", :class => 'btn btn-mini' %>
+      <%= ts_form.input :open, :as => :radio_buttons, :collection => [['Open', true] ,['Closed', false]], :label => false %>
+      <%= ts_form.input ' ' do %>
+        <%= ts_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this status' %>
+      <% end %>
     <% end %>
     <%= f.input :ticket_statuses, :label => false do %>
-      <%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-mini btn-success' %>
+      <%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-success' %>
     <% end %>
   <% end %>
 
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
     <%= link_to 'cancel', project_path(@project), :class => 'btn' unless @project.new_record? %>
-    <%= link_to 'cancel', projects_path(), :class => 'btn' if @project.new_record? %>
+    <%= link_to 'cancel', root_path(), :class => 'btn' if @project.new_record? %>
   </div>
 <% end %>

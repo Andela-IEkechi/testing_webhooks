@@ -4,7 +4,11 @@
 
 .ticket-info {
   width: 335px;
+}
 
+.label {
+  padding: 5px 2px;
+  text-shadow: none;
 }
 .label-ticket {
   width:100px;
@@ -19,7 +23,7 @@
   background: none;
 }
 .label-feature {
-  background-color: green;
+  background-color: #579803;
 }
 .label-sprint {
   background-color: darkcyan;
@@ -27,4 +31,8 @@
 
 #git-commands h5, #git-commands-toggle {
   cursor: pointer;
+}
+
+.attach-asset {
+  margin-left: 180px;
 }
