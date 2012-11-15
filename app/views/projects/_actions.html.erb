@@ -1,5 +1,6 @@
 <ul class="nav nav-stacked">
   <% if action_name == 'show' %>
+    <% if can?(:manage, @project) %>
     <li>
       <%= link_to edit_project_path(@project) do %>
         <span class="navico"><i class="icon-edit"></i></span>edit this project
@@ -10,6 +11,7 @@
         <span class="navico"><i class="icon-trash"></i></span>remove this project
       <% end %>
     </li>
+    <% end %>
     <li>
       <%= link_to new_project_feature_path(@project) do %>
         <span class="navico"><i class="icon-plus"></i></span>add a new feature
