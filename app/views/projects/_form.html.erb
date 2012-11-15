@@ -7,7 +7,7 @@
       <%= ts_form.input :name%>
       <%= ts_form.input :open, :as => :radio_buttons, :collection => [['Open', true] ,['Closed', false]], :label => false %>
       <%= ts_form.input ' ' do %>
-      <%= ts_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this status' %>
+        <%= ts_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this status' %>
       <% end %>
     <% end %>
     <%= f.input :ticket_statuses, :label => false do %>
