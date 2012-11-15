@@ -1,3 +1,5 @@
+<h1><%= @project.title %></h1>
+<br>
 <div class="well">
   <h3>Features</h3>
   <%= render :partial => "/features/index", :locals => {:features => @project.features } %>

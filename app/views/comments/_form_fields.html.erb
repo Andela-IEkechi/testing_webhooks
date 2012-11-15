@@ -1,7 +1,7 @@
-<div class="span7">
-  <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span12', :rows => 12}%>
+<div>
+  <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span6', :rows => 12}%>
 </div>
-<div class="span5">
+<div>
   <%= comment_form.input :status do %>
     <%= comment_form.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
   <% end %>
@@ -24,8 +24,11 @@
     <%= comment_form.select :assignee_id, @ticket.project.ordered_participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
-  <%= comment_form.simple_fields_for :assets, [] do |a_f| %>
-    <%= a_f.file_field :payload %> <%= a_f.link_to_remove "Remove this asset" %>
-  <% end %>
-  <%= comment_form.link_to_add "Add an asset", :assets %>
+  <div class="attach-asset">
+    <%= comment_form.link_to_add "Add an asset", :assets %>
+    <%= comment_form.simple_fields_for :assets, [] do |a_f| %>
+      <%= a_f.file_field :payload %> <%= a_f.link_to_remove do %><i class="icon-trash"></i><% end %>
+    <% end %>
+  </div>
+
 </div>

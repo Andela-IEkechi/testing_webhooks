@@ -6,7 +6,7 @@ class Ticket < ActiveRecord::Base
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
 
-  COST = [1,2,3]
+  COST = [0,1,2,3]
 
   validates :project_id, :presence => true
   validates :title, :length => {:minimum => 3}
@@ -70,9 +70,9 @@ class Ticket < ActiveRecord::Base
   end
 
   def filter_summary
-    [id, title, feature && feature.title, sprint && sprint.title, status].join("").downcase
+    [id, title, feature && feature.title, sprint && sprint.goal, status].join("").downcase
   end
-  
+
   def open?
     ticket_s
   end

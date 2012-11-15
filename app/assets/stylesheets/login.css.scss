@@ -1,57 +1,47 @@
-// Place all the styles related to the projects controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
-
-@font-face {
-  font-family: 'logofont';
-  src: local('BELCESUB.TTF');
-  src: url('/fonts/BELCESUB.TTF');
-  advancedAntiAliasing: true;
-}
-
-
-.loginbox {
-	border-radius: 15px;
-	background-color: #000;
-	padding: 20px;
-  color: white;
+/*the headings here are unique to the sign-in boxes*/
+.signinbox {
+  border-radius: 15px;
+  border: 1px solid #B8B8B8;
+  background-color: #fff;
+  padding: 20px;
+  h1, h2, h3 {
+    font-family: 'logofont', arial;
+  }
   h1 {
+    color: #fff;
+    background-color: #6A6A6A;
+    border-radius: 10px;
     background-image: url('logo_train_big.png');
     background-repeat: no-repeat;
-    background-position: 0px 3px;
-    padding-left: 55px;
+    background-position: 9px 9px;
+    padding-left: 57px;
     vertical-align: middle;
-    min-height: 45px;
-    font-family: 'logofont', arial;
+    min-height: 60px;
     font-size: 27px;
     text-transform: uppercase;
-    margin-bottom: -23px;
+    margin-bottom: -35px;
   }
   h2 {
     color: #D9D9D9;
     font-size: 15px;
-    margin-left: 59px;
+    margin-left: 61px;
     font-weight: bold;
-    font-family: 'logofont', arial;
   }
-  div {
-    margin: auto;
-    margin: 30px 0px;
-    text-align: center;
-  }
-  .btn {
-    background-color: #A9FD3C;
-    border: 0;
-    background-image: none;
-    width: 190px;
-    font-size: 16px;
-    font-weight: bold;
-    font-family: arial;
-    padding: 10px;
-    margin: 10px;
-  &:hover {
-    background-color: #77ca0a;
+  h3 {
+    color: #fff;
+    background-color: #6A6A6A;
+    border-radius: 6px;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    margin-bottom: 15px;
+
   }
 }
+
+.btn-sign {
+  font-size: 17px;
+  padding: 10px 20px;
+  margin: 5px;
+  width: 30%;
 }

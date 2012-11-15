@@ -1,20 +1,31 @@
-<ul class="nav nav-pills nav-stacked">
+<ul class="nav nav-stacked">
   <% if action_name == 'show' %>
+    <% if can?(:manage, @project) %>
     <li>
-      <%= link_to 'edit this project', edit_project_path(@project) %>
+      <%= link_to edit_project_path(@project) do %>
+        <span class="navico"><i class="icon-edit"></i></span>edit this project
+      <% end %>
     </li>
     <li>
-      <%= link_to 'remove this project', project_path(@project), :method => :delete, :data => {:confirm => "Are you sure you want to delete this project?"} %>
+      <%= link_to project_path(@project), :method => :delete, :data => {:confirm => "Are you sure you want to delete this project?"} do %>
+        <span class="navico"><i class="icon-trash"></i></span>remove this project
+      <% end %>
+    </li>
+    <% end %>
+    <li>
+      <%= link_to new_project_feature_path(@project) do %>
+        <span class="navico"><i class="icon-plus"></i></span>add a new feature
+      <% end %>
     </li>
     <li>
-      <%= link_to 'add a new feature', new_project_feature_path(@project) %>
+      <%= link_to new_project_sprint_path(@project) do %>
+        <span class="navico"><i class="icon-plus"></i></span>add a new sprint
+      <% end %>
     </li>
     <li>
-      <%= link_to 'add a new sprint', new_project_sprint_path(@project) %>
-    </li>
-    <li>
-      <%= link_to 'add a new ticket', new_ticket_path(:project_id => @project) %>
+      <%= link_to new_ticket_path(:project_id => @project) do %>
+        <span class="navico"><i class="icon-plus"></i></span> add a new ticket
+      <% end %>
     </li>
   <% end %>
 </ul>
-

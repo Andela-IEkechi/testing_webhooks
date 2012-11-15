@@ -1,0 +1,67 @@
+@font-face {
+  font-family: 'logofont';
+  src: local('BELCESUB.TTF');
+  src: url('/fonts/BELCESUB.TTF');
+  advancedAntiAliasing: true;
+}
+
+p, b, .label {
+  font-family: arial;
+}
+
+a, a:hover {
+	color: #579803;
+}
+
+h1, h3 {
+  border: 1px solid #ddd;
+  padding:9px 20px;
+  background-color: white;
+  font-size: 20px;
+  line-height: 25px;
+  color: #A5A5A5;
+}
+
+input:focus, textarea:focus {
+    border: 1px solid #92e12a !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+input[type=checkbox] {
+    position: relative;
+    top: -3px;
+}
+
+abbr[title] {
+  display: none;
+}
+
+.btn-maincolor {
+  background-color: #A9FD3C;
+  border: 1px solid #92e12a;
+  background-image: none;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: arial;
+  padding: 7px 10px;
+  border-radius: 5px;
+  color: #434343;
+  &:hover {
+    background-color: #92e12a;
+  }
+}
+
+/*margin centering won't work without a fixed width & unfloated parent - float currently cause by row-fluid*/
+.centered {
+  text-align: center;
+  margin: 30px auto;
+}
+
+td.count {
+  width: 40px;
+}
+
+td.date {
+  width: 275px;
+}
