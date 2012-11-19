@@ -27,6 +27,12 @@
     </div>
   </caption>
   <!--title row -->
+  <tr>
+    <th>Ticket #</th>
+    <th>Ticket title</th>
+    <th>Ticket state</th>
+    <th>Ticket cost</th>
+  </tr>
   <% tickets.each do |ticket| %>
   <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
     <td class="span1"><%= ticket.id %></td>

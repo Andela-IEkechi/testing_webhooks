@@ -1,4 +1,10 @@
 <table class="table table-bordered table-striped">
+  <tr>
+    <th>Feature #</th>
+    <th>Feature title</th>
+    <th>Due On </th>
+    <th>Feature tickets</th>
+  </tr>
   <% features.each do |feature| %>
   <tr>
     <td><%= link_to feature.title, project_feature_path(feature.project, feature) %></td>

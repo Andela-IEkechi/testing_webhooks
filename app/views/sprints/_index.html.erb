@@ -1,5 +1,11 @@
 <label class="pull-right">Show Closed Sprints &nbsp;<%= check_box_tag :show_closed_sprints, true %></label>
 <table class="table table-bordered table-striped" id="sprint-list">
+  <tr>
+    <th>Sprint #</th>
+    <th>Sprint title</th>
+    <th>Due On </th>
+    <th>Sprint tickets</th>
+  </tr>
   <% sprints.each do |sprint| %>
     <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
       <td title="sprint number"><%= sprint.id %></td>
