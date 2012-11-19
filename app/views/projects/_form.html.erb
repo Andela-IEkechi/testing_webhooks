@@ -1,13 +1,13 @@
 <%= yield :form_heading %>
 
 <%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
-  <%= f.input :title, :input_html => {:class => 'span4'} %>
+  <%= f.input :title, :input_html => {:class => 'span3'} %>
   <% unless @project.new_record? %>
     <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
-      <%= ts_form.input :name%>
-      <%= ts_form.input :open, :as => :radio_buttons, :collection => [['Open', true] ,['Closed', false]], :label => false %>
+      <%= ts_form.input :name, :input_html => {:class => 'span3'}%>
+      <%= ts_form.input :open, :as => :radio_buttons, :collection => [['Open', true] ,['Closed', false]], :label => false, :wrapper_html => { :class => 'pull-left' } %>
       <%= ts_form.input ' ' do %>
-        <%= ts_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this status' %>
+        <%= ts_form.link_to_remove "Remove", :class => 'btn btn-warning btn-small', :title => 'Remove this status' %>
       <% end %>
     <% end %>
     <%= f.input :ticket_statuses, :label => false do %>
