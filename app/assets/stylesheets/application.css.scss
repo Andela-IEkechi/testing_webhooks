@@ -1,14 +1,10 @@
-@import "login";
 @import "bootstrap";
-@import "projects";
+@import "base";
 @import "tickets";
 @import "features";
 @import "sprints";
 @import "users";
 @import "bootstrap-datepicker";
+@import "login";
 @import "pygments";
-
-
-td.count {
-  width: 40px;
-}
+@import "nav";

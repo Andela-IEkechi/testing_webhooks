@@ -7,7 +7,8 @@ class TicketsController < ApplicationController
 	def index
       @tickets = @feature.tickets if @feature
       @tickets ||= @project.tickets if @project
-      @tickets ||= current_user.tickets
+      @projects = current_user.participations.all
+      @tickets ||= @projects.collect{|p| p.tickets.all}.flatten
 	end
 
   def show

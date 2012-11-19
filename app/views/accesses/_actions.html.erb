@@ -1,6 +1,8 @@
-<ul class="nav nav-pills nav-stacked">
+<ul class="nav nav-stacked">
   <li>
-    <%= link_to 'back to project', project_path(@project) %>
+    <%= link_to project_path(@project) do %>
+    <span class="navico"><i class="icon-arrow-left navico"></i></span>back to project
+    <% end %> 
   </li>
 </ul>
 
