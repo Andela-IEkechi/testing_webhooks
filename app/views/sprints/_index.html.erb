@@ -1,4 +1,8 @@
-<label class="pull-right">Show Closed Sprints &nbsp;<%= check_box_tag :show_closed_sprints, true %></label>
+<% if @project.sprints.all.map { |s| [s.open?] }.include?([false]) %>
+  <label class="pull-right">Show Closed Sprints &nbsp;
+    <%= check_box_tag :show_closed_sprints, true %>
+  </label>
+<% end %>
 <table class="table table-bordered table-striped" id="sprint-list">
   <% sprints.each do |sprint| %>
     <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
