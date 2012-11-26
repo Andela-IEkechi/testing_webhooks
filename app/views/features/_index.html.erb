@@ -1,14 +1,16 @@
 <table class="table table-bordered table-striped">
   <tr>
-    <th>Feature #</th>
-    <th>Feature title</th>
-    <th>Due On </th>
-    <th>Feature tickets</th>
+    <th class="span1">Feature #</th>
+    <th class="span5">Title</th>
+    <th>Due Date</th>
+    <th class="span1">Tickets</th>
   </tr>
   <% features.each do |feature| %>
   <tr>
+    <td></td>
     <td><%= link_to feature.title, project_feature_path(feature.project, feature) %></td>
-    <td class="count" title="tickets in this feature"><span class="badge badge-info"><%= feature.assigned_tickets.count %></span></td>
+    <td></td>    
+    <td class="span1 count" title="tickets in this feature"><span class="badge badge-info"><%= feature.assigned_tickets.count %></span></td>
   </tr>
   <% end %>
   <% if features.count == 0 %>

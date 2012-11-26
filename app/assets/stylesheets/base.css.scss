@@ -59,9 +59,18 @@ abbr[title] {
 }
 
 td.count {
-  width: 40px;
+  text-align: center;
 }
 
 td.date {
   width: 275px;
+}
+
+#ticket-list th, .table-striped th {
+  font-family: arial;
+  font-size: 12px;
+  color: #A5A5A5;
+  font-weight: lighter;
+  line-height: 10px;
+  height: 10px;
 }

@@ -28,10 +28,10 @@
   </caption>
   <!--title row -->
   <tr>
-    <th>Ticket #</th>
-    <th>Ticket title</th>
-    <th>Ticket state</th>
-    <th>Ticket cost</th>
+    <th class="span1">Ticket  &nbsp;#</th>
+    <th class="span5">Title</th>
+    <th>State</th>
+    <th class="span1">Cost</th>
   </tr>
   <% tickets.each do |ticket| %>
   <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
@@ -44,7 +44,7 @@
         <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
       </div>
     </td>
-    <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= ticket.cost %></span></td>
+    <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= ticket.cost %></span></td>
   </tr>
   <% end %>
   <% if tickets.count == 0 %>
