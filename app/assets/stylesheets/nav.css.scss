@@ -8,9 +8,15 @@ ul.nav {
   }
 }
 
-.login {
+.login, .login:hover {
   font-size: 12px;
   line-height: 24px;
+  color: #ABFF3D;
+  text-decoration: none;
+  .caret {
+    margin-top: 17px;
+    margin-left: 7px;
+  }
 }
 
 .navbar .nav > li > a {
