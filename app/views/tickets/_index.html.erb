@@ -1,10 +1,6 @@
 <%
   tickets ||= @tickets
-  state = Array.new
-
-  tickets.each do |ticket|
-    state << ticket.status if !state.include? ticket.status
-  end
+  states = tickets && tickets.first.project.ticket_statuses.collect(&:name) || []
 %>
 
 <table class="table table-bordered table-striped" id="ticket-list">
@@ -19,7 +15,7 @@
         </button>
         <ul class="dropdown-menu" id="state-picker">
           <li>All</li>
-          <% state.each do |st| %>
+          <% states.each do |st| %>
           <li><%= st %></li>
           <% end %>
         </ul>
@@ -34,7 +30,7 @@
     <th class="span1">Cost</th>
   </tr>
   <% tickets.each do |ticket| %>
-  <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
+  <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
     <td class="span1"><%= ticket.id %></td>
     <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
     <td class="ticket-info">
