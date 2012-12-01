@@ -1,15 +1,11 @@
 <%
   tickets ||= @tickets
+  states = tickets && tickets.first.project.ticket_statuses.collect(&:name) || []
 %>
-
-<% state = Array.new %>
-<% tickets.each do |ticket| %>
-  <% state << ticket.status if !state.include? ticket.status %>
-<% end %>
-
 
 <table class="table table-bordered table-striped" id="ticket-list">
   <caption>
+    <h2 class="pull-left">Tickets</h2>
     <div class="pull-right input-append">
       <div class="btn-group">
         <input id="search_input" type="text" class="span8" placeholder="Filter">
@@ -18,17 +14,23 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" id="state-picker">
-          <% state.each do |st| %>
+          <li>All</li>
+          <% states.each do |st| %>
           <li><%= st %></li>
           <% end %>
-          <li>All</li>
         </ul>
       </div>
     </div>
   </caption>
   <!--title row -->
+  <tr>
+    <th class="span1">#</th>
+    <th>Title</th>
+    <th>State</th>
+    <th class="span1">Cost</th>
+  </tr>
   <% tickets.each do |ticket| %>
-  <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
+  <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
     <td class="span1"><%= ticket.id %></td>
     <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
     <td class="ticket-info">
@@ -38,12 +40,12 @@
         <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
       </div>
     </td>
-    <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= ticket.cost %></span></td>
+    <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= ticket.cost %></span></td>
   </tr>
   <% end %>
   <% if tickets.count == 0 %>
     <tr>
-      <td>There are no tickets</td>
+      <td colspan="4">There are no tickets</td>
     </tr>
   <% end %>
 </table>
