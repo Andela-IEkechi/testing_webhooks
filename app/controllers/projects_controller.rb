@@ -6,9 +6,11 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    flash[:title] = "Project #{@project.id} - #{@project}"
   end
 
   def new
+    flash[:title] = "New project"
   end
 
   def create
