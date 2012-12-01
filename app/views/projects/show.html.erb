@@ -1,13 +1,12 @@
-<h1><%= @project.title %></h1>
-<br>
 <div class="well">
-  <h3>Features</h3>
   <%= render :partial => "/features/index", :locals => {:features => @project.features } %>
+</div>
 
-  <h3>Sprints</h3>
+<div class="well">
   <%= render :partial => "/sprints/index", :locals => {:sprints => @project.sprints } %>
+</div>
 
-  <h3>Tickets</h3>
-    <%= render :partial => "/tickets/index", :locals => {:tickets => @project.tickets.unassigned } %>
+<div class="well">
+  <%= render :partial => "/tickets/index", :locals => {:tickets => @project.tickets.unassigned } %>
 </div>
 
