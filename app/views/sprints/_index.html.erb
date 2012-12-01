@@ -1,8 +1,8 @@
 <label class="pull-right">Show Closed Sprints &nbsp;<%= check_box_tag :show_closed_sprints, true %></label>
 <table class="table table-bordered table-striped" id="sprint-list">
   <tr>
-    <th class="span1">Sprint #</th>
-    <th class="span5">Title</th>
+    <th class="span1">#</th>
+    <th>Goal</th>
     <th>Due Date</th>
     <th class="span1">Tickets</th>
   </tr>
@@ -21,7 +21,7 @@
   <% end %>
   <% if sprints.count == 0 %>
   <tr>
-    <td>There are no sprints</td>
+    <td colspan="4">There are no sprints</td>
   </tr>
   <% end %>
 </table>
@@ -29,4 +29,4 @@
 
 
 
- 
+

@@ -1,12 +1,11 @@
 <%
   tickets ||= @tickets
+  state = Array.new
+
+  tickets.each do |ticket|
+    state << ticket.status if !state.include? ticket.status
+  end
 %>
-
-<% state = Array.new %>
-<% tickets.each do |ticket| %>
-  <% state << ticket.status if !state.include? ticket.status %>
-<% end %>
-
 
 <table class="table table-bordered table-striped" id="ticket-list">
   <caption>
@@ -18,18 +17,18 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" id="state-picker">
+          <li>All</li>
           <% state.each do |st| %>
           <li><%= st %></li>
           <% end %>
-          <li>All</li>
         </ul>
       </div>
     </div>
   </caption>
   <!--title row -->
   <tr>
-    <th class="span1">Ticket  &nbsp;#</th>
-    <th class="span5">Title</th>
+    <th class="span1">#</th>
+    <th>Title</th>
     <th>State</th>
     <th class="span1">Cost</th>
   </tr>
@@ -49,7 +48,7 @@
   <% end %>
   <% if tickets.count == 0 %>
     <tr>
-      <td>There are no tickets</td>
+      <td colspan="4">There are no tickets</td>
     </tr>
   <% end %>
 </table>
