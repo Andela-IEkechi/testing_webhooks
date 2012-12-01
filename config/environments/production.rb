@@ -74,8 +74,3 @@ Conductor::Application.configure do
     :password  => "cb7fae88-04ef-44e9-9d33-b848e302e3a2"
   }
 end
-
-Conductor::Application.config.middleware.use ExceptionNotifier,
-  :email_prefix => "[Exception] ",
-  :sender_address => %{"notifier" <notifier@conductor-app.co.za>},
-  :exception_recipients => %w{support@shuntyard.co.za}
