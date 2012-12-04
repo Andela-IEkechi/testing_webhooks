@@ -15,11 +15,11 @@ a, a:hover {
 
 h1, h3 {
   border: 1px solid #ddd;
-  padding:9px 20px;
-  background-color: white;
+  padding:9px 10px;
+  background-color: #fff;
   font-size: 20px;
   line-height: 25px;
-  color: #A5A5A5;
+  color: #6B6B6B;
 }
 
 input:focus, textarea:focus {
@@ -64,4 +64,12 @@ td.count {
 
 td.date {
   width: 275px;
+}
+
+body {
+  background-color: #F5F5F5;
+}
+
+.well {
+  background-color: white;
 }
