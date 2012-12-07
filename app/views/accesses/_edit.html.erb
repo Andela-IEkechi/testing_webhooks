@@ -1,7 +1,28 @@
 <h3>Access control</h3>
 
 <%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
+
+<!-- checkboxes -->
   <%= f.association :participants, :as => :check_boxes, :collection=>@project.ordered_participants %>
+
+<!-- radio buttons -->
+ <% @project.memberships.each do |m| %>
+  <div class="control-group">
+    <label class="control-label"><%= m.user.email %></label>
+    <div class="controls">
+      <label class="radio inline">
+        <%= radio_button_tag "membership_#{m.id}", true, m.admin?, :name => "project[memberships][#{m.id}][is_admin]" %>
+        Administrator
+      </label>
+      <label class="radio inline">
+        <%= radio_button_tag "membership_#{m.id}", false, m.regular_user?, :name => "project[memberships][#{m.id}][is_admin]" %>
+        Regular user
+      </label>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- invite -->
   <%= f.simple_fields_for :participants, [] do |p_form| %>
     <div class="well top-padding">
       <%= p_form.input :email %>
@@ -10,6 +31,7 @@
       <% end %>
     </div>
   <% end %>
+
   <%= f.link_to_add "Invite a user", :participants, :class => 'btn btn-success offset2' %>
 
   <div class="form-actions">
