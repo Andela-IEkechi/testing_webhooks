@@ -35,3 +35,7 @@ $ ->
 
   $(".ticket-filter #state-picker li:contains('All')").click ->
     $('.ticket-filter tr').show();
+
+  $(".btn").click (e) ->
+    $(this).attr('data-disable-with', 'Processing...');
+    return true;
