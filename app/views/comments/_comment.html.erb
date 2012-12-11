@@ -50,5 +50,8 @@
     <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
   <% end %>
 
-  <p><a id="comment_edit_button<%= comment.id %>" href="#" onclick="$('#comment_edit_button<%= comment.id %>').hide(); $('#comment_show_div<%= comment.id %>').hide(); $('#comment_edit_div<%= comment.id %>').show(); return false;">edit</a></p>
+  <p>
+    <%= link_to "Edit", "#", :id => "comment_edit_button#{comment.id}", :onclick => "$('#comment_edit_button#{comment.id}').hide(); $('#comment_show_div#{comment.id}').hide(); $('#comment_edit_div#{comment.id}').show(); return false;" %> | 
+    <%= link_to "Remove", :controller => "comments", :action => "ajax_destroy", :id => comment.id %>
+  </p>
 </div>

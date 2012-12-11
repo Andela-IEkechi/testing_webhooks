@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_filter :strip_empty_assets, :except => "ajax_update"
+  before_filter :strip_empty_assets, :except => ["ajax_update","ajax_destroy"]
   load_and_authorize_resource :ticket
   load_and_authorize_resource :comment, :through => :ticket
 
@@ -27,6 +27,16 @@ class CommentsController < ApplicationController
     @comment.save
     respond_to do |format|
       format.js
+    end
+  end
+
+  def ajax_destroy
+    # delete_path = parent_path()
+    if @comment.destroy
+      # redirect_to delete_path
+    else
+      flash[:alert] = "Comment could not be deleted"
+      render 'show'
     end
   end
 

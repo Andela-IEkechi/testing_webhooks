@@ -15,6 +15,8 @@ Conductor::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   resources :users
 
+  post "comments/ajax_update"
+  post "comments/ajax_destroy"
   resources :tickets do
     resources :comments
   end
