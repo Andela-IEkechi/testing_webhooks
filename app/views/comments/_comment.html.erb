@@ -32,7 +32,7 @@
     <p>assigned to: <b><%= comment.assignee || 'none' %></b></p>
   <% end %>
   <% if changeset[:cost] %>
-    <p>cost updated to: <b><%= comment.cost %></b></p>
+    <p>cost updated to: <b><%= cost_long(comment.cost) %></b></p>
   <% end %>
   <div><%= comment.html.html_safe %></div>
   <% comment.assets && comment.assets.each do |asset| %>

@@ -40,7 +40,7 @@
         <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
       </div>
     </td>
-    <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= ticket.cost %></span></td>
+    <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
   </tr>
   <% end %>
   <% if tickets.count == 0 %>
