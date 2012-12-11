@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem 'rails', '3.2.7'
 gem 'pg'
@@ -46,6 +46,7 @@ group :development,:test do
   gem 'rb-readline'
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'pry'
 end
 
 group :test do

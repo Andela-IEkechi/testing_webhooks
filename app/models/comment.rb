@@ -48,4 +48,8 @@ class Comment < ActiveRecord::Base
   def html
     rendered_body || ''
   end
+
+  def only?
+    ticket.comments.size == 1
+  end
 end
