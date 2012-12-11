@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_filter :strip_empty_assets, :except => "edit"
+  before_filter :strip_empty_assets, :except => ["edit","destroy"]
   load_and_authorize_resource :ticket
   load_and_authorize_resource :comment, :through => :ticket
 
@@ -32,6 +32,19 @@ class CommentsController < ApplicationController
       flash[:alert] = "Comment could not be updated"
       render 'edit'
     end
+  end
+
+  def destroy
+    delete_path = ticket_path(@comment.ticket)
+    if @comment.only?
+      flash[:alert] = "Cannot remove the only comment"
+    elsif @comment.destroy
+      flash[:notice] = "Comment was removed"
+    else
+      flash[:alert] = "Comment could not be deleted"
+    end
+
+    redirect_to delete_path
   end
 
   private
