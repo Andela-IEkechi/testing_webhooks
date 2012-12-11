@@ -12,6 +12,7 @@ class Ticket < ActiveRecord::Base
   validates :title, :length => {:minimum => 3}
 
   scope :unassigned, lambda{ parent.is_a? Project}
+  scope :open, lambda{ parent.is_a? Project}
 
   def to_s
     title
@@ -74,7 +75,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def open?
-    ticket_s
+    get_current(:status).open
+  end
+
+  def closed?
+    !open?
   end
 
   private

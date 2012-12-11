@@ -13,15 +13,6 @@ a, a:hover {
 	color: #579803;
 }
 
-h1, h3 {
-  border: 1px solid #ddd;
-  padding:9px 10px;
-  background-color: #fff;
-  font-size: 20px;
-  line-height: 25px;
-  color: #6B6B6B;
-}
-
 input:focus, textarea:focus {
     border: 1px solid #92e12a !important;
     box-shadow: none !important;
@@ -58,8 +49,16 @@ abbr[title] {
   margin: 30px auto;
 }
 
+caption {
+  text-align: left;
+  h2 {
+    font-size: 20px;
+    line-height: 25px;
+  }
+}
+
 td.count {
-  width: 40px;
+  text-align: center;
 }
 
 td.date {
@@ -73,3 +72,12 @@ body {
 .well {
   background-color: white;
 }
+
+.top-padding {
+  padding: 10px 0px 0px 0px;
+}
+
+.odd {
+  background-color: whiteSmoke;
+}
+
