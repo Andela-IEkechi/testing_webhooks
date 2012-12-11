@@ -6,7 +6,7 @@ class Ticket < ActiveRecord::Base
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
 
-  COST = [0,1,2,3]
+  COST = ["unknown",1,2,3]
 
   validates :project_id, :presence => true
   validates :title, :length => {:minimum => 3}
