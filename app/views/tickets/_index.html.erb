@@ -35,7 +35,7 @@
   <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
     <td class="span1"><%= ticket.id %></td>
     <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
-    <td><%= ticket.assignee || "No one" %></td>
+    <td><%= ticket.assignee %></td>
     <td class="ticket-info">
       <div class="pull-right">
         <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
