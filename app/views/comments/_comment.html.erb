@@ -34,24 +34,12 @@
   <% if changeset[:cost] %>
     <p>cost updated to: <b><%= comment.cost %></b></p>
   <% end %>
-  <div id="comment_show_div<%= comment.id %>"><%= comment.html.html_safe %></div>
-  
-  <div id="comment_edit_div<%= comment.id %>" style="display:none;">
-    <%= form_tag({:controller => "comments", :action => "ajax_update"}, :remote => true) do %>
-      <%= hidden_field_tag "comment_id", comment.id %>
-      <%= hidden_field_tag "comment_cost", comment.cost %>
-      <%= text_area_tag :comment_body, "#{comment.body}", :class => "input-block-level" %>
-      <br />
-      <%= submit_tag "Save" %>
-    <% end %>
-  </div>
-
+  <div><%= comment.html.html_safe %></div>
   <% comment.assets && comment.assets.each do |asset| %>
     <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
   <% end %>
-
   <p>
-    <%= link_to "Edit", "#", :id => "comment_edit_button#{comment.id}", :onclick => "$('#comment_edit_button#{comment.id}').hide(); $('#comment_show_div#{comment.id}').hide(); $('#comment_edit_div#{comment.id}').show(); return false;" %> | 
-    <%= link_to "Remove", :controller => "comments", :action => "ajax_destroy", :id => comment.id %>
+    <%= link_to "Edit", edit_ticket_comment_path(@ticket.id, comment.id) %> | 
+    <%= link_to "Remove", ticket_comment_path(@ticket.id, comment.id), :method => :delete %>
   </p>
 </div>

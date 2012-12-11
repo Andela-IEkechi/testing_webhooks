@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_filter :strip_empty_assets, :except => ["ajax_update","ajax_destroy"]
+  before_filter :strip_empty_assets, :except => "edit"
   load_and_authorize_resource :ticket
   load_and_authorize_resource :comment, :through => :ticket
 
@@ -20,23 +20,17 @@ class CommentsController < ApplicationController
    redirect_to ticket_path(@comment.ticket, :project_id => @comment.ticket.project, :feature_id => @comment.feature)
   end
 
-  def ajax_update
-    @comment = Comment.find_by_id(params[:comment_id])
-    @comment.body = params[:comment_body]
-    @comment.cost = params[:comment_cost].to_i
-    @comment.save
-    respond_to do |format|
-      format.js
-    end
+  def edit
+    
   end
 
-  def ajax_destroy
-    # delete_path = parent_path()
-    if @comment.destroy
-      # redirect_to delete_path
+  def update
+    if @comment.update_attributes(params[:comment])
+      flash[:notice] = "Comment was updated"
+      redirect_to ticket_path(@comment.ticket)
     else
-      flash[:alert] = "Comment could not be deleted"
-      render 'show'
+      flash[:alert] = "Comment could not be updated"
+      render 'edit'
     end
   end
 
