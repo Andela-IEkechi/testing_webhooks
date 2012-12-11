@@ -34,8 +34,14 @@
   <% if changeset[:cost] %>
     <p>cost updated to: <b><%= comment.cost %></b></p>
   <% end %>
-  <p><%= comment.html.html_safe %></p>
+  <div><%= comment.html.html_safe %></div>
   <% comment.assets && comment.assets.each do |asset| %>
     <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
+  <% end %>
+  <% if comment_counter > 0 %>
+    <p>
+      <%= link_to "Edit", edit_ticket_comment_path(@ticket.id, comment.id) %> | 
+      <%= link_to "Remove", ticket_comment_path(@ticket.id, comment.id), :method => :delete, :confirm => "Are you sure?" %>
+    </p>
   <% end %>
 </div>
