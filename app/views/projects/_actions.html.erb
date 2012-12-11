@@ -28,4 +28,13 @@
       <% end %>
     </li>
   <% end %>
+  <% if action_name == 'edit' %>
+    <% if can?(:manage, @project) %>
+      <li>
+        <%= link_to project_path(:project_id => @project) do %>
+          <span class="navico"><i class="icon-arrow-left navico"></i></span>back to project
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
 </ul>
