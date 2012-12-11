@@ -14,7 +14,7 @@ Conductor::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   resources :users
-
+  
   resources :tickets do
     resources :comments
   end
