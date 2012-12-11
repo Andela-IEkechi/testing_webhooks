@@ -1,0 +1,3 @@
+$('#comment_edit_button<%= @comment.id %>').show();
+$('#comment_edit_div<%= @comment.id %>').hide();
+$('#comment_show_div<%= @comment.id %>').html('<%= @comment.html.html_safe %>').show();

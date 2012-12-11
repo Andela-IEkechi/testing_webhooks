@@ -34,8 +34,21 @@
   <% if changeset[:cost] %>
     <p>cost updated to: <b><%= comment.cost %></b></p>
   <% end %>
-  <p><%= comment.html.html_safe %></p>
+  <div id="comment_show_div<%= comment.id %>"><%= comment.html.html_safe %></div>
+  
+  <div id="comment_edit_div<%= comment.id %>" style="display:none;">
+    <%= form_tag({:controller => "comments", :action => "ajax_update"}, :remote => true) do %>
+      <%= hidden_field_tag "comment_id", comment.id %>
+      <%= hidden_field_tag "comment_cost", comment.cost %>
+      <%= text_area_tag :comment_body, "#{comment.body}", :class => "input-block-level" %>
+      <br />
+      <%= submit_tag "Save" %>
+    <% end %>
+  </div>
+
   <% comment.assets && comment.assets.each do |asset| %>
     <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
   <% end %>
+
+  <p><a id="comment_edit_button<%= comment.id %>" href="#" onclick="$('#comment_edit_button<%= comment.id %>').hide(); $('#comment_show_div<%= comment.id %>').hide(); $('#comment_edit_div<%= comment.id %>').show(); return false;">edit</a></p>
 </div>
