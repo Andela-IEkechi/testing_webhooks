@@ -3,11 +3,9 @@ class SprintsController < ApplicationController
   load_and_authorize_resource :sprint, :through => :project
 
   def show
-    flash[:title] = "Sprint #{@sprint.id} - #{@sprint}"
   end
 
   def new
-    flash[:title] = "New sprint"
     @sprint.due_on = Date.today.end_of_week - 2.days #friday
   end
 
