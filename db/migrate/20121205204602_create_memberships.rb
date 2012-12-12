@@ -4,13 +4,13 @@ class CreateMemberships < ActiveRecord::Migration
     create_table :memberships do |t|
       t.references :project
       t.references :user
-      t.boolean :is_admin, :null => false, :default => false
+      t.string :role, :null => false, :default => 'Regular'
     end
 
     # Use the existing data from project_users to populate memberships
     execute <<-SQL
-      INSERT INTO memberships (project_id, user_id, is_admin)
-      SELECT project_id, user_id, true FROM projects_users
+      INSERT INTO memberships (project_id, user_id, role)
+      SELECT project_id, user_id, 'Admin' FROM projects_users
     SQL
 
   end

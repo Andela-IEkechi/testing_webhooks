@@ -10,14 +10,7 @@
   <div class="control-group">
     <label class="control-label"><%= m.user.email %></label>
     <div class="controls">
-      <label class="radio inline">
-        <%= radio_button_tag "membership_#{m.id}", true, m.admin?, :name => "project[memberships][#{m.id}][is_admin]" %>
-        Administrator
-      </label>
-      <label class="radio inline">
-        <%= radio_button_tag "membership_#{m.id}", false, m.regular_user?, :name => "project[memberships][#{m.id}][is_admin]" %>
-        Regular user
-      </label>
+      <%= select_tag :role, options_for_select(Membership::ROLE_NAMES, m.role) %>
     </div>
   </div>
   <% end %>

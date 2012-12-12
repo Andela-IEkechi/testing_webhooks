@@ -1,15 +1,20 @@
 class Membership < ActiveRecord::Base
-  #attr_accessible :is_admin
+
+  ROLE_NAMES = %w(Owner Admin Regular Restricted)
+
+  attr_accessible :role
 
   belongs_to :user
   belongs_to :project
 
+  validates_inclusion_of :role, :in => ROLE_NAMES
+
   def admin?
-    is_admin
+    self.role == 'Admin'
   end
 
   def regular_user?
-    !is_admin
+    self.role == 'Regular'
   end
 
 end
