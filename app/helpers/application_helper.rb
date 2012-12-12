@@ -7,4 +7,8 @@ module ApplicationHelper
     when :alert then "alert alert-error"
     end
   end
+
+  def project_name
+    @project rescue ""
+  end
 end

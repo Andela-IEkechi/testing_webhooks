@@ -5,10 +5,9 @@
 
 			<% if user_signed_in? %>
 			<ul class="nav">
-				<li>					
+				<li>
 					  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-					    <%= @project || 'Projects' unless @project && @project.new_record? %>
-					    <%= 'New project' if @project && @project.new_record? %>
+                                            Projects
 					    <b class="caret green-caret"></b>
 					  </a>
 					  <ul class="dropdown-menu">
@@ -26,13 +25,14 @@
 				<li>
 					<%= link_to "My Tickets", tickets_path() %>
 				</li>
+				<li class="heading"><%= project_name %></li>
 			</ul>
 
 			<div class="dropdown pull-right">
 				<a class="dropdown-toggle login" data-toggle="dropdown" href="#">
 				  <%= gravatar_for @current_user %>
 				  <%= current_user.email%>
-				  <span class="caret"></span>
+				  <span class="caret green-caret"></span>
 				</a>
 				<ul class="dropdown-menu">
 				  <li>

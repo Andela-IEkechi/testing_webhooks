@@ -12,8 +12,6 @@ class TicketsController < ApplicationController
   end
 
   def show
-    flash[:title] = "Ticket #{@ticket.id} - #{@ticket}"
-
     #create a new comment, but dont tell the ticket about it, or it will render
     @comment = Comment.new(
       :ticket_id => @ticket.id,
@@ -26,8 +24,6 @@ class TicketsController < ApplicationController
   end
 
   def new
-    flash[:title] = "New ticket"
-
     #must have a project to make a new ticket, optionally has a feature/sprint also
     @ticket.project = @project
     @comment = @ticket.comments.build()
