@@ -7,6 +7,8 @@
   <caption>
     <h2 class="pull-left">Tickets</h2>
     <div class="pull-right input-append">
+      
+
       <div class="btn-group">
         <input id="search_input" type="text" class="span8" placeholder="Filter">
         <button class="btn dropdown-toggle" data-toggle="dropdown">
@@ -16,11 +18,16 @@
         <ul class="dropdown-menu" id="state-picker">
           <li>All</li>
           <% states.each do |st| %>
-          <li><%= st %></li>
+          <li><%= link_to st, "#" %></li>
           <% end %>
+          <li><%= link_to "1", "#", :onclick => "return false;" %></li>
+          <li><%= link_to "2", "#" %></li>
+          <li><%= link_to "3", "#" %></li>
         </ul>
       </div>
     </div>
+
+
   </caption>
   <!--title row -->
   <tr>
