@@ -105,6 +105,7 @@ GEM
       nokogiri (~> 1.5.0)
       ruby-hmac
     formatador (0.2.4)
+    friendly_id (4.0.8)
     guard (1.5.3)
       listen (>= 0.4.2)
       lumberjack (>= 1.0.2)
@@ -307,6 +308,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fog
+  friendly_id (~> 4.0.1)
   guard-rspec
   guard-spork
   heroku

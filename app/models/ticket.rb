@@ -1,4 +1,7 @@
 class Ticket < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :slug, use: :slugged
+
   belongs_to :project #always
   has_many :comments, :include => :assets, :order => :id
   #Status is linked through comments
@@ -13,6 +16,10 @@ class Ticket < ActiveRecord::Base
 
   scope :unassigned, lambda{ parent.is_a? Project}
   scope :open, lambda{ parent.is_a? Project}
+  
+  def slug
+    "#{self.id} #{self.title}"
+  end
 
   def to_s
     title

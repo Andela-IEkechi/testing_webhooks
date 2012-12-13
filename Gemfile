@@ -10,6 +10,7 @@ gem 'omniauth-github'
 gem 'paper_trail'
 gem 'thin'
 gem 'rake'
+gem "friendly_id", "~> 4.0.1"
 
 #comment body markup
 gem 'redcarpet'
