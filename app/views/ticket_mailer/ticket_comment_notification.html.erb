@@ -1,7 +1,64 @@
 <p><%= @comment.user %> has updated this ticket:</p>
 
+<% previous_comment = @comment.ticket.comments[-2] %>
+<p>
+  <% if @comment.feature_id != previous_comment.feature_id %>
+    <%= if previous_comment.feature_id %>
+      Feature has been changed from <b><%= previous_comment.feature.title %></b>: <%= previous_comment.feature.body %><br> to<br><b><%= @comment.feature.title %></b>: <%= @comment.feature.body %>
+    <% else %>
+      Feature has been added <b><%= @comment.feature.title %></b>: <%= @comment.feature.body %>
+    <% end %>
+  <% end %>
+</p>
+<p>
+  <% if @comment.sprint_id != previous_comment.sprint_id %>
+    <%= if previous_comment.sprint_id %>
+      Sprint has been changed from <b><%= previous_comment.sprint.goal %></b>: Due on <%= previous_comment.sprint.due_on %><br> to<br><b><%= @comment.sprint.goal %></b>: Due on <%= @comment.sprint.due_on %>
+    <% else %>
+      Sprint has been added <b><%= @comment.sprint.goal %></b>: Due on <%= @comment.sprint.due_on %>
+    <% end %>
+  <% end %>
+</p>
+<p>
+  <% if @comment.assignee_id != previous_comment.assignee_id %>
+    <%= if previous_comment.assignee_id %>
+      Assignee has been changed from <%= previous_comment.assignee.email %> to <%= @comment.assignee.email %>
+    <% else %>
+      Assignee has been added <%= @comment.assignee.email %>
+    <% end %>
+  <% end %>
+</p>
+<p>
+  <% if @comment.status_id != previous_comment.status_id %>
+    <%= if previous_comment.status_id %>
+      Status has been changed from <%= previous_comment.status.name %> to <%= @comment.status.name %>
+    <% else %>
+      Status has been added <%= @comment.status.name %>
+    <% end %>
+  <% end %>
+</p>
+<p>
+  <% if @comment.cost != previous_comment.cost %>
+    Cost has been changed from <%= previous_comment.cost %> to <%= @comment.cost %>
+  <% end %>
+</p>
+<p>
+  <% if @comment.body.blank? %>
+    <% last_comment %>
+    <% @comment.ticket.comments.reverse.each do |e| %>
+      <% last_comment = e.body %>
+      <% break if e.body %>
+    <% end %>
+    No comment added, last comment was<br>
+    <%= last_comment %>
+  <% else %>
+    Comment was changed to<br>
+    <%= @comment.html.html_safe %>
+  <% end %>
+</p>
+
 <div>
-  <%= @comment.html.html_safe %>
+  
 </div>
 
 <p><%= link_to @comment.ticket, ticket_url(@comment.ticket) %></p>
