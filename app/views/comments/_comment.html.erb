@@ -14,7 +14,7 @@
   end
   changeset[:user] = comment.user.to_s
 %>
-
+<%= comment.id %>
 <div class="well">
   <% if changeset[:user] %>
     <p><b><%= changeset[:user] %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago</p>
