@@ -20,6 +20,7 @@ gem 'bootstrap-sass'
 
 #file uploads
 gem 'carrierwave'
+gem 'carrierwave_direct'
 gem "fog"
 
 #monitoring
