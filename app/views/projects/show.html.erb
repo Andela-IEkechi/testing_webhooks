@@ -1,12 +1,12 @@
-<div class="well">
+<div>
   <%= render :partial => "/features/index", :locals => {:features => @project.features } %>
 </div>
 
-<div class="well">
+<div>
   <%= render :partial => "/sprints/index", :locals => {:sprints => @project.sprints } %>
 </div>
 
-<div class="well">
+<div>
   <%= render :partial => "/tickets/index", :locals => {:tickets => @project.tickets.unassigned } %>
 </div>
 
