@@ -16,7 +16,7 @@
 
   <% unless @ticket.new_record? && !@sprint %>
     <%= comment_form.input :sprint do %>
-      <%= comment_form.select :sprint_id, @ticket.project.sprints.all.map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
+      <%= comment_form.select :sprint_id, @ticket.project.sprints.all.select(&:open?).map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
     <% end %>
   <% end %>
 
