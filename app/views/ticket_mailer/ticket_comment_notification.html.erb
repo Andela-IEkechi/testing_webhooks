@@ -1,60 +1,26 @@
 <p><%= @comment.user %> has updated this ticket:</p>
 
-<% previous_comment = @comment.ticket.comments[-2] %>
-<p>
-  <% if @comment.feature_id != previous_comment.feature_id %>
-    <%= if previous_comment.feature_id %>
-      Feature has been changed from <b><%= previous_comment.feature.title %></b>: <%= previous_comment.feature.body %><br> to<br><b><%= @comment.feature.title %></b>: <%= @comment.feature.body %>
-    <% else %>
-      Feature has been added <b><%= @comment.feature.title %></b>: <%= @comment.feature.body %>
-    <% end %>
+<%
+  changeset = change_set(@comment)
+%>
+  <% if changeset[:status_id] %>
+    <p>status changed to <b><%= @comment.status %></b></p>
   <% end %>
-</p>
-<p>
-  <% if @comment.sprint_id != previous_comment.sprint_id %>
-    <%= if previous_comment.sprint_id %>
-      Sprint has been changed from <b><%= previous_comment.sprint.goal %></b>: Due on <%= previous_comment.sprint.due_on %><br> to<br><b><%= @comment.sprint.goal %></b>: Due on <%= @comment.sprint.due_on %>
-    <% else %>
-      Sprint has been added <b><%= @comment.sprint.goal %></b>: Due on <%= @comment.sprint.due_on %>
-    <% end %>
+  <% if changeset[:feature_id] %>
+    <p>now part of feature: <b><%= @comment.feature || 'none' %></b></p>
   <% end %>
-</p>
-<p>
-  <% if @comment.assignee_id != previous_comment.assignee_id %>
-    <%= if previous_comment.assignee_id %>
-      Assignee has been changed from <%= previous_comment.assignee.email %> to <%= @comment.assignee.email %>
-    <% else %>
-      Assignee has been added <%= @comment.assignee.email %>
-    <% end %>
+  <% if changeset[:sprint_id] %>
+    <p>now part of sprint: <b><%= @comment.sprint || 'none' %></b></p>
   <% end %>
-</p>
-<p>
-  <% if @comment.status_id != previous_comment.status_id %>
-    <%= if previous_comment.status_id %>
-      Status has been changed from <%= previous_comment.status.name %> to <%= @comment.status.name %>
-    <% else %>
-      Status has been added <%= @comment.status.name %>
-    <% end %>
+  <% if changeset[:assignee_id] %>
+    <p>assigned to: <b><%= @comment.assignee || 'none' %></b></p>
   <% end %>
-</p>
-<p>
-  <% if @comment.cost != previous_comment.cost %>
-    Cost has been changed from <%= previous_comment.cost %> to <%= @comment.cost %>
+  <% if changeset[:cost] %>
+    <p>cost updated to: <b><%= cost_long(@comment.cost) %></b></p>
   <% end %>
-</p>
-<p>
-  <% if @comment.body.blank? %>
-    <% last_comment %>
-    <% @comment.ticket.comments.reverse.each do |e| %>
-      <% last_comment = e.body %>
-      <% break if e.body %>
-    <% end %>
-    No comment added, last comment was<br>
-    <%= last_comment %>
-  <% else %>
-    Comment was changed to<br>
-    <%= @comment.html.html_safe %>
+  <div><%= @comment.html.html_safe %></div>
+  <% @comment.assets && @comment.assets.each do |asset| %>
+    <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
   <% end %>
-</p>
 
 <p><%= link_to @comment.ticket, ticket_url(@comment.ticket) %></p>
