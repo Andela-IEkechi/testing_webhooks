@@ -26,13 +26,16 @@
   <tr>
     <th class="span1">#</th>
     <th>Title</th>
+    <th>Assignee</th>
     <th>State</th>
     <th class="span1">Cost</th>
   </tr>
   <% tickets.each do |ticket| %>
+  
   <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
     <td class="span1"><%= ticket.id %></td>
     <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
+    <td><%= ticket.assignee %></td>
     <td class="ticket-info">
       <div class="pull-right">
         <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
