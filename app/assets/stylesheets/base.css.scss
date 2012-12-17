@@ -72,3 +72,11 @@ td.date {
 .odd {
   background-color: whiteSmoke;
 }
+
+.input-append ul.dropdown-menu li, .input-prepend ul.dropdown-menu li{
+  padding:5px;
+}
+.input-append ul.dropdown-menu li:hover, .input-prepend ul.dropdown-menu li:hover{
+  background-color:#f0f0f0;
+  cursor:pointer;
+}
