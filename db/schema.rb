@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20121109090147) do
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
-    t.string   "payload"
+    t.string   "file"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -63,11 +63,6 @@ ActiveRecord::Schema.define(:version => 20121109090147) do
     t.integer  "project_id", :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "ticket_files", :force => true do |t|
-    t.boolean "file_processed", :default => false
-    t.string  "file"
   end
 
   create_table "ticket_statuses", :force => true do |t|

@@ -9,17 +9,8 @@ p, b, .label {
   font-family: arial;
 }
 
-a, a:hover {
+a, a:hover, #git-commands-toggle, #git-commands {
 	color: #579803;
-}
-
-h1, h3 {
-  border: 1px solid #ddd;
-  padding:9px 20px;
-  background-color: white;
-  font-size: 20px;
-  line-height: 25px;
-  color: #A5A5A5;
 }
 
 input:focus, textarea:focus {
@@ -58,10 +49,26 @@ abbr[title] {
   margin: 30px auto;
 }
 
+caption {
+  text-align: left;
+  h2 {
+    font-size: 20px;
+    line-height: 25px;
+  }
+}
+
 td.count {
-  width: 40px;
+  text-align: center;
 }
 
 td.date {
   width: 275px;
+}
+
+.top-padding {
+  padding: 10px 0px 0px 0px;
+}
+
+.odd {
+  background-color: whiteSmoke;
 }

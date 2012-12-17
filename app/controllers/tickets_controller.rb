@@ -4,12 +4,12 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :sprint, :through => :project
   load_and_authorize_resource :ticket
 
-	def index
+  def index
       @tickets = @feature.tickets if @feature
       @tickets ||= @project.tickets if @project
       @projects = current_user.participations.all
       @tickets ||= @projects.collect{|p| p.tickets.all}.flatten
-	end
+  end
 
   def show
     #create a new comment, but dont tell the ticket about it, or it will render

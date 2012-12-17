@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   specs:
     actionmailer (3.2.7)
       actionpack (= 3.2.7)
@@ -315,6 +315,7 @@ DEPENDENCIES
   omniauth-github
   paper_trail
   pg
+  pry
   pygmentize
   rails (= 3.2.7)
   rails-footnotes (>= 3.7.5.rc4)
