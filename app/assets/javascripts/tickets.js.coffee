@@ -35,3 +35,5 @@ $ ->
 
   $(".ticket-filter #state-picker li:contains('All')").click ->
     $('.ticket-filter tr').show();
+
+
