@@ -81,3 +81,17 @@ body {
   background-color: whiteSmoke;
 }
 
+caption {
+  background-color: #BFBFBF;
+  color: white;
+  padding: 8px;
+  line-height: 30px; /*temp to v-align filter dropdown, delete once filter is redesigned*/
+  height: 30px; /*temp*/
+  h4 {
+    display: inline;
+  }
+}
+
+.table-striped tbody tr:nth-child(odd) th {
+background-color: #fff;
+}
