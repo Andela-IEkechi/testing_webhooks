@@ -17,7 +17,16 @@
 
 <div class="well">
   <% if changeset[:user] %>
-    <p><b><%= changeset[:user] %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago</p>
+    <p><b><%= changeset[:user] %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago
+
+<% if comment_counter > 0 %>
+    <span class="pull-right">
+      <%= link_to "Edit", edit_ticket_comment_path(@ticket.id, comment.id) %> | 
+      <%= link_to "Remove", ticket_comment_path(@ticket.id, comment.id), :method => :delete, :confirm => "Are you sure?" %>
+    </span>
+  <% end %>
+
+    </p>
   <% end %>
   <% if changeset[:status_id] %>
     <p>status changed to <b><%= comment.status %></b></p>
@@ -37,11 +46,5 @@
   <div><%= comment.html.html_safe %></div>
   <% comment.assets && comment.assets.each do |asset| %>
     <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
-  <% end %>
-  <% if comment_counter > 0 %>
-    <p>
-      <%= link_to "Edit", edit_ticket_comment_path(@ticket.id, comment.id) %> | 
-      <%= link_to "Remove", ticket_comment_path(@ticket.id, comment.id), :method => :delete, :confirm => "Are you sure?" %>
-    </p>
   <% end %>
 </div>
