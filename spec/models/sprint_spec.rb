@@ -90,8 +90,8 @@ describe Sprint do
       @sprint.due_on = 5.days.from_now
       @sprint.should be_open
     end
-    
-    it "should be open if it has open tickets", :focus => true do
+
+    it "should be open if it has open tickets" do
       ticket = @sprint.project.tickets.first
       @sprint.tickets << ticket
       ticket.comments.last.status.open=true
@@ -102,7 +102,7 @@ describe Sprint do
       @sprint.should respond_to(:closed?)
     end
 
-    it "should be closed if its not running and has no open tickets", :focus => true do
+    it "should be closed if its not running and has no open tickets" do
       ticket = @sprint.project.tickets.first
       @sprint.tickets << ticket
 
@@ -131,7 +131,7 @@ describe Sprint do
       @sprint.should respond_to(:running?)
     end
 
-    it "should be running if due date is in the future", :focus => true do
+    it "should be running if due date is in the future" do
       @sprint.due_on = 5.days.ago
       @sprint.should_not be_running
       @sprint.due_on = 5.days.from_now
