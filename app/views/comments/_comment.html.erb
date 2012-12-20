@@ -15,7 +15,7 @@
   changeset[:user] = comment.user.to_s
 %>
 
-<div class="well">
+<div>
   <% if changeset[:user] %>
     <p><b><%= changeset[:user] %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago</p>
   <% end %>
@@ -34,7 +34,7 @@
   <% if changeset[:cost] %>
     <p>cost updated to: <b><%= comment.cost %></b></p>
   <% end %>
-  <p><%= comment.html.html_safe %></p>
+  <p class="comment-body"><%= comment.html.html_safe %></p>
   <% comment.assets && comment.assets.each do |asset| %>
     <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
   <% end %>

@@ -15,7 +15,11 @@
     </code>
   </div>
 </div>
-<%= render :partial => '/comments/comment', :collection => @ticket.comments %>
-
-<%= render :partial => '/comments/form' %>
-
+<div class="pull-left twocolumn-container">
+  <div class="well pull-left span6 comment-collection">
+    <%= render :partial => '/comments/comment', :collection => @ticket.comments %>
+  </div>
+  <div class="well pull-left span6">
+    <%= render :partial => '/comments/form' %>
+  </div>
+</div>
