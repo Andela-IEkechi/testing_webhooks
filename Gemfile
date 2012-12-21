@@ -25,6 +25,9 @@ gem "fog"
 #monitoring
 gem 'crashlog', '>= 1.0.4'
 
+#searching
+gem 'meta_search'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
