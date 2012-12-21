@@ -5,10 +5,13 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :ticket
 
   def index
-      @tickets = @feature.tickets if @feature
-      @tickets ||= @project.tickets if @project
-      @projects = current_user.participations.all
-      @tickets ||= @projects.collect{|p| p.tickets.all}.flatten
+    @search = @sprint.tickets.search(params[:search]) if @sprint
+    @search ||= @feature.tickets.search(params[:search]) if @feature
+    @search ||= @project.tickets.search(params[:search]) if @project
+    @search ||= current_user.tickets.search(params[:search]) #for the 'my tickets' page
+    @tickets =  @search.all
+
+    @projects = current_user.participations.all
   end
 
   def show
