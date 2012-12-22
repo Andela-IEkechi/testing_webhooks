@@ -5,8 +5,16 @@
 <!-- checkboxes -->
   <%= f.association :participants, :as => :check_boxes, :collection=>@project.ordered_participants %>
 
-<!-- radio buttons -->
- <% @project.memberships.each do |m| %>
+ <!-- dummy entry to show the project owner -->
+  <div class="control-group">
+    <label class="control-label"><%= @project.user.email %></label>
+    <div class="controls">
+      <%= select_tag :dummy, options_for_select(["Owner"]), :disabled => 'disabled' %>
+    </div>
+  </div>
+
+<!-- memberships -->
+ <% @project.members_but_owner.each do |m| %>
   <div class="control-group">
     <label class="control-label"><%= m.user.email %></label>
     <div class="controls">

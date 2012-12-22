@@ -11,6 +11,11 @@ class AccessesController < ApplicationController
     params[:project][:participant_ids] = params[:project][:participant_ids].collect(&:to_i).select{|x| x > 0} + new_user_ids
     params[:project][:participant_ids].uniq!
 
+    params[:membership].each do |k,v|
+      m = Membership.find(k)
+      m.update_attributes(v)
+    end
+
     if @project.update_attributes(params[:project])
       Participant::notify(@project, params[:project][:participant_ids])
       flash[:notice] = "Project access updated"

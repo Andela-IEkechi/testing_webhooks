@@ -26,6 +26,9 @@ class Project < ActiveRecord::Base
     self.participants.order(:email)
   end
 
+  def members_but_owner
+    self.memberships.reject{|m| m.user_id == self.user.id}
+  end
 
   private
   def default_statuses
