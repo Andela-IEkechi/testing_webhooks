@@ -6,17 +6,6 @@ $ ->
   $('.clickable').click ->
     window.location = $(this).data('href');
 
-  $("#git-commands-toggle").click ->
-    $('#git-commands').show();
-    $('#git-commands-toggle').hide();
-
-  $("#git-commands").click ->
-    $('#git-commands-toggle').show();
-    $('#git-commands').hide();
-
-  $("#git-commands code").click (event) ->
-    event.stopPropagation();
-
   $("#state-picker li").click ->
     button = $(this).parent().prev();
     child = button.find();
@@ -35,3 +24,5 @@ $ ->
 
   $(".ticket-filter #state-picker li:contains('All')").click ->
     $('.ticket-filter tr').show();
+
+
