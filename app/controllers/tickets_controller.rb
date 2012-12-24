@@ -21,6 +21,16 @@ class TicketsController < ApplicationController
       :assignee_id => @ticket.assignee.try(:id),
       :cost => @ticket.cost
       )
+
+    # Pagination and 'show_all' option
+    if params[:show_all] == '1'
+      @comments = Comment.paginate(:page => params[:page])
+    else
+      @comments = Comment.paginate(:page => params[:page], :per_page => 5)
+    end
+
+
+
   end
 
   def new

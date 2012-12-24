@@ -3,7 +3,17 @@
   <h3><%= @ticket.title %></h3>
   <h4><%= @ticket.parent %></h4>
 </div>
-<%= render :partial => '/comments/comment', :collection => @ticket.comments %>
+<%= render :partial => '/comments/comment', :collection => @comments %>
+
+<div class="pagination">
+<% if params[:show_all] == '1' %>
+<%= link_to 'Show comments in pages', params.merge(:show_all => 0, :page => 1), :class => 'btn pull-right' %>
+<% else %>
+<%= link_to 'Show all comments', params.merge(:show_all => 1, :page => 1), :class => 'btn pull-right' %>
+<% end %>
+
+<%= will_paginate(@comments, :renderer => PaginationListLinkRenderer) %>
+</div>
 
 <%= render :partial => '/comments/form' %>
 
