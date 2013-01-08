@@ -5,11 +5,17 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :ticket
 
   def index
-      @tickets = @feature.tickets if @feature
-      @tickets ||= @project.tickets if @project
-      @projects = current_user.participations.all
-      @tickets ||= @tickets.in_user_projects(current_user)
-      @tickets = @tickets.page params[:page]
+    @tickets = @sprint.tickets if @sprint
+    @tickets ||= @feature.tickets if @feature
+    @tickets ||= @project.tickets if @project
+    @tickets ||= @tickets.in_user_projects(current_user)
+    @tickets = @tickets.page params[:page]
+
+    respond_to do |format|
+      format.js do
+        render :partial => '/shared/index'
+      end
+    end
   end
 
   def show

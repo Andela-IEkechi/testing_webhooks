@@ -1,26 +1,6 @@
-<%
-  tickets ||= @tickets
-  states = tickets.first && tickets.first.project.ticket_statuses.collect(&:name) || []
-%>
-
 <table class="table table-bordered table-striped" id="ticket-list">
   <caption>
     <h2 class="pull-left">Tickets</h2>
-    <div class="pull-right input-append">
-      <div class="btn-group">
-        <input id="search_input" type="text" class="span8" placeholder="Filter">
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-          State
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" id="state-picker">
-          <li>All</li>
-          <% states.each do |st| %>
-          <li><%= st %></li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
   </caption>
   <!--title row -->
   <tr>
@@ -30,7 +10,7 @@
     <th>State</th>
     <th class="span1">Cost</th>
   </tr>
-  <% tickets.each do |ticket| %>
+  <% @tickets.each do |ticket| %>
 
   <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
     <td class="span1"><%= ticket.id %></td>
@@ -46,10 +26,11 @@
     <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
   </tr>
   <% end %>
-  <% if tickets.count == 0 %>
+  <% if @tickets.count == 0 %>
     <tr>
       <td colspan="4">There are no tickets</td>
     </tr>
   <% end %>
 </table>
-<%= paginate tickets %>
+
+<%= paginate @tickets, :params => {:controller => 'tickets', :action => 'index', :id => nil}, :remote => true %>
