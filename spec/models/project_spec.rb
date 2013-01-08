@@ -15,7 +15,7 @@ describe Project do
     project_with_tickets.should have_at_least(1).tickets
   end
 
-  it "should have a working factory that does not have an API key", :focus => true  do
+  it "should have a working factory that does not have an API key"  do
     project_without_api = build(:no_api_project)
     project_without_api.should_not be_nil
     project_without_api.api_key.should be_nil

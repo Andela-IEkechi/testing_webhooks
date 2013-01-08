@@ -82,11 +82,11 @@ describe Sprint do
       @sprint.assigned_tickets.count.should eq(1)
     end
 
-    it "should respond to open", :focus => true do
+    it "should respond to open" do
       @sprint.should respond_to(:open?)
     end
 
-    it "should be open if it's still running", :focus => true do
+    it "should be open if it's still running" do
       @sprint.due_on = 5.days.from_now
       @sprint.should be_open
     end
@@ -98,7 +98,7 @@ describe Sprint do
       @sprint.should be_open
     end
 
-    it "should respond to closed", :focus => true do
+    it "should respond to closed" do
       @sprint.should respond_to(:closed?)
     end
 
@@ -127,7 +127,7 @@ describe Sprint do
 
     end
 
-    it "should respond to running", :focus => true do
+    it "should respond to running" do
       @sprint.should respond_to(:running?)
     end
 
