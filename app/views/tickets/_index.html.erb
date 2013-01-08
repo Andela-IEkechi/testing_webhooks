@@ -31,7 +31,7 @@
     <th class="span1">Cost</th>
   </tr>
   <% tickets.each do |ticket| %>
-  
+
   <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
     <td class="span1"><%= ticket.id %></td>
     <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
@@ -52,3 +52,4 @@
     </tr>
   <% end %>
 </table>
+<%= paginate tickets %>

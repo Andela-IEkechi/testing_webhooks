@@ -8,7 +8,8 @@ class TicketsController < ApplicationController
       @tickets = @feature.tickets if @feature
       @tickets ||= @project.tickets if @project
       @projects = current_user.participations.all
-      @tickets ||= @projects.collect{|p| p.tickets.all}.flatten
+      @tickets ||= @tickets.in_user_projects(current_user)
+      @tickets = @tickets.page params[:page]
   end
 
   def show
