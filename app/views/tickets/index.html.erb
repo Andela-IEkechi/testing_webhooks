@@ -1,6 +1,6 @@
 <% @projects.each do |project| %>
   <div class="well">
     <h3><%= link_to project.title, project_path(project) %></h3>
-      <%= render :partial => 'index', :locals => {:tickets => project.tickets.select{|t| t.assignee_id == current_user.id }}%>
+      <%= render :partial => 'index', :locals => {:project => project, :tickets => project.tickets.select{|t| t.assignee_id == current_user.id }}%>
   </div>
 <% end %>

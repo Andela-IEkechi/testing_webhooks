@@ -1,25 +1,24 @@
 <%
   tickets ||= @tickets
-  states = tickets.first && tickets.first.project.ticket_statuses.collect(&:name) || []
+  project ||= @project
+  @search ||= tickets.search
 %>
 
 <table class="table table-bordered table-striped" id="ticket-list">
   <caption>
-    <h2 class="pull-left">Tickets</h2>
-    <div class="pull-right input-append">
-      <div class="btn-group">
-        <input id="search_input" type="text" class="span8" placeholder="Filter">
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-          State
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" id="state-picker">
-          <li>All</li>
-          <% states.each do |st| %>
-          <li><%= st %></li>
-          <% end %>
-        </ul>
-      </div>
+    <div>
+      <h2>Tickets</h2>
+      <%= simple_form_for @search, :url => tickets_path, :html => {:method => :get, :class => 'form-search'} do |f| %>
+        <%= f.input_field :title_contains, :label => false, :placeholder => 'search by title' %>
+        <%= f.submit 'Search' %>
+
+        <%= link_to '#', {:id => 'advanced_search'} do %>
+          <small>advanced search</small>
+        <% end %>
+        <div class="search_fields" style="display:none;" data-href="<%= search_tickets_path()%>">
+          <%= f.input_field :ticket_status, :collection => project.ticket_statuses.collect{|ts| [ts.name, ts.id]} %>
+        </div>
+      <% end %>
     </div>
   </caption>
   <!--title row -->
@@ -31,7 +30,7 @@
     <th class="span1">Cost</th>
   </tr>
   <% tickets.each do |ticket| %>
-  
+
   <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
     <td class="span1"><%= ticket.id %></td>
     <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
