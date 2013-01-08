@@ -12,7 +12,7 @@ class Ticket < ActiveRecord::Base
   validates :title, :length => {:minimum => 3}
 
   scope :unassigned, lambda{ parent.is_a? Project}
-  scope :open, lambda{ parent.is_a? Project}
+  scope :in_user_projects, lambda{ |u| {:conditions => ["project_id IN (?)", u.participation_ids ]}}
 
   def to_s
     title
