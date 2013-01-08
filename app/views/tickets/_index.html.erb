@@ -15,8 +15,8 @@
         <%= link_to '#', {:id => 'advanced_search'} do %>
           <small>advanced search</small>
         <% end %>
-        <div class="search_fields" style="display:none;" data-href="<%= search_tickets_path()%>">
-          <%= f.input_field :ticket_status, :collection => project.ticket_statuses.collect{|ts| [ts.name, ts.id]} %>
+        <div class="search_fields" style="display:none;" data-href="<%= tickets_path()%>">
+          <%= f.input_field :ticket_status_in, :collection => project.ticket_statuses.collect{|ts| [ts.name, ts.id]} %>
         </div>
       <% end %>
     </div>
