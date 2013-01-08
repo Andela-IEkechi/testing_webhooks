@@ -5,11 +5,11 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :ticket
 
   def index
-    @tickets = @sprint.tickets if @sprint
-    @tickets ||= @feature.tickets if @feature
+    @tickets = @sprint.assigned_tickets if @sprint
+    @tickets ||= @feature.assigned_tickets if @feature
     @tickets ||= @project.tickets if @project
-    @tickets ||= @tickets.in_user_projects(current_user)
-    @tickets = @tickets.page params[:page]
+    @tickets ||= @tickets.in_user_projects(current_user).all
+    @tickets = Kaminari.paginate_array(@tickets).page params[:page]
 
     respond_to do |format|
       format.js do
