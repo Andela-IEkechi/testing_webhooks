@@ -1,36 +1,43 @@
-<table class="table table-bordered table-striped" id="ticket-list">
-  <caption>
-    <h2 class="pull-left">Tickets</h2>
-  </caption>
-  <!--title row -->
-  <tr>
-    <th class="span1">#</th>
-    <th>Title</th>
-    <th>Assignee</th>
-    <th>State</th>
-    <th class="span1">Cost</th>
-  </tr>
-  <% @tickets.each do |ticket| %>
-
-  <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
-    <td class="span1"><%= ticket.id %></td>
-    <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
-    <td><%= ticket.assignee %></td>
-    <td class="ticket-info">
-      <div class="pull-right">
-        <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
-        <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
-        <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
-      </div>
-    </td>
-    <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
-  </tr>
-  <% end %>
-  <% if @tickets.count == 0 %>
+<div id="tickets-list-container">
+  <table class="table table-bordered table-striped" id="ticket-list">
+    <caption>
+      <h2 class="pull-left">Tickets</h2>
+    </caption>
+    <!--title row -->
     <tr>
-      <td colspan="4">There are no tickets</td>
+      <th class="span1">#</th>
+      <th>Title</th>
+      <th>Assignee</th>
+      <th>State</th>
+      <th class="span1">Cost</th>
     </tr>
-  <% end %>
-</table>
+    <% @tickets.each do |ticket| %>
+    <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
+      <td class="span1"><%= ticket.id %></td>
+      <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
+      <td><%= ticket.assignee %></td>
+      <td class="ticket-info">
+        <div class="pull-right">
+          <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
+          <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
+          <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
+        </div>
+      </td>
+      <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
+    </tr>
+    <% end if @tickets %>
+    <% if @tickets.nil? || @tickets.count == 0 %>
+      <tr>
+        <td colspan="4">There are no tickets</td>
+      </tr>
+    <% end %>
+    <% unless @tickets %>
+      <tr>
+        <td colspan="4"><%= link_to 'loading tickets...', tickets_path(), :remote => true, :class => "autoload" %></td>
+      </tr>
+    <% end %>
+  </table>
 
-<%= paginate @tickets, :params => {:controller => 'tickets', :action => 'index', :id => nil}, :remote => true %>
+  <%= paginate @tickets, :params => {:controller => 'tickets', :action => 'index', :id => nil}, :remote => true if @tickets %>
+
+</div>

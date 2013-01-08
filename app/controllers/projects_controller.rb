@@ -6,7 +6,6 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @tickets = @project.tickets.unassigned.page params[:page]
   end
 
   def new
