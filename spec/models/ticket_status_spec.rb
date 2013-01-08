@@ -32,17 +32,17 @@ describe TicketStatus do
     @status.to_s.should eq(@status.name)
   end
 
-  it "should respond to :open", :focus => true do
+  it "should respond to :open" do
     @status.should respond_to :open
   end
 
-  it "should be closable", :focus => true do
+  it "should be closable" do
     @status.open.should eq(true)
     @status.close!
     @status.open.should eq(false)
   end
 
-  it "should be openable", :focus => true do
+  it "should be openable" do
     @status.open = false
     @status.open.should eq(false)
     @status.open!

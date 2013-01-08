@@ -33,22 +33,22 @@ describe Ticket do
     @ticket.should respond_to(:comments)
   end
 
-  context "filter summary" do  
-    it "should be present", :focus => true do
+  context "filter summary" do
+    it "should be present" do
       @ticket.should respond_to :filter_summary
     end
 
-    it "should not be empty", :focus => true do
+    it "should not be empty" do
       @ticket.filter_summary.should_not be_blank
     end
 
-    it "should be unique", :focus => true do
+    it "should be unique" do
       ticket1 = create(:ticket)
       ticket2 = create(:ticket, :title => ticket1.title)
-      ticket1.filter_summary.should_not eq(ticket2.filter_summary)  
+      ticket1.filter_summary.should_not eq(ticket2.filter_summary)
     end
 
-    it "should be lower case", :focus => true do
+    it "should be lower case" do
       @ticket.title = 'UPPER CASE TITLE'
       @ticket.filter_summary.should eq(@ticket.filter_summary.downcase)
     end
@@ -99,7 +99,6 @@ describe Ticket do
       @ticket.save
       @ticket.sprint_id.should eq(@sprint.id)
     end
-
   end
 
 end
