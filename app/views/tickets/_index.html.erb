@@ -33,11 +33,11 @@
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="4"><%= link_to 'loading tickets...', tickets_path(), :remote => true, :class => "autoload" %></td>
+        <td colspan="4"><%= link_to 'loading tickets...', tickets_path(:project_id => @project, :sprint_id => @sprint, :feature_id => @feature), :remote => true, :class => "autoload" %></td>
       </tr>
     <% end %>
   </table>
 
-  <%= paginate @tickets, :params => {:controller => 'tickets', :action => 'index', :id => nil}, :remote => true if @tickets %>
+  <%= paginate @tickets, :params => {:controller => 'tickets', :action => 'index', :id => nil, :project_id => @project, :sprint_id => @sprint, :feature_id => @feature}, :remote => true if @tickets %>
 
 </div>
