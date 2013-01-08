@@ -5,6 +5,7 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :ticket
 
   def index
+    @tickets = nil
     @tickets = @sprint.assigned_tickets if @sprint
     @tickets ||= @feature.assigned_tickets if @feature
     @tickets ||= @project.tickets if @project
