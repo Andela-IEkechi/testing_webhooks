@@ -11,6 +11,10 @@ gem 'paper_trail'
 gem 'thin'
 gem 'rake'
 
+#paging
+gem 'kaminari'
+gem 'kaminari-bootstrap'
+
 #comment body markup
 gem 'redcarpet'
 gem 'pygmentize'
