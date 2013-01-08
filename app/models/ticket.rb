@@ -1,6 +1,6 @@
 class Ticket < ActiveRecord::Base
   belongs_to :project #always
-  has_many :comments, :include => :assets, :order => :id
+  has_many :comments, :include => [:status], :order => :id
   #Status is linked through comments
 
   attr_accessible :project_id, :comments_attributes, :title
@@ -23,7 +23,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def body
-    get_current(:body)
+    get_last(:body)
   end
 
   def sprint
@@ -62,6 +62,10 @@ class Ticket < ActiveRecord::Base
     get_last(:status)
   end
 
+  def status_id
+    get_last(:status) && get_last(:status).id || nil
+  end
+
   def cost
     get_last(:cost)
   end
@@ -75,7 +79,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def open?
-    get_current(:status).open
+    get_last(:status).open
   end
 
   def closed?
@@ -83,13 +87,6 @@ class Ticket < ActiveRecord::Base
   end
 
   private
-
-  #this returns the CURRENTLY SET VALUE, in the history for this ticket
-  #ie, the value the last time it was set, even if that was 5 comments ago
-  def get_current(attr)
-    attr = attr.to_sym
-    comments.collect(&attr).compact.last
-  end
 
   #this returns the values as set in the last comment
   def get_last(attr)
