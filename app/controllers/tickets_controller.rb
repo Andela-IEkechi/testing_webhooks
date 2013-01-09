@@ -8,14 +8,20 @@ class TicketsController < ApplicationController
     @tickets = nil
     @tickets = @sprint.assigned_tickets if @sprint
     @tickets ||= @feature.assigned_tickets if @feature
-    @tickets ||= @project.tickets if @project
-    @tickets ||= @tickets.in_user_projects(current_user).all
-    @tickets = Kaminari.paginate_array(@tickets).page params[:page]
+    @tickets ||= @project.tickets.all if @project
+    if params[:assignee_id] && @tickets
+      @tickets.select! do |t|
+        t.assignee_id == params[:assignee_id].to_i
+      end
+      @assignee_id = current_user.id
+    end
+    @tickets = Kaminari.paginate_array(@tickets).page params[:page] if @tickets
 
     respond_to do |format|
       format.js do
         render :partial => '/shared/index'
       end
+      format.html
     end
   end
 

@@ -1,4 +1,14 @@
-<div id="tickets-list-container">
+<%
+  project_id ||= @project && @project.id
+  sprint_id ||= @sprint && @sprint.id
+  feature_id ||= @feature && @feature.id
+  assignee_id ||= @assignee_id
+
+  parent = "sprint-#{sprint_id}" if sprint_id
+  parent ||= "feature-#{feature_id}" if feature_id
+  parent ||= "project-#{project_id}" if project_id
+ %>
+<div id="tickets-list-container-<%= parent %>">
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
       <h2 class="pull-left">Tickets</h2>
@@ -33,11 +43,10 @@
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="4"><%= link_to 'loading tickets...', tickets_path(:project_id => @project, :sprint_id => @sprint, :feature_id => @feature), :remote => true, :class => "autoload" %></td>
+        <td colspan="4"><%= link_to 'loading tickets...', tickets_path(:project_id => project_id, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id), :remote => true, :class => "autoload" %></td>
       </tr>
     <% end %>
   </table>
-
-  <%= paginate @tickets, :params => {:controller => 'tickets', :action => 'index', :id => nil, :project_id => @project, :sprint_id => @sprint, :feature_id => @feature}, :remote => true if @tickets %>
+  <%= paginate @tickets, :params => {:controller => 'tickets', :action => 'index', :id => nil, :project_id => project_id, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id}, :remote => true if @tickets %>
 
 </div>

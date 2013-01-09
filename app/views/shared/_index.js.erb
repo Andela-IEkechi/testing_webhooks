@@ -1,2 +1,6 @@
-
-$('#<%=controller_name%>-list-container').html('<%= escape_javascript(render(:partial => "/#{controller_name}/index"))%>');
+<%
+  parent = "sprint-#{@sprint.id}" if @sprint
+  parent ||= "feature-#{@feature.id}" if @feature
+  parent ||= "project-#{@project.id}" if @project
+%>
+$('#<%=controller_name%>-list-container-<%= parent %>').html('<%= escape_javascript(render(:partial => "/#{controller_name}/index"))%>');
