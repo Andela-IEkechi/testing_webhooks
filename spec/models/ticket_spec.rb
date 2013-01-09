@@ -14,7 +14,6 @@ describe Ticket do
       ticket = build(:invalid_ticket)
       ticket.should_not be_valid
     end
-
   end
 
   context "validates that" do
@@ -55,49 +54,41 @@ describe Ticket do
   end
 
   context "belongs to a parent" do
-    before(:each) do
-      @feature = create(:feature, :project => @ticket.project)
-      @sprint = create(:sprint, :project => @ticket.project)
-    end
-
     it "the parent is a project, if there is no feature or sprint" do
       @ticket.parent.should eq(@ticket.project)
     end
 
     it "the parent is a feature, if there is no sprint" do
-      @ticket.comments << create(:comment, :ticket => @ticket, :feature => @feature)
-      @ticket.save
+      @ticket.sprint.should be_nil
+      @ticket.comments << create(:comment_with_feature, :ticket => @ticket)
       @ticket.should be_valid
+      @ticket.feature.should_not be_nil
       @ticket.parent.should eq(@ticket.feature)
     end
 
     it "the parent is a sprint, if there is one" do
-      @ticket.comments << create(:comment, :ticket => @ticket, :sprint => @sprint)
-      @ticket.save
+      @ticket.sprint.should be_nil
+      @ticket.comments << create(:comment_with_sprint, :ticket => @ticket)
       @ticket.should be_valid
       @ticket.parent.should eq(@ticket.sprint)
     end
 
     it "it can belong to both a feature and a sprint at the same time" do
-      @ticket.comments << create(:comment, :ticket => @ticket, :feature => @feature, :sprint => @sprint)
-      @ticket.save
-
-      @ticket.feature.should eq(@feature)
-      @ticket.sprint.should eq(@sprint)
+      @ticket.comments << create(:comment_with_feature_and_sprint, :ticket => @ticket)
+      @ticket.feature.should_not be_nil
+      @ticket.sprint.should_not be_nil
     end
 
     it "reports the id of the feature it's assigned to, or nil" do
-      @ticket.feature_id.should be_nil
-      @ticket.comments << create(:comment, :ticket => @ticket, :feature => @feature)
-      @ticket.save
-      @ticket.feature_id.should eq(@feature.id)
+      @ticket.feature.should be_nil
+      @ticket.comments << create(:comment_with_feature, :ticket => @ticket)
+      @ticket.feature.should_not be_nil
     end
 
     it "reports the id of the sprint it's assigned to, or nil" do
-      @ticket.sprint_id.should be_nil
-      @ticket.comments << create(:comment, :ticket => @ticket, :sprint => @sprint)
-      @ticket.save
-      @ticket.sprint_id.should eq(@sprint.id)
+      @ticket.sprint.should be_nil
+      @ticket.comments << create(:comment_with_sprint, :ticket => @ticket)
+      @ticket.sprint.should_not be_nil
     end
   end
 
