@@ -5,13 +5,24 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :ticket
 
   def index
-    @search = @sprint.tickets.search(params[:search]) if @sprint
-    @search ||= @feature.tickets.search(params[:search]) if @feature
-    @search ||= @project.tickets.search(params[:search]) if @project
-    @search ||= current_user.tickets.search(params[:search]) #for the 'my tickets' page
-    @tickets =  @search.all
+    @tickets = nil
+    @tickets = @sprint.assigned_tickets if @sprint
+    @tickets ||= @feature.assigned_tickets if @feature
+    @tickets ||= @project.tickets.all if @project
+    if params[:assignee_id] && @tickets
+      @tickets.select! do |t|
+        t.assignee_id == params[:assignee_id].to_i
+      end
+      @assignee_id = current_user.id
+    end
+    @tickets = Kaminari.paginate_array(@tickets).page params[:page] if @tickets
 
-    @projects = current_user.participations.all
+    respond_to do |format|
+      format.js do
+        render :partial => '/shared/index'
+      end
+      format.html
+    end
   end
 
   def show
