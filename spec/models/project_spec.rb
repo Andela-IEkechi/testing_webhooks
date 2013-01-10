@@ -15,7 +15,7 @@ describe Project do
     project_with_tickets.should have_at_least(1).tickets
   end
 
-  it "should have a working factory that does not have an API key", :focus => true  do
+  it "should have a working factory that does not have an API key"  do
     project_without_api = build(:no_api_project)
     project_without_api.should_not be_nil
     project_without_api.api_key.should be_nil
@@ -137,13 +137,7 @@ describe Project do
       ordered_emails = @project.participants.all.sort{|a,b| a.email <=> b.email}.collect(&:email)
       participant_emails.should == ordered_emails
     end
-
   end
+
 end
 
-=begin
-  should define 0 or more features (see feature section below for detail)
-  should define 0 or more sprints (see sprint section below for detail)
-  should define 0 or more tickets (see ticket section below for detail)
-  can be deleted
-=end

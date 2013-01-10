@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Comment::Asset, focus: true do
+describe Comment::Asset do
 
   before(:each) do
     @asset = create(:comment_asset)
