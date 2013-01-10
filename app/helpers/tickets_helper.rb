@@ -7,4 +7,6 @@ module TicketsHelper
       cost.to_s
     end
   end
+
+
 end

@@ -15,6 +15,24 @@ describe Comment do
       comment.should be_valid
       comment.body.should_not be_blank
     end
+
+    it "should create a comment with a feature only" do
+      comment = create(:comment_with_feature)
+      comment.feature_id.should_not be_nil
+      comment.sprint_id.should be_nil
+    end
+
+    it "should create a comment with a sprint only" do
+      comment = create(:comment_with_sprint)
+      comment.sprint_id.should_not be_nil
+      comment.feature_id.should be_nil
+    end
+
+    it "should create a comment with a feature and a sprint" do
+      comment = create(:comment_with_feature_and_sprint)
+      comment.feature_id.should_not be_nil
+      comment.sprint_id.should_not be_nil
+    end
   end
 
   context "validates that" do
@@ -49,8 +67,8 @@ describe Comment do
       @comment.cost.should_not be_nil
     end
 
-    it "should have a cost between 1 and 3" do
-      (1..3).each do |l|
+    it "should have a cost between 0 and 3" do
+      (0..3).each do |l|
         @comment.cost = l
         @comment.should be_valid
       end

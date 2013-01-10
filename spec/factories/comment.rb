@@ -3,8 +3,6 @@
 FactoryGirl.define do
   factory :comment do
     association(:ticket)
-    association(:feature)
-    association(:sprint)
     association(:user)
     cost 1
 
@@ -14,6 +12,19 @@ FactoryGirl.define do
 
     factory :comment_with_body do
       body {Faker::Lorem.paragraph()}
+    end
+
+    factory :comment_with_sprint do
+      association(:sprint)
+    end
+
+    factory :comment_with_feature do
+      association(:feature)
+    end
+
+    factory :comment_with_feature_and_sprint do
+      association(:feature)
+      association(:sprint)
     end
   end
 end

@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121109090147) do
+ActiveRecord::Schema.define(:version => 20130110091315) do
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
-    t.string   "payload"
+    t.string   "file"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -65,11 +65,6 @@ ActiveRecord::Schema.define(:version => 20121109090147) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "ticket_files", :force => true do |t|
-    t.boolean "file_processed", :default => false
-    t.string  "file"
-  end
-
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id",                   :null => false
     t.string  "name",                         :null => false
@@ -77,10 +72,11 @@ ActiveRecord::Schema.define(:version => 20121109090147) do
   end
 
   create_table "tickets", :force => true do |t|
-    t.integer  "project_id", :null => false
-    t.string   "title",      :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "project_id",      :null => false
+    t.string   "title",           :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "last_comment_id"
   end
 
   create_table "users", :force => true do |t|

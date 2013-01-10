@@ -1,14 +1,27 @@
 class TicketsController < ApplicationController
+  before_filter :load_search_resources, :only => :index
+
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project
   load_and_authorize_resource :sprint, :through => :project
-  load_and_authorize_resource :ticket
+  load_and_authorize_resource :ticket, :except => :index
 
   def index
-      @tickets = @feature.tickets if @feature
-      @tickets ||= @project.tickets if @project
-      @projects = current_user.participations.all
-      @tickets ||= @projects.collect{|p| p.tickets.all}.flatten
+    @tickets = @sprint.assigned_tickets if @sprint
+    @tickets ||= @feature.assigned_tickets if @feature
+    @tickets ||= @project.tickets if @project
+
+    @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
+    @assignee_id = current_user.id if params[:assignee_id]
+
+    @search = @tickets.search(params[:search])
+    @tickets = Kaminari::paginate_array(@search.all).page(params[:page])
+
+    respond_to do |format|
+      format.js do
+        render :partial => '/shared/index'
+      end
+    end
   end
 
   def show
@@ -75,6 +88,15 @@ class TicketsController < ApplicationController
     return project_sprint_path(@ticket.project, @ticket.sprint) if @ticket.sprint
     return project_feature_path(@ticket.project, @ticket.feature) if @ticket.feature
     project_path(@ticket.project)
+  end
+
+  def load_search_resources
+    if params[:search]
+      [:project_id, :feature_id, :sprint_id, :assignee_id].each do |val|
+        params[val] ||= params[:search][val] if params[:search][val] && !params[:search][val].empty?
+        params[:search].delete(val)
+      end
+    end
   end
 
 end
