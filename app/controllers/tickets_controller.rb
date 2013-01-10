@@ -9,9 +9,11 @@ class TicketsController < ApplicationController
     @tickets ||= @feature.tickets if @feature
     @tickets ||= @project.tickets if @project
 
-    #all tickets for the current user
+    unless @project
+      @tickets = Ticket.scoped
+    end
 
-    @tickets ||= Ticket.for_user(current_user)
+    @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
     @assignee_id = current_user.id if params[:assignee_id]
 
     @search = @tickets.search(params[:search])

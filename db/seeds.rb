@@ -39,6 +39,7 @@ Ticket.find_each(&:destroy)
     comment = ticket.comments.build(:body => 'a comment', :status_id => mhp.ticket_statuses.first.id)
     comment.sprint = sprint if x == 1
     comment.user = jlr
+    comment.assignee = jlr if x == 20
     comment.save
   end
 end

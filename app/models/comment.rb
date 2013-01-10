@@ -1,5 +1,6 @@
 class Comment < ActiveRecord::Base
   include Markdownable
+  after_create :update_ticket
 
   belongs_to :ticket #always
   belongs_to :user #the person who made the comment
@@ -39,5 +40,11 @@ class Comment < ActiveRecord::Base
 
   def only?
     ticket.comments.size == 1
+  end
+
+  private
+
+  def update_ticket
+    self.ticket.update_last_comment! if self.ticket
   end
 end

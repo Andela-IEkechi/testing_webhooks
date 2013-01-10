@@ -18,7 +18,7 @@ class Ticket < ActiveRecord::Base
 
   scope :unassigned, lambda{ parent.is_a? Project}
 
-  scope :for_user, lambda{|u| assignee.id == u.id}
+  scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment}}
   scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment}}
   #scope :for_sprint, lambda{|s| self.sprint.id == s.id}
   scope :for_feature, lambda{|f| self.feature.id == f.id}
@@ -69,6 +69,11 @@ class Ticket < ActiveRecord::Base
 
   def feature_id
     feature && feature.id || nil
+  end
+
+  def update_last_comment!
+    self.last_comment = self.comments.last
+    self.save!
   end
 
   private
