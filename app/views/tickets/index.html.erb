@@ -1,6 +1,0 @@
-<% current_user.participations.each do |project| %>
-  <div class="well">
-    <h3><%= link_to project.title, project_path(project) %></h3>
-      <%= render :partial => 'index', :locals => { :project => project, :assignee_id => current_user.id }%>
-  </div>
-<% end %>

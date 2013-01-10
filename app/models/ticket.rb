@@ -20,8 +20,7 @@ class Ticket < ActiveRecord::Base
 
   scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment}}
   scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment}}
-  #scope :for_sprint, lambda{|s| self.sprint.id == s.id}
-  scope :for_feature, lambda{|f| self.feature.id == f.id}
+  scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment}}
 
   def to_s
     title

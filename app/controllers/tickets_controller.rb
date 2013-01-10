@@ -2,29 +2,23 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project
   load_and_authorize_resource :sprint, :through => :project
-  load_and_authorize_resource :ticket
+  load_and_authorize_resource :ticket, :except => :index
 
   def index
-    @tickets = @sprint.tickets if @sprint
-    @tickets ||= @feature.tickets if @feature
+    @tickets = @sprint.assigned_tickets if @sprint
+    @tickets ||= @feature.assigned_tickets if @feature
     @tickets ||= @project.tickets if @project
-
-    unless @project
-      @tickets = Ticket.scoped
-    end
 
     @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
     @assignee_id = current_user.id if params[:assignee_id]
 
     @search = @tickets.search(params[:search])
-
     @tickets = Kaminari::paginate_array(@search.all).page(params[:page])
 
     respond_to do |format|
       format.js do
         render :partial => '/shared/index'
       end
-      format.html
     end
   end
 

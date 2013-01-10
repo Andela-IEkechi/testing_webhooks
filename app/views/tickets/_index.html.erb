@@ -1,6 +1,6 @@
 <%
-  @project ||= project
-  project_id ||= @project && @project.id
+  project ||= @project
+  project_id ||= project && project.id
   sprint_id ||= @sprint && @sprint.id
   feature_id ||= @feature && @feature.id
   assignee_id ||= @assignee_id
@@ -23,7 +23,7 @@
               <small>advanced search</small>
             <% end %>
             <div class="search_fields" style="display:none;" data-href="<%= tickets_path()%>">
-              <%= f.input_field :last_comment_status_id_in, :collection => @project.ticket_statuses.collect{|ts| [ts.name, ts.id]} %>
+              <%= f.input_field :last_comment_status_id_in, :collection => project.ticket_statuses.collect{|ts| [ts.name, ts.id]} %>
             </div>
           <% end %>
         <% end %>
@@ -52,7 +52,7 @@
       <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
     </tr>
     <% end if @tickets %>
-    <% if @tickets.nil? || @tickets.count == 0 %>
+    <% if @tickets && @tickets.count == 0 %>
       <tr>
         <td colspan="4">There are no tickets</td>
       </tr>
