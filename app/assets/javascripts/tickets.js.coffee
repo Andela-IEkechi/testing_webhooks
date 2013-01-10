@@ -25,6 +25,3 @@ $ ->
   $(".ticket-filter #state-picker li:contains('All')").click ->
     $('.ticket-filter tr').show();
 
-  $("a#advanced_search").click (e) ->
-    e.preventDefault();
-    $(this).next().toggle();

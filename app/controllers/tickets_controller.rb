@@ -1,4 +1,6 @@
 class TicketsController < ApplicationController
+  before_filter :load_search_resources, :only => :index
+
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project
   load_and_authorize_resource :sprint, :through => :project
@@ -86,6 +88,15 @@ class TicketsController < ApplicationController
     return project_sprint_path(@ticket.project, @ticket.sprint) if @ticket.sprint
     return project_feature_path(@ticket.project, @ticket.feature) if @ticket.feature
     project_path(@ticket.project)
+  end
+
+  def load_search_resources
+    if params[:search]
+      [:project_id, :feature_id, :sprint_id, :assignee_id].each do |val|
+        params[val] ||= params[:search][val] if params[:search][val] && !params[:search][val].empty?
+        params[:search].delete(val)
+      end
+    end
   end
 
 end
