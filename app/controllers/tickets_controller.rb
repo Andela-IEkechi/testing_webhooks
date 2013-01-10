@@ -5,17 +5,18 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :ticket
 
   def index
-    @tickets = nil
-    @tickets = @sprint.assigned_tickets if @sprint
-    @tickets ||= @feature.assigned_tickets if @feature
-    @tickets ||= @project.tickets.all if @project
-    if params[:assignee_id] && @tickets
-      @tickets.select! do |t|
-        t.assignee_id == params[:assignee_id].to_i
-      end
-      @assignee_id = current_user.id
-    end
-    @tickets = Kaminari.paginate_array(@tickets).page params[:page] if @tickets
+    @tickets = @sprint.tickets if @sprint
+    @tickets ||= @feature.tickets if @feature
+    @tickets ||= @project.tickets if @project
+
+    #all tickets for the current user
+
+    @tickets ||= Ticket.for_user(current_user)
+    @assignee_id = current_user.id if params[:assignee_id]
+
+    @search = @tickets.search(params[:search])
+
+    @tickets = Kaminari::paginate_array(@search.all).page(params[:page])
 
     respond_to do |format|
       format.js do

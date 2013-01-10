@@ -1,4 +1,5 @@
 <%
+  @project ||= project
   project_id ||= @project && @project.id
   sprint_id ||= @sprint && @sprint.id
   feature_id ||= @feature && @feature.id
@@ -10,23 +11,25 @@
  %>
 <div id="tickets-list-container-<%= parent %>">
   <table class="table table-bordered table-striped" id="ticket-list">
-  <caption>
-    <div>
-      <h2>Tickets</h2>
-      <%= simple_form_for @search, :url => tickets_path, :html => {:method => :get, :class => 'form-search'} do |f| %>
-        <%= f.input_field :title_contains, :label => false, :placeholder => 'search by title' %>
-        <%= f.submit 'Search' %>
+    <caption>
+      <div>
+        <h2>Tickets</h2>
+        <% if @search %>
+          <%= simple_form_for @search, :url => tickets_path, :html => {:method => :get, :class => 'form-search'} do |f| %>
+            <%= f.input_field :title_contains, :label => false, :placeholder => 'search by title' %>
+            <%= f.submit 'Search' %>
 
-        <%= link_to '#', {:id => 'advanced_search'} do %>
-          <small>advanced search</small>
+            <%= link_to '#', {:id => 'advanced_search'} do %>
+              <small>advanced search</small>
+            <% end %>
+            <div class="search_fields" style="display:none;" data-href="<%= tickets_path()%>">
+              <%= f.input_field :last_comment_status_id_in, :collection => @project.ticket_statuses.collect{|ts| [ts.name, ts.id]} %>
+            </div>
+          <% end %>
         <% end %>
-        <div class="search_fields" style="display:none;" data-href="<%= tickets_path()%>">
-          <%= f.input_field :ticket_status_in, :collection => project.ticket_statuses.collect{|ts| [ts.name, ts.id]} %>
-        </div>
-      <% end %>
-    </div>
-  </caption>
-  <!--title row -->
+      </div>
+    </caption>
+    <!--title row -->
     <tr>
       <th class="span1">#</th>
       <th>Title</th>
@@ -56,10 +59,23 @@
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="4"><%= link_to 'loading tickets...', tickets_path(:project_id => project_id, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id), :remote => true, :class => "autoload" %></td>
+        <td colspan="4"><%= link_to 'loading tickets...',
+          tickets_path(:project_id => project_id, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
+          :remote => true, :class => "autoload" %>
+        </td>
       </tr>
     <% end %>
   </table>
-  <%= paginate @tickets, :params => {:controller => 'tickets', :action => 'index', :id => nil, :project_id => project_id, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id}, :remote => true if @tickets %>
+  <%= paginate @tickets,
+        :params => {
+          :controller => 'tickets',
+          :action => 'index',
+          :id => nil,
+          :project_id => project_id,
+          :sprint_id => sprint_id,
+          :feature_id => feature_id,
+          :assignee_id => assignee_id
+        },
+        :remote => true if @tickets %>
 
 </div>

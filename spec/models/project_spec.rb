@@ -137,13 +137,7 @@ describe Project do
       ordered_emails = @project.participants.all.sort{|a,b| a.email <=> b.email}.collect(&:email)
       participant_emails.should == ordered_emails
     end
-
   end
+
 end
 
-=begin
-  should define 0 or more features (see feature section below for detail)
-  should define 0 or more sprints (see sprint section below for detail)
-  should define 0 or more tickets (see ticket section below for detail)
-  can be deleted
-=end

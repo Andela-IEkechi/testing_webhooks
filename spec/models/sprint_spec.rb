@@ -6,6 +6,7 @@ describe Sprint do
   end
 
   it "must have a working factory" do
+
     @sprint.should_not be_nil
   end
 
@@ -32,12 +33,10 @@ describe Sprint do
   end
 
   context "without tickets" do
-
     it "should have a 0 cost if there are no tickets" do
       @sprint.should have(0).tickets
       @sprint.cost.should eq(0)
     end
-
   end
 
   context "with tickets" do
@@ -124,7 +123,6 @@ describe Sprint do
       #not running with a closed ticket!
       ticket.comments.last.status.open=false
       @sprint.should be_closed
-
     end
 
     it "should respond to running" do
@@ -137,6 +135,6 @@ describe Sprint do
       @sprint.due_on = 5.days.from_now
       @sprint.should be_running
     end
-
   end
+
 end
