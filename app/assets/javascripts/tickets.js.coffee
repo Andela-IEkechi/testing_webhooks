@@ -6,3 +6,8 @@ $ ->
   $('.clickable').click ->
     window.location = $(this).data('href');
 
+  $('.repeat-action').click ->
+    action = $(this).parentsUntil('form').parent().attr('action')
+    action = action + '?create_another=true'
+    $(this).parentsUntil('form').parent().attr('action', action)
+
