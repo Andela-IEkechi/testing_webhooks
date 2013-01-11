@@ -50,9 +50,16 @@ class TicketsController < ApplicationController
 
     if @ticket.save
       flash.keep[:info] = "Ticket was added"
-      redirect_to ticket_path(@ticket, :project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+      if params[:create_another]
+        @ticket.reload #refresh the assoc to last_comment
+        redirect_to new_ticket_path(:project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+      else
+        redirect_to ticket_path(@ticket, :project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+      end
     else
       flash[:alert] = "Ticket could not be created"
+      @sprint = @ticket.sprint
+      @feature = @ticket.feature
       render 'new'
     end
   end
