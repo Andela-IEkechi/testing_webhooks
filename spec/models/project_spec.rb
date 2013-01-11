@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Project do
+describe Project, :focus => true do
   before(:each) do
     @project = create(:project)
   end
@@ -66,13 +66,9 @@ describe Project do
   end
 
   it "should delete related features when it's destroyed" do
-    expect {
-      create(:feature, :project => @project)
-      create(:feature, :project => @project)
-    }.to change(Feature, :count).by(2)
-    expect {
-      @project.destroy
-    }.to change(Feature,:count).by(-2)
+    create(:feature, :project => @project)
+    @project.features.count.should_not be_nil
+    @project.destroy
   end
 
   it "should delete related tickets when it's destroyed" do

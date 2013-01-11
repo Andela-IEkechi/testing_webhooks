@@ -42,6 +42,10 @@ class Ticket < ActiveRecord::Base
     get_last(:user) && get_last(:user).id || nil
   end
 
+  def status
+    get_last(:status)
+  end
+
   def cost
     get_last(:cost)
   end

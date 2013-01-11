@@ -32,7 +32,8 @@ describe Ticket do
     @ticket.should respond_to(:comments)
   end
 
-  context "filter summary" do
+  context "filter summary" do 
+
     it "should be present" do
       @ticket.should respond_to :filter_summary
     end
@@ -60,7 +61,8 @@ describe Ticket do
 
     it "the parent is a feature, if there is no sprint" do
       @ticket.sprint.should be_nil
-      @ticket.comments << create(:comment_with_feature, :ticket => @ticket)
+      @ticket.comments << create(:comment, :ticket => @ticket, :feature => @feature, :sprint => nil)
+      @ticket.save
       @ticket.should be_valid
       @ticket.feature.should_not be_nil
       @ticket.parent.should eq(@ticket.feature)
