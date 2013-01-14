@@ -60,11 +60,9 @@ describe Ticket do
     end
 
     it "the parent is a feature, if there is no sprint" do
-      @ticket.sprint.should be_nil
-      @ticket.comments << create(:comment, :ticket => @ticket, :feature => @feature, :sprint => nil)
-      @ticket.save
+      @ticket.feature.should be_nil
+      @ticket.comments << create(:comment_with_feature, :ticket => @ticket)
       @ticket.should be_valid
-      @ticket.feature.should_not be_nil
       @ticket.parent.should eq(@ticket.feature)
     end
 
