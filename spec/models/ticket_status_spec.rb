@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TicketStatus, :focus => true do
+describe TicketStatus do
   before(:each) do
     @status = create(:ticket_status)
   end
