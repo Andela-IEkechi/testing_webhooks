@@ -57,8 +57,7 @@ describe Feature do
   context "without tickets" do
 
     it "should have a 0 cost if there are no tickets" do
-      @feature.should have(0).tickets
-      @feature.cost.should eq(0)
+      @feature.tickets.should be_nil 
     end
 
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sprint do
+describe Sprint, :focus => true do
   before(:each) do
     @sprint = create(:sprint)
   end
@@ -34,8 +34,8 @@ describe Sprint do
 
   context "without tickets" do
     it "should have a 0 cost if there are no tickets" do
-      @sprint.should have(0).tickets
-      @sprint.cost.should eq(0)
+      @sprint.tickets = nil
+      @sprint.cost.should be_nil
     end
   end
 
@@ -88,6 +88,7 @@ describe Sprint do
     it "should be open if it's still running" do
       @sprint.due_on = Date.today + 5
       @sprint.should be_open
+    end
     
     it "should be open if it has open tickets" do
       ticket = @sprint.project.tickets.first

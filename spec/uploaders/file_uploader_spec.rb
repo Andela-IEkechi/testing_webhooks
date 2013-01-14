@@ -1,6 +1,6 @@
 require 'carrierwave/test/matchers'
 
-describe FileUploader do
+describe FileUploader, :focus => true do
   include CarrierWave::Test::Matchers
 
   before do
