@@ -9,6 +9,7 @@
   <%= f.input :project_id, :as => :hidden %>
 
   <div class="form-actions">
+    <%= f.submit :class=>'btn', :value => 'Create Another', :class => 'repeat-action' %>
     <%= f.submit :class=>'btn' %>
     <%= link_to 'cancel', project_feature_path(@ticket.project, @ticket.feature), :class => 'btn' if @ticket.feature && !@ticket.sprint %>
     <%= link_to 'cancel', project_sprint_path(@ticket.project, @ticket.sprint), :class => 'btn' if !@ticket.feature && @ticket.sprint %>

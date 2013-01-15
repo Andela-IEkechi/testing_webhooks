@@ -139,5 +139,27 @@ describe Project do
     end
   end
 
+  context "with tickets" do
+    before(:each) do
+      10.times do
+        title = [*('A'..'Z')].sample(8).join
+        @project.tickets.create(:title => title)
+      end
+    end
+
+    it "should return tickets ordered by id" do
+      ids = @project.tickets.collect(&:id)
+      ids.should eq(ids.sort)
+    end
+
+    it "should not return tickets by creation date" do
+      first = @project.tickets.first
+      first.created_at = Time.now
+      first.save
+
+      ids = @project.tickets.collect(&:id)
+      ids.should eq(ids.sort)
+    end
+  end
 end
 
