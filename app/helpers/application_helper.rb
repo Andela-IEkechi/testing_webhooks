@@ -8,7 +8,4 @@ module ApplicationHelper
     end
   end
 
-  def project_name
-    @project rescue ""
-  end
 end
