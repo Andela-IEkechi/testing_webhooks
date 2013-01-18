@@ -5,13 +5,13 @@ module TabHeadingHelper
 
   def tab_heading
     if @ticket
-      "##{@ticket.id} - #{@ticket}"
+      @ticket.id ? "##{@ticket.id} - #{@ticket}" : "New ticket"
     elsif @sprint
-      "Sprint - #{@sprint}"
+      @sprint.id ? "Sprint - #{@sprint}" : "New sprint"
     elsif @feature
-      "Feature - #{@feature}"
+      @feature.id ? "Feature - #{@feature}" : "New feature"
     elsif @project
-      "#{@project}"
+      @project.id ? "Project - #{@project}" : "New project"
     else
       "Conductor"
     end

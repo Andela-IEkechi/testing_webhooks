@@ -2,7 +2,7 @@ ul.nav {
   li.heading {
     color:#f0f0f0;
     font-size: 15px;
-    padding: 10px 15px 10px;
+    padding: 0px 15px 10px;
     padding-left: 50px;
     font-weight: bold;
   }
@@ -23,7 +23,7 @@ ul.nav {
   color: white;
   text-shadow: none;
   font-size: 15px;
-  &:hover, 
+  &:hover,
   &:active,
   &:focus {
     color: #ABFF3D;
@@ -47,7 +47,7 @@ ul.nav {
 }
 
 .navbar .brand {
-	background-image: url('logo_tunnel_small.png');
+	background-image: url('logo.png');
   background-repeat: no-repeat;
   background-position: 10px 7px;
   padding-left: 40px;

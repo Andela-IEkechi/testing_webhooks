@@ -1,14 +1,27 @@
 class TicketsController < ApplicationController
+  before_filter :load_search_resources, :only => :index
+
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project
   load_and_authorize_resource :sprint, :through => :project
-  load_and_authorize_resource :ticket
+  load_and_authorize_resource :ticket, :except => :index
 
   def index
-      @tickets = @feature.tickets if @feature
-      @tickets ||= @project.tickets if @project
-      @projects = current_user.participations.all
-      @tickets ||= @projects.collect{|p| p.tickets.all}.flatten
+    @tickets = @sprint.assigned_tickets if @sprint
+    @tickets ||= @feature.assigned_tickets if @feature
+    @tickets ||= @project.tickets if @project
+
+    @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
+    @assignee_id = current_user.id if params[:assignee_id]
+
+    @search = @tickets.search(params[:search])
+    @tickets = Kaminari::paginate_array(@search.all).page(params[:page])
+
+    respond_to do |format|
+      format.js do
+        render :partial => '/shared/index'
+      end
+    end
   end
 
   def show
@@ -37,9 +50,16 @@ class TicketsController < ApplicationController
 
     if @ticket.save
       flash.keep[:info] = "Ticket was added"
-      redirect_to ticket_path(@ticket, :project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+      if params[:create_another]
+        @ticket.reload #refresh the assoc to last_comment
+        redirect_to new_ticket_path(:project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+      else
+        redirect_to ticket_path(@ticket, :project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+      end
     else
       flash[:alert] = "Ticket could not be created"
+      @sprint = @ticket.sprint
+      @feature = @ticket.feature
       render 'new'
     end
   end
@@ -75,6 +95,15 @@ class TicketsController < ApplicationController
     return project_sprint_path(@ticket.project, @ticket.sprint) if @ticket.sprint
     return project_feature_path(@ticket.project, @ticket.feature) if @ticket.feature
     project_path(@ticket.project)
+  end
+
+  def load_search_resources
+    if params[:search]
+      [:project_id, :feature_id, :sprint_id, :assignee_id].each do |val|
+        params[val] ||= params[:search][val] if params[:search][val] && !params[:search][val].empty?
+        params[:search].delete(val)
+      end
+    end
   end
 
 end

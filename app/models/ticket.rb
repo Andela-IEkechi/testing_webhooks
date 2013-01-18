@@ -1,7 +1,12 @@
 class Ticket < ActiveRecord::Base
   belongs_to :project #always
-  has_many :comments, :include => :assets, :order => :id
-  #Status is linked through comments
+  has_many :comments, :order => :id
+
+  belongs_to :last_comment, :class_name => 'Comment'
+  has_one :assignee, :through => :last_comment
+  has_one :feature, :through => :last_comment
+  has_one :sprint, :through => :last_comment
+  has_one :status, :through => :last_comment
 
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
@@ -12,7 +17,10 @@ class Ticket < ActiveRecord::Base
   validates :title, :length => {:minimum => 3}
 
   scope :unassigned, lambda{ parent.is_a? Project}
-  scope :open, lambda{ parent.is_a? Project}
+
+  scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment}}
+  scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment}}
+  scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment}}
 
   def to_s
     title
@@ -23,31 +31,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def body
-    get_current(:body)
-  end
-
-  def sprint
-    get_last(:sprint)
-  end
-
-  def sprint_id
-    get_last(:sprint) && get_last(:sprint).id || nil
-  end
-
-  def feature
-    get_last(:feature)
-  end
-
-  def feature_id
-    get_last(:feature) && get_last(:feature).id || nil
-  end
-
-  def assignee
-    get_last(:assignee)
-  end
-
-  def assignee_id
-    get_last(:assignee) && get_last(:assignee).id || nil
+    get_last(:body)
   end
 
   def user
@@ -56,10 +40,6 @@ class Ticket < ActiveRecord::Base
 
   def user_id
     get_last(:user) && get_last(:user).id || nil
-  end
-
-  def status
-    get_last(:status)
   end
 
   def cost
@@ -75,21 +55,27 @@ class Ticket < ActiveRecord::Base
   end
 
   def open?
-    get_current(:status).open
+    get_last(:status).open
   end
 
   def closed?
     !open?
   end
 
-  private
-
-  #this returns the CURRENTLY SET VALUE, in the history for this ticket
-  #ie, the value the last time it was set, even if that was 5 comments ago
-  def get_current(attr)
-    attr = attr.to_sym
-    comments.collect(&attr).compact.last
+  def sprint_id
+    sprint && sprint.id || nil
   end
+
+  def feature_id
+    feature && feature.id || nil
+  end
+
+  def update_last_comment!
+    self.last_comment = self.comments.last
+    self.save!
+  end
+
+  private
 
   #this returns the values as set in the last comment
   def get_last(attr)
