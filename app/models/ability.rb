@@ -17,7 +17,12 @@ class Ability
 
     can :manage, Feature
     can :manage, Sprint
-    can :manage, Ticket
+
+    can [:read, :create], Ticket
+    can :manage, Ticket do |ticket|
+      ticket.user.id == user.id
+    end
+
     can [:read, :create], Comment
     can :manage, Comment, :user_id => user.id
 
