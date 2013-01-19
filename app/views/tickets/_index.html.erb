@@ -13,8 +13,7 @@
 <div id="tickets-list-container-<%= parent %>">
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
-      <div>
-        <h2>Tickets</h2>
+      <div class="pull-right">
         <% if @search %>
           <%= simple_form_for @search,
                 :url => tickets_path(),
@@ -28,6 +27,7 @@
           <% end %>
         <% end %>
       </div>
+      <h2>Tickets</h2>
     </caption>
     <!--title row -->
     <tr>
