@@ -5,17 +5,17 @@
         <span class="navico"><i class="icon-arrow-left navico"></i></span>back to project
       <% end %>
     </li>
-    <% if @sprint %>
-    <li>
-      <%= link_to project_sprint_path(@ticket.project, @sprint) do %>
-      <span class="navico"><i class="icon-arrow-left navico"></i></span>back to sprint
-      <% end %>
-    </li>
-    <% end %>
     <% if @feature %>
     <li>
       <%= link_to project_feature_path(@ticket.project, @feature) do %>
       <span class="navico"><i class="icon-arrow-left navico"></i></span>back to feature
+      <% end %>
+    </li>
+    <% end %>
+    <% if @sprint %>
+    <li>
+      <%= link_to project_sprint_path(@ticket.project, @sprint) do %>
+      <span class="navico"><i class="icon-arrow-left navico"></i></span>back to sprint
       <% end %>
     </li>
     <% end %>
