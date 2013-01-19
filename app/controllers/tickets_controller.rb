@@ -18,6 +18,8 @@ class TicketsController < ApplicationController
     @search = @tickets.search(params[:search])
     @combined_search = @search.all
     @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search]
+    #need to resort if we added to the results
+    @combined_search.sort!{|a,b| a.id<=>b.id} if params[:search]
 
     @tickets = Kaminari::paginate_array(@combined_search).page(params[:page])
 
