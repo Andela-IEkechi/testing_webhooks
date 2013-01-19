@@ -4,10 +4,10 @@
   <div class="row">
     <%= render :partial => '/comments/form_fields', :locals => {:comment_form => f} %>
   </div>
+
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
-    <%= link_to 'cancel', project_feature_path(@ticket.project, @ticket.feature), :class => 'btn' if @ticket.feature && !@ticket.sprint %>
-    <%= link_to 'cancel', project_sprint_path(@ticket.project, @ticket.sprint), :class => 'btn' if !@ticket.feature && @ticket.sprint %>
-    <%= link_to 'cancel', project_path(@ticket.project), :class => 'btn' if !@ticket.feature && !@ticket.sprint %>
+    <%= link_to 'cancel', ticket_path(@ticket), :class => 'btn' %>
+
   </div>
 <% end %>
