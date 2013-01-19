@@ -14,8 +14,12 @@ class TicketsController < ApplicationController
     @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
     @assignee_id = current_user.id if params[:assignee_id]
 
+    #also include tickets with IDs that match
     @search = @tickets.search(params[:search])
-    @tickets = Kaminari::paginate_array(@search.all).page(params[:page])
+    @combined_search = @search.all
+    @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search]
+
+    @tickets = Kaminari::paginate_array(@combined_search).page(params[:page])
 
     respond_to do |format|
       format.js do
