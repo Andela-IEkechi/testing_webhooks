@@ -7,15 +7,7 @@
 
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
-    <% if @feature %>
-      <%= link_to 'cancel', project_feature_path(@ticket.project, @feature), :class => 'btn' %>
-    <% elsif @sprint %>
-      <%= link_to 'cancel', project_sprint_path(@ticket.project, @sprint), :class => 'btn' %>
-    <% elsif !@ticket.new_record? %>
-      <%= link_to 'cancel', ticket_path(@ticket), :class => 'btn' %>
-    <% else%>
-      <%= link_to 'cancel', project_path(@ticket.project), :class => 'btn' %>
-    <% end %>
+    <%= cancel_link %>
 
   </div>
 <% end %>
