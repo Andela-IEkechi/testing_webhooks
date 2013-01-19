@@ -4,9 +4,9 @@ class Ticket < ActiveRecord::Base
 
   belongs_to :last_comment, :class_name => 'Comment'
   has_one :assignee, :through => :last_comment
-  has_one :feature, :through => :last_comment
-  has_one :sprint, :through => :last_comment
-  has_one :status, :through => :last_comment
+  has_one :feature,  :through => :last_comment
+  has_one :sprint,   :through => :last_comment
+  has_one :status,   :through => :last_comment
 
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments

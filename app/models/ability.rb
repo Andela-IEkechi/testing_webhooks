@@ -18,7 +18,8 @@ class Ability
     can :manage, Feature
     can :manage, Sprint
     can :manage, Ticket
-    can :manage, Comment
+    can [:read, :create], Comment
+    can :manage, Comment, :user_id => user.id
 
     #
     # The first argument to `can` is the action you are giving the user permission to do.
