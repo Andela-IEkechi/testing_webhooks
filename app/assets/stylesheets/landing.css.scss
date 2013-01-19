@@ -30,22 +30,3 @@ body {
   border-bottom: 1px solid #E0E0E0;        
   border-top: 1px solid #E0E0E0;        
 }
-
-.meter {
-  width: 500px; 
-  border: solid 1px lighten($btnBackgroundHighlight, 5%);
-  margin: 30px;
-  .progress-done {
-    @include buttonBackground(lighten(#008000, 40%), #008000, $green, 0 1px 1px rgba(255,255,255,.75));
-    @include box-shadow(inset 0 1px 0 rgba(255,255,255,.2));
-    float: left;
-    background-color: green;
-    width: 50%;
-  }
-  .progress-left {
-     @include buttonBackground($btnBackground, $btnBackgroundHighlight, $grayDark, 0 1px 1px rgba(255,255,255,.75));
-    float: left;
-    background-color: green;
-    width: 50%;
-  }
-}
