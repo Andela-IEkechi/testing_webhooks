@@ -1,3 +1,19 @@
 // Place all the styles related to the comments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+div.comment-statusbar {
+  width:100%;
+  border-top: 1px solid #ccc;
+  text-align:center;
+  span {
+    color: #444;
+    pading-right: 30px;
+    display: inline-block;
+    b {
+      color: #000;
+    }
+  }
+
+}

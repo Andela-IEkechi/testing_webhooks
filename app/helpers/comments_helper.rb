@@ -7,4 +7,17 @@ module CommentsHelper
       cost.to_s
     end
   end
+
+  def cancel_link
+    if @feature
+      link_to 'cancel', project_feature_path(@ticket.project, @feature), :class => 'btn', :title => 'back to the feature'
+    elsif @sprint
+      link_to 'cancel', project_sprint_path(@ticket.project, @sprint), :class => 'btn', :title => 'back to the sprint'
+    elsif !@ticket.new_record?
+      link_to 'cancel', ticket_path(@ticket), :class => 'btn', :title => 'back to the ticket'
+    else
+      link_to 'cancel', project_path(@ticket.project), :class => 'btn', :title => 'back to the project'
+    end
+  end
+
 end

@@ -5,22 +5,23 @@
         <span class="navico"><i class="icon-arrow-left navico"></i></span>back to project
       <% end %>
     </li>
-    <% if @ticket.sprint %>
+    <% if @feature %>
     <li>
-      <%= link_to project_sprint_path(@ticket.project, @ticket.sprint) do %>
-      <span class="navico"><i class="icon-arrow-left navico"></i></span>back to sprint
+      <%= link_to project_feature_path(@ticket.project, @feature) do %>
+      <span class="navico"><i class="icon-arrow-left navico"></i></span>back to feature
       <% end %>
     </li>
     <% end %>
-    <% if @ticket.feature %>
+    <% if @sprint %>
     <li>
-      <%= link_to project_feature_path(@ticket.project, @ticket.feature) do %>
-      <span class="navico"><i class="icon-arrow-left navico"></i></span>back to feature
+      <%= link_to project_sprint_path(@ticket.project, @sprint) do %>
+      <span class="navico"><i class="icon-arrow-left navico"></i></span>back to sprint
       <% end %>
     </li>
     <% end %>
   <% end %>
   <% if action_name == 'show' %>
+    <% if can?(:manage, @ticket.comments.first) %>
     <li>
       <%= link_to edit_ticket_path(@ticket) do %>
       <span class="navico"><i class="icon-edit navico"></i></span>edit this ticket
@@ -31,10 +32,11 @@
       <span class="navico"><i class="icon-trash navico"></i></span>remove this ticket
       <% end %>
     </li>
+    <% end %>
   <% end %>
   <% if action_name != 'new' && action_name != 'index' %>
     <li>
-      <%= link_to new_ticket_path(:project_id => @ticket.project) do %>
+      <%= link_to new_ticket_path(:project_id => @ticket.project, :sprint_id => @ticket.sprint_id, :feature_id => @ticket.feature_id) do %>
       <span class="navico"><i class="icon-plus navico"></i></span>add a new ticket
       <% end %>
     </li>

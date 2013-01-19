@@ -86,7 +86,6 @@ describe Feature do
         ticket.comments.create(:feature => @feature, :cost => 2)
       end
       @feature.cost.should eq(@feature.assigned_tickets.count * 2)
-      @feature.cost.should == @feature.assigned_tickets.sum(&:cost)
     end
 
     it "should not report the same ticket as assigned multiple times" do
@@ -104,7 +103,7 @@ describe Feature do
       @feature.reload
       @feature.assigned_tickets.count.should eq(1)
     end
-
   end
+
 end
 
