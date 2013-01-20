@@ -4,7 +4,7 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project
   load_and_authorize_resource :sprint, :through => :project
-  load_and_authorize_resource :ticket, :except => :index
+  load_and_authorize_resource :ticket, :except => :index, :find_by => :scoped_id
 
   def index
     @tickets = @sprint.assigned_tickets if @sprint
@@ -33,7 +33,7 @@ class TicketsController < ApplicationController
   def show
     #create a new comment, but dont tell the ticket about it, or it will render
     @comment = Comment.new(
-      :ticket_id => @ticket.id,
+      :ticket_id => @ticket.scoped_id,
       :status_id => @ticket.status.try(:id),
       :feature_id => @ticket.feature.try(:id),
       :sprint_id => @ticket.sprint.try(:id),
@@ -58,9 +58,9 @@ class TicketsController < ApplicationController
       flash.keep[:info] = "Ticket was added"
       if params[:create_another]
         @ticket.reload #refresh the assoc to last_comment
-        redirect_to new_ticket_path(:project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+        redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
       else
-        redirect_to ticket_path(@ticket, :project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+        redirect_to project_ticket_path(@ticket.project, @ticket)
       end
     else
       flash[:alert] = "Ticket could not be created"
@@ -77,7 +77,7 @@ class TicketsController < ApplicationController
   def update
     if @ticket.update_attributes(params[:ticket])
       flash[:notice] = "Ticket was updated"
-      redirect_to ticket_path(@ticket, :project_id => @project, :feature_id => @feature)
+      redirect_to project_ticket_path(@ticket.project, @ticket)
     else
       flash[:alert] = "Ticket could not be updated"
       render 'edit'

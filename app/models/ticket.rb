@@ -1,4 +1,6 @@
 class Ticket < ActiveRecord::Base
+  before_create :populate_scoped_id
+
   belongs_to :project #always
   has_many :comments, :order => :id
 
@@ -76,11 +78,21 @@ class Ticket < ActiveRecord::Base
     self.save!
   end
 
+  def to_param
+    self.scoped_id
+  end
+
   private
 
   #this returns the values as set in the last comment
   def get_last(attr)
     comments.last.try(attr)
   end
+
+  def populate_scoped_id
+    project.increment!(:tickets_sequence)
+    self[:scoped_id] = project.tickets_sequence
+  end
+
 
 end

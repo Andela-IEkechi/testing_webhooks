@@ -7,7 +7,7 @@ FactoryGirl.define do
     cost 1
 
     before(:create) do |comment|
-      comment.status = create(:ticket_status, :project => comment.ticket.project)
+      comment.status = create(:ticket_status, :project => comment.project)
     end
 
     factory :comment_with_body do
