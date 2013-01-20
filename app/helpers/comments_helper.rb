@@ -14,7 +14,7 @@ module CommentsHelper
     elsif @sprint
       link_to 'cancel', project_sprint_path(@ticket.project, @sprint), :class => 'btn', :title => 'back to the sprint'
     elsif !@ticket.new_record?
-      link_to 'cancel', ticket_path(@ticket), :class => 'btn', :title => 'back to the ticket'
+      link_to 'cancel', project_ticket_path(@ticket.project, @ticket), :class => 'btn', :title => 'back to the ticket'
     else
       link_to 'cancel', project_path(@ticket.project), :class => 'btn', :title => 'back to the project'
     end

@@ -17,17 +17,17 @@ class CommentsController < ApplicationController
       @ticket = @comment.ticket
     end
 
-   redirect_to ticket_path(@comment.ticket, :project_id => @comment.ticket.project, :feature_id => @comment.feature)
+   redirect_to project_ticket_path(@comment.project, @comment.ticket)
   end
 
   def edit
-    
+
   end
 
   def update
     if @comment.update_attributes(params[:comment])
       flash[:notice] = "Comment was updated"
-      redirect_to ticket_path(@comment.ticket)
+      redirect_to project_ticket_path(@comment.project, @comment.ticket)
     else
       flash[:alert] = "Comment could not be updated"
       render 'edit'
@@ -35,7 +35,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    delete_path = ticket_path(@comment.ticket)
+    delete_path = project_ticket_path(@comment.project, @comment.ticket)
     if @comment.only?
       flash[:alert] = "Cannot remove the only comment"
     elsif @comment.destroy
