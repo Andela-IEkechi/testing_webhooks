@@ -12,36 +12,52 @@
       changeset[attr] = [now]
     end
   end
-  changeset[:user] = comment.user.to_s
 %>
 
 <div class="well">
-  <% if changeset[:user] %>
-    <p><b><%= changeset[:user] %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago</p>
+  <% if can?(:manage, comment) %>
+  <div class="pull-right">
+    <% if comment_counter == 0 %>
+      <p>
+        <%= link_to "edit ticket", edit_ticket_path(@ticket.id) %> |
+        <%= link_to "remove ticket", ticket_path(@ticket.id), :method => :delete, :data => { :confirm => 'Are you sure?' } %>
+      </p>
+    <% else %>
+      <p>
+        <%= link_to "edit", edit_ticket_comment_path(@ticket.id, comment.id) %> |
+        <%= link_to "remove", ticket_comment_path(@ticket.id, comment.id), :method => :delete, :data => { :confirm => 'Are you sure?' } %>
+      </p>
+    <% end %>
+  </div>
   <% end %>
-  <% if changeset[:status_id] %>
-    <p>status changed to <b><%= comment.status %></b></p>
-  <% end %>
-  <% if changeset[:feature_id] %>
-    <p>now part of feature: <b><%= comment.feature || 'none' %></b></p>
-  <% end %>
-  <% if changeset[:sprint_id] %>
-    <p>now part of sprint: <b><%= comment.sprint || 'none' %></b></p>
-  <% end %>
-  <% if changeset[:assignee_id] %>
-    <p>assigned to: <b><%= comment.assignee || 'none' %></b></p>
-  <% end %>
-  <% if changeset[:cost] %>
-    <p>cost updated to: <b><%= cost_long(comment.cost) %></b></p>
+
+  <% if comment.user %>
+    <p><b><%= comment.user.to_s %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago</p>
   <% end %>
   <div><%= comment.html.html_safe %></div>
+
   <% comment.assets && comment.assets.each do |asset| %>
     <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
   <% end %>
-  <% if comment_counter > 0 %>
-    <p>
-      <%= link_to "Edit", edit_ticket_comment_path(@ticket.id, comment.id) %> |
-      <%= link_to "Remove", ticket_comment_path(@ticket.id, comment.id), :method => :delete, :data => { :confirm => 'Are you sure?' } %>
-    </p>
+
+  <% if changeset.size > 0 %>
+  <div class="comment-statusbar">
+    <% if changeset[:status_id] %>
+      <span>state: <b><%= comment.status %></b></span>
+    <% end %>
+    <% if changeset[:feature_id] %>
+      <span>feature: <b><%= comment.feature || 'none' %></b></span>
+    <% end %>
+    <% if changeset[:sprint_id] %>
+      <span>sprint: <b><%= comment.sprint || 'none' %></b></span>
+    <% end %>
+    <% if changeset[:assignee_id] %>
+      <span>assignee: <b><%= comment.assignee || 'none' %></b></span>
+    <% end %>
+    <% if changeset[:cost] %>
+      <span>cost: <b><%= cost_long(comment.cost) %></b></span>
+    <% end %>
+  </div>
   <% end %>
+
 </div>

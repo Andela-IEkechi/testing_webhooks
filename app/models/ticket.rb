@@ -4,9 +4,9 @@ class Ticket < ActiveRecord::Base
 
   belongs_to :last_comment, :class_name => 'Comment'
   has_one :assignee, :through => :last_comment
-  has_one :feature, :through => :last_comment
-  has_one :sprint, :through => :last_comment
-  has_one :status, :through => :last_comment
+  has_one :feature,  :through => :last_comment
+  has_one :sprint,   :through => :last_comment
+  has_one :status,   :through => :last_comment
 
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
@@ -21,6 +21,7 @@ class Ticket < ActiveRecord::Base
   scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment}}
   scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment}}
   scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment}}
+  scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
 
   def to_s
     title

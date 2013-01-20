@@ -25,7 +25,9 @@
 				<li>
 					<%= link_to "My Tickets", projects_path() %>
 				</li>
-				<li class="heading"><%= project_name %></li>
+				<% if @project %>
+				<li class="heading"><%= link_to @project, project_path(@project) %></li>
+				<% end %>
 			</ul>
 
 			<div class="dropdown pull-right">
