@@ -148,16 +148,16 @@ describe TicketsController do
             @attrs.merge!(:project_id => @project.id, :sprint_id => @sprint.id)
             post :create, :project_id => @project.id, :sprint_id => @sprint.id, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project, :sprint_id => @sprint))
+            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id, :sprint_id => @sprint))
           elsif @feature
             @attrs.merge!(:project_id => @project.id, :feature_id => @feature.id)
             post :create, :project_id => @project.id, :feature_id => @feature.id, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project, :feature_id => @feature))
+            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id :feature_id => @feature))
           else
             post :create, :project_id => @project.id, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project))
+            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id)
           end
         end
       end
@@ -210,15 +210,15 @@ describe TicketsController do
           if @sprint
             post :update, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project, :feature_id => @feature))
+            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id, :feature_id => @feature))
           elsif @feature
             post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project, :feature_id => @feature))
+            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id, :feature_id => @feature))
           else
             post :update, :project_id => @project.id, :id => @ticket, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(ticket_path(assigns(:ticket).id, :project_id => @project))
+            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id))
           end
         end
       end

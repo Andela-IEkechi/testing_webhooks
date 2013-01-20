@@ -16,7 +16,7 @@
       <div class="pull-right">
         <% if @search %>
           <%= simple_form_for @search,
-                :url => tickets_path(),
+                :url => project_tickets_path(project),
                 :html => {:method => :get, :class => 'form-search'}, :remote => true do |f| %>
             <%= f.input_field :title_or_assignee_email_or_sprint_goal_or_feature_title_or_status_name_contains, :label => false, :placeholder => 'search' %>
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
@@ -40,7 +40,7 @@
     <% @tickets.each do |ticket| %>
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
       <td class="span1"><%= ticket.id %></td>
-      <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
+      <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
       <td><%= ticket.assignee %></td>
       <td class="ticket-info">
           <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
@@ -58,7 +58,7 @@
     <% unless @tickets %>
       <tr>
         <td colspan="5"><%= link_to 'loading tickets...',
-          tickets_path(:project_id => project_id, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
+          project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
           :remote => true, :class => "autoload" %>
         </td>
       </tr>
