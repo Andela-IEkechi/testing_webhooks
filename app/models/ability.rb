@@ -20,7 +20,7 @@ class Ability
 
     can [:read, :create], Ticket
     can :manage, Ticket do |ticket|
-      ticket.user.id == user.id
+      (ticket.user.id rescue nil) == user.id
     end
 
     can [:read, :create], Comment
