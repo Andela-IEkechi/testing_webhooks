@@ -1,6 +1,6 @@
 <%= yield :form_heading %>
 
-<%= simple_nested_form_for([@ticket, @comment], :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
+<%= simple_nested_form_for([@ticket.project, @ticket, @comment], :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
   <div class="row">
     <%= render :partial => '/comments/form_fields', :locals => {:comment_form => f} %>
   </div>
