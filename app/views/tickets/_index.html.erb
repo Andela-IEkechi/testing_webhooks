@@ -39,7 +39,7 @@
     </tr>
     <% @tickets.each do |ticket| %>
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
-      <td class="span1"><%= ticket.id %></td>
+      <td class="span1"><%= ticket.scoped_id %></td>
       <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
       <td><%= ticket.assignee %></td>
       <td class="ticket-info">

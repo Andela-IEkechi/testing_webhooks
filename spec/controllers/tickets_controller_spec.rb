@@ -105,11 +105,11 @@ describe TicketsController do
     describe "GET #edit" do
       before(:each) do
         if @sprint
-          get :edit, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket.id
+          get :edit, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket.scoped_id
         elsif @feature
-          get :edit, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket.id
+          get :edit, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket.scoped_id
         else
-          get :edit, :project_id => @project.id, :id => @ticket.id
+          get :edit, :project_id => @project.id, :id => @ticket.scoped_id
         end
       end
 
