@@ -34,15 +34,5 @@ module TicketHolder
       open_tickets.count > 0
     end
 
-    def completion_percentage
-      return 0 if assigned_tickets.count == 0
-      (closed_tickets.count/(assigned_tickets.count*1.0)).round(2)
-    end
-
-    def completion_message
-      return "nothing assigned" if assigned_tickets.count == 0
-      "#{closed_tickets.count} of #{assigned_tickets.count} tickets closed"
-    end
-
   end
 end

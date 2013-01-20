@@ -16,7 +16,7 @@
       closed=feature.closed_tickets.count
       total=feature.assigned_tickets.count
     %>
-    <td><meter min="0" max="<%= total %>" value="<%= closed %>" title="<%= feature.completion_message %>" low="<%= total/2 %>" high="<%= total+1 %>"><%= (feature.completion_percentage*100).round(0) %>%</meter></td>
+    <td><meter min="0" max="<%= total %>" value="<%= closed %>" title="<%= completion_message(feature) %>" low="<%= total/2 %>" high="<%= total+1 %>"><%= completion_percentage(feature) %>%</meter></td>
     <td class="span1 count" title="tickets in this feature"><span class="badge badge-info"><%= feature.assigned_tickets.count %></span></td>
   </tr>
   <% end %>
