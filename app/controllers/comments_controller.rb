@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   before_filter :strip_empty_assets, :except => ["edit","destroy"]
-  load_and_authorize_resource :ticket
+  load_and_authorize_resource :ticket, :find_by => :scoped_id
   load_and_authorize_resource :comment, :through => :ticket
 
 
