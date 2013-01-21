@@ -5,13 +5,13 @@ class GithubController < ApplicationController
 
   def commit
     p "git commit seen for project #{@project}"
-    params[:commits].each do |commit|
+    params["commits"].each do |commit|
       p "processing commit: #{commit}"
       #whodunnit
-      if user = User.find_by_email(commit[:author][:email])
+      if user = User.find_by_email(commit["author"]["email"])
         p "comitter is user #{user}"
         #find the ticket it relates to
-        commit_msg = commit[:message]
+        commit_msg = commit["message"]
         p "commit message looks like #{commit_msg}"
         #parse the message to get the ticket number(s)
         #which looks like [#123]
@@ -27,7 +27,7 @@ class GithubController < ApplicationController
           ticket.comments.create(:body => decorated_message, :user_id => user.id)
         end
       end #no user  = no comment
-    end if params[:commits]
+    end if params["commits"]
   end
 =begin
     commits": [ { "added": [], "author": { "email": "fm.marais@gmail.com", "name": "fmarais", "username": "fmarais" },
@@ -40,4 +40,5 @@ class GithubController < ApplicationController
                                "timestamp": "2012-12-14T05:46:15-08:00",
                                "url": "https://github.com/Shuntyard/Conductor/commit/da847bbe15e09b33dcb84da1ed195b4fcf4da411" }
 =end
+  render :text => "commit received"
 end
