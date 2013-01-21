@@ -19,7 +19,9 @@ class TicketsController < ApplicationController
     #also include tickets with IDs that match
     @search = @tickets.search(params[:search])
     @combined_search = @search.all
-    @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search]
+
+    #remember not to search for blank IDs, it will find '%%' matches, which deplicates results: con671
+    @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search] && !params[:search].values.first.blank?
     #need to resort if we added to the results
     @combined_search.sort!{|a,b| a.id<=>b.id} if params[:search]
 
