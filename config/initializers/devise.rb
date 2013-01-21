@@ -206,10 +206,10 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   #staging:
-  #config.omniauth :github, 'bd6407eded6365278e4b', 'b5eb70fb4f6eee80c969435ddebe439ce45411e4', :scope => 'repo'
+  #config.omniauth :github, 'bd6407eded6365278e4b', 'b5eb70fb4f6eee80c969435ddebe439ce45411e4' #, :scope => ''
 
   #see config/environments for setting these values
-  config.omniauth :github, ENV['GITHUB_CLIENT_ID'] , ENV['GITHUB_CLIENT_SECRET'], :scope => 'repo'
+  config.omniauth :github, ENV['GITHUB_CLIENT_ID'] , ENV['GITHUB_CLIENT_SECRET'] #, :scope => ''
 
   #see http://developer.github.com/v3/oauth/#scopes for scope details
   #go read https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview
