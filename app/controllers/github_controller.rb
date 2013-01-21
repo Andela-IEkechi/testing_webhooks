@@ -5,14 +5,10 @@ class GithubController < ApplicationController
   load_resource :project
 
   def commit
-    p "processing commits..."
-    p params
-    payload = params["payload"]
+    payload = JSON.parse(params["payload"])
     payload["commits"].each do |commit|
       #whodunnit
       if user = User.find_by_email(commit["author"]["email"])
-        p "found user #{user}"
-
         #find the ticket it relates to
         commit_msg = commit["message"]
         #parse the message to get the ticket number(s)
@@ -26,7 +22,6 @@ class GithubController < ApplicationController
           ticket.comments.create(:body => decorated_message, :user_id => user.id)
         end
       else
-        p "no user, no comment"
       end #no user  = no comment
     end if payload["commits"]
     render :text => "commit received"
