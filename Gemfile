@@ -29,10 +29,6 @@ gem "fog"
 #monitoring
 gem 'crashlog', '>= 1.0.4'
 
-group :production do
-  gem 'newrelic_rpm'
-end
-
 #searching
 gem 'meta_search'
 
