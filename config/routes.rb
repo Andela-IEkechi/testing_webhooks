@@ -12,7 +12,7 @@ Conductor::Application.routes.draw do
     resources :sprints
   end
 
-  post 'github/commit/:project_id'
+  post 'github/commit/:project_id' => 'github#commit'
 
   root :to => 'projects#index'
 end
