@@ -24,7 +24,7 @@ class GithubController < ApplicationController
           #post the commit message as a ticket comment
           decorated_message = "#{commit[:message]}\n\n[#{commit[:id]}](#{commit[:url]})"
           p "comment looks like #{decorated_message}"
-          ticket.comments.create(:body => , decorated_message, :user_id => user.id)
+          ticket.comments.create(:body => decorated_message, :user_id => user.id)
         end
       end #no user  = no comment
     end if params[:commits]
