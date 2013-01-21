@@ -6,6 +6,8 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :sprint, :through => :project
   load_and_authorize_resource :ticket, :except => :index, :find_by => :scoped_id
 
+  before_filter :load_ticket_parents
+
   def index
     @tickets = @sprint.assigned_tickets if @sprint
     @tickets ||= @feature.assigned_tickets if @feature
@@ -17,10 +19,12 @@ class TicketsController < ApplicationController
     #also include tickets with IDs that match
     @search = @tickets.search(params[:search])
     @combined_search = @search.all
-    @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search]
-    #need to resort if we added to the results
-    @combined_search.sort!{|a,b| a.id<=>b.id} if params[:search]
 
+    #remember not to search for blank IDs, it will find '%%' matches, which deplicates results: con671
+    @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search] && !params[:search].values.first.blank?
+
+    #need to resort both because we added to the set, and because metasearch seems to kill the model ordering
+    @combined_search.sort!{|a,b| a.id<=>b.id}
     @tickets = Kaminari::paginate_array(@combined_search).page(params[:page])
 
     respond_to do |format|
@@ -55,7 +59,7 @@ class TicketsController < ApplicationController
     @ticket.comments.first.user = current_user
 
     if @ticket.save
-      flash.keep[:info] = "Ticket was added"
+      flash.keep[:notice] = "Ticket was added"
       if params[:create_another]
         @ticket.reload #refresh the assoc to last_comment
         redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
@@ -109,6 +113,14 @@ class TicketsController < ApplicationController
         params[val] ||= params[:search][val] if params[:search][val] && !params[:search][val].empty?
         params[:search].delete(val)
       end
+    end
+  end
+
+  def load_ticket_parents
+    #if we dont pass the feature_id/sprint_id in on the url, we grab the ones from the ticket, if any
+    if @ticket
+      @sprint ||= @ticket.sprint
+      @feature ||= @ticket.feature
     end
   end
 
