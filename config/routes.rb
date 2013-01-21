@@ -3,11 +3,10 @@ Conductor::Application.routes.draw do
 
   resources :users
 
-  resources :tickets do
-    resources :comments
-  end
-
   resources :projects do
+    resources :tickets do
+      resources :comments
+    end
     resource  :access
     resources :features
     resources :sprints
