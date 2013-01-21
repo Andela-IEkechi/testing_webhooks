@@ -35,6 +35,9 @@ class User < ActiveRecord::Base
         #user.name ||= auth.extra.raw_info.name
         user.provider ||= auth.provider
         user.uid ||= auth.uid
+        p "saving updated user..."
+        user.valid?
+        p "errors? #{user.errors}"
         user.save
       else
         p "creating a new GH user"
