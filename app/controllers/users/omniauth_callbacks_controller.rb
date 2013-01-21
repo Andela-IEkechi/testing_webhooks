@@ -1,8 +1,7 @@
-class User::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def github
     # You need to implement the method below in your model (e.g. app/models/user.rb)
-    binding.pry
     @user = User.find_for_github_oauth(request.env["omniauth.auth"], current_user)
 
     if @user.persisted?
