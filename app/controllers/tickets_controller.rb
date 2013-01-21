@@ -55,7 +55,7 @@ class TicketsController < ApplicationController
     @ticket.comments.first.user = current_user
 
     if @ticket.save
-      flash.keep[:info] = "Ticket was added"
+      flash.keep[:notice] = "Ticket was added"
       if params[:create_another]
         @ticket.reload #refresh the assoc to last_comment
         redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
