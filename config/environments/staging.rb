@@ -79,4 +79,12 @@ Conductor::Application.configure do
     :password  => "cb7fae88-04ef-44e9-9d33-b848e302e3a2"
   }
 
+  #set up the GH values
+  #we DONT HAVE TO do this on heroku, I just put the values in here for reference.
+  #Heroku already has a configured set of these values on the staging server
+  # config.before_configuration do
+  #   ENV['GITHUB_CLIENT_ID'] = 'bd6407eded6365278e4b'
+  #   ENV['GITHUB_CLIENT_SECRET'] = 'b5eb70fb4f6eee80c969435ddebe439ce45411e4'
+  # end
+
 end
