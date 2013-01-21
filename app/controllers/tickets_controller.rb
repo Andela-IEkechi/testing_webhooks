@@ -6,6 +6,8 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :sprint, :through => :project
   load_and_authorize_resource :ticket, :except => :index, :find_by => :scoped_id
 
+  before_filter :load_ticket_parents
+
   def index
     @tickets = @sprint.assigned_tickets if @sprint
     @tickets ||= @feature.assigned_tickets if @feature
@@ -109,6 +111,14 @@ class TicketsController < ApplicationController
         params[val] ||= params[:search][val] if params[:search][val] && !params[:search][val].empty?
         params[:search].delete(val)
       end
+    end
+  end
+
+  def load_ticket_parents
+    #if we dont pass the feature_id/sprint_id in on the url, we grab the ones from the ticket, if any
+    if @ticket
+      @sprint ||= @ticket.sprint
+      @feature ||= @ticket.feature
     end
   end
 
