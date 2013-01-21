@@ -6,6 +6,8 @@ class GithubController < ApplicationController
 
   def commit
     p "processing commits..."
+    p params
+    payload = params["payload"]
     payload["commits"].each do |commit|
       #whodunnit
       if user = User.find_by_email(commit["author"]["email"])
