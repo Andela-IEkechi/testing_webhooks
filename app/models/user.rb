@@ -27,20 +27,13 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_for_github_oauth(auth, signed_in_resource=nil)
-    p "looking for github user..."
     unless user = User.where(:provider => auth.provider, :uid => auth.uid).first
-      p 'looking for email user'
       if user = User.find_by_email(auth.info.email)
-        p "updating an existing user to use GH also"
         #user.name ||= auth.extra.raw_info.name
         user.provider ||= auth.provider
         user.uid ||= auth.uid
-        p "saving updated user..."
-        user.valid?
-        p "errors? #{user.errors}"
         user.save
       else
-        p "creating a new GH user"
         user = User.create(#name:auth.extra.raw_info.name,
                            provider:auth.provider,
                            uid:auth.uid,
@@ -49,7 +42,6 @@ class User < ActiveRecord::Base
                            )
       end
     end
-    p "user: #{user}"
     user
   end
 end
