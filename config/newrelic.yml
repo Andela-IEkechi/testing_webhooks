@@ -182,7 +182,7 @@ common: &default_settings
 # NOTE if your application has other named environments, you should
 # provide newrelic configuration settings for these environments here.
 
-development:
+xdevelopment:
   <<: *default_settings
   # Turn off communication to New Relic service in development mode (also
   # 'enabled').
@@ -195,7 +195,7 @@ development:
   # executed since starting the app server.
   # NOTE: There is substantial overhead when running in developer mode.
   # Do not use for production or load testing.
-  developer_mode: true
+  developer_mode: false
 
   # Enable textmate links
   # textmate: true
