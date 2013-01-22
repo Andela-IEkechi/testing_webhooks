@@ -1,19 +1,7 @@
 <div class="well">
-  <h1 class="pull-right">#<%= @ticket.id %></h1>
+  <h1 class="pull-right">#<%= @ticket.scoped_id %></h1>
   <h3><%= @ticket.title %></h3>
   <h4><%= @ticket.parent %></h4>
-
-  <h5  id='git-commands-toggle'>Show git flow commands &nbsp;<b class="icon-chevron-down"></b></h5>
-  <div id='git-commands' style="display: none">
-    <h5>Hide git flow commands &nbsp;<b class="icon-chevron-up"></b></h5>
-    <code>
-      git flow feature start con<%= @ticket.id %>
-    </code>
-    <br>
-    <code>
-      git push --set-upstream origin feature/con<%= @ticket.id %>
-    </code>
-  </div>
 </div>
 <%= render :partial => '/comments/comment', :collection => @ticket.comments %>
 

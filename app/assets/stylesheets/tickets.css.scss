@@ -3,7 +3,6 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .ticket-info {
-  width: 335px;
 }
 
 .label {
@@ -11,14 +10,14 @@
   text-shadow: none;
 }
 .label-ticket {
-  width:100px;
+  width:31%;
   display: inline-block;
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .label-missing {
-  width:100px;
+  width:31%;
   display: inline-block;
   background: none;
 }
@@ -44,4 +43,8 @@
   font-weight: lighter;
   line-height: 10px;
   height: 10px;
+}
+
+.form-search {
+  margin: 0 0 5px;
 }
