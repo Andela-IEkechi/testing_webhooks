@@ -16,7 +16,7 @@ class Sprint < ActiveRecord::Base
   def running?
     Date.today <= due_on
   end
-
+  
   def open?
     running? || has_open_tickets?
   end
