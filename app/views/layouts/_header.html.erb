@@ -25,7 +25,7 @@
 				<li>
 					<%= link_to "My Tickets", projects_path() %>
 				</li>
-				<% if @project %>
+				<% if @project && !@project.new_record? %>
 				<li class="heading"><%= link_to @project, project_path(@project) %></li>
 				<% end %>
 			</ul>
