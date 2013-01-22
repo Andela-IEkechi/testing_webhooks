@@ -38,11 +38,12 @@ class Ticket < ActiveRecord::Base
   end
 
   def user
-    get_last(:user)
+    #the user is the guy who logged the ticket, ie, the owner of the first comment on the ticket.
+    get_first(:user)
   end
 
   def user_id
-    get_last(:user) && get_last(:user).id || nil
+    user.id rescue nil
   end
 
   def cost
@@ -85,6 +86,10 @@ class Ticket < ActiveRecord::Base
   private
 
   #this returns the values as set in the last comment
+  def get_first(attr)
+    comments.first.try(attr)
+  end
+
   def get_last(attr)
     comments.last.try(attr)
   end
