@@ -8,7 +8,7 @@ class GithubController < ApplicationController
     payload = JSON.parse(params["payload"])
     payload["commits"].each do |commit|
       #whodunnit
-      if user = User.find_by_email(commit["author"]["email"])
+      if user = User.find_for_commit(commit["author"]["email"])
         #find the ticket it relates to
         commit_msg = commit["message"]
         #parse the message to get the ticket number(s)
