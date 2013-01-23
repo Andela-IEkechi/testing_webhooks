@@ -27,9 +27,11 @@ div.comment-statusbar {
       border-right: 0;
     }
   }
-  /*.comment-actions {
-    a {
-      color: white;
+  .comment-actions {
+    span {
+      i {
+        padding: 3px;
+      }
     }
-  }*/
+  }
 }
