@@ -3,6 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .ticket-info {
+  text-align: center !important;
 }
 
 .label {
@@ -17,8 +18,6 @@
   text-overflow: ellipsis;
 }
 .label-missing {
-  width:29%;
-  display: inline-block;
   background: none;
 }
 .label-feature {
@@ -26,6 +25,9 @@
 }
 .label-sprint {
   background-color: darkcyan;
+}
+.label-status {
+  //use default grey
 }
 
 #git-commands h5, #git-commands-toggle {
@@ -47,4 +49,10 @@
 
 .form-search {
   margin: 0 0 5px;
+}
+
+.ticket-title {
+  h1 {
+    color: #579803;
+  }
 }
