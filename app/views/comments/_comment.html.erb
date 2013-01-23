@@ -14,50 +14,70 @@
   end
 %>
 
-<div class="well">
-  <% if can?(:manage, comment) %>
-  <div class="pull-right">
-    <% if comment_counter == 0 %>
-      <p>
-        <%= link_to "edit ticket", edit_project_ticket_path(@ticket.project, @ticket) %> |
-        <%= link_to "remove ticket", project_ticket_path(@ticket.project, @ticket), :method => :delete, :data => { :confirm => 'Are you sure?' } %>
-      </p>
-    <% else %>
-      <p>
-        <%= link_to "edit", edit_project_ticket_comment_path(@ticket.project, @ticket, comment) %> |
-        <%= link_to "remove", project_ticket_comment_path(@ticket.project, @ticket, comment), :method => :delete, :data => { :confirm => 'Are you sure?' } %>
-      </p>
-    <% end %>
-  </div>
-  <% end %>
+<% if comment.first? %>
+<div class="ticket-title">
+  <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
+  <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
+</div>
+<% end %>
 
+<div class="comment-container">
   <% if comment.user %>
-    <p><b><%= comment.user.to_s %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago</p>
+    <p class="muted"><%= comment.user.to_s %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
   <% end %>
   <div><%= comment.html.html_safe %></div>
 
   <% comment.assets && comment.assets.each do |asset| %>
-    <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
+    <%= link_to asset.name, asset.payload_url, :target => '_blank', :title => number_to_human_size(asset.payload.file.size) %><br />
   <% end %>
 
-  <% if changeset.size > 0 %>
   <div class="comment-statusbar">
-    <% if changeset[:status_id] %>
-      <span>state: <b><%= comment.status %></b></span>
+    <% if can?(:manage, comment) %>
+    <div class="pull-right comment-actions">
+      <% unless comment.first? %>
+          <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
+            <span><i class='icon-edit'></i>edit</span>
+          <% end %>
+          &nbsp; 
+          <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
+            <span><i class='icon-trash'></i>remove</span>
+          <% end %>
+      <% end %>
+    </div>
     <% end %>
-    <% if changeset[:feature_id] %>
-      <span>feature: <b><%= comment.feature || 'none' %></b></span>
-    <% end %>
-    <% if changeset[:sprint_id] %>
-      <span>sprint: <b><%= comment.sprint || 'none' %></b></span>
-    <% end %>
-    <% if changeset[:assignee_id] %>
-      <span>assignee: <b><%= comment.assignee || 'none' %></b></span>
-    <% end %>
-    <% if changeset[:cost] %>
-      <span>cost: <b><%= cost_long(comment.cost) %></b></span>
-    <% end %>
+
+    <ul class="inline">
+      <% if changeset[:status_id] %>
+        <li>
+          state: <b><%= comment.status %></b>
+        </li>
+      <% end %>
+      <% if changeset[:feature_id] %>
+        <li>
+          feature: <b><%= comment.feature || 'none' %></b>
+        </li>
+      <% end %>
+      <% if changeset[:sprint_id] %>
+        <li>
+          sprint: <b><%= comment.sprint || 'none' %></b>
+        </li>
+      <% end %>
+      <% if changeset[:assignee_id] %>
+        <li>
+          assignee: <b><%= comment.assignee || 'none' %></b>
+        </li>
+      <% end %>
+      <% if changeset[:cost] %>
+        <li>
+          cost: <b><%= cost_long(comment.cost) %></b>
+        </li>
+      <% end %>
+      <% if false && changeset.keys.count == 0 %>
+        <li>
+          no change
+        </li>
+      <% end %>
+    </ul>
   </div>
-  <% end %>
 
 </div>
