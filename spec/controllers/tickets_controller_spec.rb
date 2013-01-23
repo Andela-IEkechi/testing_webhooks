@@ -153,11 +153,11 @@ describe TicketsController do
             @attrs.merge!(:project_id => @project.id, :feature_id => @feature.id)
             post :create, :project_id => @project.id, :feature_id => @feature.id, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id :feature_id => @feature))
+            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id, :feature_id => @feature))
           else
             post :create, :project_id => @project.id, :ticket => @attrs
             response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id)
+            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id))
           end
         end
       end

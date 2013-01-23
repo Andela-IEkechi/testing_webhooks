@@ -1,6 +1,9 @@
 class User < ActiveRecord::Base
+  has_one :account
   has_many :projects, :dependent => :destroy #projects we own
   has_and_belongs_to_many :participations, :association_foreign_key => 'project_id', :class_name => 'Project'
+
+  after_create :setup_plan
 
   # Include default devise modules. Others available are:
   #  :lockable, :timeoutable
@@ -43,5 +46,11 @@ class User < ActiveRecord::Base
       end
     end
     user
+  end
+
+  private
+
+  def setup_plan
+    self.create_account
   end
 end
