@@ -21,6 +21,9 @@ class Comment < ActiveRecord::Base
   validates :user_id, :presence => true
   validates :cost, :inclusion => {:in => Ticket::COST}
 
+  #we need a scope to target all but the first comment
+  scope :subsequent, order(:id).offset(1)
+
   def to_s
     title
   end

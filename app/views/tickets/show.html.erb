@@ -2,18 +2,10 @@
   <h1 class="pull-right">#<%= @ticket.scoped_id %></h1>
   <h3><%= @ticket.title %></h3>
   <h4><%= @ticket.parent %></h4>
-
-  <% comment = @ticket.last_comment %>
-  <div class="ticket-statusbar">
-    <span>state: <b><%= comment.status %></b></span>
-    <span>feature: <b><%= comment.feature || 'none' %></b></span>
-    <span>sprint: <b><%= comment.sprint || 'none' %></b></span>
-    <span>assignee: <b><%= comment.assignee || 'none' %></b></span>
-    <span>cost: <b><%= cost_long(comment.cost) %></b></span>
-  </div>
-
+  <%= render :partial => '/comments/comment', :object => @ticket.comments.first %>
 </div>
-<%= render :partial => '/comments/comment', :collection => @ticket.comments %>
+
+<%= render :partial => '/comments/comment', :collection => @ticket.comments.subsequent %>
 
 <%= render :partial => '/comments/form' %>
 
