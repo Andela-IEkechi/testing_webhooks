@@ -42,6 +42,10 @@ class Comment < ActiveRecord::Base
     ticket.comments.size == 1
   end
 
+  def first?
+    ticket.comments.first.id == self.id
+  end
+
   private
 
   def update_ticket
