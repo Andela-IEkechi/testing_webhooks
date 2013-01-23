@@ -31,3 +31,5 @@ class GithubController < ApplicationController
     render :text => "commit received"
   end
 end
+
+
