@@ -37,4 +37,11 @@
       </li>
     <% end %>
   <% end %>
+  <% if action_name == 'index' %>
+    <li>
+      <%= link_to new_project_path() do %>
+      <span class="navico"><i class="icon-plus navico"></i></span>add a new project
+      <% end %>
+    </li>
+  <% end %>
 </ul>
