@@ -3,17 +3,28 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
+.comment-container {
+}
+
+hr {
+  border: solid 1px #579803;
+  width: 80%;
+  margin: 15px auto;
+}
+
 div.comment-statusbar {
-  width:100%;
-  border-top: 1px solid #ccc;
-  text-align:center;
-  span {
-    color: #444;
-    pading-right: 30px;
-    display: inline-block;
-    b {
-      color: #000;
+  background-color: #579803;
+  ul  {
+    list-style-type: none; //bootstrap supports this, but not in the gem we use...yet we should drop this style when "class='inline' is available"
+    border-left: 1px solid grey;
+    li {
+      border-right: 1px solid grey;
     }
   }
+  .comment-actions {
+    a {
+      color: white;
+    }
 
+  }
 }

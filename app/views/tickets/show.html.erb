@@ -1,11 +1,4 @@
-<div class="well">
-  <h1 class="pull-right">#<%= @ticket.scoped_id %></h1>
-  <h3><%= @ticket.title %></h3>
-  <h4><%= @ticket.parent %></h4>
-  <%= render :partial => '/comments/comment', :object => @ticket.comments.first %>
-</div>
-
-<%= render :partial => '/comments/comment', :collection => @ticket.comments.subsequent %>
+<%= render :partial => '/comments/comment', :collection => @ticket.comments %>
 
 <%= render :partial => '/comments/form' %>
 
