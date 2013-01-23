@@ -22,17 +22,18 @@ div.comment-statusbar {
     list-style-type: none; //bootstrap supports this, but not in the gem we use...yet we should drop this style when "class='inline' is available"
 
     li {
-      border-right: 1px solid grey;
+      border-right: 1px solid #A7A7A7;
     }
     li:last-child {
       border-right: 0;
     }
   }
   .comment-actions {
-    span {
-      i {
-        padding: 3px;
-      }
+    font-size: 13px;
+    i {
+    padding-right: 8px;
+    margin-right: 8px;
+    border-right: 1px solid #A7A7A7;
     }
   }
 }
