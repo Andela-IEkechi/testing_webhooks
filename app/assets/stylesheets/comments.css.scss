@@ -30,10 +30,12 @@ div.comment-statusbar {
   }
   .comment-actions {
     font-size: 13px;
-    i {
-    padding-right: 8px;
-    margin-right: 8px;
-    border-right: 1px solid #A7A7A7;
+    span {
+      padding-left: 20px;
+      i {
+        padding-right: 3x;
+        margin-right: 3px;
+      }
     }
   }
 }
