@@ -4,6 +4,10 @@
 
 .comment-container {
   margin-bottom: 50px;
+  p.muted {
+    border-bottom: 1px solid #EFEFEF;
+    font-size: 12px;
+  }
 }
 
 div.comment-statusbar {
@@ -12,7 +16,7 @@ div.comment-statusbar {
   padding-right: 10px;
   line-height:35px;
   height:35px;
-  border-radius: 2px;
+  @include border-radius(3px);
   ul  {
     list-style-type: none; //bootstrap supports this, but not in the gem we use...yet we should drop this style when "class='inline' is available"
 

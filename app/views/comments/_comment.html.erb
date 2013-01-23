@@ -17,13 +17,13 @@
 <% if comment.first? %>
 <div class="ticket-title">
   <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
-  <h2><%= @ticket.title %><small><%= @ticket.parent %></small></h2>
+  <h2><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h2>
 </div>
 <% end %>
 
 <div class="comment-container">
   <% if comment.user %>
-    <p><b><%= comment.user.to_s %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago</p>
+    <p class="muted"><%= comment.user.to_s %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
   <% end %>
   <div><%= comment.html.html_safe %></div>
 
