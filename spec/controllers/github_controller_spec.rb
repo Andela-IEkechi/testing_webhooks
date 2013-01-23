@@ -48,9 +48,6 @@ describe GithubController, :focus => true do
 
     @ticket.comments.count.should eq(1)
     ticket2.comments.count.should eq(1)
-
-    p "#{@ticket.comments.first.body}"
-
   end
 
 end

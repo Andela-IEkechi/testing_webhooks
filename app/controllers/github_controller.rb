@@ -6,18 +6,14 @@ class GithubController < ApplicationController
 
   def commit
     payload = JSON.parse(params["payload"])
-    p "parsed json: #{payload}"
     payload["commits"].each do |commit|
-      p "this commit: #{commit}"
       #whodunnit
       if user = User.find_by_email(commit["author"]["email"])
         #find the ticket it relates to
         commit_msg = commit["message"]
-        p "message: #{commit_msg}"
         #parse the message to get the ticket number(s)
         #which looks like [#123]
         commit_msg.scan(/\[#(\d+\.*)\]/).flatten.each do |ticket_ref|
-          p "ticket ref: #{ticket_ref}"
           #looks like '123'
           #find the ticket the matches
           ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
@@ -31,5 +27,3 @@ class GithubController < ApplicationController
     render :text => "commit received"
   end
 end
-
-#some shit here
