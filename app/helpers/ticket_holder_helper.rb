@@ -15,7 +15,9 @@ module TicketHolderHelper
   #helps to set the color for the progress bar
   def completion_state(holder)
     case completion_percentage(holder)
-    when 0..25
+    when 0
+      return "grey"
+    when 1..25
       return "danger"
     when 26..75
       return "warning"
