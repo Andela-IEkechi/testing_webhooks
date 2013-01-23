@@ -2,7 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-
 .comment-container {
   margin-bottom: 50px;
 }
@@ -18,9 +17,10 @@ div.comment-statusbar {
   padding-left: 5px;
   padding-right: 10px;
   line-height:35px;
+  height:35px;
   ul  {
     list-style-type: none; //bootstrap supports this, but not in the gem we use...yet we should drop this style when "class='inline' is available"
-    
+
     li {
       border-right: 1px solid grey;
     }
