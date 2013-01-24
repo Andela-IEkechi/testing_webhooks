@@ -99,7 +99,6 @@ td.date {
   color: white;
   font-size: 13px;
 }
-
 .conductor-table
 {
   .id
@@ -121,5 +120,10 @@ td.date {
   .count
   {
     width:5%;
+  }
+  .overflow
+  {
+    text-overflow:white-space nowrap;
+    overflow:hidden;
   }
 }
