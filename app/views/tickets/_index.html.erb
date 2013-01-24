@@ -11,7 +11,7 @@
  %>
 
  <div id="tickets-list-container-<%= parent %>">
-  <table class="table table-bordered table-striped conductor-table" id="ticket-list">
+  <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
       <div class="pull-right">
         <% if @search %>
@@ -32,11 +32,11 @@
     <!--title row -->
     <thead>
     <tr>
-      <th class="id">#</th>
-      <th class="name">Title</th>
-      <th class="emailx">Assignee</th>
-      <th class="state">State</th>
-      <th class="count">Cost</th>
+      <th class="width-5">#</th>
+      <th class="width-45">Title</th>
+      <th class="width-20">Assignee</th>
+      <th class="width-25">State</th>
+      <th class="width-5">Cost</th>
     </tr>
     </thead>
     <tbody>
@@ -45,8 +45,8 @@
       <td><%= ticket.scoped_id %></td>
       <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
       <td>
-        <div class="overflow email">
-          <%#= ticket.assignee %>kajsh kjahs kjhkjh ghf
+        <div class="overflow">
+          <%= ticket.assignee %>
         </div>
       </td>
       <td class="ticket-info">
@@ -54,7 +54,7 @@
           <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
           <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
       </td>
-      <td  class="count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
+      <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
     </tr>
     <% end if @tickets %>
     <% if @tickets && @tickets.count == 0 %>
