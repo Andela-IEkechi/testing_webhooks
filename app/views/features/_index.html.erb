@@ -3,10 +3,10 @@
     <h2>Features</h2>
   </caption>
   <tr>
-    <th class="span1">#</th>
-    <th>Title</th>
-    <th class="span3">Progress</th>
-    <th class="span1">Tickets</th>
+    <th style="width:5%;">#</th>
+    <th style="width:65%;">Title</th>
+    <th style="width:25%;">Progress</th>
+    <th style="width:5%;">Tickets</th>
   </tr>
   <% features.each do |feature| %>
   <tr>
@@ -24,7 +24,7 @@
           <div class="bar bar-<%= completion_state(feature) %> " style="width: <%= completion_percentage(feature) %>%;"></div>
         </div>
       </td>
-    <td class="span1 count" title="tickets in this feature"><span class="badge badge-info"><%= feature.assigned_tickets.count %></span></td>
+    <td class="count" title="tickets in this feature"><span class="badge badge-info"><%= feature.assigned_tickets.count %></span></td>
   </tr>
   <% end %>
   <% if features.count == 0 %>
