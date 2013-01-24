@@ -99,3 +99,27 @@ td.date {
   color: white;
   font-size: 13px;
 }
+
+.conductor-table
+{
+  .id
+  {
+    width:5%;
+  }
+  .name
+  {
+    width:45%;
+  }
+  .date, .email
+  {
+    width:20%;
+  }
+  .progress, .state
+  {
+    width:25%;
+  }
+  .count
+  {
+    width:5%;
+  }
+}

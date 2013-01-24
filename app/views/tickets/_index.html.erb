@@ -11,7 +11,7 @@
  %>
 
  <div id="tickets-list-container-<%= parent %>">
-  <table class="table table-bordered table-striped" id="ticket-list">
+  <table class="table table-bordered table-striped conductor-table" id="ticket-list">
     <caption>
       <div class="pull-right">
         <% if @search %>
@@ -32,11 +32,11 @@
     <!--title row -->
     <thead>
     <tr>
-      <th style="width:5%;">#</th>
-      <th style="width:45%;">Title</th>
-      <th style="width:20%;">Assignee</th>
-      <th style="width:25%;">State</th>
-      <th style="width:5%;">Cost</th>
+      <th class="id">#</th>
+      <th class="name">Title</th>
+      <th class="email">Assignee</th>
+      <th class="state">State</th>
+      <th class="count">Cost</th>
     </tr>
     </thead>
     <tbody>
