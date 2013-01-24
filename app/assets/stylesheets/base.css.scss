@@ -91,8 +91,11 @@ td.date {
   height: 15px;
 }
 
-.progress-grey
+.progress-count
 {
-  background-image:none;
-  background-color:rgb(145,145,145);
+  text-align: center;
+  margin-bottom: -18px;
+  text-shadow: black 1px 1px 3px;
+  color: white;
+  font-size: 13px;
 }

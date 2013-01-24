@@ -15,14 +15,17 @@ module TicketHolderHelper
   #helps to set the color for the progress bar
   def completion_state(holder)
     case completion_percentage(holder)
-    when 0
-      return "grey"
-    when 1..25
+    when 0..25
       return "danger"
     when 26..75
       return "warning"
     else
       return "success"
     end
+  end
+
+  def completion_str(holder)
+    return "not started" if completion_percentage(holder) == 0
+    "#{completion_percentage(holder)}%"
   end
 end
