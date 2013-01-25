@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20130124140518) do
 
   create_table "api_keys", :force => true do |t|
     t.integer  "project_id"
-    t.integer  "name",       :null => false
+    t.string   "name",       :null => false
     t.string   "token",      :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

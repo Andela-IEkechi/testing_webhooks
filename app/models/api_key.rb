@@ -2,9 +2,11 @@ class ApiKey < ActiveRecord::Base
   before_save :generate_token
   belongs_to :project
 
-  validates :name, :unique => {:scope => :project_id}, :length => {:minimum => 5}
-  validates :token, :presence => true, :unique => true
+  validates :name, :uniqueness => {:scope => :project_id}, :length => {:minimum => 5}
+  validates :token, :presence => true, :uniqueness => true
   validates :project_id, :presence => true
+
+  attr_accessible :project_id, :token, :name
 
   private
   def generate_token
@@ -15,4 +17,3 @@ class ApiKey < ActiveRecord::Base
     end
   end
 end
-# TODO: we need to regenerate the key until unique
