@@ -40,8 +40,10 @@ ActiveRecord::Schema.define(:version => 20130125103633) do
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
     t.text     "rendered_body"
-    t.integer  "api_key_id"
+    t.string   "api_key_name"
   end
+
+  add_index "comments", ["api_key_name"], :name => "index_comments_on_api_key_name", :unique => true
 
   create_table "features", :force => true do |t|
     t.string   "title",       :null => false
