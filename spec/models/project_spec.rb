@@ -33,11 +33,6 @@ describe Project do
     project.user.should_not be_nil
   end
 
-  it "should have a sprint duration" do
-      project = create(:project)
-      project.sprint_duration.should_not be_nil
-  end
-
   it "should not allow duplicate titles for the same user" do
     joe = create(:user)
     project_one = create(:project, :user => joe)

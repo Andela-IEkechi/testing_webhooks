@@ -5,13 +5,12 @@ describe ApiKey, :focus => true do
   context "has a factory that"  do
     it "should create a valid api_key" do
       api_key = create(:api_key)
-      # raise api_key.token
       api_key.should_not be_nil
       api_key.should be_valid
     end
   end
 
-  context "validates that" do
+  context "validates that it" do
     before(:each) do
       @api_key = create(:api_key)
     end
@@ -21,8 +20,9 @@ describe ApiKey, :focus => true do
       @api_key.should_not be_valid
     end
 
-    it "must have a token" do
-      @api_key.token = nil
+    it "must have a unique token" do
+      api_tmp = create(:api_key)
+      @api_key.token = api_tmp.token
       @api_key.should_not be_valid
     end
 
