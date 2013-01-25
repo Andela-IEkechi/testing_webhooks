@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  set_primary_key :name
+
   include Markdownable
   after_create :update_ticket
 
