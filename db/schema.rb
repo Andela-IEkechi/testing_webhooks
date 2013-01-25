@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20130125142145) do
     t.integer  "status_id"
     t.text     "body"
     t.integer  "cost",          :default => 0
-    t.integer  "user_id",                      :null => false
+    t.integer  "user_id"
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
     t.text     "rendered_body"
