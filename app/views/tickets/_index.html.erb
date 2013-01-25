@@ -10,7 +10,7 @@
   parent ||= "project-#{project_id}" if project_id
  %>
 
-<div id="tickets-list-container-<%= parent %>">
+ <div id="tickets-list-container-<%= parent %>">
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
       <div class="pull-right">
@@ -30,24 +30,31 @@
       <h2>Tickets</h2>
     </caption>
     <!--title row -->
+    <thead>
     <tr>
-      <th class="span1">#</th>
-      <th>Title</th>
-      <th class="span2">Assignee</th>
-      <th class="span3">State</th>
-      <th class="span1">Cost</th>
+      <th class="width-5">#</th>
+      <th class="width-45">Title</th>
+      <th class="width-20">Assignee</th>
+      <th class="width-25">State</th>
+      <th class="width-5">Cost</th>
     </tr>
+    </thead>
+    <tbody>
     <% @tickets.each do |ticket| %>
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
-      <td class="span1"><%= ticket.scoped_id %></td>
+      <td><%= ticket.scoped_id %></td>
       <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
-      <td><%= ticket.assignee %></td>
+      <td>
+        <div class="overflow">
+          <%= ticket.assignee %>
+        </div>
+      </td>
       <td class="ticket-info">
           <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
           <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
           <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
       </td>
-      <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
+      <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
     </tr>
     <% end if @tickets %>
     <% if @tickets && @tickets.count == 0 %>
@@ -63,6 +70,7 @@
         </td>
       </tr>
     <% end %>
+    </tbody>
   </table>
   <%= paginate @tickets,
         :params => {
