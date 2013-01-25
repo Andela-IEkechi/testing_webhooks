@@ -10,7 +10,7 @@ p, b, .label {
 }
 
 a, a:hover, #git-commands-toggle, #git-commands {
-	color: #579803;
+  color: $linkColor;
 }
 
 input:focus, textarea:focus {

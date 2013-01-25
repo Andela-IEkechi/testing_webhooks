@@ -23,7 +23,7 @@
   background: none;
 }
 .label-feature {
-  background-color: #579803;
+  background-color: $linkColor;
 }
 .label-sprint {
   background-color: darkcyan;
@@ -55,6 +55,6 @@
 
 .ticket-title {
   h1 {
-    color: #579803;
+    color: $linkColor;
   }
 }
