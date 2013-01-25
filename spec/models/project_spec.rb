@@ -15,12 +15,6 @@ describe Project do
     project_with_tickets.should have_at_least(1).tickets
   end
 
-  it "should have a working factory that does not have an API key"  do
-    project_without_api = build(:no_api_project)
-    project_without_api.should_not be_nil
-    project_without_api.api_key.should be_nil
-  end
-
   it "gives it's title on to_s" do
     @project.title = "A testing project"
     @project.to_s.should eq(@project.title)
@@ -102,18 +96,16 @@ describe Project do
     }.to change(TicketStatus,:count).by(-2) #two default statuses
   end
 
-  it "should have an API key to allow external parties to interface with it" do
-    @project.api_key.should_not be_nil
+  it "should have optional API keys to allow external parties to interface with it" do
+    @project.api_keys.should have(0).entries
+    expect {
+      @project.api_keys << create(:api_key, :project => @project, :name => "key one")
+      @project.api_keys << create(:api_key, :project => @project, :name => "key two")
+    }.to change{@project.api_keys.count}.from(0).to(2)
   end
 
-  it "should not have an API key" do
-    project_without_api = build(:no_api_project)
-    project_without_api.api_key.should be_nil
-  end
-
-  it "should generate an api_key on create" do
-    project_without_api = create(:no_api_project)
-    project_without_api.api_key.should_not be_blank
+  it "should not have an API key by default" do
+    @project.should have(0).api_keys
   end
 
   context "with participants" do
