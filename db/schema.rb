@@ -11,17 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130125081337) do
+ActiveRecord::Schema.define(:version => 20130125103633) do
 
-  create_table "api_keys", :id => false, :force => true do |t|
-    t.string   "name",       :null => false
+  create_table "api_keys", :primary_key => "name", :force => true do |t|
     t.string   "token",      :null => false
     t.integer  "project_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
-
-  add_index "api_keys", ["name"], :name => "index_api_keys_on_name", :unique => true
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
@@ -43,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20130125081337) do
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
     t.text     "rendered_body"
+    t.string   "api_key_name"
   end
 
   create_table "features", :force => true do |t|
@@ -60,7 +58,6 @@ ActiveRecord::Schema.define(:version => 20130125081337) do
     t.datetime "updated_at",                      :null => false
     t.integer  "user_id",                         :null => false
     t.integer  "tickets_sequence", :default => 0
-    t.integer  "sprint_duration",  :default => 5
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
