@@ -4,6 +4,7 @@ class ApiKey < ActiveRecord::Base
 
   validates :name, :unique => {:scope => :project_id}, :length => {:minimum => 5}
   validates :token, :presence => true, :unique => true
+  validates :project_id, :presence => true
 
   private
   def generate_token
