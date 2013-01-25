@@ -20,16 +20,18 @@ describe ApiKey, :focus => true do
       @api_key.should_not be_valid
     end
 
-    it "must have a unique token" do
-      api_tmp = create(:api_key)
-      @api_key.token = api_tmp.token
-      @api_key.should_not be_valid
-    end
-
     it "must have unique token" do
       duplicate = build(:api_key, :token => @api_key.token)
       duplicate.should_not be_valid
     end
+  end
+
+  it "should generate a new token with :generate_token" do
+    no_token = build(:api_key)
+    no_token.token.should be_blank
+    no_token.generate_token
+    no_token.token.should_not be_blank
+    no_token.should be_valid
   end
 
 end

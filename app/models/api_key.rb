@@ -8,7 +8,7 @@ class ApiKey < ActiveRecord::Base
 
   attr_accessible :project_id, :token, :name
 
-  private
+
   def generate_token
     self.token = Devise.friendly_token
 
