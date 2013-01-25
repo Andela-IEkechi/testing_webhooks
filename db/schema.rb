@@ -13,10 +13,9 @@
 
 ActiveRecord::Schema.define(:version => 20130125103633) do
 
-  create_table "api_keys", :force => true do |t|
-    t.integer  "project_id"
-    t.string   "name",       :null => false
+  create_table "api_keys", :primary_key => "name", :force => true do |t|
     t.string   "token",      :null => false
+    t.integer  "project_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -42,8 +41,6 @@ ActiveRecord::Schema.define(:version => 20130125103633) do
     t.text     "rendered_body"
     t.string   "api_key_name"
   end
-
-  add_index "comments", ["api_key_name"], :name => "index_comments_on_api_key_name", :unique => true
 
   create_table "features", :force => true do |t|
     t.string   "title",       :null => false

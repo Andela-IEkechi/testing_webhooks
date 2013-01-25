@@ -4,6 +4,6 @@ class RemoveApiKeyFromProject < ActiveRecord::Migration
   end
 
   def down
-    add_column :projects, :api_key, :string, :null => false
+    add_column :projects, :api_key, :string, :null => false, :default => ""
   end
 end
