@@ -7,7 +7,7 @@ Conductor::Application.routes.draw do
     resources :tickets do
       resources :comments
     end
-    resource  :api
+    resource  :key
     resource  :access
     resources :features
     resources :sprints
