@@ -96,12 +96,12 @@ describe Project do
     }.to change(TicketStatus,:count).by(-2) #two default statuses
   end
 
-  it "should have optional API keys to allow external parties to interface with it", focus: true do
+  it "should have optional API keys to allow external parties to interface with it" do
     @project.api_keys.should have(0).entries
     expect {
-      @project.api_keys << create(:api_key, :project => @project, :name => "foo")
-      @project.api_keys << create(:api_key, :project => @project, :name => "bar")
-    }.to change{@project.api_keys}.from(0).to(2)
+      @project.api_keys << create(:api_key, :project => @project, :name => "key one")
+      @project.api_keys << create(:api_key, :project => @project, :name => "key two")
+    }.to change{@project.api_keys.count}.from(0).to(2)
   end
 
   it "should not have an API key by default" do

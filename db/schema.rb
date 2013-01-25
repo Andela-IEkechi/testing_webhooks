@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130124140518) do
+ActiveRecord::Schema.define(:version => 20130125081337) do
 
   create_table "api_keys", :force => true do |t|
     t.integer  "project_id"
@@ -55,7 +55,6 @@ ActiveRecord::Schema.define(:version => 20130124140518) do
   create_table "projects", :force => true do |t|
     t.string   "title",                           :null => false
     t.integer  "sprint_duration",  :default => 5
-    t.string   "api_key",                         :null => false
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
     t.integer  "user_id",                         :null => false
