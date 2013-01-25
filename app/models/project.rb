@@ -1,5 +1,4 @@
 class Project < ActiveRecord::Base
-  before_create :set_api_key
   before_create :owner_participation
   after_create :default_statuses
 
@@ -15,7 +14,6 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :ticket_statuses, :participants
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}
-  validates :api_key, :presence => true, :on => :update
 
   def to_s
     title
@@ -25,17 +23,11 @@ class Project < ActiveRecord::Base
     self.participants.order(:email)
   end
 
-
   private
   def default_statuses
     #when we create a new project, we make sure we create at least two statuses for the tickets in the project
     self.ticket_statuses.create(:name => 'new')
     self.ticket_statuses.create(:name => 'closed', :open => false)
-  end
-
-  def set_api_key
-    require 'digest/sha1'
-    self.api_key = Digest::SHA1.hexdigest Time.now.to_s
   end
 
   def owner_participation
