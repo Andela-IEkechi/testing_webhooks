@@ -4,7 +4,6 @@ FactoryGirl.define do
   factory :comment do
     association(:ticket)
     association(:user)
-    association(:api_key)
     cost 1
 
     before(:create) do |comment|
@@ -26,6 +25,11 @@ FactoryGirl.define do
     factory :comment_with_feature_and_sprint do
       association(:feature)
       association(:sprint)
+    end
+
+    factory :comment_by_api_key do
+      user nil
+      association(:api_key)
     end
   end
 end
