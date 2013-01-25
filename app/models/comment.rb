@@ -1,10 +1,12 @@
 class Comment < ActiveRecord::Base
+  set_primary_key :name
+
   include Markdownable
   after_create :update_ticket
 
   belongs_to :ticket #always
   belongs_to :user #the person who made the comment
-  belongs_to :api_key
+  belongs_to :api_key, :foreign_key => 'api_key_name'
   has_one    :project, :through => :ticket
   has_many   :assets
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Comment, :focus => true do 
+describe Comment, :focus => true do
 
   context "has a factory that"  do
     it "should create a valid comment" do
@@ -79,11 +79,8 @@ describe Comment, :focus => true do
         @comment.cost = l
         @comment.should be_valid
       end
-    end
-
-    it "should have a cost no greater than 3" do
-        @comment.cost = 4
-        @comment.should_not be_valid
+      @comment.cost = 4
+      @comment.should_not be_valid
     end
   end
 

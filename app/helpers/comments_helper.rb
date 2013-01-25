@@ -20,4 +20,9 @@ module CommentsHelper
     end
   end
 
+  def author(comment)
+    return comment.user.to_s if comment.user
+    return comment.api_key_name unless comment.api_key_name.blank?
+    'anonymous'
+  end
 end
