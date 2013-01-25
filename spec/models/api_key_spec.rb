@@ -20,6 +20,13 @@ describe ApiKey, :focus => true do
       @api_key.should_not be_valid
     end
 
+    it "must have a name of at least 5 characters" do
+      @api_key.name = "shrt"
+      @api_key.should_not be_valid
+      @api_key.name = "right"
+      @api_key.should be_valid
+    end
+
     it "must have unique token" do
       duplicate = build(:api_key, :token => @api_key.token)
       duplicate.should_not be_valid

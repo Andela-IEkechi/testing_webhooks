@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :comment do
     association(:ticket)
     association(:user)
-    cost 1
+    cost 0
 
     before(:create) do |comment|
       comment.status = create(:ticket_status, :project => comment.project)
