@@ -22,6 +22,7 @@ class Comment < ActiveRecord::Base
   validates :cost, :inclusion => {:in => Ticket::COST}
   validates :status, :presence => true
   validates :api_key_id, :presence => true, :unless => lambda{|record| record.user_id }
+  validates :user_id, :presence => true, :unless => lambda{|record| record.api_key_id }
 
   def to_s
     title
