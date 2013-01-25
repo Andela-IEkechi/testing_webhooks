@@ -13,7 +13,8 @@
 
 ActiveRecord::Schema.define(:version => 20130125103633) do
 
-  create_table "api_keys", :primary_key => "name", :force => true do |t|
+  create_table "api_keys", :id => false, :force => true do |t|
+    t.string   "name",       :null => false
     t.string   "token",      :null => false
     t.integer  "project_id"
     t.datetime "created_at", :null => false

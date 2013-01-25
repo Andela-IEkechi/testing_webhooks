@@ -6,6 +6,6 @@ class CreateApiKey < ActiveRecord::Migration
       t.references :project
       t.timestamps
     end
-    add_index :api_keys, :name, :unique => true
+    #add_index :api_keys, :name, :unique => true
   end
 end
