@@ -64,6 +64,12 @@ describe Comment, :focus => true do
       @comment.should_not be_valid
     end
 
+    # it "must have a api_key or user_id" do
+    #   @comment.user_id = nil
+    #   @comment.should be_valid
+    #   @comment.user_id = 
+    # end
+
     it "should have a cost assigned" do
       @comment.cost.should_not be_nil
     end
