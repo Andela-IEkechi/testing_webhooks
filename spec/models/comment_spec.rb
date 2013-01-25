@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Comment, :focus => true do
+describe Comment do
 
   context "has a factory that"  do
     it "should create a valid comment" do

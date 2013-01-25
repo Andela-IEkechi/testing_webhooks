@@ -1,5 +1,5 @@
 class ApiKey < ActiveRecord::Base
-  set_primary_key :name
+  self.primary_key = 'name'
 
   before_create :generate_token
   belongs_to :project

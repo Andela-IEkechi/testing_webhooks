@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ApiKey, :focus => true do
+describe ApiKey do
 
   context "has a factory that"  do
     it "should create a valid api_key" do
