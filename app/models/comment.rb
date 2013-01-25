@@ -4,7 +4,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :ticket #always
   belongs_to :user #the person who made the comment
-  belongs_to :api_key
+  belongs_to :api_key, :foreign_key => 'api_key_name'
   has_one    :project, :through => :ticket
   has_many   :assets
 
