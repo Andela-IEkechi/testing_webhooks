@@ -4,6 +4,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :ticket #always
   belongs_to :user #the person who made the comment
+  belongs_to :api_key
   has_one    :project, :through => :ticket
   has_many   :assets
 
@@ -18,8 +19,8 @@ class Comment < ActiveRecord::Base
   attr_accessible :ticket_id, :user_id, :status_id, :feature_id, :sprint_id, :assignee_id, :assets_attributes
 
   #we can't enforce this in the model, or nested create fails : validates :ticket_id, :presence => true
-  validates :user_id, :presence => true
   validates :cost, :inclusion => {:in => Ticket::COST}
+  validates :status, :presence => true
 
   def to_s
     title

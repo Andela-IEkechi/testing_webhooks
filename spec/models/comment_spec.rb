@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Comment do
+describe Comment, :focus => true do 
 
   context "has a factory that"  do
     it "should create a valid comment" do
@@ -60,6 +60,7 @@ describe Comment do
 
     it "must have a status" do
       @comment.status = nil
+      # raise @comment.status.inspect
       @comment.should_not be_valid
     end
 

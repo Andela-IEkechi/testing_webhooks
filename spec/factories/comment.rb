@@ -4,6 +4,7 @@ FactoryGirl.define do
   factory :comment do
     association(:ticket)
     association(:user)
+    association(:api_key)
     cost 1
 
     before(:create) do |comment|
