@@ -7,12 +7,13 @@ Conductor::Application.routes.draw do
     resources :tickets do
       resources :comments
     end
+    resource  :key
     resource  :access
     resources :features
     resources :sprints
   end
 
-  post 'github/commit/:project_id' => 'github#commit'
+  post 'github/commit/:token' => 'github#commit'
 
   root :to => 'projects#index'
 end

@@ -40,16 +40,8 @@ describe Comment do
       @comment = create(:comment)
     end
 
-    # it "should have a default cost of 0" do
-    #   @comment.cost.should == 0
-    # end
-
-    it "should not have a default cost of 0" do
-      @comment.cost.should_not eq(0)
-    end
-
-    it "should have a default cost of 1" do
-      @comment.cost.should == 1
+    it "should have a default cost of 0" do
+      @comment.cost.should == 0
     end
 
     it "should be valid when cost is in #{Ticket::COST}" do
@@ -60,23 +52,23 @@ describe Comment do
 
     it "must have a status" do
       @comment.status = nil
+      # raise @comment.status.inspect
       @comment.should_not be_valid
+    end
+
+    it "must have either an api_key or user_id, but not both" do
+      @comment.user_id.should_not be_nil
+      @comment.should be_valid
+
+      @comment.user_id = nil
+      @comment.should_not be_valid
+
+      @comment.api_key = create(:api_key)
+      @comment.should be_valid
     end
 
     it "should have a cost assigned" do
       @comment.cost.should_not be_nil
-    end
-
-    it "should have a cost between 0 and 3" do
-      (0..3).each do |l|
-        @comment.cost = l
-        @comment.should be_valid
-      end
-    end
-
-    it "should have a cost no greater than 3" do
-        @comment.cost = 4
-        @comment.should_not be_valid
     end
   end
 
