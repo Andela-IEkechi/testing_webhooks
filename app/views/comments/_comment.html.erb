@@ -22,9 +22,7 @@
 <% end %>
 
 <div class="comment-container">
-  <% if comment.user %>
-    <p class="muted"><%= comment.user.to_s %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
-  <% end %>
+  <p class="muted"><%= author(comment) %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
   <div><%= comment.html.html_safe %></div>
 
   <% comment.assets && comment.assets.each do |asset| %>

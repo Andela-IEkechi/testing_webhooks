@@ -1,11 +1,12 @@
 require 'spec_helper'
 
-describe GithubController, :focus => true do
+describe GithubController, focus: true do
 
   before :each do
     @project = create(:project)
     @ticket = create(:ticket, :project => @project)
     @user    = create(:user)
+    @key = create(:api_key, :project => @project)
   	@payload = {
     after: "2d00bdaa3f0d41a3a9bc355eb38f6245e70d79a1",
     before: "4144b9ae4565cf74cbe6c1915123debbab1119bc",
@@ -34,7 +35,7 @@ describe GithubController, :focus => true do
   it 'assigns a commit message to a ticket' do
     #'/github/commit/1'
     expect do
-      post :commit, :project_id => @project.id, "payload" => JSON(@payload)
+      post :commit, :token => @key.token, "payload" => JSON(@payload)
     end.to change{@ticket.comments.count}.from(0).to(1)
   end
 
@@ -43,7 +44,7 @@ describe GithubController, :focus => true do
     @payload[:commits].first[:message] = "a commit message with more than one ticket [##{@ticket.scoped_id}] [##{ticket2.scoped_id}]"
 
     expect do
-      post :commit, :project_id => @project.id, "payload" => JSON(@payload)
+      post :commit, :token => @key.token, "payload" => JSON(@payload)
     end.to change{@ticket.comments.count + ticket2.comments.count}.from(0).to(2)
 
     @ticket.comments.count.should eq(1)

@@ -2,13 +2,11 @@ class GithubController < ApplicationController
   skip_before_filter :authenticate_user!, :only => [:commit]
   protect_from_forgery :except => :commit
 
-  load_resource :project
-
   def commit
-    payload = JSON.parse(params["payload"])
-    payload["commits"].each do |commit|
-      #whodunnit
-      if user = User.find_by_email(commit["author"]["email"])
+    if api_key = ApiKey.find_by_token(params["token"])
+      @project = api_key.project
+      payload = JSON.parse(params["payload"])
+      payload["commits"].each do |commit|
         #find the ticket it relates to
         commit_msg = commit["message"]
         #parse the message to get the ticket number(s)
@@ -18,12 +16,11 @@ class GithubController < ApplicationController
           #find the ticket the matches
           ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
           #post the commit message as a ticket comment
-          decorated_message = "#{commit['message']}\n\n[#{commit['id']}](#{commit['url']})"
-          ticket.comments.create(:body => decorated_message, :user_id => user.id)
+          decorated_message = "#{commit['author']['email']} #{commit['message']}\n\n[#{commit['id']}](#{commit['url']})"
+          ticket.comments.create(:body => decorated_message, :api_key_name => api_key)
         end
-      else
-      end #no user  = no comment
-    end if payload["commits"]
+      end if payload["commits"]
+    end #no key  = no comment
     render :text => "commit received"
   end
 end

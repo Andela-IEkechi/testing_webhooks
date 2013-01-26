@@ -4,6 +4,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :ticket #always
   belongs_to :user #the person who made the comment
+  belongs_to :api_key, :foreign_key => 'api_key_name', :class_name => 'ApiKey'
   has_one    :project, :through => :ticket
   has_many   :assets
 
@@ -15,11 +16,12 @@ class Comment < ActiveRecord::Base
   accepts_nested_attributes_for :assets
 
   attr_accessible :body, :cost, :rendered_body
-  attr_accessible :ticket_id, :user_id, :status_id, :feature_id, :sprint_id, :assignee_id, :assets_attributes
+  attr_accessible :ticket_id, :user_id, :status_id, :feature_id, :sprint_id, :assignee_id, :assets_attributes, :api_key_name
 
   #we can't enforce this in the model, or nested create fails : validates :ticket_id, :presence => true
-  validates :user_id, :presence => true
   validates :cost, :inclusion => {:in => Ticket::COST}
+  validates :api_key_name, :presence => true, :unless => lambda{|record| record.user_id }
+  validates :user_id, :presence => true, :unless => lambda{|record| record.api_key_name }
 
   def to_s
     title
