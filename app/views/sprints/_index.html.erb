@@ -1,16 +1,20 @@
 <table class="table table-bordered table-striped" id="sprint-list">
   <caption>
-    <h2 class="pull-left">Sprints</h2>
-    <span class="pull-right">
+    <div class="pull-right">
         Show Closed Sprints &nbsp;<%= check_box_tag :show_closed_sprints, true %>
-    </span>
+    </div>
+    <h2>Sprints</h2>
   </caption>
+  <thead>
   <tr>
-    <th class="span1">#</th>
-    <th>Goal</th>
-    <th>Due Date</th>
-    <th class="span1">Tickets</th>
+    <th class="width-5">#</th>
+    <th class="width-45">Goal</th>
+    <th class="width-20">Due Date</th>
+    <th class="width-25">Progress</th>
+    <th class="width-5">Tickets</th>
   </tr>
+  </thead>
+  <tbody>
   <% sprints.each do |sprint| %>
     <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
       <td title="sprint number"><%= sprint.id %></td>
@@ -21,14 +25,23 @@
         <% end %>
       </td>
       <td title="due date"><%= sprint.due_on.to_s(:long) %></td>
-      <td class="span1 count" title="tickets in this sprint"><span class="badge badge-important"><%= sprint.assigned_tickets.count %></span></td>
+      <td>
+        <div class="progress-count">
+          <%= completion_str(sprint) %>
+        </div>
+        <div class="progress"  title="<%= completion_message(sprint) %>">
+          <div class="bar bar-<%= completion_state(sprint) %> " style="width: <%= completion_percentage(sprint) %>%;" ></div>
+        </div>
+      </td>
+      <td  class="count" title="tickets in this sprint"><span class="badge badge-important"><%= sprint.assigned_tickets.count %></span></td>
     </tr>
   <% end %>
   <% if sprints.count == 0 %>
   <tr>
-    <td colspan="4">There are no sprints</td>
+    <td colspan="5">There are no sprints</td>
   </tr>
   <% end %>
+  </tbody>
 </table>
 
 

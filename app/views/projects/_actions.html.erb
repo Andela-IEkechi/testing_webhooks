@@ -23,7 +23,7 @@
       <% end %>
     </li>
     <li>
-      <%= link_to new_ticket_path(:project_id => @project) do %>
+      <%= link_to new_project_ticket_path(@project) do %>
         <span class="navico"><i class="icon-plus"></i></span> add a new ticket
       <% end %>
     </li>
@@ -36,5 +36,12 @@
         <% end %>
       </li>
     <% end %>
+  <% end %>
+  <% if action_name == 'index' %>
+    <li>
+      <%= link_to new_project_path() do %>
+      <span class="navico"><i class="icon-plus navico"></i></span>add a new project
+      <% end %>
+    </li>
   <% end %>
 </ul>

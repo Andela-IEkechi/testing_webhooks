@@ -11,13 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121109090147) do
+ActiveRecord::Schema.define(:version => 20130125142145) do
+
+  create_table "api_keys", :id => false, :force => true do |t|
+    t.string   "name",       :null => false
+    t.string   "token",      :null => false
+    t.integer  "project_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
-    t.string   "payload"
+    t.string   "file"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "payload"
   end
 
   create_table "comments", :force => true do |t|
@@ -28,10 +37,11 @@ ActiveRecord::Schema.define(:version => 20121109090147) do
     t.integer  "status_id"
     t.text     "body"
     t.integer  "cost",          :default => 0
-    t.integer  "user_id",                      :null => false
+    t.integer  "user_id"
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
     t.text     "rendered_body"
+    t.string   "api_key_name"
   end
 
   create_table "features", :force => true do |t|
@@ -44,12 +54,11 @@ ActiveRecord::Schema.define(:version => 20121109090147) do
   end
 
   create_table "projects", :force => true do |t|
-    t.string   "title",                          :null => false
-    t.integer  "sprint_duration", :default => 5
-    t.string   "api_key",                        :null => false
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-    t.integer  "user_id",                        :null => false
+    t.string   "title",                           :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "user_id",                         :null => false
+    t.integer  "tickets_sequence", :default => 0
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
@@ -65,11 +74,6 @@ ActiveRecord::Schema.define(:version => 20121109090147) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "ticket_files", :force => true do |t|
-    t.boolean "file_processed", :default => false
-    t.string  "file"
-  end
-
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id",                   :null => false
     t.string  "name",                         :null => false
@@ -77,11 +81,16 @@ ActiveRecord::Schema.define(:version => 20121109090147) do
   end
 
   create_table "tickets", :force => true do |t|
-    t.integer  "project_id", :null => false
-    t.string   "title",      :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "project_id",                     :null => false
+    t.string   "title",                          :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.integer  "last_comment_id"
+    t.integer  "scoped_id",       :default => 0
   end
+
+  add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
+  add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

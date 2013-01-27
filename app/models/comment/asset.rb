@@ -6,7 +6,7 @@ class Comment::Asset < ActiveRecord::Base
   attr_accessible :payload
 
   def name
-    payload && payload.filename && payload.filename.split('/').last
+    payload.file.filename rescue payload
   end
 
 end

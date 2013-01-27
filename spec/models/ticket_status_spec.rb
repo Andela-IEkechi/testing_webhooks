@@ -32,41 +32,39 @@ describe TicketStatus do
     @status.to_s.should eq(@status.name)
   end
 
-  it "should respond to :open", :focus => true do
+  it "should respond to :open" do
     @status.should respond_to :open
   end
 
-  it "should be closable", :focus => true do
+  it "should be closable" do
     @status.open.should eq(true)
     @status.close!
     @status.open.should eq(false)
   end
 
-  it "should be openable", :focus => true do
+  it "should be openable" do
     @status.open = false
     @status.open.should eq(false)
     @status.open!
     @status.open.should eq(true)
   end
 
-  it "should know about tickets that use it" do
-    @status.should have(0).tickets
-    create(:ticket, :status => @status)
-    @status.reload
-    @status.should have(1).tickets
+  it "should know about comments that use it" do
+    comment = create(:comment, :status => @status)
+    status = comment.status
+    status.should have(1).comments
   end
 
   it "should not be deleted if it is in use" do
-    @status.should have(0).tickets
-    create(:ticket, :status => @status)
-    @status.reload
-    @status.should have(1).tickets
+    comment = create(:comment, :status => @status)
+    status = comment.status
+    status.should have(1).comments
     expect {
-      @status.destroy
+      status.destroy
     }.to change(TicketStatus, :count).by(0)
     expect {
-      @status.tickets.find_each(&:destroy)
-      @status.destroy
+      status.comments.find_each(&:destroy)
+      status.destroy
     }.to change(TicketStatus, :count).by(-1)
   end
 end
