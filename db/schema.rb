@@ -19,7 +19,16 @@ ActiveRecord::Schema.define(:version => 20130125142145) do
     t.integer  "project_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+
+  create_table "accounts", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "plan",       :default => "free"
+    t.boolean  "enabled",    :default => true
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
+
+  add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
@@ -74,6 +83,11 @@ ActiveRecord::Schema.define(:version => 20130125142145) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "ticket_files", :force => true do |t|
+    t.boolean "file_processed", :default => false
+    t.string  "file"
+  end
+
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id",                   :null => false
     t.string  "name",                         :null => false
@@ -81,12 +95,20 @@ ActiveRecord::Schema.define(:version => 20130125142145) do
   end
 
   create_table "tickets", :force => true do |t|
+<<<<<<< HEAD
     t.integer  "project_id",                     :null => false
     t.string   "title",                          :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+=======
+    t.integer  "project_id",                                     :null => false
+    t.string   "title",                                          :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+>>>>>>> feature/con690
     t.integer  "last_comment_id"
-    t.integer  "scoped_id",       :default => 0
+    t.string   "ticket_number",   :limit => 30, :default => "0"
+    t.integer  "scoped_id",                     :default => 0
   end
 
   add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
@@ -112,6 +134,7 @@ ActiveRecord::Schema.define(:version => 20130125142145) do
     t.datetime "updated_at",                             :null => false
     t.string   "provider"
     t.string   "uid"
+    t.string   "full_name"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
