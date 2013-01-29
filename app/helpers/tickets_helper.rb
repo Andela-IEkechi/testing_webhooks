@@ -1,4 +1,30 @@
 module TicketsHelper
+
+  TICKET_KEYWORDS_MAP = {
+    :id => :id_eq, :title => :title_contains,
+    :assigned => :assignee_email_contains,
+    :status => :status_name_contains,
+    :feature => :feature_title_contains,
+    :sprint => :feature_title_contains,
+    :cost => :cost_eq }
+
+  def search_query_to_hash(query)
+
+    if query.match(":")
+      hash = {}
+      query.scan(/(\w+):(\w+)/){ |x,y| hash[x.to_sym] = y }
+      output = {}
+      hash.keys.each do |k|
+        if TICKET_KEYWORDS_MAP.keys.include? k
+          output[TICKET_KEYWORDS_MAP[k]] = hash[k]
+        end
+      end
+      return output
+    else
+      nil
+    end
+  end
+
   def cost_short(cost)
     case cost
     when 0
@@ -7,6 +33,5 @@ module TicketsHelper
       cost.to_s
     end
   end
-
 
 end

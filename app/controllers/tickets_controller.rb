@@ -1,4 +1,7 @@
 class TicketsController < ApplicationController
+
+  include TicketsHelper
+
   before_filter :load_search_resources, :only => :index
 
   load_and_authorize_resource :project
@@ -17,7 +20,19 @@ class TicketsController < ApplicationController
     @assignee_id = current_user.id if params[:assignee_id]
 
     #also include tickets with IDs that match
-    @search = @tickets.search(params[:search])
+
+    search_hash = false
+    if params[:search]
+      search_hash = search_query_to_hash(params[:search][:title_or_assignee_email_or_sprint_goal_or_feature_title_or_status_name_contains])
+    end
+
+    if search_hash # if meaningful hash could be obtained (con707)
+      @search = @tickets.search(search_hash)
+      # @search = @tickets.search(params[:search])
+    else
+      @search = @tickets.search(params[:search])
+    end
+
     @combined_search = @search.all
 
     #remember not to search for blank IDs, it will find '%%' matches, which deplicates results: con671
