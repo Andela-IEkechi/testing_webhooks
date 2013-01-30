@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController, focus: true do
+describe GithubController do
 
   before :each do
     @project = create(:project)
@@ -49,6 +49,21 @@ describe GithubController, focus: true do
 
     @ticket.comments.count.should eq(1)
     ticket2.comments.count.should eq(1)
+  end
+
+  it "preserves ticket states when assigning a commit message to a ticket" do
+    feature = create(:feature)
+    @ticket.feature = feature
+    @ticket.save
+    @ticket.feature.should_not be_nil
+    post :commit, :token => @key.token, "payload" => JSON(@payload)
+    @ticket.feature_id.should eq feature.id
+  end
+
+  it "should assign the commenter to the comment" do
+    post :commit, :token => @key.token, "payload" => JSON(@payload)
+    @ticket.reload
+    @ticket.last_comment.commenter.should eq(@user.email)
   end
 
 end

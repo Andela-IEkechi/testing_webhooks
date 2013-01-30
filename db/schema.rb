@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130125142145) do
+ActiveRecord::Schema.define(:version => 20130130210941) do
 
   create_table "api_keys", :id => false, :force => true do |t|
     t.string   "name",       :null => false
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20130125142145) do
     t.datetime "updated_at",                   :null => false
     t.text     "rendered_body"
     t.string   "api_key_name"
+    t.string   "commenter"
   end
 
   create_table "features", :force => true do |t|
