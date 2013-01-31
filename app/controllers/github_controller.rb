@@ -17,7 +17,9 @@ class GithubController < ApplicationController
           ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
           #post the commit message as a ticket comment
           decorated_message = "#{commit['author']['email']} #{commit['message']}\n\n[#{commit['id']}](#{commit['url']})"
-          ticket.comments.create(:body => decorated_message, :api_key_name => api_key)
+          attributes = {:body => decorated_message, :api_key_name => api_key}
+          attributes.merge!(ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at).include?(k) }) if ticket.last_comment
+          ticket.comments.create(attributes)
         end
       end if payload["commits"]
     end #no key  = no comment
