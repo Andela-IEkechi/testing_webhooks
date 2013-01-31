@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130130210941) do
+ActiveRecord::Schema.define(:version => 20130131110400) do
 
   create_table "api_keys", :id => false, :force => true do |t|
     t.string   "name",       :null => false
@@ -46,20 +46,25 @@ ActiveRecord::Schema.define(:version => 20130130210941) do
   end
 
   create_table "features", :force => true do |t|
-    t.string   "title",       :null => false
+    t.string   "title",                      :null => false
     t.string   "description"
     t.date     "due_on"
-    t.integer  "project_id",  :null => false
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "project_id",                 :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "scoped_id",   :default => 0
   end
 
+  add_index "features", ["project_id"], :name => "index_features_on_project_id"
+
   create_table "projects", :force => true do |t|
-    t.string   "title",                           :null => false
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.integer  "user_id",                         :null => false
-    t.integer  "tickets_sequence", :default => 0
+    t.string   "title",                            :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.integer  "user_id",                          :null => false
+    t.integer  "tickets_sequence",  :default => 0
+    t.integer  "features_sequence", :default => 0
+    t.integer  "sprints_sequence",  :default => 0
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
@@ -68,12 +73,15 @@ ActiveRecord::Schema.define(:version => 20130130210941) do
   end
 
   create_table "sprints", :force => true do |t|
-    t.date     "due_on",     :null => false
-    t.string   "goal",       :null => false
-    t.integer  "project_id", :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.date     "due_on",                    :null => false
+    t.string   "goal",                      :null => false
+    t.integer  "project_id",                :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "scoped_id",  :default => 0
   end
+
+  add_index "sprints", ["project_id"], :name => "index_sprints_on_project_id"
 
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id",                   :null => false
