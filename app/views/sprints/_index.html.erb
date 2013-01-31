@@ -17,7 +17,7 @@
   <tbody>
   <% sprints.each do |sprint| %>
     <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
-      <td title="sprint number"><%= sprint.id %></td>
+      <td title="sprint number"><%= sprint.scoped_id %></td>
       <td>
         <%= link_to sprint.goal, project_sprint_path(sprint.project, sprint) %>
         <% if (sprint.closed?) %>
