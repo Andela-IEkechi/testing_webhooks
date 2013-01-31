@@ -13,7 +13,7 @@ shared_examples_for "scoped" do
 
   it "should report :scoped_id as the value for :to_param", focus: true do
     @instance.scoped_id = @instance.id + 1
-    @scoped.scoped_id.should_not eq(@instance.id)
+    @instance.scoped_id.should_not eq(@instance.id)
     @instance.to_param.should eq(@instance.scoped_id)
   end
 end
