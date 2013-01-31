@@ -21,8 +21,8 @@ module CommentsHelper
   end
 
   def author(comment)
+    return "#{comment.commenter} via #{comment.api_key_name}" if !comment.api_key_name.blank?
     return comment.user.to_s if !comment.user.nil?
-    return "#{comment.commenter} via #{comment.api_key_name}" unless comment.api_key_name.blank?
     'anonymous'
   end
 end

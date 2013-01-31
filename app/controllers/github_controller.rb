@@ -16,8 +16,8 @@ class GithubController < ApplicationController
           ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
 
           #set up the attrs we want to persist
-          attributes = {:body => commit_message(commit), :api_key_name => api_key.name, :commenter => commit['author']['email']}
-          attributes.merge!(ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at).include?(k) }) if ticket.last_comment
+          attributes = {"body" => commit_message(commit), "api_key_name" => api_key.name, "commenter" => commit['author']['email']}
+          attributes = ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at).include?(k) }.merge!(attributes)
 
           ticket.comments.create(attributes)
         end
