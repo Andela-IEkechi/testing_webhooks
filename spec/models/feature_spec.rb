@@ -1,6 +1,9 @@
 require 'spec_helper'
+require 'shared/examples_for_scoped'
 
 describe Feature do
+  it_behaves_like 'scoped'
+
   before(:each) do
     @feature = create(:feature)
   end
