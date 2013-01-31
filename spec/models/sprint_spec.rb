@@ -2,7 +2,9 @@ require 'spec_helper'
 require 'shared/examples_for_scoped'
 
 describe Sprint do
-  it_behaves_like 'scoped'
+  it_behaves_like 'scoped' do
+    let(:scoped_class) { Sprint }
+  end
 
   before(:each) do
     @sprint = create(:sprint)
