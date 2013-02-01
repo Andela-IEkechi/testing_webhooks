@@ -12,6 +12,10 @@ gem 'thin'
 gem 'rake'
 gem "friendly_id", ">=4.0.9"
 
+#paging
+gem 'kaminari'
+gem 'kaminari-bootstrap'
+
 #comment body markup
 gem 'redcarpet'
 gem 'pygmentize'
@@ -25,6 +29,9 @@ gem "fog"
 
 #monitoring
 gem 'crashlog', '>= 1.0.4'
+
+#searching
+gem 'meta_search'
 
 # Gems used only for assets and not required
 # in production environments by default.
