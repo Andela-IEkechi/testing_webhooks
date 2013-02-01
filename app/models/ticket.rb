@@ -1,8 +1,8 @@
 class Ticket < ActiveRecord::Base
+  include Scoped
   extend FriendlyId
   friendly_id :custom_slug, use: :slugged
 
-  include Scoped
 
   belongs_to :project #always
   has_many :comments, :order => :id
@@ -23,14 +23,14 @@ class Ticket < ActiveRecord::Base
 
   scope :unassigned, lambda{ parent.is_a? Project}
 
-  def custom_slug
-    "#{self.id}-#{self.title}"
-  end
-
   scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment}}
   scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment}}
   scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment}}
   scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.scoped_id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
+
+  def to_param
+    self.slug
+  end
 
   def to_s
     title
@@ -95,6 +95,10 @@ class Ticket < ActiveRecord::Base
 
   def get_last(attr)
     comments.last.try(attr)
+  end
+
+  def custom_slug
+    [self.scoped_id, self.title].join('-')
   end
 
 end
