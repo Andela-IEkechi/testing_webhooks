@@ -51,4 +51,27 @@ describe GithubController, focus: true do
     ticket2.comments.count.should eq(1)
   end
 
+  it 'changes ticket attributes from the commit message' do
+
+    user2 = create(:user)
+    @ticket.project.participants << @user
+    @ticket.project.participants << user2
+
+    # Set the cost to 1 before sending the POST
+    @ticket.comments.create(:body => 'test', :user_id => @user.id, :cost => 1, :assignee_id => user2.id)
+
+    expect do
+      # Send a message with a cost of 3 for the ticket
+      @payload[:commits].first[:message] = "hello [##{@ticket.scoped_id} cost:3 assigned:#{@user.email}]"
+
+      post :commit, :token => @key.token, "payload" => JSON(@payload)
+    end.to change{@ticket.comments.count}.from(1).to(2)
+
+    @ticket.cost.should eq(3)
+
+    # TODO: FIX THIS CASE
+    @ticket.assignee.should eq(@user)
+
+  end
+
 end
