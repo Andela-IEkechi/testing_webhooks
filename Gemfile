@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~>3.2.7'
+gem 'rails', '~>3.2.11'
 gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
