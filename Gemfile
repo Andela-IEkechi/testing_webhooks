@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.7'
+gem 'rails', '~>3.2.7'
 gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
@@ -10,7 +10,7 @@ gem 'omniauth-github'
 gem 'paper_trail'
 gem 'thin'
 gem 'rake'
-gem "friendly_id", "~> 4.0.1"
+gem "friendly_id", ">=4.0.9"
 
 #comment body markup
 gem 'redcarpet'
