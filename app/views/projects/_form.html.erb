@@ -6,7 +6,7 @@
     <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
       <div class="well top-padding">
         <%= ts_form.input :name, :input_html => {:class => 'span3'} %>
-        <%= ts_form.input :open, :as => :radio_buttons, :collection => [['Open', true] ,['Closed', false]], :label => false %>
+        <%= ts_form.input :open, :as => :radio_buttons, :collection => [['Open', true] ,['Closed', false]], :label => false, :html => {:class => 'pull-right'} %>
         <%= ts_form.input ' ' do %>
           <%= ts_form.link_to_remove "Remove", :class => 'btn btn-warning btn-small', :title => 'Remove this status' %>
         <% end %>

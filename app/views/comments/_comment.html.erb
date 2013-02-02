@@ -21,14 +21,12 @@
 </div>
 <% end %>
 
-<div class="comment-container">
-  <% if comment.user %>
-    <p class="muted"><%= comment.user.to_s %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
-  <% end %>
+<div class="comment-container" id="comment-<%= comment.id %>">
+  <p class="muted"><%= author(comment) %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
   <div><%= comment.html.html_safe %></div>
 
   <% comment.assets && comment.assets.each do |asset| %>
-    <%= link_to asset.name, asset.payload_url, :target => '_blank', :title => number_to_human_size(asset.payload.file.size) %><br />
+    <%= link_to asset.name, asset.payload_url, :target => '_blank', :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %><br />
   <% end %>
 
   <div class="comment-statusbar">
@@ -38,8 +36,8 @@
           <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
             <span><i class='icon-edit'></i>edit</span>
           <% end %>
-          &nbsp;|&nbsp;
-          <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
+          &nbsp;
+          <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :remote => true, :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
             <span><i class='icon-trash'></i>remove</span>
           <% end %>
       <% end %>

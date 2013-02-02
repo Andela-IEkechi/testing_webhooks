@@ -26,9 +26,13 @@ app = jlr.projects.create(:title => "Allan Parsons Project")
 
 #create a test sprint
 Sprint.find_each(&:destroy)
-sprint = mhp.sprints.build(:goal => [*('A'..'Z')].sample(12).join)
-sprint.due_on = Date.today + 7
-sprint.save!
+3.times do
+  sprint = mhp.sprints.build(:goal => [*('A'..'Z')].sample(12).join)
+  sprint.due_on = Date.today + 7
+  sprint.save!
+end
+
+sprint = mhp.sprints.last
 
 #create some dummy tickets
 Ticket.find_each(&:destroy)

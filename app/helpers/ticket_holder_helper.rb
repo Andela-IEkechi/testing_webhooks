@@ -23,4 +23,9 @@ module TicketHolderHelper
       return "success"
     end
   end
+
+  def completion_str(holder)
+    return "not started" if completion_percentage(holder) == 0
+    "#{completion_percentage(holder)}%"
+  end
 end

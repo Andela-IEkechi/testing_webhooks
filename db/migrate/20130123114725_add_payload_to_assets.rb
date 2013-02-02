@@ -1,5 +1,6 @@
 class AddPayloadToAssets < ActiveRecord::Migration
   def change
-    add_column :comment_assets, :payload, :string
+    Comment::Asset.reset_column_information
+    add_column(:comment_assets, :payload, :string) unless Comment::Asset.column_names.include?('payload')
   end
 end
