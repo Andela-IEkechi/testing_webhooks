@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
-                  :terms
+                  :terms, :chosen_plan
 
   validates :terms, acceptance: {accept: true}
 
