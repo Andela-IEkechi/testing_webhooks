@@ -3,8 +3,6 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!  
   protect_from_forgery
 
-  Footnotes::Filter.notes = []
-
   protected
 
   def layout_by_resource
