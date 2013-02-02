@@ -2,10 +2,13 @@
   <div class="round-and-shaded signup clearfix">
     <center>
       <h2>Create Your Account</h2>
-      <p class="muted">Sign in using social network:</p>      
+      <p class="muted">Sign in using provider:</p>      
       <div class="login-social">
-        <a href="#" class="btn btn-info"><i class="icon-search"></i> Login with Twitter</a>        
-        <a href="#" class="btn btn-info"><i class="icon-search"></i> Login with Facebook</a>                   
+        <%- if devise_mapping.omniauthable? %>
+          <%- resource_class.omniauth_providers.each do |provider| %>
+            <%= link_to "Sign in with #{provider.to_s.titleize}", omniauth_authorize_path(resource_name, provider), class: "zocial #{provider}"  %><br />
+          <% end -%>
+        <% end -%>        
       </div>
       <p class="muted">Create your free account:</p>      
     </center>
@@ -15,18 +18,15 @@
 
 
       <div class="form-inputs">
-        <%= f.input :full_name, :required => true, :autofocus => true, placeholder: "" %>
-        <%= f.input :email, :required => true, :autofocus => true, placeholder: "" %>
-        <%= f.input :password, :required => true, placeholder: "" %>
-        <%= f.input :password_confirmation, :required => true, placeholder: "" %>
+        <%= f.input :full_name, required: true, autofocus: true, input_html: {tabindex: 1} %>
+        <%= f.input :email, required: true, input_html: {tabindex: 2} %>
+        <%= f.input :password, required: true, input_html: {tabindex: 3} %>
+        <%= f.input :password_confirmation, required: true, input_html: {tabindex: 4} %>
       </div>
 
       <div class="form-actions">
-        <span class="login-checkbox pull-left">
-          <input id="terms" name="terms" type="checkbox" class="field pull-left" value="First Choice" tabindex="4" /> 
-          <label class="choice" for="terms">&nbsp; I have read and agree with the Terms of Use.</label>
-        </span>        
-        <%= f.submit "Sign up", :class => "btn btn-primary btn-large" %>
+        <%= f.input :terms, label: "I have read and agree with the Terms of Use.", required: true, input_html: {tabindex: 5}, :wrapper => :inline_checkbox %>
+        <%= f.submit "Sign up", :class => "btn btn-primary btn-large", tabindex: 6 %>
       </div>
     <% end %>
 

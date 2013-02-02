@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User do
+describe User, focus: true do
 
   shared_examples "a project participant" do
     it "that can to participate in projects"
@@ -58,4 +58,12 @@ describe User do
     end
   end
 
+  context "when terms not accepted" do
+    it "should not allow create user without accepting terms" do
+      user = build(:user)
+      user.should be_valid
+      user.terms = "0"
+      user.should_not be_valid
+    end
+  end
 end
