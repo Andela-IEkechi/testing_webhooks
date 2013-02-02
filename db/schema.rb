@@ -119,8 +119,7 @@ ActiveRecord::Schema.define(:version => 20130202073459) do
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
     t.integer  "last_comment_id"
-    t.string   "ticket_number",   :limit => 30, :default => "0"
-    t.integer  "scoped_id",                     :default => 0
+    t.integer  "scoped_id",       :default => 0
   end
 
   add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
