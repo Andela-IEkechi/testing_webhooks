@@ -54,23 +54,33 @@ describe GithubController, focus: true do
   it 'changes ticket attributes from the commit message' do
 
     user2 = create(:user)
-    @ticket.project.participants << @user
-    @ticket.project.participants << user2
+    @ticket.project.participants = [@user, user2]
 
-    # Set the cost to 1 before sending the POST
-    @ticket.comments.create(:body => 'test', :user_id => @user.id, :cost => 1, :assignee_id => user2.id)
+    sprint = create(:sprint, :project => @project)
+    feature = create(:feature, :project => @project)
+    status = create(:ticket_status, :project => @project)
+    cost = 3
 
     expect do
-      # Send a message with a cost of 3 for the ticket
-      @payload[:commits].first[:message] = "hello [##{@ticket.scoped_id} cost:3 assigned:#{@user.email}]"
+
+      # Set default values for the ticket
+      @ticket.comments.create(:body => 'test', :user_id => @user.id,
+                              :cost => 0, :assignee_id => user2.id)
+
+      # Send a message with changes to all ticket attributes
+      @payload[:commits].first[:message] = "hello [##{@ticket.scoped_id} cost:#{cost} assigned:#{@user.email} sprint:#{sprint.goal} feature:#{feature.title} status:#{status.name}]"
 
       post :commit, :token => @key.token, "payload" => JSON(@payload)
-    end.to change{@ticket.comments.count}.from(1).to(2)
 
-    @ticket.cost.should eq(3)
+      @ticket.reload # required!
 
-    # TODO: FIX THIS CASE
+    end.to change{@ticket.comments.count}.from(0).to(2)
+
+    @ticket.cost.should eq(cost)
     @ticket.assignee.should eq(@user)
+    @ticket.sprint.should eq(sprint)
+    @ticket.feature.should eq(feature)
+    @ticket.status.should eq(status)
 
   end
 

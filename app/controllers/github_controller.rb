@@ -19,15 +19,11 @@ class GithubController < ApplicationController
           # there's a number, let's find the ticket it matches to
           ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
 
-          ticket_params = comment_to_hash(others)
+          #set up the attrs we want to persist
+          attributes = {:body => commit_message(commit), :api_key_name => api_key.name}
+          attributes.merge!(comment_to_hash(others))
 
-          # post the commit message as a ticket comment
-          decorated_message = "#{commit['author']['email']} #{commit['message']}\n\n[#{commit['id']}](#{commit['url']})"
-
-          ticket_params.merge!({ :body => decorated_message,
-                                 :api_key_name => api_key })
-
-          ticket.comments.create(ticket_params)
+          ticket.comments.create(attributes)
 
         end
       end if payload["commits"]
@@ -37,6 +33,11 @@ class GithubController < ApplicationController
 
   private
 
+  def commit_message(commit)
+    "#{commit['message']}\n\n[view on GitHub](#{commit['url']})"
+  end
+
+  # "cost:1 assigned:joe@foo.org" -> {:cost=>1, :assignee_id=>3456}
   def comment_to_hash(message)
 
     temp = {}
@@ -44,28 +45,30 @@ class GithubController < ApplicationController
 
     message.split(" ").each do |part|
       pair = part.split(":")
-      if pair.count == 2
-        temp[pair[0].to_sym] = pair[1]
-      end
+      temp[pair[0].to_sym] = pair[1] if (pair.count == 2)
     end
 
-    # Cost
-    if temp.has_key? :cost
-      output[:cost] = temp[:cost]
-    end
+    output[:cost] = temp[:cost].to_i if (temp.has_key? :cost)
 
-    # Assigned
     if temp.has_key? :assigned
       assignee = @project.participants.find_by_email( temp[:assigned] )
-      if assignee
-        output[:assignee_id] = assignee.id
-      end
+      output[:assignee_id] = assignee.id if assignee
     end
 
-    # TODO:
-    # :sprint -> :sprint_id
-    # :feature -> :feature_id
-    # :status -> :status_id
+    if temp.has_key? :sprint
+      sprint = @project.sprints.find_by_goal( temp[:sprint] )
+      output[:sprint_id] = sprint.id if sprint
+    end
+
+    if temp.has_key? :feature
+      feature = @project.features.find_by_title( temp[:feature] )
+      output[:feature_id] = feature.id if feature
+    end
+
+    if temp.has_key? :status
+      status = @project.ticket_statuses.find_by_name( temp[:status] )
+      output[:status_id] = status.id if status
+    end
 
     output
 
