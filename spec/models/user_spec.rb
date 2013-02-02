@@ -59,8 +59,9 @@ describe User, focus: true do
   end
 
   context "when terms not accepted" do
-    it "should not allow create user without accepting terms" do
-      user = build(:user)
+    it "should not allow user to be created" do
+      user = build(:user_with_password)
+      user.valid? 
       user.should be_valid
       user.terms = "0"
       user.should_not be_valid

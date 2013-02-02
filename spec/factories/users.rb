@@ -4,7 +4,8 @@ FactoryGirl.define do
   factory :user do
     sequence(:email) {Faker::Internet.email()}
     terms true
-    
+    full_name 'Monty'
+
     before(:create) do |user|
       pass = Faker::Lorem.words(6)
       user.password = pass
@@ -20,6 +21,11 @@ FactoryGirl.define do
         user.confirmed_at = nil
         user.save
       end
+    end
+
+    factory :user_with_password do
+      password 'goose911'
+      password_confirmation 'goose911'
     end
   end
 end
