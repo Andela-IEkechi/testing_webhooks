@@ -3,7 +3,6 @@ class GithubController < ApplicationController
   protect_from_forgery :except => :commit
 
   def commit
-    #p params
     if api_key = ApiKey.find_by_token(params["token"])
       @project = api_key.project
       payload = JSON.parse(params["payload"])
@@ -25,7 +24,7 @@ class GithubController < ApplicationController
               :commenter => commit['author']['email'],
               :git_commit_uuid => commit['id']
             }
-            attributes.merge!(ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at).include?(k) }) if ticket.last_comment
+            attributes.merge!(ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at user_id).include?(k) }) if ticket.last_comment
             ticket.comments.create(attributes)
           end
         end #else we already created a coment for this commit message

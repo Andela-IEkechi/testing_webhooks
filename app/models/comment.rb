@@ -25,7 +25,7 @@ class Comment < ActiveRecord::Base
   validates :status_id, :presence => true
 
   def to_s
-    title
+    body
   end
 
   def parent

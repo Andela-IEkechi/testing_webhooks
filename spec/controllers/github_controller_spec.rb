@@ -78,4 +78,10 @@ describe GithubController do
     end.to change{@ticket.comments.count}.from(1).to(2)
   end
 
+  it "should not assign a user to the new comment", focus: true do
+    @ticket.comments.last.user.should_not be_nil
+    post :commit, :token => @key.token, "payload" => JSON(@payload)
+    @ticket.reload
+    @ticket.comments.last.user.should be_nil
+  end
 end
