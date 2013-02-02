@@ -1,7 +1,7 @@
 class TicketStatus < ActiveRecord::Base
   belongs_to :project
-  has_many :tickets, :foreign_key => 'status_id'
-  before_destroy :check_for_tickets
+  has_many :comments, :foreign_key => 'status_id'
+  before_destroy :check_for_comments
 
   attr_accessible :name, :open #cant use "type"
 
@@ -24,9 +24,9 @@ class TicketStatus < ActiveRecord::Base
 
   private
 
-  def check_for_tickets
-    if tickets.count > 0
-      errors.add(:base, "cannot delete a ticket status while tickets refer to it")
+  def check_for_comments
+    if comments && comments.count > 0
+      errors.add(:base, "cannot delete a ticket status while comments refer to it")
       return false
     end
   end

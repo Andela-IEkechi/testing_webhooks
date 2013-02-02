@@ -56,7 +56,25 @@ describe User do
     it "should report it's email and (invite) as to_s" do
       @user.to_s.should eq("#{@user.email} (invited)")
     end
-
   end
 
+  context "when terms not accepted" do
+    it "should not allow user to be created" do
+      user = build(:user_with_password)
+      user.valid?
+      user.should be_valid
+      user.terms = "0"
+      user.should_not be_valid
+    end
+  end
+
+  it "should have an account when it is created" do
+    user = create(:user)
+    user.account.should_not be_nil
+  end
+
+  it "should have a free plan by default" do
+    user = create(:user)
+    user.account.plan.should eq("free")
+  end
 end

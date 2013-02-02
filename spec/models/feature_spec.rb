@@ -1,6 +1,12 @@
 require 'spec_helper'
+require 'shared/examples_for_scoped'
 
 describe Feature do
+  it_behaves_like 'scoped' do
+    let(:scoped_class) { Feature }
+  end
+
+
   before(:each) do
     @feature = create(:feature)
   end
@@ -86,7 +92,6 @@ describe Feature do
         ticket.comments.create(:feature => @feature, :cost => 2)
       end
       @feature.cost.should eq(@feature.assigned_tickets.count * 2)
-      @feature.cost.should == @feature.assigned_tickets.sum(&:cost)
     end
 
     it "should not report the same ticket as assigned multiple times" do
@@ -104,7 +109,7 @@ describe Feature do
       @feature.reload
       @feature.assigned_tickets.count.should eq(1)
     end
-
   end
+
 end
 
