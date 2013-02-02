@@ -1,6 +1,6 @@
 class LandingController < ApplicationController
   skip_before_filter :authenticate_user!
-  
+
   def home
   end
 
@@ -8,6 +8,7 @@ class LandingController < ApplicationController
   end
 
   def pricing
+    @plans = Account::PLANS.reject{|k,v| k == 'free'}
   end
 
   def signup

@@ -1,6 +1,9 @@
 class User < ActiveRecord::Base
+  has_one :account
   has_many :projects, :dependent => :destroy #projects we own
   has_and_belongs_to_many :participations, :association_foreign_key => 'project_id', :class_name => 'Project'
+
+  after_create :create_account
 
   # Include default devise modules. Others available are:
   #  :lockable, :timeoutable
@@ -11,7 +14,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
-                  :terms
+                  :terms, :chosen_plan
 
   validates :terms, acceptance: {accept: true}
 
@@ -49,4 +52,5 @@ class User < ActiveRecord::Base
     end
     user
   end
+
 end
