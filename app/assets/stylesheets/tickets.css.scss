@@ -4,11 +4,13 @@
 
 .ticket-info {
   text-align: center !important;
+  .label:empty {
+    display: inline-block;
+  }
 }
 
 .label {
   padding: 5px 2px;
-  text-shadow: none;
 }
 .label-ticket {
   width:29%;
