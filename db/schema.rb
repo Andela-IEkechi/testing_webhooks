@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130131110400) do
+ActiveRecord::Schema.define(:version => 20130202064959) do
 
   create_table "api_keys", :id => false, :force => true do |t|
     t.string   "name",       :null => false
@@ -30,20 +30,23 @@ ActiveRecord::Schema.define(:version => 20130131110400) do
   end
 
   create_table "comments", :force => true do |t|
-    t.integer  "ticket_id",                    :null => false
+    t.integer  "ticket_id",                      :null => false
     t.integer  "feature_id"
     t.integer  "sprint_id"
     t.integer  "assignee_id"
     t.integer  "status_id"
     t.text     "body"
-    t.integer  "cost",          :default => 0
+    t.integer  "cost",            :default => 0
     t.integer  "user_id"
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.text     "rendered_body"
     t.string   "api_key_name"
     t.string   "commenter"
+    t.string   "git_commit_uuid"
   end
+
+  add_index "comments", ["git_commit_uuid"], :name => "index_comments_on_git_commit_uuid"
 
   create_table "features", :force => true do |t|
     t.string   "title",                      :null => false
@@ -121,6 +124,7 @@ ActiveRecord::Schema.define(:version => 20130131110400) do
     t.datetime "updated_at",                             :null => false
     t.string   "provider"
     t.string   "uid"
+    t.string   "full_name"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
