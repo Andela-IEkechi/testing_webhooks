@@ -52,16 +52,20 @@ ActiveRecord::Schema.define(:version => 20130202073459) do
     t.datetime "updated_at",                   :null => false
     t.text     "rendered_body"
     t.string   "api_key_name"
+    t.string   "commenter"
   end
 
   create_table "features", :force => true do |t|
-    t.string   "title",       :null => false
+    t.string   "title",                      :null => false
     t.string   "description"
     t.date     "due_on"
-    t.integer  "project_id",  :null => false
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "project_id",                 :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "scoped_id",   :default => 0
   end
+
+  add_index "features", ["project_id"], :name => "index_features_on_project_id"
 
   create_table "projects", :force => true do |t|
     t.string   "title",                           :null => false
@@ -69,6 +73,13 @@ ActiveRecord::Schema.define(:version => 20130202073459) do
     t.datetime "updated_at",                      :null => false
     t.integer  "user_id",                         :null => false
     t.integer  "tickets_sequence", :default => 0
+    t.string   "title",                            :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.integer  "user_id",                          :null => false
+    t.integer  "tickets_sequence",  :default => 0
+    t.integer  "features_sequence", :default => 0
+    t.integer  "sprints_sequence",  :default => 0
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
@@ -77,17 +88,20 @@ ActiveRecord::Schema.define(:version => 20130202073459) do
   end
 
   create_table "sprints", :force => true do |t|
-    t.date     "due_on",     :null => false
-    t.string   "goal",       :null => false
-    t.integer  "project_id", :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.date     "due_on",                    :null => false
+    t.string   "goal",                      :null => false
+    t.integer  "project_id",                :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "scoped_id",  :default => 0
   end
 
   create_table "ticket_files", :force => true do |t|
     t.boolean "file_processed", :default => false
     t.string  "file"
   end
+
+  add_index "sprints", ["project_id"], :name => "index_sprints_on_project_id"
 
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id",                   :null => false
@@ -100,6 +114,10 @@ ActiveRecord::Schema.define(:version => 20130202073459) do
     t.string   "title",                                          :null => false
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
+    t.integer  "project_id",                     :null => false
+    t.string   "title",                          :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.integer  "last_comment_id"
     t.string   "ticket_number",   :limit => 30, :default => "0"
     t.integer  "scoped_id",                     :default => 0

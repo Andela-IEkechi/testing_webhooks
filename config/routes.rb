@@ -7,6 +7,7 @@ Conductor::Application.routes.draw do
     resources :tickets do
       resources :comments
     end
+    resource  :key
     resource  :access
     resources :features
     resources :sprints
@@ -17,6 +18,8 @@ Conductor::Application.routes.draw do
   get 'landing/pricing'
   get 'landing/signup'
   get 'landing/support'
+
+  post 'github/commit/:token' => 'github#commit'
 
   root :to => 'projects#index'
 end
