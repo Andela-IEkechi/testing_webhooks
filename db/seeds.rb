@@ -13,8 +13,8 @@ jlr.confirm!
 
 barbara = User.create(:email => 'barbara@shuntyard.co.za', :password => 'conductor', :password_confirmation => 'conductor')
 barbara.confirm!
-sue = User.create(:email => 'sue@example.com', :password => 'secret', :password_confirmation => 'secret')
-sue.confirm!
+user = User.create(:email => 'user@example.com', :password => 'secret', :password_confirmation => 'secret')
+user.confirm!
 
 greg = User.create(:email => 'greg@shuntyard.co.za', :password => 'Password1', :password_confirmation => 'Password1')
 greg.confirm!
@@ -26,9 +26,13 @@ app = jlr.projects.create(:title => "Allan Parsons Project")
 
 #create a test sprint
 Sprint.find_each(&:destroy)
-sprint = mhp.sprints.build(:goal => [*('A'..'Z')].sample(12).join)
-sprint.due_on = Date.today + 7
-sprint.save!
+3.times do
+  sprint = mhp.sprints.build(:goal => [*('A'..'Z')].sample(12).join)
+  sprint.due_on = Date.today + 7
+  sprint.save!
+end
+
+sprint = mhp.sprints.last
 
 #create some dummy tickets
 Ticket.find_each(&:destroy)

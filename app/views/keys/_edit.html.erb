@@ -1,0 +1,19 @@
+<h3>API keys</h3>
+
+<%= simple_nested_form_for(@project, :url => project_key_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
+  <%= f.simple_fields_for :api_keys do |p_form| %>
+    <div class="well top-padding">
+      <%= p_form.input :name %>
+      <%= p_form.input :token, :disabled => true, :placeholder => "pending" %>
+      <%= p_form.input ' ' do %>
+        <%= p_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Revoke this key'  %>
+      <% end %>
+    </div>
+  <% end %>
+  <%= f.link_to_add "Add a key", :api_keys, :class => 'btn btn-success offset2' %>
+
+  <div class="form-actions">
+    <%= f.submit :class=>'btn' %>
+    <%= link_to 'cancel', project_path(@project), :class => 'btn' %>
+  </div>
+<% end %>

@@ -4,7 +4,9 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project
   load_and_authorize_resource :sprint, :through => :project
-  load_and_authorize_resource :ticket, :except => :index
+  load_and_authorize_resource :ticket, :through => :project, :except => :index, :find_by => :scoped_id
+
+  before_filter :load_ticket_parents
 
   def index
     @tickets = @sprint.assigned_tickets if @sprint
@@ -14,8 +16,16 @@ class TicketsController < ApplicationController
     @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
     @assignee_id = current_user.id if params[:assignee_id]
 
+    #also include tickets with IDs that match
     @search = @tickets.search(params[:search])
-    @tickets = Kaminari::paginate_array(@search.all).page(params[:page])
+    @combined_search = @search.all
+
+    #remember not to search for blank IDs, it will find '%%' matches, which deplicates results: con671
+    @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search] && !params[:search].values.first.blank?
+
+    #need to resort both because we added to the set, and because metasearch seems to kill the model ordering
+    @combined_search.sort!{|a,b| a.id<=>b.id}
+    @tickets = Kaminari::paginate_array(@combined_search).page(params[:page])
 
     respond_to do |format|
       format.js do
@@ -27,7 +37,7 @@ class TicketsController < ApplicationController
   def show
     #create a new comment, but dont tell the ticket about it, or it will render
     @comment = Comment.new(
-      :ticket_id => @ticket.id,
+      :ticket_id => @ticket.scoped_id,
       :status_id => @ticket.status.try(:id),
       :feature_id => @ticket.feature.try(:id),
       :sprint_id => @ticket.sprint.try(:id),
@@ -49,12 +59,12 @@ class TicketsController < ApplicationController
     @ticket.comments.first.user = current_user
 
     if @ticket.save
-      flash.keep[:info] = "Ticket was added"
+      flash.keep[:notice] = "Ticket was added"
       if params[:create_another]
         @ticket.reload #refresh the assoc to last_comment
-        redirect_to new_ticket_path(:project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+        redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
       else
-        redirect_to ticket_path(@ticket, :project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+        redirect_to project_ticket_path(@ticket.project, @ticket)
       end
     else
       flash[:alert] = "Ticket could not be created"
@@ -71,7 +81,7 @@ class TicketsController < ApplicationController
   def update
     if @ticket.update_attributes(params[:ticket])
       flash[:notice] = "Ticket was updated"
-      redirect_to ticket_path(@ticket, :project_id => @project, :feature_id => @feature)
+      redirect_to project_ticket_path(@ticket.project, @ticket)
     else
       flash[:alert] = "Ticket could not be updated"
       render 'edit'
@@ -103,6 +113,14 @@ class TicketsController < ApplicationController
         params[val] ||= params[:search][val] if params[:search][val] && !params[:search][val].empty?
         params[:search].delete(val)
       end
+    end
+  end
+
+  def load_ticket_parents
+    #if we dont pass the feature_id/sprint_id in on the url, we grab the ones from the ticket, if any
+    if @ticket
+      @sprint ||= @ticket.sprint
+      @feature ||= @ticket.feature
     end
   end
 
