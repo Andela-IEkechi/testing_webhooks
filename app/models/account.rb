@@ -17,39 +17,45 @@ class Account < ActiveRecord::Base
     PLANS[value]
   end
 
-  def upgrade(new_plan=nil)
-    return unless plan_specs(new_plan)
+  def upgrade_to?
     case self.plan
     when 'free'
-      self.plan = 'small'
+      return 'small'
     when 'small'
-      self.plan = 'medium'
+      return 'medium'
     when 'medium'
-      self.plan = 'large'
+      return 'large'
     else
-      self.plan = 'large'
+      return 'large'
     end
   end
 
-  def downgrade(new_plan=nil)
-    if plan_specs(new_plan) && can_downgrade?(new_plan)
-      self.plan = new_plan
+  def upgrade
+    self.plan = upgrade_to?
+  end
+
+  def downgrade_to?
     case self.plan
     when 'large'
-      self.plan = 'medium'
+      return 'medium'
     when 'medium'
-      self.plan = 'small'
+      return 'small'
     when 'small'
-      self.plan = 'free'
+      return 'free'
     else
-      self.plan = 'free'
+      return 'free'
     end
   end
 
+  def downgrade
+    self.plan = downgrade_to? if can_downgrade?
+  end
+
+
   private
-  def can_downgrade?(new_plan)
+  def can_downgrade?
     #TODO we should check uses counts, projects, storage to see if a user can downgrade safely
-    false
+    true
   end
 
 

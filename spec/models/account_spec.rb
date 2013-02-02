@@ -1,34 +1,75 @@
 require 'spec_helper'
 
-describe Account, focus: true do  
+describe Account, focus: true do
+  before(:each) do
+    @account = create(:account)
+  end
+
   it "should create a free plan of no params provided" do
-    plan = create(:account)
-    plan.plan.should eq "free"
+    @account.plan.should eq "free"
   end
 
   it "should be enbaled by default" do
-    plan = create(:account)
-    p plan.inspect
-    plan.enabled.should be_true
+    @account.enabled.should be_true
   end
 
-  it "must return the free plan" do
-    plan = create(:account, plan: "free")
-    plan.plan.should eq "free"
+  context "when specifying a plan" do
+    it "must return the free plan" do
+      account = create(:account, plan: "free")
+      account.plan.should eq "free"
+    end
+
+    it "must return the startup plan" do
+      account = create(:account, plan: "startup")
+      account.plan.should eq "startup"
+    end
+
+    it "must return the company plan" do
+      account = create(:account, plan: "company")
+      account.plan.should eq "company"
+    end
+
+    it "must return the organization plan" do
+      account = create(:account, plan: "organization")
+      account.plan.should eq "organization"
+    end
   end
 
-  it "must return the startup plan" do
-    plan = create(:account, plan: "startup")
-    plan.plan.should eq "startup"
-  end
+  context "when changing plans" do
+    before(:each) do
+      @plans = Account::PLANS.keys
+    end
 
-  it "must return the company plan" do
-    plan = create(:account, plan: "company")
-    plan.plan.should eq "company"
-  end
+    it "should know which plan to upgrade to next" do
+      @account.should respond_to :'upgrade_to?'
+      @plans.each_with_index do |plan, index|
+        @account.plan = plan
+        @account.upgrade_to?.should eq(@plans[index+1] || @plans.last)
+      end
+    end
 
-  it "must return the organization plan" do
-    plan = create(:account, plan: "organization")
-    plan.plan.should eq "organization"
+    it "should know which plan to downgrade to next" do
+      @account.should respond_to :'downgrade_to?'
+      @plans.reverse.each_with_index do |plan, index|
+        @account.plan = plan
+        @account.downgrade_to?.should eq(@plans.reverse[index+1] || @plans.reverse.last)
+      end
+    end
+
+    it "should be able to upgrade" do
+      @plans.each_with_index do |plan, index|
+        @account.plan = plan
+        @account.upgrade
+        @account.plan.should eq(@plans[index+1] || @plans.last)
+      end
+    end
+
+    it "should be able to downgrade" do
+      @plans.reverse.each_with_index do |plan, index|
+        @account.plan = plan
+        @account.downgrade
+        @account.plan.should eq(@plans.reverse[index+1] || @plans.reverse.last)
+      end
+    end
   end
 end

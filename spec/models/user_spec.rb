@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User, focus: true do
+describe User do
 
   shared_examples "a project participant" do
     it "that can to participate in projects"
@@ -69,6 +69,12 @@ describe User, focus: true do
   end
 
   it "should have an account when it is created" do
-    @user.account.should_not be_nil
+    user = create(:user)
+    user.account.should_not be_nil
+  end
+
+  it "should have a free plan by default" do
+    user = create(:user)
+    user.account.plan.should eq("free")
   end
 end
