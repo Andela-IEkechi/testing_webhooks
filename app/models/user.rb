@@ -9,7 +9,9 @@ class User < ActiveRecord::Base
          :omniauthable, :confirmable,:token_authenticatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :provider, :uid
+  attr_accessible :email, :password, :password_confirmation,
+                  :remember_me, :provider, :uid, :full_name
+
   def to_s
     if confirmed?
       email

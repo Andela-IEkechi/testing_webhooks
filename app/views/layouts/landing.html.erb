@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Conductor &middot; The shiz niz in the sprint biz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= csrf_meta_tags %>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="../assets/ico/favicon.png">
+  </head>
+  <body class="landing">
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="<%= 'active' if current_page?(landing_home_path) %>"><%= link_to 'Home', landing_home_path %></li>
+          <li class="<%= 'active' if current_page?(landing_tour_path) %>"><%= link_to 'Tour', landing_tour_path %></li>
+          <li class="<%= 'active' if current_page?(landing_pricing_path) %>"><%= link_to 'Pricing & Signup', landing_pricing_path %></li>
+          <li class="<%= 'active' if current_page?(landing_support_path) %>"><%= link_to 'Support', landing_support_path %></li>
+        </ul>
+        <h3 class="muted">Conductor</h3>
+      </div>
+    </div>
+
+    <div class="container-fluid container-jumbotron">
+      <div class="row-fluid">
+        <div class="container">
+          <%= yield :jumbotron %>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <%= yield  %>
+    </div>
+
+    <div class="container-fluid container-footer">
+      <div class="row-fluid">
+        <div class="container">
+          <div class="footer">
+            <div class="row-fluid">
+              <div class="span3">
+                <h4>About Us</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+              </div>
+              <div class="span3">
+                <h4>About Us</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+              </div>
+              <div class="span3">
+                <h4>About Us</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+              </div>
+              <div class="span3">
+                <h4>About Us</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%= javascript_include_tag "application" %>
+  </body>
+</html>
