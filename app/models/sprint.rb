@@ -1,7 +1,9 @@
 class Sprint < ActiveRecord::Base
+  include TicketHolder
+  include Scoped
+
   belongs_to :project #not optional
 
-  include TicketHolder
 
   attr_accessible :goal, :due_on
 
@@ -16,7 +18,7 @@ class Sprint < ActiveRecord::Base
   def running?
     Date.today <= due_on
   end
-  
+
   def open?
     running? || has_open_tickets?
   end

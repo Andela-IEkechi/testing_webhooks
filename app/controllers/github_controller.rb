@@ -7,28 +7,44 @@ class GithubController < ApplicationController
       @project = api_key.project
       payload = JSON.parse(params["payload"])
       payload["commits"].each do |commit|
-        #find the ticket it relates to
-        commit_msg = commit["message"]
 
-        # parse the message to get the ticket number(s)
-        # which looks like [#123<...>]
-        commit_msg.scan(/\[#(\d+)(.*?)\]/).each do |ticket_ref, others|
+        #first we check if we have processed this commit before
+        if Comment.find_all_by_git_commit_uuid(commit["id" ]).count == 0 #we could have commented on multiple tickets for the same commit
+          #find the ticket it relates to
+          commit_msg = commit["message"]
 
-          others.strip! # remove leading space from the rest of the message
+          #parse the message to get the ticket number(s)
+          #which looks like [#123<...>]
 
-          # there's a number, let's find the ticket it matches to
-          ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
+          commit_msg.scan(/\[#(\d+)(.*?)\]/).flatten.each do |ticket_ref,others|
+            #find the ticket the matches
+            ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
 
-          #set up the attrs we want to persist
-          attributes = {:body => commit_message(commit), :api_key_name => api_key.name}
-          attributes.merge!(comment_to_hash(others))
+            others.strip! # remove leading space from the rest of the message
 
-          ticket.comments.create(attributes)
+            #set up the attrs we want to persist
+            attributes = {
+              :body => commit_message(commit),
+              :api_key_name => api_key.name,
+              :commenter => commit['author']['email'],
+              :git_commit_uuid => commit['id']
+            }
+            attributes.merge!(ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at user_id).include?(k) }) if ticket.last_comment
 
-        end
+            attributes.merge!(comment_to_hash(others))
+            ticket.comments.create(attributes)
+          end
+        end #else we already created a coment for this commit message
+
       end if payload["commits"]
     end #no key  = no comment
-    render :text => "commit received"
+    render :text => "success"
+  end
+
+  private
+
+  def commit_message(commit)
+    "#{commit['message']}\n\n[view on GitHub](#{commit['url']})"
   end
 
   private
