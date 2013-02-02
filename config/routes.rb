@@ -19,7 +19,10 @@ Conductor::Application.routes.draw do
   get 'landing/tour'
   get 'landing/pricing'
   get 'landing/signup'
-  get 'landing/support'
 
-  root :to => 'projects#index'
+  get 'landing/support'
+  get 'landing/privacy'
+  get 'landing/terms'
+
+  root :to => 'landing#home'
 end

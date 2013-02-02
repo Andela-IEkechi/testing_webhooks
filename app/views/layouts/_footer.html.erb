@@ -2,10 +2,14 @@
   <div class="span8 offset2 footer">
     <p class="pull-left">Copyright © 2013 Shuntyard Technologies. All Rights Reserved.</p>
     <ul class="inline pull-right">
-      <li><a href="#">Support</a></li>
-      <li><a href="#">Privacy</a></li>
-      <li><a href="#">Terms of Service</a></li>
+      <% if Rails.env.staging? || Rails.env.development? %>
+      <li>
+        <%= Rails.env %>
+      </li>
+      <% end %>
+      <li><%= link_to 'Support', landing_support_path() %></li>
+      <li><%= link_to 'Privacy', landing_privacy_path() %></li>
+      <li><%= link_to 'Terms of Service', landing_terms_path() %></li>
     </ul>
   </div>
 </div>
-
