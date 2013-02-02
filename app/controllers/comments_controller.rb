@@ -40,12 +40,20 @@ class CommentsController < ApplicationController
     if @comment.only?
       flash[:alert] = "Cannot remove the only comment"
     elsif @comment.destroy
+      @removed_comment_id = params[:id]
       flash[:notice] = "Comment was removed"
     else
       flash[:alert] = "Comment could not be deleted"
     end
+    respond_to do |format|
+      format.html do
+        redirect_to delete_path
+      end
+      format.js do
+        render :partial => '/shared/destroy'
+      end
+    end
 
-    redirect_to delete_path
   end
 
   private

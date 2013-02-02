@@ -1,6 +1,6 @@
 class FeaturesController < ApplicationController
   load_and_authorize_resource :project
-  load_and_authorize_resource :feature, :through => :project
+  load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
 
   def show
   end

@@ -21,14 +21,14 @@
                     <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
                                    <link rel="shortcut icon" href="../assets/ico/favicon.png">
   </head>
-  <body>
+  <body class="landing">
     <div class="container">
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class="<%= 'active' if current_page?(landing_home_path) %>"><a href="home">Home</a></li>
-          <li class="<%= 'active' if current_page?(landing_tour_path) %>"><a href="tour">Tour</a></li>
-          <li class="<%= 'active' if current_page?(landing_pricing_path) %>"><a href="pricing">Pricing & Signup</a></li>
-          <li class="<%= 'active' if current_page?(landing_support_path) %>"><a href="support">Support</a></li>
+          <li class="<%= 'active' if current_page?(landing_home_path) %>"><%= link_to 'Home', landing_home_path %></li>
+          <li class="<%= 'active' if current_page?(landing_tour_path) %>"><%= link_to 'Tour', landing_tour_path %></li>
+          <li class="<%= 'active' if current_page?(landing_pricing_path) %>"><%= link_to 'Pricing & Signup', landing_pricing_path %></li>
+          <li class="<%= 'active' if current_page?(landing_support_path) %>"><%= link_to 'Support', landing_support_path %></li>
         </ul>
         <h3 class="muted">Conductor</h3>
       </div>
