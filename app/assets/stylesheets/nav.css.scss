@@ -12,6 +12,9 @@ ul.nav {
   font-size: 12px;
   line-height: 24px;
   color: $top-nav-link-color;
+  &:hover {
+    color: $top-nav-link-color;
+  }
 }
 
 .navbar .nav > li > a {
