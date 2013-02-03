@@ -1,53 +1,87 @@
 <%
-  tickets ||= @tickets
-  states = tickets.first && tickets.first.project.ticket_statuses.collect(&:name) || []
-%>
+  project ||= @project
+  project_id ||= project && project.id
+  sprint_id ||= @sprint && @sprint.scoped_id
+  feature_id ||= @feature && @feature.scoped_id
+  assignee_id ||= @assignee_id
 
-<table class="table table-bordered table-striped" id="ticket-list">
-  <caption>
-    <h2 class="pull-left">Tickets</h2>
-    <div class="pull-right input-append">
-      
+  parent = "sprint-#{sprint_id}" if sprint_id
+  parent ||= "feature-#{feature_id}" if feature_id
+  parent ||= "project-#{project_id}" if project_id
+ %>
 
-      <div class="btn-group">
-        <input id="search_input" type="text" class="span8" placeholder="Filter">
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-          State
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" id="state-picker">
-          <li>All</li>
-          <% states.each do |st| %>
-            <li><%= st %></li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
-  </caption>
-  <!--title row -->
-  <tr>
-    <th class="span1">#</th>
-    <th>Title</th>
-    <th>State</th>
-    <th class="span1">Cost</th>
-  </tr>
-  <% tickets.each do |ticket| %>
-  <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>" style="<%=ticket.closed? ? 'display:none;': ''%>">
-    <td class="span1"><%= ticket.id %></td>
-    <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
-    <td class="ticket-info">
+ <div id="tickets-list-container-<%= parent %>">
+  <table class="table table-bordered table-striped" id="ticket-list">
+    <caption>
       <div class="pull-right">
-        <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
-        <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
-        <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
+        <% if @search %>
+          <%= simple_form_for @search,
+                :url => project_tickets_path(project),
+                :html => {:method => :get, :class => 'form-search'}, :remote => true do |f| %>
+            <%= f.input_field :title_or_assignee_email_or_sprint_goal_or_feature_title_or_status_name_contains, :label => false, :placeholder => 'search' %>
+            <%= f.hidden_field :sprint_id, :value => sprint_id %>
+            <%= f.hidden_field :feature_id, :value => feature_id %>
+            <%= f.hidden_field :project_id, :value => project_id %>
+            <%= f.hidden_field :assignee_id, :value => assignee_id %>
+            <%= f.submit 'Search' %>
+          <% end %>
+        <% end %>
       </div>
-    </td>
-    <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
-  </tr>
-  <% end %>
-  <% if tickets.count == 0 %>
+      <h2>Tickets</h2>
+    </caption>
+    <!--title row -->
+    <thead>
     <tr>
-      <td colspan="4">There are no tickets</td>
+      <th class="width-5">#</th>
+      <th class="width-45">Title</th>
+      <th class="width-20">Assignee</th>
+      <th class="width-25">State</th>
+      <th class="width-5">Cost</th>
     </tr>
-  <% end %>
-</table>
+    </thead>
+    <tbody>
+    <% @tickets.each do |ticket| %>
+    <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
+      <td><%= ticket.scoped_id %></td>
+      <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
+      <td>
+        <div class="overflow">
+          <%= ticket.assignee %>
+        </div>
+      </td>
+      <td class="ticket-info">
+          <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
+          <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
+          <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
+      </td>
+      <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
+    </tr>
+    <% end if @tickets %>
+    <% if @tickets && @tickets.count == 0 %>
+      <tr>
+        <td colspan="5">There are no tickets</td>
+      </tr>
+    <% end %>
+    <% unless @tickets %>
+      <tr>
+        <td colspan="5"><%= link_to 'loading tickets...',
+          project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
+          :remote => true, :class => "autoload" %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <%= paginate @tickets,
+        :params => {
+          :controller => 'tickets',
+          :action => 'index',
+          :id => nil,
+          :project_id => project_id,
+          :sprint_id => sprint_id,
+          :feature_id => feature_id,
+          :assignee_id => assignee_id
+        },
+        :remote => true if @tickets %>
+
+</div>

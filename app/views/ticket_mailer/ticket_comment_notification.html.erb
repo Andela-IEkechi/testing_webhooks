@@ -23,4 +23,4 @@
     <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
   <% end %>
 
-<p><%= link_to @comment.ticket, ticket_url(@comment.ticket) %></p>
+<p><%= link_to @comment.ticket, project_ticket_url(@comment.project, @comment.ticket) %></p>

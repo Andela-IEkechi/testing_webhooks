@@ -2,33 +2,68 @@
   changeset = change_set(comment)
 %>
 
-<div class="well">
-  <% if changeset[:user] %>
-    <p><b><%= changeset[:user] %></b> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %></em> ago</p>
-  <% end %>
-  <% if changeset[:status_id] %>
-    <p>status changed to <b><%= comment.status %></b></p>
-  <% end %>
-  <% if changeset[:feature_id] %>
-    <p>now part of feature: <b><%= comment.feature || 'none' %></b></p>
-  <% end %>
-  <% if changeset[:sprint_id] %>
-    <p>now part of sprint: <b><%= comment.sprint || 'none' %></b></p>
-  <% end %>
-  <% if changeset[:assignee_id] %>
-    <p>assigned to: <b><%= comment.assignee || 'none' %></b></p>
-  <% end %>
-  <% if changeset[:cost] %>
-    <p>cost updated to: <b><%= cost_long(comment.cost) %></b></p>
-  <% end %>
+<% if comment.first? %>
+<div class="ticket-title">
+  <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
+  <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
+</div>
+<% end %>
+
+<div class="comment-container" id="comment-<%= comment.id %>">
+  <p class="muted"><%= author(comment) %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
   <div><%= comment.html.html_safe %></div>
+
   <% comment.assets && comment.assets.each do |asset| %>
-    <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
+    <%= link_to asset.name, asset.payload_url, :target => '_blank', :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %><br />
   <% end %>
-  <% if comment_counter > 0 %>
-    <p>
-      <%= link_to "Edit", edit_ticket_comment_path(@ticket.id, comment.id) %> |
-      <%= link_to "Remove", ticket_comment_path(@ticket.id, comment.id), :method => :delete, :confirm => "Are you sure?" %>
-    </p>
-  <% end %>
+
+  <div class="comment-statusbar">
+    <% if can?(:manage, comment) %>
+    <div class="pull-right comment-actions">
+      <% unless comment.first? %>
+          <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
+            <span><i class='icon-edit'></i>edit</span>
+          <% end %>
+          &nbsp;
+          <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :remote => true, :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
+            <span><i class='icon-trash'></i>remove</span>
+          <% end %>
+      <% end %>
+    </div>
+    <% end %>
+
+    <ul class="inline">
+      <% if changeset[:status_id] %>
+        <li>
+          state: <b><%= comment.status %></b>
+        </li>
+      <% end %>
+      <% if changeset[:feature_id] %>
+        <li>
+          feature: <b><%= comment.feature || 'none' %></b>
+        </li>
+      <% end %>
+      <% if changeset[:sprint_id] %>
+        <li>
+          sprint: <b><%= comment.sprint || 'none' %></b>
+        </li>
+      <% end %>
+      <% if changeset[:assignee_id] %>
+        <li>
+          assignee: <b><%= comment.assignee || 'none' %></b>
+        </li>
+      <% end %>
+      <% if changeset[:cost] %>
+        <li>
+          cost: <b><%= cost_long(comment.cost) %></b>
+        </li>
+      <% end %>
+      <% if false && changeset.keys.count == 0 %>
+        <li>
+          no change
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
 </div>
