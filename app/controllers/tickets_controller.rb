@@ -2,8 +2,8 @@ class TicketsController < ApplicationController
   before_filter :load_search_resources, :only => :index
 
   load_and_authorize_resource :project
-  load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
-  load_and_authorize_resource :sprint,  :through => :project, :find_by => :scoped_id
+  load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id, :except => :index
+  load_and_authorize_resource :sprint,  :through => :project, :find_by => :scoped_id, :except => :index
   load_and_authorize_resource :ticket,  :through => :project, :find_by => :scoped_id, :except => :index
 
   before_filter :load_ticket_parents
