@@ -13,13 +13,16 @@ Conductor::Application.routes.draw do
     resources :sprints
   end
 
+  post 'github/commit/:token' => 'github#commit'
+
   get 'landing/home'
   get 'landing/tour'
   get 'landing/pricing'
   get 'landing/signup'
+
   get 'landing/support'
+  get 'landing/privacy'
+  get 'landing/terms'
 
-  post 'github/commit/:token' => 'github#commit'
-
-  root :to => 'projects#index'
+  root :to => 'landing#home'
 end
