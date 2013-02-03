@@ -1,6 +1,6 @@
 <%= yield :form_heading %>
 
-<%= simple_nested_form_for(@ticket, :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
+<%= simple_nested_form_for([@ticket.project,@ticket], :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'span6'}%>
   <%= f.simple_fields_for :comments, @comment do |c_f| %>
     <%= render :partial => '/comments/form_fields', :locals => {:comment_form => c_f} %>
@@ -9,7 +9,8 @@
   <%= f.input :project_id, :as => :hidden %>
 
   <div class="form-actions">
+    <%= f.submit :class=>'btn repeat-action', :value => 'Create Another' if @ticket.new_record? %>
     <%= f.submit :class=>'btn' %>
-    <%= link_to 'Cancel',  ticket_path(@ticket, :project_id => @ticket.project_id, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id), :class => 'btn' %>
+    <%= cancel_link %>
   </div>
 <% end %>

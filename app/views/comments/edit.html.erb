@@ -1,0 +1,9 @@
+
+<% content_for :form_heading do %>
+  <h3>Edit your comment
+    &nbsp;<small>made <%= distance_of_time_in_words_to_now @comment.updated_at %> ago</small>
+  </h3>
+
+<% end %>
+
+<%= render :partial => "form" %>

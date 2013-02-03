@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
   before_filter :filter_by_participation
 
   def index
+
   end
 
   def show
