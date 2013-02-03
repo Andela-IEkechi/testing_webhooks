@@ -1,0 +1,7 @@
+// render the flash
+$('#flash-message').html('<%= escape_javascript(render(:partial => "/shared/flash_messages"))%>');
+
+// trash the comment from the ui if we managed to remove it
+<% if @removed_comment_id %>
+  $("#comment-<%= @removed_comment_id %> ").remove();
+<% end %>

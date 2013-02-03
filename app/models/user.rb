@@ -1,6 +1,9 @@
 class User < ActiveRecord::Base
+  has_one :account
   has_many :projects, :dependent => :destroy #projects we own
   has_and_belongs_to_many :participations, :association_foreign_key => 'project_id', :class_name => 'Project'
+
+  after_create :create_account
 
   # Include default devise modules. Others available are:
   #  :lockable, :timeoutable
@@ -9,7 +12,12 @@ class User < ActiveRecord::Base
          :omniauthable, :confirmable,:token_authenticatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :provider, :uid
+  attr_accessible :email, :password, :password_confirmation,
+                  :remember_me, :provider, :uid, :full_name,
+                  :terms, :chosen_plan
+
+  validates :terms, acceptance: {accept: true}
+
   def to_s
     if confirmed?
       email
@@ -43,5 +51,9 @@ class User < ActiveRecord::Base
       end
     end
     user
+  end
+
+  def trial?
+    (Date.today - created_at.to_date).to_i <= 30
   end
 end

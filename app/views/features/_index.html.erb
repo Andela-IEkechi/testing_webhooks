@@ -1,6 +1,6 @@
 <table class="table table-bordered table-striped">
   <caption>
-    <h2>Features</h2>
+    <h4>Features</h4>
   </caption>
   <tr>
     <th class="width-5">#</th>
@@ -10,7 +10,7 @@
   </tr>
   <% features.each do |feature| %>
   <tr>
-    <td><%= feature.id %></td>
+    <td><%= feature.scoped_id %></td>
     <td><%= link_to feature.title, project_feature_path(feature.project, feature) %></td>
     <%
       closed=feature.closed_tickets.count
