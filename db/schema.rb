@@ -70,6 +70,12 @@ ActiveRecord::Schema.define(:version => 20130203072437) do
 
   add_index "features", ["project_id"], :name => "index_features_on_project_id"
 
+  create_table "memberships", :force => true do |t|
+    t.integer "project_id"
+    t.integer "user_id"
+    t.string  "role",       :default => "Regular", :null => false
+  end
+
   create_table "projects", :force => true do |t|
     t.string   "title",                               :null => false
     t.datetime "created_at",                          :null => false
