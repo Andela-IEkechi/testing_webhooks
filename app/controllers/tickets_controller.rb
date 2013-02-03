@@ -2,9 +2,9 @@ class TicketsController < ApplicationController
   before_filter :load_search_resources, :only => :index
 
   load_and_authorize_resource :project
-  load_and_authorize_resource :feature, :through => :project
-  load_and_authorize_resource :sprint, :through => :project
-  load_and_authorize_resource :ticket, :through => :project, :except => :index, :find_by => :scoped_id
+  load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
+  load_and_authorize_resource :sprint,  :through => :project, :find_by => :scoped_id
+  load_and_authorize_resource :ticket,  :through => :project, :find_by => :scoped_id, :except => :index
 
   before_filter :load_ticket_parents
 
@@ -36,14 +36,12 @@ class TicketsController < ApplicationController
 
   def show
     #create a new comment, but dont tell the ticket about it, or it will render
-    @comment = Comment.new(
-      :ticket_id => @ticket.scoped_id,
-      :status_id => @ticket.status.try(:id),
-      :feature_id => @ticket.feature.try(:id),
-      :sprint_id => @ticket.sprint.try(:id),
-      :assignee_id => @ticket.assignee.try(:id),
-      :cost => @ticket.cost
-      )
+    @comment = Comment.new(:ticket_id   => @ticket.scoped_id,
+                           :status_id   => @ticket.status.try(:id),
+                           :feature_id  => @ticket.feature.try(:id),
+                           :sprint_id   => @ticket.sprint.try(:id),
+                           :assignee_id => @ticket.assignee.try(:id),
+                           :cost        => @ticket.cost)
   end
 
   def new

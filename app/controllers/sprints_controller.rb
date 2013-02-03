@@ -6,7 +6,8 @@ class SprintsController < ApplicationController
   end
 
   def new
-    @sprint.due_on = Date.today.end_of_week - 2.days #friday
+    todays_date = Date.today
+    @sprint.due_on = todays_date + (5 - todays_date.cwday) % 7
   end
 
   def create
