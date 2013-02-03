@@ -28,6 +28,7 @@ gem "fog"
 
 #monitoring
 gem 'crashlog', '>= 1.0.4'
+gem 'newrelic_rpm'
 
 #searching
 gem 'meta_search'
@@ -63,7 +64,7 @@ group :test do
   gem 'guard-spork'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'rb-inotify'
+  gem 'rb-inotify', '~> 0.8.8'
 end
 
 group :development do

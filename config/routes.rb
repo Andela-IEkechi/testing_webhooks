@@ -1,5 +1,5 @@
 Conductor::Application.routes.draw do
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  devise_for :users, :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks' }
 
   resources :users
 
@@ -15,5 +15,14 @@ Conductor::Application.routes.draw do
 
   post 'github/commit/:token' => 'github#commit'
 
-  root :to => 'projects#index'
+  get 'landing/home'
+  get 'landing/tour'
+  get 'landing/pricing'
+  get 'landing/signup'
+
+  get 'landing/support'
+  get 'landing/privacy'
+  get 'landing/terms'
+
+  root :to => 'landing#home'
 end

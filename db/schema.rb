@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130202064959) do
+ActiveRecord::Schema.define(:version => 20130203072437) do
+
+  create_table "accounts", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "plan",       :default => "free"
+    t.boolean  "enabled",    :default => true
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
 
   create_table "api_keys", :id => false, :force => true do |t|
     t.string   "name",       :null => false
@@ -61,13 +71,14 @@ ActiveRecord::Schema.define(:version => 20130202064959) do
   add_index "features", ["project_id"], :name => "index_features_on_project_id"
 
   create_table "projects", :force => true do |t|
-    t.string   "title",                            :null => false
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.integer  "user_id",                          :null => false
+    t.string   "title",                               :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+    t.integer  "user_id",                             :null => false
     t.integer  "tickets_sequence",  :default => 0
     t.integer  "features_sequence", :default => 0
     t.integer  "sprints_sequence",  :default => 0
+    t.boolean  "private",           :default => true
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
@@ -105,8 +116,8 @@ ActiveRecord::Schema.define(:version => 20130202064959) do
   add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "email",                  :default => "",    :null => false
+    t.string   "encrypted_password",     :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -120,11 +131,12 @@ ActiveRecord::Schema.define(:version => 20130202064959) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.string   "authentication_token"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "provider"
     t.string   "uid"
     t.string   "full_name"
+    t.boolean  "terms",                  :default => false
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
