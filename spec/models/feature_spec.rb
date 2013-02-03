@@ -60,6 +60,13 @@ describe Feature do
     @feature.should_not be_valid
   end
 
+  it "should return the scoped_id when an id is implied", focus: true do
+    @feature.scoped_id = @feature.project.features_sequence + 1
+    @feature.id.should_not eq(@feature.scoped_id)
+    @feature.to_param.should eq(@feature.scoped_id)
+
+  end
+
   context "without tickets" do
 
     it "should have a 0 cost if there are no tickets" do
