@@ -9,6 +9,8 @@ class TicketsController < ApplicationController
   before_filter :load_ticket_parents
 
   def index
+    redirect_to project_path(@project) && return unless @project
+
     @tickets = @sprint.assigned_tickets if @sprint
     @tickets ||= @feature.assigned_tickets if @feature
     @tickets ||= @project.tickets if @project
@@ -30,6 +32,9 @@ class TicketsController < ApplicationController
     respond_to do |format|
       format.js do
         render :partial => '/shared/index'
+      end
+      format.html do
+        redirect_to project_path(@project)
       end
     end
   end
