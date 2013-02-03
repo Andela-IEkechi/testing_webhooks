@@ -1,4 +1,4 @@
-<div class="navbar">
+<div class="navbar navbar-inverse">
 	<div class="navbar-inner">
 		<div class="container">
 			<%= link_to "Conductor", root_path, :class=>'brand' %>
@@ -23,15 +23,18 @@
 					  </ul>
 				</li>
 				<li>
-					<%= link_to "My Tickets", tickets_path() %>
+					<%= link_to "My Tickets", projects_path() %>
 				</li>
+				<% if @project && !@project.new_record? %>
+				<li class="heading"><%= link_to @project, project_path(@project) %></li>
+				<% end %>
 			</ul>
 
 			<div class="dropdown pull-right">
 				<a class="dropdown-toggle login" data-toggle="dropdown" href="#">
 				  <%= gravatar_for @current_user %>
 				  <%= current_user.email%>
-				  <span class="caret"></span>
+				  <span class="caret green-caret"></span>
 				</a>
 				<ul class="dropdown-menu">
 				  <li>

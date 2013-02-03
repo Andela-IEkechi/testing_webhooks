@@ -1,7 +1,9 @@
 class Feature < ActiveRecord::Base
-	belongs_to :project #not optional
-
   include TicketHolder
+  include Scoped
+
+  belongs_to :project #not optional
+
 
   attr_accessible :title, :description, :due_on
 

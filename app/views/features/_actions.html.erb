@@ -3,22 +3,22 @@
     <li>
       <%= link_to project_path(@feature.project) do %>
       <span class="navico"><i class="icon-arrow-left navico"></i></span>back to project
-      <% end %> 
+      <% end %>
     </li>
   <% end %>
   <% if action_name == 'show' %>
     <li>
       <%= link_to edit_project_feature_path(@feature.project,@feature) do %>
       <span class="navico"><i class="icon-edit navico"></i></span>edit this feature
-      <% end %> 
+      <% end %>
     </li>
     <li>
-      <%= link_to project_feature_path(@feature.project,@feature), :method => :delete, :confirm => "Are you sure you want to delete this feature?" do %>
+      <%= link_to project_feature_path(@feature.project,@feature), :method => :delete, :data => {:confirm => "Are you sure you want to delete this feature?"} do %>
       <span class="navico"><i class="icon-trash navico"></i></span>remove this feature
-      <% end %> 
+      <% end %>
     </li>
     <li>
-      <%= link_to new_ticket_path(:project_id => @project, :feature_id => @feature) do %>
+      <%= link_to new_project_ticket_path(@project, :feature_id => @feature) do %>
       <span class="navico"><i class="icon-plus navico"></i></span>add a new ticket
       <% end %>
     </li>
