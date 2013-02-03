@@ -18,7 +18,9 @@
         <% if user_signed_in? %>
         <div class="span9">
           <%= render :partial => '/shared/flash_messages' %>
-          <%= yield %>
+          <div class="well">
+            <%= yield %>
+          </div>
         </div>
         <div class="span3">
           <%= render :partial => 'actions' %>

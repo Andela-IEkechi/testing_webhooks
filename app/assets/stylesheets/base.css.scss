@@ -51,6 +51,13 @@ abbr[title] {
 
 caption {
   text-align: left;
+  color: #000;
+  padding: 8px;
+  line-height: 30px; /*temp to v-align filter dropdown, delete once filter is redesigned*/
+  height: 30px; /*temp*/
+  h4 {
+    display: inline;
+  }
   h2 {
     font-size: 20px;
     line-height: 25px;
@@ -65,12 +72,24 @@ td.date {
   width: 275px;
 }
 
+body {
+  background-color: #F5F5F5;
+}
+
+.well {
+  background-color: white;
+}
+
 .top-padding {
   padding: 10px 0px 0px 0px;
 }
 
 .odd {
   background-color: whiteSmoke;
+}
+
+.table-striped tbody tr:nth-child(odd) th {
+background-color: #fff;
 }
 
 .input-append ul.dropdown-menu li, .input-prepend ul.dropdown-menu li{
@@ -127,5 +146,4 @@ td.date {
     width: 65%;
   }
 }
-
 

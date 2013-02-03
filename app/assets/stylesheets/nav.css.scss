@@ -71,8 +71,21 @@ span.navico {
   border-top: 1px solid #ddd;
   li {
     border-bottom: 1px solid #ddd;
+    background-color: #fff;
   }
   li:nth-child(2n) {
-  background-color:#f9f9f9;
+  background-color: #f9f9f9;
   }
+}
+
+.footer {
+  margin: 60px auto;
+  width: auto;
+  text-align: center;
+  height: 40px;
+  vertical-align: middle;
+  line-height: 40px;
+  border-top: 1px dashed #ABABAB;
+  border-bottom: 1px dashed #ABABAB;
+  background-color: #fff;
 }
