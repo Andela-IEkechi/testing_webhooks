@@ -2,7 +2,7 @@ common: &common
   adapter: postgresql
   username: conductor
   password: conductor
-  template: template0
+  host: localhost
 
 development:
   <<: *common

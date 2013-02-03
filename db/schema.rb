@@ -11,45 +11,80 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121214085943) do
+ActiveRecord::Schema.define(:version => 20130203072437) do
 
-  create_table "comment_assets", :force => true do |t|
-    t.integer  "comment_id", :null => false
-    t.string   "payload"
+  create_table "accounts", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "plan",       :default => "free"
+    t.boolean  "enabled",    :default => true
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
+
+  create_table "api_keys", :id => false, :force => true do |t|
+    t.string   "name",       :null => false
+    t.string   "token",      :null => false
+    t.integer  "project_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
+  create_table "comment_assets", :force => true do |t|
+    t.integer  "comment_id", :null => false
+    t.string   "file"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "payload"
+  end
+
   create_table "comments", :force => true do |t|
-    t.integer  "ticket_id",                    :null => false
+    t.integer  "ticket_id",                      :null => false
     t.integer  "feature_id"
     t.integer  "sprint_id"
     t.integer  "assignee_id"
     t.integer  "status_id"
     t.text     "body"
-    t.integer  "cost",          :default => 0
-    t.integer  "user_id",                      :null => false
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.integer  "cost",            :default => 0
+    t.integer  "user_id"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.text     "rendered_body"
+    t.string   "api_key_name"
+    t.string   "commenter"
+    t.string   "git_commit_uuid"
   end
 
+  add_index "comments", ["git_commit_uuid"], :name => "index_comments_on_git_commit_uuid"
+
   create_table "features", :force => true do |t|
-    t.string   "title",       :null => false
+    t.string   "title",                      :null => false
     t.string   "description"
     t.date     "due_on"
-    t.integer  "project_id",  :null => false
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "project_id",                 :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "scoped_id",   :default => 0
+  end
+
+  add_index "features", ["project_id"], :name => "index_features_on_project_id"
+
+  create_table "memberships", :force => true do |t|
+    t.integer "project_id"
+    t.integer "user_id"
+    t.string  "role",       :default => "Regular", :null => false
   end
 
   create_table "projects", :force => true do |t|
-    t.string   "title",                          :null => false
-    t.integer  "sprint_duration", :default => 5
-    t.string   "api_key",                        :null => false
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-    t.integer  "user_id",                        :null => false
+    t.string   "title",                               :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+    t.integer  "user_id",                             :null => false
+    t.integer  "tickets_sequence",  :default => 0
+    t.integer  "features_sequence", :default => 0
+    t.integer  "sprints_sequence",  :default => 0
+    t.boolean  "private",           :default => true
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
@@ -58,12 +93,15 @@ ActiveRecord::Schema.define(:version => 20121214085943) do
   end
 
   create_table "sprints", :force => true do |t|
-    t.date     "due_on",     :null => false
-    t.string   "goal",       :null => false
-    t.integer  "project_id", :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.date     "due_on",                    :null => false
+    t.string   "goal",                      :null => false
+    t.integer  "project_id",                :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "scoped_id",  :default => 0
   end
+
+  add_index "sprints", ["project_id"], :name => "index_sprints_on_project_id"
 
   create_table "ticket_statuses", :force => true do |t|
     t.integer "project_id",                   :null => false
@@ -72,15 +110,20 @@ ActiveRecord::Schema.define(:version => 20121214085943) do
   end
 
   create_table "tickets", :force => true do |t|
-    t.integer  "project_id", :null => false
-    t.string   "title",      :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "project_id",                     :null => false
+    t.string   "title",                          :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.integer  "last_comment_id"
+    t.integer  "scoped_id",       :default => 0
   end
 
+  add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
+  add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
+
   create_table "users", :force => true do |t|
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "email",                  :default => "",    :null => false
+    t.string   "encrypted_password",     :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -94,10 +137,12 @@ ActiveRecord::Schema.define(:version => 20121214085943) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.string   "authentication_token"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "provider"
     t.string   "uid"
+    t.string   "full_name"
+    t.boolean  "terms",                  :default => false
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true

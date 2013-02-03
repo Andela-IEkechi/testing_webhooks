@@ -1,0 +1,6 @@
+<%
+  parent = "sprint-#{@sprint.scoped_id}" if @sprint
+  parent ||= "feature-#{@feature.scoped_id}" if @feature
+  parent ||= "project-#{@project.id}" if @project
+%>
+$('#<%=controller_name%>-list-container-<%= parent %>').html('<%= escape_javascript(render(:partial => "/#{controller_name}/index"))%>');
