@@ -1,21 +1,21 @@
 .ticket-info {
-  width: 335px;
+  text-align: center !important;
+  .label:empty {
+    display: inline-block;
+  }
 }
 
 .label {
   padding: 5px 2px;
-  text-shadow: none;
 }
 .label-ticket {
-  width:100px;
+  width:29%;
   display: inline-block;
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .label-missing {
-  width:100px;
-  display: inline-block;
   background: none;
 }
 .label-feature {
@@ -24,6 +24,9 @@
 .label-sprint {
   background-color: $label-sprint-color;
 }
+.label-status {
+  //use default grey
+}
 
 #git-commands h5, #git-commands-toggle {
   cursor: pointer;
@@ -31,4 +34,23 @@
 
 .attach-asset {
   margin-left: 180px;
+}
+
+#ticket-list th, .table-striped th {
+  font-family: arial;
+  font-size: 12px;
+  color: #A5A5A5;
+  font-weight: lighter;
+  line-height: 10px;
+  height: 10px;
+}
+
+.form-search {
+  margin: 0 0 5px;
+}
+
+.ticket-title {
+  h1 {
+    color: #579803;
+  }
 }

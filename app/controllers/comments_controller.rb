@@ -1,8 +1,9 @@
 class CommentsController < ApplicationController
-  before_filter :strip_empty_assets
-  load_and_authorize_resource :ticket
-  load_and_authorize_resource :comment, :through => :ticket
+  before_filter :strip_empty_assets, :except => ["edit","destroy"]
 
+  load_and_authorize_resource :project
+  load_and_authorize_resource :ticket, :through => :project, :find_by => :scoped_id
+  load_and_authorize_resource :comment, :through => :ticket
 
   def new
   end
@@ -17,7 +18,42 @@ class CommentsController < ApplicationController
       @ticket = @comment.ticket
     end
 
-   redirect_to ticket_path(@comment.ticket, :project_id => @comment.ticket.project, :feature_id => @comment.feature)
+   redirect_to project_ticket_path(@comment.project, @comment.ticket)
+  end
+
+  def edit
+
+  end
+
+  def update
+    if @comment.update_attributes(params[:comment])
+      flash[:notice] = "Comment was updated"
+      redirect_to project_ticket_path(@comment.project, @comment.ticket)
+    else
+      flash[:alert] = "Comment could not be updated"
+      render 'edit'
+    end
+  end
+
+  def destroy
+    delete_path = project_ticket_path(@comment.project, @comment.ticket)
+    if @comment.only?
+      flash[:alert] = "Cannot remove the only comment"
+    elsif @comment.destroy
+      @removed_comment_id = params[:id]
+      flash[:notice] = "Comment was removed"
+    else
+      flash[:alert] = "Comment could not be deleted"
+    end
+    respond_to do |format|
+      format.html do
+        redirect_to delete_path
+      end
+      format.js do
+        render :partial => '/shared/destroy'
+      end
+    end
+
   end
 
   private
