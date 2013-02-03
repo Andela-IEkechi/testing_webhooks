@@ -1,23 +1,29 @@
 ul.nav {
   li.heading {
+    color:#f0f0f0;
+    font-size: 15px;
+    padding: 0px 15px 10px;
     padding-left: 50px;
-    a {
-      color:#f0f0f0;
-      font-size: 15px;
-    }
+    font-weight: bold;
   }
 }
 
-.login {
+.login, .login:hover {
   font-size: 12px;
   line-height: 24px;
+  color: #ABFF3D;
+  text-decoration: none;
+  .caret {
+    margin-top: 17px;
+    margin-left: 7px;
+  }
 }
 
 .navbar .nav > li > a {
   color: white;
   text-shadow: none;
   font-size: 15px;
-  &:hover, 
+  &:hover,
   &:active,
   &:focus {
     color: #ABFF3D;
@@ -41,7 +47,7 @@ ul.nav {
 }
 
 .navbar .brand {
-	background-image: url('logo_tunnel_small.png');
+	background-image: url('logo.png');
   background-repeat: no-repeat;
   background-position: 10px 7px;
   padding-left: 40px;
@@ -50,13 +56,6 @@ ul.nav {
   text-transform: uppercase;
   font-size: 19px;
   color: #fff;
-}
-
-.navbar-inner {
-	background-color: black;
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(#222));
-	background-image: -o-linear-gradient(top, #000, #222);
-	background-image: linear-gradient(top, #000, #222);
 }
 
 span.navico {

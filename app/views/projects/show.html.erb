@@ -6,7 +6,7 @@
   <%= render :partial => "/sprints/index", :locals => {:sprints => @project.sprints } %>
 </div>
 
-<div>
-  <%= render :partial => "/tickets/index", :locals => {:tickets => @project.tickets.unassigned } %>
+<div class="well">
+  <%= render :partial => "/tickets/index" %>
 </div>
 
