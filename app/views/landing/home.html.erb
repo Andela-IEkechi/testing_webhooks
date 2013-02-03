@@ -3,32 +3,45 @@
     <%= image_tag 'landing/sample-product.png' %>
     <div class="left">
       <h1>Simple Ticketing and Project Management</h1>
-      <p class="lead">Get projects out the door faster with less hassle. Create a project... add some features... setup some sprints... are start getting things done.!</p>
-      <a class="btn btn-large btn-info" href="#">Start your Free Trial</a>
+      <p class="lead">Get projects out the door faster and with less hassle. Organise your projects with <strong>features</strong> and <strong>sprints</strong> and start getting things done!</p>
+      <%= link_to 'Start your Free Trial', new_registration_path(:user), class: "btn btn-large btn-info" %>
     </div>
   </div>
 <% end %>
 
 <div class="row-fluid marketing">
-  <div class="span6">
-    <h4>Subheading</h4>
-    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+  <div class="span12">
+    <div class="row">
+      <div class="span6">
+        <h4>Projects</h4>
+        <p>Set up a new project in one simple and easy step. Choose a name and decide if it's a public project or not, and you are on your way!</p>
+      </div>
+      <div class="span6">
+        <h4>Features</h4>
+        <p>Organise aspects of your project into features. Conductor lets you track the progress of each feature with a glance.</p>
+      </div>
+    </div>
 
-    <h4>Subheading</h4>
-    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+    <div class="row">
+      <div class="span6">
+        <h4>Sprints</h4>
+        <p>Delivery is managed through sprints. Each sprint has a due date to help you manage deadlines and delivery schedules.</p>
+      </div>
+      <div class="span6">
+        <h4>Tickets</h4>
+        <p>Tickets are what it's all about. Each task in your project is represented by a ticket. Attach files, estimate effort and schedule a ticket into a sprint for implementation.</p>
+      </div>
+    </div>
 
-    <h4>Subheading</h4>
-    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-  </div>
-
-  <div class="span6">
-    <h4>Subheading</h4>
-    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-    <h4>Subheading</h4>
-    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-    <h4>Subheading</h4>
-    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+    <div class="row">
+      <div class="span6">
+        <h4>Participation</h4>
+        <p>Getting others to help out on your project is easy: just invite them from the project page! All you need is their email address. Conductor will notify them of your invitation and provide instructions on how to get started.</p>
+      </div>
+      <div class="span6">
+        <h4>Overview</h4>
+        <p>We aim to provide a quick and easy project overview. Track implementation and delivery at a glance, or drill down into features and sprints for more detail.</p>
+      </div>
+    </div>
   </div>
 </div>
