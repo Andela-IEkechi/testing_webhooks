@@ -77,4 +77,9 @@ describe User do
     user = create(:user)
     user.account.plan.should eq("free")
   end
+
+  it "should respont to :trial?" do
+    user = create(:user)
+    user.should respond_to(:trial?)
+  end
 end

@@ -99,6 +99,15 @@ describe Project do
     }.to change{@project.api_keys.count}.from(0).to(2)
   end
 
+  it "should be a private project by default" do
+    @project.should be_private
+  end
+
+  it "should be able to be a public project" do
+    @project.private = false
+    @project.should_not be_private
+  end
+
   it "should not have an API key by default" do
     @project.should have(0).api_keys
   end
