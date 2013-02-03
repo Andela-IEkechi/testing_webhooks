@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Account, focus: true do
+describe Account do
   before(:each) do
     @account = create(:account)
   end
