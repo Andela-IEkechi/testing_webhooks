@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.7'
+gem 'rails', '~>3.2.11'
 gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
@@ -11,6 +11,10 @@ gem 'paper_trail'
 gem 'thin'
 gem 'rake'
 
+#paging
+gem 'kaminari'
+gem 'kaminari-bootstrap'
+
 #comment body markup
 gem 'redcarpet'
 gem 'pygmentize'
@@ -20,10 +24,15 @@ gem 'bootstrap-sass'
 
 #file uploads
 gem 'carrierwave'
+gem 'carrierwave_direct'
 gem "fog"
 
 #monitoring
 gem 'crashlog', '>= 1.0.4'
+gem 'newrelic_rpm'
+
+#searching
+gem 'meta_search'
 
 # pagination
 gem 'will_paginate', '~> 3.0.0'
@@ -59,7 +68,7 @@ group :test do
   gem 'guard-spork'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'rb-inotify'
+  gem 'rb-inotify', '~> 0.8.8'
 end
 
 group :development do

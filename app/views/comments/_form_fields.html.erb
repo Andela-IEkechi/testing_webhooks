@@ -1,5 +1,5 @@
 <div>
-  <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span6', :rows => 12}%>
+  <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span11', :rows => 12}%>
 </div>
 <div>
   <%= comment_form.input :status do %>
@@ -8,16 +8,12 @@
 
   <%= comment_form.input :cost, :collection => Ticket::COST.map{|x| [(x == 0)? "unknown" : x.to_s,x]}, :include_blank => false %>
 
-  <% unless @ticket.new_record? && !@feature %>
-    <%= comment_form.input :feature do %>
-      <%= comment_form.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
-    <% end %>
+  <%= comment_form.input :feature do %>
+    <%= comment_form.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
-  <% unless @ticket.new_record? && !@sprint %>
-    <%= comment_form.input :sprint do %>
-      <%= comment_form.select :sprint_id, @ticket.project.sprints.all.select(&:open?).map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
-    <% end %>
+  <%= comment_form.input :sprint do %>
+    <%= comment_form.select :sprint_id, @ticket.project.sprints.all.select(&:open?).map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
   <%= comment_form.input :assigned_to do %>
@@ -25,7 +21,7 @@
   <% end %>
 
   <div class="attach-asset">
-    <%= comment_form.link_to_add "Add an asset", :assets %>
+    <%= comment_form.link_to_add "Attach a file", :assets %>
     <%= comment_form.simple_fields_for :assets, [] do |a_f| %>
       <%= a_f.file_field :payload %> <%= a_f.link_to_remove do %><i class="icon-trash"></i><% end %>
     <% end %>

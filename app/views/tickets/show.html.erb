@@ -1,10 +1,4 @@
-<div class="well">
-  <h1 class="pull-right">#<%= @ticket.id %></h1>
-  <h3><%= @ticket.title %></h3>
-  <h4><%= @ticket.parent %></h4>
-</div>
 <%= render :partial => '/comments/comment', :collection => @comments %>
-
 <div class="pagination">
 <% if params[:show_all] == '1' %>
 <%= link_to 'Show comments in pages', params.merge(:show_all => 0, :page => 1), :class => 'btn pull-right' %>
@@ -16,4 +10,3 @@
 </div>
 
 <%= render :partial => '/comments/form' %>
-

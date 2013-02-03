@@ -1,3 +1,59 @@
 // Place all the styles related to the comments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.comment-collection div:first-child {
+	background-color: #F5F5F5;
+	padding: 20px;
+	margin-bottom: 30px;
+}
+
+.comment-collection div:nth-child(n+2) .comment-body {
+	padding: 5px 18px;
+	background-color: #F5F5F5;
+}
+
+/*this is in lieu of a plain span12 that kept stubborny insisting on giving a left margin, for reasons as yet unknown to humankind*/
+.twocolumn-container {
+	margin-left: 0;
+	width: 100%;
+}
+
+
+.comment-container {
+  margin-bottom: 50px;
+  p.muted {
+    border-bottom: 1px solid #EFEFEF;
+    font-size: 12px;
+  }
+}
+
+div.comment-statusbar {
+  background-color: #E3E3E3;
+  padding-left: 5px;
+  padding-right: 10px;
+  line-height:35px;
+  height:35px;
+  @include border-radius(3px);
+  ul  {
+    font-size: 12px;
+    list-style-type: none; //bootstrap supports this, but not in the gem we use...yet we should drop this style when "class='inline' is available"
+
+    li {
+      border-right: 1px solid #A7A7A7;
+    }
+    li:last-child {
+      border-right: 0;
+    }
+  }
+  .comment-actions {
+    font-size: 13px;
+    span {
+      padding-left: 20px;
+      i {
+        padding-right: 3x;
+        margin-right: 3px;
+      }
+    }
+  }
+}

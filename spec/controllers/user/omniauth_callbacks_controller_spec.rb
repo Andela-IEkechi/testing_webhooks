@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe User::OmniauthCallbacksController do
+describe Users::OmniauthCallbacksController do
 
 end
