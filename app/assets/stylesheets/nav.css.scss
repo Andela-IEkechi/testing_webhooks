@@ -2,7 +2,6 @@ ul.nav {
   li.heading {
     color:#f0f0f0;
     font-size: 15px;
-    padding: 0px 15px 10px;
     padding-left: 50px;
     a {
       color: $top-nav-link-color;
@@ -11,7 +10,7 @@ ul.nav {
   }
 }
 
-.login, .login:hover {
+.navbar .nav > li > a.login, .navbar .nav > li > a.login:hover {
   font-size: 12px;
   line-height: 24px;
   color: $top-nav-link-color;
@@ -20,13 +19,12 @@ ul.nav {
   }
   text-decoration: none;
   .caret {
-    margin-top: 17px;
-    margin-left: 7px;
+    margin-top: 10px;
   }
 }
 
 .navbar .nav > li > a {
-  color: white;
+  color: #fff;
   text-shadow: none;
   font-size: 15px;
   &:hover,
@@ -91,10 +89,40 @@ span.navico {
   }
 }
 
+.navbar-profile {  
+  width: 270px;
+  height: 120px;
+  padding: 3px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #BEBEBE;
+  @extend .clearfix;
+  .profile-img {
+    @extend .pull-left;
+    width: 100px;
+  }
+  .profile-splurb {
+    @extend .pull-right;
+    width: 150px;
+    padding-top: 20px
+  }
+}
+
+.dropdown-menu.login {
+  background-color: whiteSmoke;
+  li.last {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    .sign-out {
+      @extend .btn;
+      @extend .pull-right;
+      margin-right: 10px;
+      width: 50px;
+    }
+  }
+}
+
 .footer {
   width: auto;
   height: 40px;
   vertical-align: middle;
-  border-top: 1px dashed $dashed-footer-color;
-  border-bottom: 1px dashed $dashed-footer-color;
 }

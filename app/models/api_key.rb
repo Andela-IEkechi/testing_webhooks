@@ -5,7 +5,7 @@ class ApiKey < ActiveRecord::Base
   belongs_to :project
 
   validates :name, :uniqueness => {:scope => :project_id}, :length => {:minimum => 5}
-  validates :token, :uniqueness => true
+  validates :token, :uniqueness => true, :on => :create
   validates :project_id, :presence => true
 
   attr_accessible :project_id, :token, :name
