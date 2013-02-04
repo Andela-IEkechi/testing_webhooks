@@ -8,6 +8,13 @@
     margin: 20px 0 20px 0;
   }
 
+  #flash-message {
+    p {
+      margin: 0px;
+    }
+
+  }
+
   input[type='text'], input[type='password'], input[type='email'] {
     color: #8E8D8D;
     padding: 11px 6px 10px 6px;
