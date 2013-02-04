@@ -66,14 +66,6 @@ class Ticket < ActiveRecord::Base
     !open?
   end
 
-  def sprint_id
-    sprint && sprint.id || nil
-  end
-
-  def feature_id
-    feature && feature.id || nil
-  end
-
   def update_last_comment!
     self.last_comment = self.comments.last
     self.save!
