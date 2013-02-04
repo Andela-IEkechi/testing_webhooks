@@ -36,7 +36,7 @@
   <% end %>
   <% if action_name != 'new' && action_name != 'index' %>
     <li>
-      <%= link_to new_project_ticket_path(@ticket.project, :sprint_id => @ticket.sprint_id, :feature_id => @ticket.feature_id) do %>
+      <%= link_to new_project_ticket_path(@ticket.project, :sprint_id => @ticket.sprint, :feature_id => @ticket.feature) do %>
       <span class="navico"><i class="icon-plus navico"></i></span>add a new ticket
       <% end %>
     </li>
