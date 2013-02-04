@@ -1,4 +1,5 @@
 class TicketMailer < ActionMailer::Base
+  add_template_helper(CommentsHelper)
   default from: "no-reply@conductor-app.co.za"
 
   layout 'email'

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController do
+describe GithubController, focus: true do
 
   before :each do
     @project = create(:project)
@@ -62,7 +62,7 @@ describe GithubController do
     @ticket.save
     @ticket.feature.should_not be_nil
     post :commit, :token => @key.token, "payload" => JSON(@payload)
-    @ticket.feature_id.should eq feature.id
+    @ticket.feature.id.should eq feature.id
   end
 
   it "should assign the commenter to the comment" do
