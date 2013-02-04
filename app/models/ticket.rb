@@ -20,9 +20,9 @@ class Ticket < ActiveRecord::Base
 
   scope :unassigned, lambda{ parent.is_a? Project}
 
-  scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment}}
-  scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment}}
-  scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment}}
+  scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment, :include => :status}}
+  scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment, :include => :status}}
+  scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment, :include => :status}}
   scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.scoped_id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
 
   def to_s
@@ -64,14 +64,6 @@ class Ticket < ActiveRecord::Base
 
   def closed?
     !open?
-  end
-
-  def sprint_id
-    sprint && sprint.id || nil
-  end
-
-  def feature_id
-    feature && feature.id || nil
   end
 
   def update_last_comment!
