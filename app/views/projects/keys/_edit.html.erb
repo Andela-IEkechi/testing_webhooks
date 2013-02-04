@@ -3,12 +3,12 @@
 <%= simple_nested_form_for(@project, :url => project_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.simple_fields_for :api_keys do |k_form| %>
     <div class="well top-padding">
-      <%= k_form.input :name do %>
-        <%= k_form.input_field :name %>
-        <%= content_tag(:strong, k_form.object.token) if k_form.object.token %>
-        <%= content_tag(:span, 'a new key will be generated when you save the project') unless k_form.object.token %>
+      <%= k_form.input :name, :hint => (k_form.object.new_record? ? 'a new key will be generated when you save the project': '') do %>
+        <%= k_form.input_field :name, :disabled => !k_form.object.new_record?, :placeholder => "key name" %>
+        <%= content_tag(:strong, :title => "created #{k_form.object.created_at.to_s(:long)}") do
+          k_form.object.token
+        end if k_form.object.token %>
       <% end %>
-      <%= k_form.hidden_field :token %>
       <%= k_form.input ' ' do %>
         <%= k_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Revoke this key'  %>
       <% end %>
