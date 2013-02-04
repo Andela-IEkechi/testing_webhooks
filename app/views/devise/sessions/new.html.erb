@@ -2,7 +2,7 @@
   <div class="round-and-shaded signup clearfix">
     <center>
       <h2>Sign In</h2>
-      <p class="muted">Sign in using provider:</p>
+      <p class="muted">Sign in with</p>
       <div class="login-social">
         <%- if devise_mapping.omniauthable? %>
           <%- resource_class.omniauth_providers.each do |provider| %>
@@ -10,7 +10,7 @@
           <% end -%>
         <% end -%>
       </div>
-      <p class="muted">Sign in using you registered account:</p>
+      <p class="muted">Sign in using your username and password</p>
     </center>
 
 		<%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
