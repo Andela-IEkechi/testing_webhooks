@@ -30,12 +30,12 @@ module TicketHolder
       @ticket_status_count  ||= begin
         counts = { "a" => 0, "t" => 0, "f" => 0 }
         counts.merge! assigned_tickets.joins(:status).sum(1, group: 'ticket_statuses.open')
-        counts.each{ |k,v| counts[k] = v.to_f; counts["a"] += counts[k] }
+        counts.each{ |k,v| counts[k] = v.to_i; counts["a"] += counts[k] }
       end
     end
 
     def progess_count
-      ticket_count || (100*closed_ticket_count/ticket_count).round
+      ticket_count|| (100*closed_ticket_count/ticket_count).round.to_i
     end
 
     def open_ticket_count
