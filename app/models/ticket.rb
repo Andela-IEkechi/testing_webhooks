@@ -46,6 +46,14 @@ class Ticket < ActiveRecord::Base
     user.id rescue nil
   end
 
+  def sprint_id
+    (last_comment.sprint.id rescue nil)
+  end
+
+  def feature_id
+    (last_comment.feature.id rescue nil)
+  end
+
   def cost
     get_last(:cost)
   end

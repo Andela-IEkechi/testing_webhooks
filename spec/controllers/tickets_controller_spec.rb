@@ -225,7 +225,7 @@ describe TicketsController do
     it_behaves_like "access to tickets"
   end
 
-  context "in the context of a feature", focus: true do
+  context "in the context of a feature" do
     before(:each) do
       @feature = create(:feature, :project => @project)
       @ticket = create(:ticket, :project => @project)
