@@ -35,7 +35,8 @@ module TicketHolder
     end
 
     def progess_count
-      ticket_count|| (100*closed_ticket_count/ticket_count).round.to_i
+      return 0 unless ticket_count
+      (100*closed_ticket_count/ticket_count).round.to_i
     end
 
     def open_ticket_count
