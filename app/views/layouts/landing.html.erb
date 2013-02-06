@@ -19,7 +19,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
       <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
                     <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-                                   <link rel="shortcut icon" href="../assets/ico/favicon.png">
+                                   <link rel="shortcut icon" href="../assets/images/favicon.ico">
   </head>
   <body class="landing">
     <div class="container">
@@ -29,7 +29,9 @@
           <li class="<%= 'active' if current_page?(landing_tour_path) %>"><%= link_to 'Tour', landing_tour_path %></li>
           <li class="<%= 'active' if current_page?(landing_pricing_path) %>"><%= link_to 'Pricing & Signup', landing_pricing_path %></li>
           <li class="<%= 'active' if current_page?(landing_support_path) %>"><%= link_to 'Support', landing_support_path %></li>
+          <% unless current_user %>
           <li><%= link_to 'Sign in', new_session_path(:user) %></li>
+          <% end %>
         </ul>
         <h3 class="muted logo"><img src="/logo-blue.png">Conductor</h3>
       </div>
