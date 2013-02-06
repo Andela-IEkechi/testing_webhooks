@@ -29,7 +29,9 @@
           <li class="<%= 'active' if current_page?(landing_tour_path) %>"><%= link_to 'Tour', landing_tour_path %></li>
           <li class="<%= 'active' if current_page?(landing_pricing_path) %>"><%= link_to 'Pricing & Signup', landing_pricing_path %></li>
           <li class="<%= 'active' if current_page?(landing_support_path) %>"><%= link_to 'Support', landing_support_path %></li>
+          <% unless current_user %>
           <li><%= link_to 'Sign in', new_session_path(:user) %></li>
+          <% end %>
         </ul>
         <h3 class="muted logo"><img src="/logo-blue.png">Conductor</h3>
       </div>
