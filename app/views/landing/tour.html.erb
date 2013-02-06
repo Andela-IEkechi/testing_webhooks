@@ -2,7 +2,7 @@
   <div class="jumbotron">
     <h1 >Simple ticket management at last!</h1>
     <p class="lead">Take a tour of Conductor and learn why you won't use anything else ever again!</p>
-    <a class="btn btn-large btn-info" href="#">Sign up today</a>
+    <%= link_to 'Sign up today', new_registration_path(:user), class: "btn btn-large btn-info" %>
   </div>
 <% end %>
 
