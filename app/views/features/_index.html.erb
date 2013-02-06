@@ -1,6 +1,6 @@
 <table class="table table-bordered table-striped">
   <caption>
-    <h2>Features</h2>
+    <h4>Features</h4>
   </caption>
   <tr>
     <th class="width-5">#</th>
@@ -12,19 +12,15 @@
   <tr>
     <td><%= feature.scoped_id %></td>
     <td><%= link_to feature.title, project_feature_path(feature.project, feature) %></td>
-    <%
-      closed=feature.closed_tickets.count
-      total=feature.assigned_tickets.count
-    %>
-      <td>
-        <div class="progress-count">
-          <%= completion_str(feature) %>
-        </div>
-        <div class="progress" title="<%= completion_message(feature) %>">
-          <div class="bar bar-<%= completion_state(feature) %> " style="width: <%= completion_percentage(feature) %>%;"></div>
-        </div>
-      </td>
-    <td class="span1 count" title="tickets in this feature"><span class="badge badge-info"><%= feature.assigned_tickets.count %></span></td>
+    <td>
+      <div class="progress-count">
+        <%= completion_str(feature) %>
+      </div>
+      <div class="progress" title="<%= completion_message(feature) %>">
+        <div class="bar bar-<%= completion_state(feature) %> " style="width: <%= feature.progess_count %>%;"></div>
+      </div>
+    </td>
+    <td class="span1 count" title="tickets in this feature"><span class="badge badge-info"><%= feature.ticket_count %></span></td>
   </tr>
   <% end %>
   <% if features.count == 0 %>

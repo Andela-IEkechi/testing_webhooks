@@ -3,7 +3,6 @@ class ProjectsController < ApplicationController
   before_filter :filter_by_participation
 
   def index
-
   end
 
   def show
@@ -33,7 +32,6 @@ class ProjectsController < ApplicationController
       flash[:alert] = "Project could not be updated"
       render 'edit'
     end
-
   end
 
   def destroy

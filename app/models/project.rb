@@ -3,9 +3,9 @@ class Project < ActiveRecord::Base
   after_create :default_statuses
 
   belongs_to :user
-  has_many :features, :dependent => :destroy
+  has_many :features, :dependent => :destroy, :order => :scoped_id
   has_many :tickets, :dependent => :destroy, :include => :comments, :order => :id
-  has_many :sprints, :order => :due_on, :dependent => :destroy
+  has_many :sprints, :order => :due_on, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy
 
   has_many :memberships # works
@@ -13,9 +13,12 @@ class Project < ActiveRecord::Base
   has_many :api_keys, :dependent => :destroy
 
   attr_accessible :title, :private, :ticket_statuses_attributes, :user_id, :participant_ids, :participants_attributes, :api_keys_attributes, :api_key_ids, :memberships
-  accepts_nested_attributes_for :ticket_statuses, :memberships, :participants, :api_keys
+  accepts_nested_attributes_for :ticket_statuses, :participants, :memberships
+  accepts_nested_attributes_for :api_keys, :allow_destroy => true
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}
+
+  default_scope order('projects.title ASC')
 
   def to_s
     title

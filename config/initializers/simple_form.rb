@@ -180,9 +180,9 @@ SimpleForm.setup do |config|
     b.use :html5
     b.use :placeholder
     b.wrapper :tag => 'div', :class => 'controls' do |ba|
-      ba.use :label_input, :class => 'checkbox inline'
+      ba.use :label_input, :class => 'checkbox inline span12'
       ba.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
       ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
     end
-  end  
+  end
 end
