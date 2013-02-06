@@ -18,7 +18,7 @@ class CommentsController < ApplicationController
       @ticket = @comment.ticket
     end
 
-   redirect_to project_ticket_path(@comment.project, @comment.ticket)
+    redirect_to project_ticket_path(@comment.project, @comment.ticket)
   end
 
   def edit
