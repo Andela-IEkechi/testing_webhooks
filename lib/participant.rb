@@ -5,6 +5,7 @@ module Participant
     new_user_ids = []
     #for each new participant, look them up first, they might be a user already
     participants_attrs.each do |token, attrs|
+
       user = User.find_by_email(attrs[:email].downcase)
       unless user || attrs[:email].blank? || attrs[:_destroy] == '1'
         user = User.new(:email => attrs[:email].downcase)
@@ -12,6 +13,12 @@ module Participant
         #we have to set a pasword, so we just make it the same as the token
         user.password = user.password_confirmation = user.authentication_token
         user.save #this should trigger emails to the user if they are new
+
+        # Update membership for new user
+        m = user.memberships.find_by_project_id(project.id)
+        m.role = attrs[:memberships]
+        m.save
+
       end
       new_user_ids << user.id if user
     end if participants_attrs

@@ -3,30 +3,55 @@
 <%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
 
 <!-- checkboxes -->
-  <%= f.association :participants, :as => :check_boxes, :collection=>@project.ordered_participants %>
 
  <!-- dummy entry to show the project owner -->
   <div class="control-group">
-    <label class="control-label"><%= @project.user.email %></label>
+    <label class="control-label">Participants</label>
     <div class="controls">
+      <label class="span4" style="display:inline">
+        <input type="checkbox" checked="checked" disabled="disabled" name="dummycheck"/>
+        <%= @project.user.email %></label>
       <%= select_tag :dummy, options_for_select(["Owner"]), :disabled => 'disabled' %>
     </div>
   </div>
 
 <!-- memberships -->
- <% @project.members_but_owner.each do |m| %>
+ <%
+    @project.members_but_owner.each do |m|
+    participant = @project.ordered_participants.find_by_email(m.user.email)
+ %>
   <div class="control-group">
-    <label class="control-label"><%= m.user.email %></label>
+    <label class="control-label"></label>
     <div class="controls">
-      <%= select "membership[#{m.id}]", :role, options_for_select(Membership::ROLE_NAMES, m.role) %>
+      <label for="project_participant_ids_<%= participant.id %>"
+             class="span4"
+             style="display: inline">
+      <input checked="checked" class="check_boxes optional"
+             id="project_participant_ids_<%= participant.id %>"
+             name="project[participant_ids][]" type="checkbox"
+             value="<%= participant.id %>">
+      <%= m.user.email %>
+      </label>
+      <%= select "membership[#{m.id}]", :role,
+          options_for_select(Membership::ROLE_NAMES, m.role) %>
     </div>
   </div>
   <% end %>
+  <input name="project[participant_ids][]" type="hidden" value="">
 
   <!-- invite -->
   <%= f.simple_fields_for :participants, [] do |p_form| %>
     <div class="well top-padding">
       <%= p_form.input :email %>
+
+
+      <div class="control-group">
+        <label class="control-label">Invite as</label>
+        <div class="controls">
+          <%= p_form.select :memberships, options_for_select(Membership::ROLE_NAMES) %>
+        </div>
+      </div>
+
       <%= p_form.input ' ' do %>
         <%= p_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this invitation'  %>
       <% end %>
