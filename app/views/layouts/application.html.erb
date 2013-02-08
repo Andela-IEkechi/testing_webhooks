@@ -2,7 +2,7 @@
 <html>
 <head>
   <title><%= tab_heading %></title>
-  <link rel="icon" href="/assets/favicon.ico" type="image/ico" />
+  <link rel="icon" href="/assets/images/favicon.ico" type="image/ico" />
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
@@ -27,7 +27,7 @@
           <% if current_user.trial? %>
             <div class="alert alert-success fade in">
               <a href="#" data-dismiss="alert" class="close">×</a>
-              You are day <%= trial_days %> of your 30 day free trial.
+              You are on day <%= trial_days %> of your 30 day free trial.
             </div>
           <% end %>
         </div>

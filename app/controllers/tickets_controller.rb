@@ -43,8 +43,8 @@ class TicketsController < ApplicationController
     #create a new comment, but dont tell the ticket about it, or it will render
     @comment = Comment.new(:ticket_id   => @ticket.to_param,
                            :status_id   => @ticket.status.to_param,
-                           :feature_id  => @ticket.feature.to_param,
-                           :sprint_id   => @ticket.sprint.to_param,
+                           :feature_id  => @ticket.feature_id, #use the real id here!
+                           :sprint_id   => @ticket.sprint_id, #use the real id here!
                            :assignee_id => @ticket.assignee.to_param,
                            :cost        => @ticket.cost)
   end
