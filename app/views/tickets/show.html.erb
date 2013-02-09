@@ -1,12 +1,36 @@
-<%= render :partial => '/comments/comment', :collection => @comments %>
-<div class="pagination">
-<% if params[:show_all] == '1' %>
-<%= link_to 'Show comments in pages', params.merge(:show_all => 0, :page => 1), :class => 'btn pull-right' %>
-<% else %>
-<%= link_to 'Show all comments', params.merge(:show_all => 1, :page => 1), :class => 'btn pull-right' %>
-<% end %>
-
-<%= will_paginate(@comments, :renderer => PaginationListLinkRenderer) %>
+<div class="ticket-title">
+  <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
+  <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
 </div>
+
+<!-- all comments wrapping -->
+<div id="all-comments">
+<% @ticket.comments.each_slice(5).each_with_index do |comments, index| %>
+<div id="comments-page-<%= index+1 %>" style="<%= index==0? '':'display:none'  %>">
+<%= render :partial => '/comments/comment', :collection => comments %>
+</div>
+<% end %>
+</div>
+
+<!-- client side pagination -->
+<%
+  pages = @ticket.comments.each_slice(5).count
+  if (pages > 1)
+%>
+<div id="pagination" class="pagination">
+
+  <a id="showAllBtn" href="#" class="btn pull-right">Show all comments</a>
+  <a id="showPagesBtn" href="#" class="btn pull-right"
+     style="display:none">Paginate comments</a>
+
+  <ul>
+    <li><a href="#">&laquo; Previous</a></li>
+    <% 1.upto(pages).each do |p| %>
+    <li><a href="#"><%= p %></a></li>
+    <% end %>
+    <li><a href="#">Next &raquo;</a></li>
+  </ul>
+</div>
+<% end %>
 
 <%= render :partial => '/comments/form' %>
