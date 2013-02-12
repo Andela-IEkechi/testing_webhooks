@@ -3,9 +3,9 @@ class Project < ActiveRecord::Base
   after_create :default_statuses
 
   belongs_to :user
-  has_many :features, :dependent => :destroy
+  has_many :features, :dependent => :destroy, :order => :scoped_id
   has_many :tickets, :dependent => :destroy, :include => :comments, :order => :id
-  has_many :sprints, :order => :due_on, :dependent => :destroy
+  has_many :sprints, :order => :due_on, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy
   has_many :api_keys, :dependent => :destroy
   has_and_belongs_to_many :participants, :association_foreign_key => 'user_id', :class_name => 'User', :order => 'email asc'
