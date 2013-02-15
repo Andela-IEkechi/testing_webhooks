@@ -1,5 +1,7 @@
 class ChangeFileToPayload < ActiveRecord::Migration
   def change
-    rename_column :comment_assets, :file, :payload
+    if column_exists?(:comment_assets, :file) && !column_exists?(:comment_assets, :payload)
+      rename_column :comment_assets, :file, :payload
+    end
   end
 end

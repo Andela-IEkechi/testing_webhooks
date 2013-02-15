@@ -9,6 +9,8 @@ class TicketsController < ApplicationController
   before_filter :load_ticket_parents
 
   def index
+    redirect_to project_path(@project) && return unless @project
+
     @tickets = @sprint.assigned_tickets if @sprint
     @tickets ||= @feature.assigned_tickets if @feature
     @tickets ||= @project.tickets if @project
@@ -31,28 +33,20 @@ class TicketsController < ApplicationController
       format.js do
         render :partial => '/shared/index'
       end
+      format.html do
+        redirect_to project_path(@project)
+      end
     end
   end
 
   def show
     #create a new comment, but dont tell the ticket about it, or it will render
-    @comment = Comment.new(
-      :ticket_id => @ticket.id,
-      :status_id => @ticket.status.try(:id),
-      :feature_id => @ticket.feature.try(:id),
-      :sprint_id => @ticket.sprint.try(:id),
-      :assignee_id => @ticket.assignee.try(:id),
-      :cost => @ticket.cost
-      )
-
-    # Pagination and 'show_all' option
-    # if params[:show_all] == '1'
-    #   @comments = Comment.paginate(:page => params[:page])
-    # else
-    #   @comments = Comment.paginate(:page => params[:page], :per_page => 5)
-    # end
-
-
+    @comment = Comment.new(:ticket_id   => @ticket.to_param,
+                           :status_id   => @ticket.status.to_param,
+                           :feature_id  => @ticket.feature_id, #use the real id here!
+                           :sprint_id   => @ticket.sprint_id, #use the real id here!
+                           :assignee_id => @ticket.assignee.to_param,
+                           :cost        => @ticket.cost)
   end
 
   def new
@@ -71,7 +65,7 @@ class TicketsController < ApplicationController
       flash.keep[:notice] = "Ticket was added"
       if params[:create_another]
         @ticket.reload #refresh the assoc to last_comment
-        redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+        redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature, :sprint_id => @ticket.sprint)
       else
         redirect_to project_ticket_path(@ticket.project, @ticket)
       end

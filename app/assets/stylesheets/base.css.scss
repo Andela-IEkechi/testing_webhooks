@@ -9,12 +9,12 @@ p, b, .label {
   font-family: arial;
 }
 
-// a, a:hover, #git-commands-toggle, #git-commands {
-// 	color: #579803;
-// }
+a, a:hover {
+	color: $primary-link-color;
+}
 
 input:focus, textarea:focus {
-    border: 1px solid #92e12a !important;
+    border: 1px solid $primary-focus-color !important;
     box-shadow: none !important;
     outline: none !important;
   }
@@ -26,21 +26,6 @@ input[type=checkbox] {
 
 abbr[title] {
   display: none;
-}
-
-.btn-maincolor {
-  background-color: #A9FD3C;
-  border: 1px solid #92e12a;
-  background-image: none;
-  font-size: 13px;
-  font-weight: bold;
-  font-family: arial;
-  padding: 7px 10px;
-  border-radius: 5px;
-  color: #434343;
-  &:hover {
-    background-color: #92e12a;
-  }
 }
 
 /*margin centering won't work without a fixed width & unfloated parent - float currently cause by row-fluid*/
@@ -146,4 +131,3 @@ background-color: #fff;
     width: 65%;
   }
 }
-
