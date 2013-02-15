@@ -3,34 +3,21 @@
   <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
 </div>
 
-<!-- all comments wrapping -->
-<div id="all-comments">
-<% @ticket.comments.each_slice(5).each_with_index do |comments, index| %>
-<div id="comments-page-<%= index+1 %>" style="<%= index==0? '':'display:none'  %>">
-<%= render :partial => '/comments/comment', :collection => comments %>
+<!-- render older comments -->
+<div class="hidden" style="display:none;">
+  <%= render :partial => '/comments/comment', :collection => @ticket.comments[0..-6] %>
 </div>
-<% end %>
+<div class="show-hide-toggle">
+  <%= link_to '#', :class => 'hidden', :style=>"display:none;" do %>
+    hide older comments <i class='icon-chevron-up'></i>
+  <% end %>
+  <%= link_to '#', :class => 'shown' do %>
+    show older comments <i class='icon-chevron-down'></i>
+  <% end %>
 </div>
 
-<!-- client side pagination -->
-<%
-  pages = @ticket.comments.each_slice(5).count
-  if (pages > 1)
-%>
-<div id="pagination" class="pagination">
 
-  <a id="showAllBtn" href="#" class="btn pull-right">Show all comments</a>
-  <a id="showPagesBtn" href="#" class="btn pull-right"
-     style="display:none">Paginate comments</a>
-
-  <ul>
-    <li><a href="#">&laquo; Previous</a></li>
-    <% 1.upto(pages).each do |p| %>
-    <li><a href="#"><%= p %></a></li>
-    <% end %>
-    <li><a href="#">Next &raquo;</a></li>
-  </ul>
-</div>
-<% end %>
+<!-- render last 5 comments comments -->
+<%= render :partial => '/comments/comment', :collection => @ticket.comments.last(5) %>
 
 <%= render :partial => '/comments/form' %>
