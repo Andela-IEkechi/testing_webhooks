@@ -2,12 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Conductor &middot; because tickets</title>
     <link rel="icon" href="/favicon.ico" type="image/ico" />
+    <title>Conductor &middot; Simple Ticketing and Project Management</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <meta name="description" content="Conductor helps you get projects out the door faster and with less hassle. Organise your projects with features and sprints and start getting things done.">
+    <meta name="author" content="Conductor Team">
+    <meta name="robots" content="Index, Follow">
+    <meta name="keywords" content="project management, issue tracking, ticketing system">
+    <%= stylesheet_link_tag "application", :media => "all" %>
     <%= csrf_meta_tags %>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -26,7 +28,7 @@
     <div class="container">
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class="<%= 'active' if current_page?(landing_home_path) %>"><%= link_to 'Home', landing_home_path %></li>
+          <li class="<%= 'active' if current_page?(landing_home_path) || current_page?(root_path) %>"><%= link_to 'Home', landing_home_path %></li>
           <li class="<%= 'active' if current_page?(landing_tour_path) %>"><%= link_to 'Tour', landing_tour_path %></li>
           <li class="<%= 'active' if current_page?(landing_pricing_path) %>"><%= link_to 'Pricing & Signup', landing_pricing_path %></li>
           <li class="<%= 'active' if current_page?(landing_support_path) %>"><%= link_to 'Support', landing_support_path %></li>
@@ -34,7 +36,7 @@
           <li><%= link_to 'Sign in', new_session_path(:user) %></li>
           <% end %>
         </ul>
-        <h3 class="muted logo"><img src="/logo-blue.png">Conductor</h3>
+        <h3 class="muted logo"><%= link_to image_tag('logo-blue.png')+'Conductor', root_path %></h3>
       </div>
     </div>
 
@@ -83,5 +85,18 @@
     </div>
 
     <%= javascript_include_tag "application" %>
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38340152-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
   </body>
 </html>

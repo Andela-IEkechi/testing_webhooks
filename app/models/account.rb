@@ -9,7 +9,7 @@ class Account < ActiveRecord::Base
     :free   => {:title => 'Free',               :price => 0,  :users => 3,  :projects => 1,  :storage_gb => 1},
     :small  => {:title => 'Startups',           :price => 10, :users => 10, :projects => 5,  :storage_gb => 2},
     :medium => {:title => 'Small Company',      :price => 25, :users => 50, :projects => 15, :storage_gb => 10, :preferred => true},
-    :large  => {:title => 'Large Organization', :price => 70, :users => 999,:projects => 10, :storage_gb => 50} #unlimited users = 999
+    :large  => {:title => 'Large Organization', :price => 70, :users => 999,:projects => 100, :storage_gb => 50} #unlimited users = 999
   }
 
   def plan_specs(value=nil)
