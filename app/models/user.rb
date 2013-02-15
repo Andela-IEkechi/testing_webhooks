@@ -14,9 +14,15 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
-                  :terms, :chosen_plan
+                  :terms, :chosen_plan, :preferences
 
   validates :terms, acceptance: {accept: true}
+
+  serialize :preferences
+
+  def initialize
+    self.preferences = OpenStruct.new
+  end
 
   def to_s
     if confirmed?
