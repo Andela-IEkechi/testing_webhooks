@@ -70,6 +70,7 @@ ul.nav {
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from($top-nav-bg-color), to($top-nav-bg-color));
 	background-image: -o-linear-gradient(top, $top-nav-bg-color, $top-nav-bg-color);
 	background-image: linear-gradient(top, $top-nav-bg-color, $top-nav-bg-color);
+  background-image: -moz-linear-gradient(top, $top-nav-bg-color, $top-nav-bg-color);
 }
 
 span.navico {
