@@ -1,15 +1,15 @@
 module TicketsHelper
 
   TICKET_KEYWORDS_MAP = {
-    :id => :id_eq, :title => :title_contains,
+    :id => :scoped_id_equals,
+    :title => :title_contains,
     :assigned => :assignee_email_contains,
     :status => :status_name_contains,
     :feature => :feature_title_contains,
-    :sprint => :feature_title_contains,
-    :cost => :cost_eq }
+    :sprint => :sprint_goal_contains,
+    :cost => :last_comment_cost_equals }
 
   def search_query_to_hash(query)
-
     if query.match(":")
       hash = {}
       query.scan(/(\w+):(\w+)/){ |x,y| hash[x.to_sym] = y }
