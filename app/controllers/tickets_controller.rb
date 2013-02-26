@@ -21,26 +21,24 @@ class TicketsController < ApplicationController
     @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
     @assignee_id = current_user.id if params[:assignee_id]
 
-    #also include tickets with IDs that match
-
+    #search he general case
     @search = @tickets.search(params[:search])
+    @combined_search = @search.all
 
+    #search on qualifiers like foo:bar
     search_hash = false
     if params[:search]
       search_hash = search_query_to_hash(params[:search][:title_or_assignee_email_or_sprint_goal_or_feature_title_or_status_name_contains])
-    end
-
-    if search_hash # if meaningful hash could be obtained (con707)
-      @combined_search = @tickets.search(search_hash).all
-    else
-      @combined_search = @search.all
+      if search_hash # if meaningful hash could be obtained (con707)
+        @combined_search += @tickets.search(search_hash).all
+      end
     end
 
     #remember not to search for blank IDs, it will find '%%' matches, which deplicates results: con671
     @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search] && !params[:search].values.first.blank?
 
-    #need to resort both because we added to the set, and because metasearch seems to kill the model ordering
-    @combined_search.sort!{|a,b| a.id<=>b.id}
+    #need to re-sort both because we added to the set, and because metasearch seems to kill the model ordering
+    @combined_search.sort!{|a,b| a.id<=>b.id}.uniq!
     @tickets = Kaminari::paginate_array(@combined_search).page(params[:page])
 
     respond_to do |format|
