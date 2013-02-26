@@ -72,7 +72,7 @@ class TicketsController < ApplicationController
   def create
     @ticket.comments.build() unless @ticket.comments.first
     @ticket.comments.first.user = current_user
-
+    binding.pry
     if @ticket.save
       flash.keep[:notice] = "Ticket was added"
       if params[:create_another]
