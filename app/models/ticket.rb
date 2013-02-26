@@ -32,7 +32,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def parent
-    last_comment.parent || project
+    last_comment.try(:parent) || project
   end
 
   def body
