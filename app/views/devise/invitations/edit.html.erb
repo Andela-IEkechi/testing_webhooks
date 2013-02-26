@@ -2,14 +2,6 @@
   <div class="round-and-shaded signup clearfix">
     <center>
       <h2>Accept Your Invitation</h2>
-      <p class="muted">Sign in using provider:</p>
-      <div class="login-social">
-        <%- if devise_mapping.omniauthable? %>
-          <%- resource_class.omniauth_providers.each do |provider| %>
-            <%= link_to "Sign in with #{provider.to_s.titleize}", omniauth_authorize_path(resource_name, provider), class: "zocial #{provider}"  %><br />
-          <% end -%>
-        <% end -%>
-      </div>
       <p class="muted">Create your free account:</p>
     </center>
 
