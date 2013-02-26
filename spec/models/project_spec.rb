@@ -99,8 +99,34 @@ describe Project do
     }.to change{@project.api_keys.count}.from(0).to(2)
   end
 
+  it "should be a private project by default" do
+    @project.should be_private
+  end
+
+  it "should be able to be a public project" do
+    @project.private = false
+    @project.should_not be_private
+  end
+
   it "should not have an API key by default" do
     @project.should have(0).api_keys
+  end
+
+  it "should be sorted alphabetically by default" , focus: true do
+    #create a few projects
+    5.times do
+      create(:project, :title => [*('A'..'Z')].sample(6).join)
+    end
+    Project.all.collect(&:title) == Project.all.collect(&:title).sort
+  end
+
+  it "should be sorted alphabetically for a user" , focus: true do
+    #create a few projects for a single user
+    5.times do
+      create(:project, :title => [*('A'..'Z')].sample(6).join, :user => @project.user)
+    end
+    @project.user.projects.count.should eq(6)
+    @project.user.projects.all.collect(&:title) == @project.user.projects.all.collect(&:title).sort
   end
 
   context "with participants" do

@@ -1,6 +1,12 @@
 require 'spec_helper'
+require 'shared/examples_for_scoped'
 
 describe Feature do
+  it_behaves_like 'scoped' do
+    let(:scoped_class) { Feature }
+  end
+
+
   before(:each) do
     @feature = create(:feature)
   end
@@ -52,6 +58,13 @@ describe Feature do
   it "must have a valid project" do
     @feature.project = nil
     @feature.should_not be_valid
+  end
+
+  it "should return the scoped_id when an id is implied", focus: true do
+    @feature.scoped_id = @feature.project.features_sequence + 1
+    @feature.id.should_not eq(@feature.scoped_id)
+    @feature.to_param.should eq(@feature.scoped_id)
+
   end
 
   context "without tickets" do

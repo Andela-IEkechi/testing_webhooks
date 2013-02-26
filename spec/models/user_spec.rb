@@ -58,4 +58,28 @@ describe User do
     end
   end
 
+  context "when terms not accepted" do
+    it "should not allow user to be created" do
+      user = build(:user_with_password)
+      user.valid?
+      user.should be_valid
+      user.terms = "0"
+      user.should_not be_valid
+    end
+  end
+
+  it "should have an account when it is created" do
+    user = create(:user)
+    user.account.should_not be_nil
+  end
+
+  it "should have a free plan by default" do
+    user = create(:user)
+    user.account.plan.should eq("free")
+  end
+
+  it "should respont to :trial?" do
+    user = create(:user)
+    user.should respond_to(:trial?)
+  end
 end

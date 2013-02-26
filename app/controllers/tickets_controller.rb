@@ -5,13 +5,15 @@ class TicketsController < ApplicationController
   before_filter :load_search_resources, :only => :index
 
   load_and_authorize_resource :project
-  load_and_authorize_resource :feature, :through => :project
-  load_and_authorize_resource :sprint, :through => :project
-  load_and_authorize_resource :ticket, :through => :project, :except => :index, :find_by => :scoped_id
+  load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
+  load_and_authorize_resource :sprint,  :through => :project, :find_by => :scoped_id
+  load_and_authorize_resource :ticket,  :through => :project, :find_by => :scoped_id, :except => :index
 
   before_filter :load_ticket_parents
 
   def index
+    redirect_to project_path(@project) && return unless @project
+
     @tickets = @sprint.assigned_tickets if @sprint
     @tickets ||= @feature.assigned_tickets if @feature
     @tickets ||= @project.tickets if @project
@@ -45,19 +47,20 @@ class TicketsController < ApplicationController
       format.js do
         render :partial => '/shared/index'
       end
+      format.html do
+        redirect_to project_path(@project)
+      end
     end
   end
 
   def show
     #create a new comment, but dont tell the ticket about it, or it will render
-    @comment = Comment.new(
-      :ticket_id => @ticket.scoped_id,
-      :status_id => @ticket.status.try(:id),
-      :feature_id => @ticket.feature.try(:id),
-      :sprint_id => @ticket.sprint.try(:id),
-      :assignee_id => @ticket.assignee.try(:id),
-      :cost => @ticket.cost
-      )
+    @comment = Comment.new(:ticket_id   => @ticket.to_param,
+                           :status_id   => @ticket.status.to_param,
+                           :feature_id  => @ticket.feature_id, #use the real id here!
+                           :sprint_id   => @ticket.sprint_id, #use the real id here!
+                           :assignee_id => @ticket.assignee.to_param,
+                           :cost        => @ticket.cost)
   end
 
   def new
@@ -76,7 +79,7 @@ class TicketsController < ApplicationController
       flash.keep[:notice] = "Ticket was added"
       if params[:create_another]
         @ticket.reload #refresh the assoc to last_comment
-        redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature_id, :sprint_id => @ticket.sprint_id)
+        redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature, :sprint_id => @ticket.sprint)
       else
         redirect_to project_ticket_path(@ticket.project, @ticket)
       end

@@ -1,8 +1,8 @@
 <%
   project ||= @project
   project_id ||= project && project.id
-  sprint_id ||= @sprint && @sprint.id
-  feature_id ||= @feature && @feature.id
+  sprint_id ||= @sprint && @sprint.to_param
+  feature_id ||= @feature && @feature.to_param
   assignee_id ||= @assignee_id
 
   parent = "sprint-#{sprint_id}" if sprint_id
@@ -43,7 +43,7 @@
     <% @tickets.each do |ticket| %>
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
       <td><%= ticket.scoped_id %></td>
-      <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
+      <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
       <td>
         <div class="overflow">
           <%= ticket.assignee %>

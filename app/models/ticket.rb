@@ -1,5 +1,5 @@
 class Ticket < ActiveRecord::Base
-  before_create :populate_scoped_id
+  include Scoped
 
   belongs_to :project #always
   has_many :comments, :order => :id
@@ -20,9 +20,9 @@ class Ticket < ActiveRecord::Base
 
   scope :unassigned, lambda{ parent.is_a? Project}
 
-  scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment}}
-  scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment}}
-  scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment}}
+  scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment, :include => :status}}
+  scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment, :include => :status}}
+  scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment, :include => :status}}
   scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.scoped_id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
 
   def to_s
@@ -46,6 +46,14 @@ class Ticket < ActiveRecord::Base
     user.id rescue nil
   end
 
+  def sprint_id
+    (last_comment.sprint.id rescue nil)
+  end
+
+  def feature_id
+    (last_comment.feature.id rescue nil)
+  end
+
   def cost
     get_last(:cost)
   end
@@ -66,21 +74,9 @@ class Ticket < ActiveRecord::Base
     !open?
   end
 
-  def sprint_id
-    sprint && sprint.id || nil
-  end
-
-  def feature_id
-    feature && feature.id || nil
-  end
-
   def update_last_comment!
     self.last_comment = self.comments.last
     self.save!
-  end
-
-  def to_param
-    self.scoped_id
   end
 
   private
@@ -93,11 +89,5 @@ class Ticket < ActiveRecord::Base
   def get_last(attr)
     comments.last.try(attr)
   end
-
-  def populate_scoped_id
-    project.increment!(:tickets_sequence)
-    self[:scoped_id] = project.tickets_sequence
-  end
-
 
 end
