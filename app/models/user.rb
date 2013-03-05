@@ -54,6 +54,6 @@ class User < ActiveRecord::Base
   end
 
   def trial?
-    (Date.today - created_at.to_date).to_i <= 30 && account.plan == 'free'
+    account.plan == 'trial'
   end
 end
