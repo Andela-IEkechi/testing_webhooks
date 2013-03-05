@@ -32,7 +32,8 @@ class Ticket < ActiveRecord::Base
   end
 
   def parent
-    last_comment.parent || project
+    return last_comment.parent if last_comment
+    project
   end
 
   def body
