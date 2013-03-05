@@ -112,7 +112,7 @@ describe Project do
     @project.should have(0).api_keys
   end
 
-  it "should be sorted alphabetically by default" , focus: true do
+  it "should be sorted alphabetically by default" do
     #create a few projects
     5.times do
       create(:project, :title => [*('A'..'Z')].sample(6).join)
@@ -120,7 +120,7 @@ describe Project do
     Project.all.collect(&:title) == Project.all.collect(&:title).sort
   end
 
-  it "should be sorted alphabetically for a user" , focus: true do
+  it "should be sorted alphabetically for a user" do
     #create a few projects for a single user
     5.times do
       create(:project, :title => [*('A'..'Z')].sample(6).join, :user => @project.user)
