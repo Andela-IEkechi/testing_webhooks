@@ -68,18 +68,13 @@ describe User do
     end
   end
 
-  it "should have an account when it is created" do
+  it "should have an account when it is created", :focus => true do
     user = create(:user)
     user.account.should_not be_nil
   end
 
-  it "should have a free plan by default" do
+  it "should have a free plan by default", :focus => true do
     user = create(:user)
     user.account.plan.should eq("free")
-  end
-
-  it "should respont to :trial?" do
-    user = create(:user)
-    user.should respond_to(:trial?)
   end
 end

@@ -52,8 +52,4 @@ class User < ActiveRecord::Base
     end
     user
   end
-
-  def trial?
-    account.plan == 'trial'
-  end
 end
