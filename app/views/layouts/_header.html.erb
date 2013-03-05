@@ -36,6 +36,7 @@
                 <strong><%= current_user.full_name %></strong><br>
                 <small><%= current_user.email %></small><br>
                 <%= link_to 'Manage profile', edit_user_registration_path, class: 'btn btn-info' %>
+                <%= link_to 'Manage account', edit_user_account_path(current_user, current_user.account), class: 'btn btn-info' %>
               </div>
             </div>
           </li>

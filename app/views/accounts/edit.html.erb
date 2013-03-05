@@ -1,0 +1,23 @@
+<h3>Manage Profile</h3>
+
+<%= simple_nested_form_for([@account.user, @account], :html => {:multipart => true}) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs pull-left">
+    <strong>Plan:</strong> <%= Account::PLANS[@account.plan.to_sym][:title] %><br />
+    <strong>Price:</strong> R<%= Account::PLANS[@account.plan.to_sym][:price] %><br />
+    <strong>Users:</strong> <%= Account::PLANS[@account.plan.to_sym][:users] %><br />
+    <strong>Storage:</strong> <%= Account::PLANS[@account.plan.to_sym][:storage_gb] %>gig
+    
+    <hr />
+    <%= f.input :plan, :collection => Account::PLANS.collect{|k,v| v[:title]} %>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <div class="form-actions">
+    <%= f.submit "Update", :class => "btn"  %>
+    <%= link_to 'cancel', root_path(), :class => 'btn' %>
+  </div>
+<% end %>
+
