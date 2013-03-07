@@ -82,4 +82,20 @@ describe User do
     user = create(:user)
     user.should respond_to(:trial?)
   end
+
+  it "should be an active user by default" do
+    user = create(:user)
+    user.should respond_to(:active?)
+    user.active?.should be_true
+  end
+
+  it "should be possible to soft-delete users" do
+    user = create(:user)
+    user.should respond_to(:deleted?)
+    user.soft_delete
+    user.reload
+
+    user.deleted?.should be_true
+  end
+
 end
