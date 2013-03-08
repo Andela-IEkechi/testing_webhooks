@@ -65,12 +65,12 @@
     <% end if @tickets %>
     <% if @tickets && @tickets.count == 0 %>
       <tr>
-        <td colspan="5">There are no tickets</td>
+        <td colspan="7">There are no tickets</td>
       </tr>
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="5"><%= link_to 'loading tickets...',
+        <td colspan="7"><%= link_to 'loading tickets...',
           project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
           :remote => true, :class => "autoload" %>
         </td>
