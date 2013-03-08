@@ -1,15 +1,8 @@
-.ticket-info {
-  text-align: center !important;
-  .label:empty {
-    display: inline-block;
-  }
-}
-
 .label {
   padding: 5px 2px;
 }
 .label-ticket {
-  width:29%;
+  width:96%;
   display: inline-block;
   text-align: center;
   overflow: hidden;
@@ -19,9 +12,15 @@
   background: none;
 }
 .label-feature {
+  a {
+    color: #FFFFFF;
+  }
   background-color: $label-feature-color;
 }
 .label-sprint {
+  a {
+    color: #FFFFFF;
+  }
   background-color: $label-sprint-color;
 }
 .label-status {
