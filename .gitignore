@@ -20,3 +20,4 @@
 *.swp
 public/uploads
 *~
+.idea
