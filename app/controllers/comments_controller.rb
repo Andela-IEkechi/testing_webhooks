@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
 
   load_and_authorize_resource :project
   load_and_authorize_resource :ticket, :through => :project, :find_by => :scoped_id
-  load_and_authorize_resource :comment, :through => :ticket
+  load_and_authorize_resource :comment, :through => :ticket, :except => :preview
 
   def new
   end
@@ -53,7 +53,16 @@ class CommentsController < ApplicationController
         render :partial => '/shared/destroy'
       end
     end
+  end
 
+  def preview
+    authorize! :create, Comment
+
+    renderer   = PygmentizeHTML
+    extensions = {fenced_code_blocks: true}
+    redcarpet  = Redcarpet::Markdown.new(renderer, extensions)
+
+    render :json => { 'rendered_content' => redcarpet.render(params[:comment]['body']).strip }
   end
 
   private

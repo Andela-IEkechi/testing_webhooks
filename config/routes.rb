@@ -12,6 +12,8 @@ Conductor::Application.routes.draw do
     resources :sprints
   end
 
+  post 'comments/preview'
+
   post 'github/commit/:token' => 'github#commit'
 
   get 'landing/home'
