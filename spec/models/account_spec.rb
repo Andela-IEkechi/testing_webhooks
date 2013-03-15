@@ -37,11 +37,11 @@ describe Account do
 
   context "when changing plans", :focus => true do
     it "should respond to :upgrade" do
-      @account.plan.should respond_to :upgrade
+      @account.should respond_to :upgrade
     end
 
     it "should respond to :downgrade" do
-      @account.plan.should respond_to :downgrade
+      @account.should respond_to :downgrade
     end
 
     it "should be able to upgrade" do
