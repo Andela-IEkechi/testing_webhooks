@@ -14,6 +14,11 @@ Conductor::Application.routes.draw do
 
   post 'comments/preview'
 
+  # Ridiculous as it seems, without this route, previewing an existing comment
+  # that you're editing posts text/html, not application/json to the server,
+  # resulting in a 500 error
+  put 'comments/preview' 
+
   post 'github/commit/:token' => 'github#commit'
 
   get 'landing/home'

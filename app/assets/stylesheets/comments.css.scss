@@ -30,7 +30,7 @@ div.comment-statusbar {
   padding-right: 10px;
   line-height:35px;
   height:35px;
-  /*@include border-radius(3px);*/
+  @include border-radius(3px);
   ul  {
     font-size: 12px;
     list-style-type: none; //bootstrap supports this, but not in the gem we use...yet we should drop this style when "class='inline' is available"
@@ -57,4 +57,5 @@ div.comment-statusbar {
 div.comment-preview {
   border: 1px solid #EFEFEF;
   margin-bottom: 20px;
+  padding: 4px;
 }

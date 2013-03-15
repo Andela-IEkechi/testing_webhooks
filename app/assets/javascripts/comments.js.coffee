@@ -10,15 +10,16 @@ $ ->
     )
 
     preview = () ->
-      output.fadeOut('fast', () ->
-        $.ajax(
-          url: _comments_preview_url,
-          data: $("#new_comment").serialize()
-          type: 'POST'
-          dataType: 'json'
-          success: (response) ->
+      jQuery.ajax(
+        url: _comments_preview_url,
+        data: input.parents('form').serialize()
+        type: 'POST'
+        dataType: 'json'
+        success: (response) ->
+          unless response.rendered_content is ""
             output.html(response.rendered_content)
-            output.fadeIn('fast')
-        )
+          else
+            output.html('There appears to be no comment content to preview. Type something first?')
+          output.show()
       )
 
