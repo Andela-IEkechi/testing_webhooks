@@ -18,8 +18,4 @@ module ApplicationHelper
       <div class='progress-left' style='width: #{100-progress}%'>&nbsp;</div>
     </div>"
   end
-
-  def trial_days
-    days = (Date.today - current_user.created_at.to_date).to_i
-  end
 end
