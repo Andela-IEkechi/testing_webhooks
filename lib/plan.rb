@@ -11,39 +11,49 @@ module Plan
     @name = name
   end
 
-  def <=>(other)
-    plan_names = PLAN.keys.collect(&:to_str)
-    plan_names.index(self) <=> plan_names.index(other)
-  end
-
   def to_s
     @name.to_s
   end
 
+  def upgrade_to?
+    case self.name
+    when 'free'
+      'small'
+    when 'small'
+      'medium'
+    when 'medium'
+      'large'
+    else
+      'large'
+    end
+  end
+
+  def downgrade_to?
+    case self.name
+    when 'large'
+      'medium'
+    when 'medium'
+      'small'
+    when 'small'
+      'free'
+    else
+      'free'
+    end
+  end
+
   def upgrade
-    new case self.name
-      when 'free'
-        return 'small'
-      when 'small'
-        return 'medium'
-      when 'medium'
-        return 'large'
-      else
-        return 'large'
-      end
+    new(upgrade_to?)
   end
 
   def downgrade
-    new case self.name
-      when 'large'
-        return 'medium'
-      when 'medium'
-        return 'small'
-      when 'small'
-        return 'free'
-      else
-        return 'free'
-      end
+    new(downgrade_to?)
   end
 
+  def better_than?(other)
+    PLANS.keys.index(self) > PLANS.keys.index(other)
+  end
+
+  def worse_than?(other)
+    !better_than?(other)
+  end
 end
