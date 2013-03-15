@@ -1,4 +1,4 @@
-module Plan
+class Plan
 
   PLANS = {
     :free   => {:title => 'Free',               :price => 0,  :users => 3,  :projects => 1,  :storage_gb => 1},
