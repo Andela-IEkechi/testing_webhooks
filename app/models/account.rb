@@ -5,11 +5,6 @@ class Account < ActiveRecord::Base
   validates :user_id, presence: true
   validates :plan, presence: true
 
-  def plan_specs(value=nil)
-    value ||= self.plan
-    PLANS[value]
-  end
-
   def upgrade
     self.plan = Plan.new(self.plan).upgrade
   end

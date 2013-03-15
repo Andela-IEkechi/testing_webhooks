@@ -11,6 +11,9 @@ class Ability
     #     can :read, :all
     #   end
 
+    can :manage, User, :id => user.id
+    can :manage, Account, :user_id => user.id
+
     can :manage, Project, :user_id => user.id
     can :create, Project if user.confirmed?
     can :read, Project #we refine the perms in the controller, it's too trickey here :(
