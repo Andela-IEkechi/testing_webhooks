@@ -40,7 +40,7 @@
       </div>
       <div class="span6">
         <h4>How does the free account work?</h4>
-        <p>When you sign up for a free account you get access to all of Conductors features. This allows you to explore the product and use it with your team. Free accounts are limited to <%= @plans[:free][:projects] %> private <%= 'project'.pluralize(@plans[:free][:projects]) %> and <%= @plans[:free][:users] %> <%= 'user'.pluralize(@plans[:free][:users]) %>.</p>
+        <p>When you sign up for a free account you get access to all of Conductors features. This allows you to explore the product and use it with your team. Free accounts are limited to <%= @plans[:free][:projects] %> private <%= 'project'.pluralize(@plans[:free][:projects]) %> and <%=  "#{@plans[:free][:users]} user".pluralize(@plans[:free][:users]) %>.</p>
       </div>
     </div>
 
