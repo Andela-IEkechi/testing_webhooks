@@ -113,12 +113,12 @@ span.navico {
   li.last {
     margin-top: 0px;
     margin-bottom: 5px;
-    .sign-out {
-      @extend .btn;
-      @extend .pull-right;
-      margin-right: 10px;
-      width: 50px;
-    }
+  }
+  .sign-out {
+    @extend .btn;
+    @extend .pull-right;
+    margin-right: 10px;
+    width: 50px;
   }
 }
 
