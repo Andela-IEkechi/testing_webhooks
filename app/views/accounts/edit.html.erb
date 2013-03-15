@@ -1,22 +1,26 @@
-<h3>Manage Profile</h3>
-<%= simple_nested_form_for([@account.user, @account], :html => {:multipart => true}) do |f| %>
+<h3>Update Your Account Details</h3>
+<%= simple_nested_form_for([@account.user, @account]) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs pull-left">
-    <strong>Plan:</strong> <%= @account.plan_specs(@account.plan.to_sym)[:title] %><br />
-    <strong>Price:</strong> R<%= @account.plan_specs(@account.plan.to_sym)[:price] %><br />
-    <strong>Users:</strong> <%= @account.plan_specs(@account.plan.to_sym)[:users] %><br />
-    <strong>Projects:</strong> <%= @account.plan_specs(@account.plan.to_sym)[:projects] %><br />
-    <strong>Storage:</strong> <%= @account.plan_specs(@account.plan.to_sym)[:storage_gb] %>gig
-    <hr />
-    <%= f.input :plan, :collection => Account::PLANS.collect{|k,v| [v[:title] ,k.to_s]}, :selected => @account.plan %>
+    <ul>
+      <% Plan::PLANS.each do |name, detail| %>
+        <li>
+          <div>
+            <%= detail[:title] %>
+          </div>
+          <div>
+            <%= link_to link_text(@account, Plan.new(name)), '#' unless @account.plan == name.to_s %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
   </div>
 
   <div class="clearfix"></div>
 
   <div class="form-actions">
-    <%= f.submit "Update", :class => "btn"  %>
-    <%= link_to 'cancel', root_path(), :class => 'btn' %>
+    <%= link_to 'Cancel', root_path(), :class => 'btn' %>
   </div>
 <% end %>
 

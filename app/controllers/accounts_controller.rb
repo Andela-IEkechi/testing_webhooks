@@ -18,6 +18,5 @@ class AccountsController < ApplicationController
   private
   def load_account
     @account = @user.account
-    @plans = Plan::PLANS.collect{|k,v| [v[:title] ,k.to_s]}
   end
 end

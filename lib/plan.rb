@@ -50,7 +50,7 @@ class Plan
   end
 
   def better_than?(other)
-    PLANS.keys.index(self) > PLANS.keys.index(other)
+    PLANS.keys.index(@name.to_sym) > PLANS.keys.index(other.to_s.to_sym)
   end
 
   def worse_than?(other)
