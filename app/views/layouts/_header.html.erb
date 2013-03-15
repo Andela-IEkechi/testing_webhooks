@@ -35,10 +35,13 @@
               <div class="profile-splurb">
                 <strong><%= current_user.full_name %></strong><br>
                 <small><%= current_user.email %></small><br>
-                <%= link_to 'Manage profile', edit_user_registration_path, class: 'btn btn-info' %>
-                <%= link_to 'Manage account', edit_user_account_path(current_user, current_user.account), class: 'btn btn-info' %>
               </div>
             </div>
+          </li>
+          <li>
+                <%= link_to 'Manage profile', edit_user_registration_path %>
+                <%= link_to 'Manage account', edit_user_account_path(current_user, current_user.account) %>
+
           </li>
           <li class="last"><%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'sign-out' %></li>
         </ul>
