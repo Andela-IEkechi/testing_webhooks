@@ -11,17 +11,12 @@ class Plan
     @name = name
   end
 
-  def <=>(other)
-    plan_names = PLANS.keys.collect(&:to_str)
-    plan_names.index(self) <=> plan_names.index(other)
-  end
-
   def to_s
     @name.to_s
   end
 
   def upgrade_to?
-    case self.name
+    case @name
     when 'free'
       'small'
     when 'small'
@@ -34,7 +29,7 @@ class Plan
   end
 
   def downgrade_to?
-    case self.name
+    case @name
     when 'large'
       'medium'
     when 'medium'
@@ -47,11 +42,11 @@ class Plan
   end
 
   def upgrade
-    new(upgrade_to?)
+    Plan.new(upgrade_to?)
   end
 
   def downgrade
-    new(downgrade_to?)
+    Plan.new(downgrade_to?)
   end
 
   def better_than?(other)
