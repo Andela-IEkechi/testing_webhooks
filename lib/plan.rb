@@ -13,7 +13,7 @@ module Plan
 
   def <=>(other)
     plan_names = PLAN.keys.collect(&:to_str)
-    plan.names.index(self) <=> plan_names.index(other)
+    plan_names.index(self) <=> plan_names.index(other)
   end
 
   def to_s
