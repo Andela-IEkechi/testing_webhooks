@@ -8,7 +8,8 @@ class Plan
   }
 
   def initialize(name)
-    @name = name
+    @name = name.to_sym
+    @name = :free if PLANS.keys.index(name.to_sym) == nil
   end
 
   def to_s
@@ -16,7 +17,7 @@ class Plan
   end
 
   def upgrade_to?
-    case @name
+    case @name.to_s
     when 'free'
       'small'
     when 'small'
@@ -29,7 +30,7 @@ class Plan
   end
 
   def downgrade_to?
-    case @name
+    case @name.to_s
     when 'large'
       'medium'
     when 'medium'
