@@ -3,23 +3,20 @@ class AccessesController < ApplicationController
 
   def edit
     #get all the users accross all the projects to select from
-    @participants = current_user.projects.collect(&:participants).flatten.uniq.sort{|a,b| a.email <=> b.email}
+    @memberships = current_user.projects.collect(&:memberships).flatten.uniq.sort{|a,b| a.user_email <=> b.user_email}
   end
 
   def update
-    new_user_ids = Participant::create_from_params(@project, params[:project].delete(:participants_attributes))
-    params[:project][:participant_ids] = params[:project][:participant_ids].collect(&:to_i).select{|x| x > 0} + new_user_ids
-    params[:project][:participant_ids].uniq!
+    #create new users based on membership attributes
+    params[:project][:memberships_attributes].each do |token, membership_attr|
+      user = User.find_by_email(membership_attrs[:email].downcase)
+      user ||= User.invite!(:email => attrs[:email].downcase) unless attrs[:email].blank? || attrs[:_destroy] == '1'
 
-    if params[:membership]
-      params[:membership].each do |k,v|
-        m = Membership.find(k)
-        m.update_attributes(v)
-      end
+      membership = @project.memberships.find_or_create_by_user_id(:user_id => user.id) if user
+      membership.update_attributes(membership_attr) if membership
     end
 
     if @project.update_attributes(params[:project])
-      Participant::notify(@project, params[:project][:participant_ids])
       flash[:notice] = "Project access updated"
       redirect_to edit_project_path(@project)
     else
@@ -28,3 +25,4 @@ class AccessesController < ApplicationController
     end
   end
 end
+

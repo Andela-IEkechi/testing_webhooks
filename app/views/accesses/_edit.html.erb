@@ -6,7 +6,7 @@
 
  <!-- dummy entry to show the project owner -->
   <div class="control-group">
-    <label class="control-label">Participants</label>
+    <label class="control-label">Members</label>
     <div class="controls">
       <label class="span4" style="display:inline">
         <input type="checkbox" checked="checked" disabled="disabled" name="dummycheck"/>
@@ -17,43 +17,43 @@
 
 <!-- memberships -->
  <%
-    @project.memberships.reject{|m| m.user_id == @project.user_id}.each do |m|
-    participant = @project.ordered_participants.find_by_email(m.user.email)
+    @project.memberships.reject{|m| m.user_id == @project.user_id}.each do |membership|
  %>
   <div class="control-group">
     <label class="control-label"></label>
     <div class="controls">
-      <label for="project_participant_ids_<%= participant.id %>"
+      <label for="project_membership_ids_<%= membership.id %>"
              class="span4"
              style="display: inline">
       <input checked="checked" class="check_boxes optional"
-             id="project_participant_ids_<%= participant.id %>"
-             name="project[participant_ids][]" type="checkbox"
-             value="<%= participant.id %>">
-      <%= m.user.email %>
+             id="project_membership_ids_<%= membership.id %>"
+             name="project[membership_ids][]" type="checkbox"
+             value="<%= membership.id %>">
+      <%= membership.user %>
       </label>
-      <%= select "membership[#{m.id}]", :role,
-          options_for_select(Membership::ROLE_NAMES, m.role) %>
+      <%= select "membership[#{membership.id}]", :role,
+          options_for_select(Membership::ROLE_NAMES, membership.role) %>
     </div>
   </div>
   <% end %>
-  <input name="project[participant_ids][]" type="hidden" value="">
+  <input name="project[membership_ids][]" type="hidden" value="">
 
   <!-- invite -->
-  <%= f.simple_fields_for :participants, [] do |p_form| %>
+  <%= f.simple_fields_for :memberships, [] do |m_form| %>
     <div class="well top-padding">
-      <%= p_form.input :email %>
-
+      <%= m_form.simple_fields_for :user, [] do |u_form| %>
+        <%= u_form.input :email %>
+      <% end %>
 
       <div class="control-group">
         <label class="control-label">Invite as</label>
         <div class="controls">
-          <%= p_form.select :memberships, options_for_select(Membership::ROLE_NAMES) %>
+          <%= m_form.select :memberships, options_for_select(Membership::ROLE_NAMES) %>
         </div>
       </div>
 
-      <%= p_form.input ' ' do %>
-        <%= p_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this invitation'  %>
+      <%= m_form.input ' ' do %>
+        <%= m_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this invitation'  %>
       <% end %>
     </div>
   <% end %>
