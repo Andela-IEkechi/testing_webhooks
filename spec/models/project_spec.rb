@@ -149,7 +149,7 @@ describe Project, focus: true do
       4.times do
         @project.memberships << create(:membership)
       end
-      membership_emails = @project.memberships.collect{|m| m.user.email}
+      membership_emails = @project.memberships.all.collect{|m| m.user.email}
       ordered_emails = @project.memberships.all.sort{|a,b| a.user.email <=> b.user.email}.collect{ |m| m.user.email}
       membership_emails.should == ordered_emails
     end
