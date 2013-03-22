@@ -2,5 +2,8 @@
 
 FactoryGirl.define do
   factory :membership do
+    association(:user)
+    association(:project)
+    role "admin"
   end
 end

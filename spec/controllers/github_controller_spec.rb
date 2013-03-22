@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController, focus: true do
+describe GithubController do
 
   before :each do
     @project = create(:project)
