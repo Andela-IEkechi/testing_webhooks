@@ -2,53 +2,35 @@
 
 <%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
 
-<!-- checkboxes -->
-
- <!-- dummy entry to show the project owner -->
-  <div class="control-group">
-    <label class="control-label">Members</label>
-    <div class="controls">
-      <label class="span4" style="display:inline">
-        <input type="checkbox" checked="checked" disabled="disabled" name="dummycheck"/>
-        <%= @project.user.email %></label>
-      <%= select_tag :dummy, options_for_select(["Owner"]), :disabled => 'disabled' %>
+  <!-- memberships -->
+  <%= f.simple_fields_for :memberships do |m_form| %>
+  <%
+     membership = m_form.object
+     project_owner = membership.user_id == membership.project.user_id
+  %>
+  <div class="row">
+    <div class="span6">
+      <%= m_form.input :id, :as => :boolean, :label => membership.user.email, :wrapper => :inline_checkbox, :disabled => project_owner  %>
     </div>
-  </div>
-
-<!-- memberships -->
- <%
-    @project.memberships.reject{|m| m.user_id == @project.user_id}.each do |membership|
- %>
-  <div class="control-group">
-    <label class="control-label"></label>
-    <div class="controls">
-      <label for="project_membership_ids_<%= membership.id %>"
-             class="span4"
-             style="display: inline">
-      <input checked="checked" class="check_boxes optional"
-             id="project_membership_ids_<%= membership.id %>"
-             name="project[membership_ids][]" type="checkbox"
-             value="<%= membership.id %>">
-      <%= membership.user %>
-      </label>
-      <%= select "membership[#{membership.id}]", :role,
-          options_for_select(Membership::ROLE_NAMES, membership.role) %>
+    <div class="span6">
+      <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner %>
     </div>
   </div>
   <% end %>
+
   <input name="project[membership_ids][]" type="hidden" value="">
 
   <!-- invite -->
   <%= f.simple_fields_for :memberships, [] do |m_form| %>
     <div class="well top-padding">
-      <%= m_form.simple_fields_for :user, [] do |u_form| %>
+      <%= m_form.simple_fields_for :user do |u_form| %>
         <%= u_form.input :email %>
       <% end %>
 
       <div class="control-group">
         <label class="control-label">Invite as</label>
         <div class="controls">
-          <%= m_form.select :memberships, options_for_select(Membership::ROLE_NAMES) %>
+          <%= m_form.select :role, options_for_select(Membership::ROLE_NAMES) %>
         </div>
       </div>
 
@@ -58,7 +40,7 @@
     </div>
   <% end %>
 
-  <%= f.link_to_add "Invite a user", :participants, :class => 'btn btn-success offset2' %>
+  <%= f.link_to_add "Invite a user", :memberships, :class => 'btn btn-success offset2' %>
 
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>

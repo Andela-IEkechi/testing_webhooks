@@ -8,14 +8,18 @@ class AccessesController < ApplicationController
 
   def update
     #create new users based on membership attributes
+    params[:project][:membership_ids] = [@project.memberships.where(:user_id => @project.user_id).first.try(:id)]
+
     params[:project][:memberships_attributes].each do |token, membership_attr|
-      user = User.find_by_email(membership_attrs[:email].downcase)
-      user ||= User.invite!(:email => attrs[:email].downcase) unless attrs[:email].blank? || attrs[:_destroy] == '1'
+      user_attr = membership_attr[:user]
+      user = User.find_by_email(user_attr[:email].downcase)
+      user ||= User.invite!(:email => user_attr[:email].downcase) unless user_attr[:email].blank? || membership_attr[:_destroy] == '1'
 
       membership = @project.memberships.find_or_create_by_user_id(:user_id => user.id) if user
-      membership.update_attributes(membership_attr) if membership
+      membership.role = membership_attr[:role] if membership
+      membership.save
+      params[:project][:membership_ids] << membership.id
     end
-
     if @project.update_attributes(params[:project])
       flash[:notice] = "Project access updated"
       redirect_to edit_project_path(@project)

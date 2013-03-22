@@ -6,7 +6,8 @@ class Ability
   	can :manage, Account
 
   	can :read, Project, :memberships => {:user_id => user.id}
-  	can :manage, Project
+  	can :manage, Project, :memberships => {:user_id => user.id, :role => 'admin'}
+		can :manage, Project, :user_id => user.id
 
   	can :manage, Membership
 
