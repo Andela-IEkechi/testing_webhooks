@@ -25,21 +25,24 @@ class Ticket < ActiveRecord::Base
   scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment, :include => :status}}
   scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.scoped_id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
 
+  delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
+
   def to_s
     title
   end
 
   def parent
-    get_last(:parent) || project
+    return last_comment.parent if last_comment
+    project
   end
 
   def body
-    get_last(:body)
+    last_comment.body
   end
 
   def user
     #the user is the guy who logged the ticket, ie, the owner of the first comment on the ticket.
-    get_first(:user)
+    comments.first.user
   end
 
   def user_id
@@ -54,10 +57,6 @@ class Ticket < ActiveRecord::Base
     (last_comment.feature.id rescue nil)
   end
 
-  def cost
-    get_last(:cost)
-  end
-
   def assignees
     comments.collect(&:assignee).compact.uniq
   end
@@ -67,7 +66,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def open?
-    get_last(:status).open
+    last_comment.status.open
   end
 
   def closed?
@@ -79,15 +78,5 @@ class Ticket < ActiveRecord::Base
     self.save!
   end
 
-  private
-
-  #this returns the values as set in the last comment
-  def get_first(attr)
-    comments.first.try(attr)
-  end
-
-  def get_last(attr)
-    comments.last.try(attr)
-  end
 
 end

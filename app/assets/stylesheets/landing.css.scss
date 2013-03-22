@@ -49,6 +49,13 @@ body.landing {
     font-family: 'logofont';
     text-transform: uppercase;
   }
+
+  #flash-message {
+    margin-top: 20px;
+    p {
+      margin: 0;
+    }
+  }
 }
 
 .ss-shadow {

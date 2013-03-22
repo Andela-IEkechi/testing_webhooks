@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.string   "uid"
     t.string   "full_name"
     t.boolean  "terms",                                :default => false
+    t.text     "preferences"
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"

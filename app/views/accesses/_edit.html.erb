@@ -17,7 +17,7 @@
 
 <!-- memberships -->
  <%
-    @project.members_but_owner.each do |m|
+    @project.memberships.reject{|m| m.user_id == @project.user_id}.each do |m|
     participant = @project.ordered_participants.find_by_email(m.user.email)
  %>
   <div class="control-group">
