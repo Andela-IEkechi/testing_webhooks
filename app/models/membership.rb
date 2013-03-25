@@ -4,9 +4,13 @@ class Membership < ActiveRecord::Base
 
   ROLE_NAMES = %w(admin regular restricted)
 
-  validates_inclusion_of :role, :in => ROLE_NAMES
+  validates :role, :inclusion => {:in => ROLE_NAMES}
+  validates :user_id, :presence => true
+  validates :project_id, :presence => true
 
   attr_accessible :role, :user_id, :project_id
+
+  delegate :email, :to => :user, :prefix => :false, :allow_nil => true
 
   def admin?
     self.role == 'admin'

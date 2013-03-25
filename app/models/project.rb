@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   has_many :memberships, :include => :user, :order => 'users.email ASC'
   has_many :api_keys, :dependent => :destroy
 
-  attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :membership_attributes
+  attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids
   accepts_nested_attributes_for :ticket_statuses, :memberships
   accepts_nested_attributes_for :api_keys, :allow_destroy => true
 

@@ -3,23 +3,24 @@ class AccessesController < ApplicationController
 
   def edit
     #get all the users accross all the projects to select from
-    @participants = current_user.projects.collect(&:participants).flatten.uniq.sort{|a,b| a.email <=> b.email}
+    @memberships = current_user.projects.collect(&:memberships).flatten.uniq.sort{|a,b| a.user_email <=> b.user_email}
   end
 
   def update
-    new_user_ids = Participant::create_from_params(@project, params[:project].delete(:participants_attributes))
-    params[:project][:participant_ids] = params[:project][:participant_ids].collect(&:to_i).select{|x| x > 0} + new_user_ids
-    params[:project][:participant_ids].uniq!
+    #create new users based on membership attributes
+    params[:project][:membership_ids] = [@project.memberships.where(:user_id => @project.user_id).first.try(:id)]
 
-    if params[:membership]
-      params[:membership].each do |k,v|
-        m = Membership.find(k)
-        m.update_attributes(v)
-      end
+    params[:project][:memberships_attributes].each do |token, membership_attr|
+      user_attr = membership_attr[:user]
+      user = User.find_by_email(user_attr[:email].downcase)
+      user ||= User.invite!(:email => user_attr[:email].downcase) unless user_attr[:email].blank? || membership_attr[:_destroy] == '1'
+
+      membership = @project.memberships.find_or_create_by_user_id(:user_id => user.id) if user
+      membership.role = membership_attr[:role] if membership
+      membership.save
+      params[:project][:membership_ids] << membership.id
     end
-
     if @project.update_attributes(params[:project])
-      Participant::notify(@project, params[:project][:participant_ids])
       flash[:notice] = "Project access updated"
       redirect_to edit_project_path(@project)
     else
@@ -28,3 +29,4 @@ class AccessesController < ApplicationController
     end
   end
 end
+
