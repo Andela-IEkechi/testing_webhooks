@@ -1,11 +1,7 @@
 module AccountsHelper
 
     def link_text(account, plan)
-      if account.plan == plan.to_s
-        "your plan"
-      else
-        Plan.new(account.plan).better_than?(plan) ? "downgrade" : "upgrade"
-      end
+      account.plan == plan.to_s ? "your plan" : Plan.new(account.plan).better_than?(plan) ? "downgrade" : "upgrade" 
     end
 
     def disabled?(plan)
