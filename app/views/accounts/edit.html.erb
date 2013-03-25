@@ -11,15 +11,13 @@
           </div>
           <div class='pull-right'>
             <%= detail[:title] %><br />
-            <% if detail[:price] != 0 %>
-              $ <%= detail[:price] %> pm<br />
-            <% end %>
+            <%= "$ #{detail[:price]} pm <br />".html_safe unless detail[:price] == 0 %>
             <%= detail[:users] %> Users<br />
             <%= detail[:projects] %> Projects<br />
             <%= detail[:storage_gb] %>gb Storage<br />
           </div>
           <h1>
-            <%= link_to link_text(@account, Plan.new(name)), '#', :class => 'btn' unless @account.plan == name.to_s %>
+            <%= link_to link_text(@account, Plan.new(name)), '#', :class => 'btn', :disabled => disabled?(name) %>
           </h1>
         </li>
       <% end %>
