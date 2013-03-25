@@ -16,10 +16,10 @@
       <div class="pull-right">
         <% if @search %>
           <%= search_form_for @search,
-                :url => project_tickets_path(project),
-                :html => {:method => :get, :class => 'form-search'},
-                :remote => true,
-                :builder => SimpleForm::FormBuilder do |f| %>
+                url:     project_tickets_path(project),
+                html:    {:method => :get, :class => 'form-search'},
+                remote:  true,
+                builder: SimpleForm::FormBuilder do |f| %>
 
             <% # this field can be any valid ransack term as it gets  %>
             <% # overwritten in the backend based on seach type       %>

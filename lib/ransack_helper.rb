@@ -7,13 +7,13 @@
 #    * performs a ransack search on only the matching attribute(s) using "or" condtion
 class RansackHelper
   TICKET_KEYWORDS_MAP = {
-    :id       => :scoped_id_eq,
-    :cost     => :last_comment_cost_eq,
-    :title    => :title_cont,
-    :assigned => :assignee_email_cont,
-    :status   => :status_name_cont,
-    :feature  => :feature_title_cont,
-    :sprint   => :sprint_goal_cont,
+    id:       :scoped_id_eq,
+    cost:     :last_comment_cost_eq,
+    title:    :title_cont,
+    assigned: :assignee_email_cont,
+    status:   :status_name_cont,
+    feature:  :feature_title_cont,
+    sprint:   :sprint_goal_cont
   }.freeze
 
   def initialize(query)
