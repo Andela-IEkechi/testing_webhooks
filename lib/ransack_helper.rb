@@ -1,10 +1,10 @@
-# search is available in te following formats
+# search is available in the following formats
 # -- user enters any string with spaces
 #    * performs a ransack search on any of the TICKET_KEYWORDS_MAP attributes
 # -- user enters attribute:term string (can be multiple)
 #    * performs a ransack search on only the matching attribute(s) using "and" condtion
 # -- user enters attribute:term string seperated by " or " (can be multiple)
-#    * performs a ransack search on only the ticket columns matching attribute(s) using "or" condtion
+#    * performs a ransack search on only the matching attribute(s) using "or" condtion
 class RansackHelper
   TICKET_KEYWORDS_MAP = {
     :id       => :scoped_id_eq,
