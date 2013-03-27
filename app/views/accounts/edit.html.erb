@@ -1,27 +1,26 @@
-<h3>Update Your Account Details</h3>
+<h3>Update Your Account Details</h3><br>
 <%= simple_nested_form_for([@account.user, @account]) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs pull-left">
-    <ul>
-      <% Plan::PLANS.each do |name, detail| %>
-        <li>
-          <div>
+  <div class="form-inputs">
+      <% Plan::PLANS.each do |name, detail| %> 
+        <div class="well pull-left account-box">   
+          <div class="small-heading">
             <%=  name.to_s.humanize %>           
           </div>
-          <div class='pull-right'>
-            <%= detail[:title] %><br />
+          <div>
+            <h5><%= detail[:title] %></h5>
             <%= "$ #{detail[:price]} pm <br />".html_safe unless detail[:price] == 0 %>
             <%= detail[:users] %> Users<br />
             <%= detail[:projects] %> Projects<br />
             <%= detail[:storage_gb] %>gb Storage<br />
           </div>
-          <h1>
-            <%= link_to link_text(@account, Plan.new(name)), '#', :class => 'btn', :disabled => disabled?(name) %>
-          </h1>
-        </li>
+          <div class="account-buttons">
+            <%= link_to link_text(@account, Plan.new(name)), '#', :class => 'btn btn-info', :disabled => disabled?(name) %>
+          </div>
+        </div>
+
       <% end %>
-    </ul>
   </div>
 
   <div class="clearfix"></div>
