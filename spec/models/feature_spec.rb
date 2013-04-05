@@ -64,7 +64,6 @@ describe Feature do
     @feature.scoped_id = @feature.project.features_sequence + 1
     @feature.id.should_not eq(@feature.scoped_id)
     @feature.to_param.should eq(@feature.scoped_id)
-
   end
 
   context "without tickets" do
