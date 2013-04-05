@@ -10,11 +10,6 @@ class LandingController < ApplicationController
   def tour
   end
 
-  # public projects
-  def public
-    @projects = Project.public
-  end
-
   def pricing
     @plans = Account::PLANS.reject{|k,v| k == 'free'}
   end

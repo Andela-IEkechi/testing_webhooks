@@ -30,7 +30,6 @@
         <ul class="nav nav-pills pull-right">
           <li class="<%= 'active' if current_page?(landing_home_path) || current_page?(root_path) %>"><%= link_to 'Home', landing_home_path %></li>
           <li class="<%= 'active' if current_page?(landing_tour_path) %>"><%= link_to 'Tour', landing_tour_path %></li>
-          <li class="<%= 'active' if current_page?(landing_public_path) %>"><%= link_to 'Public projects', landing_public_path %></li>
           <li class="<%= 'active' if current_page?(landing_pricing_path) %>"><%= link_to 'Pricing & Signup', landing_pricing_path %></li>
           <li class="<%= 'active' if current_page?(landing_support_path) %>"><%= link_to 'Support', landing_support_path %></li>
           <% unless current_user %>

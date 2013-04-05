@@ -18,7 +18,6 @@ Conductor::Application.routes.draw do
 
   get 'landing/home'
   get 'landing/tour'
-  get 'landing/public'
   get 'landing/pricing'
   get 'landing/signup'
 
