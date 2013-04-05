@@ -3,6 +3,8 @@ Conductor::Application.routes.draw do
 
   resources :users
 
+  get 'projects/public' => 'projects#public'
+
   resources :projects do
     resources :tickets do
       resources :comments

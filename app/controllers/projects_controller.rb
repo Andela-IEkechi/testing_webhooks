@@ -42,6 +42,10 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def public
+    @projects = Project.public
+  end
+
   private
 
   #I'm having massive headaches defining propper cancan rules for getting this done,
