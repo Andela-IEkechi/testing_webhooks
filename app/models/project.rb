@@ -18,6 +18,8 @@ class Project < ActiveRecord::Base
 
   default_scope order('projects.title ASC')
 
+  scope :public, where(:private => false)
+
   def to_s
     title
   end
