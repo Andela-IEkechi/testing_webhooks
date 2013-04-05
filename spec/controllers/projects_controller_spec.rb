@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ProjectsController do
+describe ProjectsController, focus: true do
   before (:each) do
     login_user
     #create a project we can assign tickets to
@@ -13,11 +13,26 @@ describe ProjectsController do
     end
 
     it "populates an array of projects" do
-      assigns(:projects).should have_at_least(1).items
+      assigns(:projects).should have(1).item
     end
 
     it "renders the :index template" do
       response.should render_template("index")
+    end
+
+    it "renders the projects we participate in" do
+      assigns(:projects).should have(1).item
+
+      new_project = create(:project)
+      new_project.memberships << create(:membership, :project => new_project)
+      new_project.memberships.should have(2).memberships
+
+      get :index
+      assigns(:projects).should have(1).item
+
+      new_project.memberships << create(:membership, :project => new_project, :user => @user)
+      get :index
+      assigns(:projects).should have(2).items
     end
   end
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Project, focus: true do
+describe Project do
   before(:each) do
     @project = create(:project)
   end

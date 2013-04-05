@@ -24,6 +24,9 @@ class ProjectsController < ApplicationController
   end
 
   def update
+    #before we update the project, we need to convert membership[user][email] entries into user_ids
+
+
     if @project.update_attributes(params[:project])
       flash[:notice] = "Project was updated"
       redirect_to edit_project_path(@project)
