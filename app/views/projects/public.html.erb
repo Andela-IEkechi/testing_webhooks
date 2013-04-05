@@ -1,0 +1,37 @@
+
+<h3>Public projects</h3>
+
+<table class="table table-bordered table-striped" id="public-project-list">
+  <caption>
+    Create free Public Projects on any plan and we won't charge you a cent!
+  </caption>
+  <!--title row -->
+  <thead>
+    <tr>
+      <th class="width-5">#</th>
+      <th class="width-45">Title</th>
+      <th class="width-45">Request an invite</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% num = 0
+       @projects.each do |project|
+       num = num + 1
+       %>
+    <tr>
+      <td><%= num %></td>
+      <td><%= link_to project.title, project_path(project) %></td>
+      <td>
+        <% if project.participants.include?(current_user) %>
+        You are already a participant on this group, great!
+        <% else %>
+        <%= link_to 'Request an invite', project_path(project), :class => 'btn btn-small btn-primary' %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
