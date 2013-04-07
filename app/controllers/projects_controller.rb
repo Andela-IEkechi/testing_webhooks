@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
       @projects.select!{|p| p.participants.include?(current_user) || (p.user_id == current_user.id)}
     end
     if @project
-      @project = nil unless (@project.user_id == current_user.id) || @project.participants.include?(current_user)
+      @project = nil unless (!@project.private || @project.user_id == current_user.id) || @project.participants.include?(current_user)
     end
   end
 
