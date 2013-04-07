@@ -7,6 +7,8 @@
     </li>
   <% end %>
   <% if action_name == 'show' %>
+
+    <% if (@feature.project.participants.include? current_user) %>
     <li>
       <%= link_to edit_project_feature_path(@feature.project,@feature) do %>
       <span class="navico"><i class="icon-edit navico"></i></span>edit this feature
@@ -17,6 +19,8 @@
       <span class="navico"><i class="icon-trash navico"></i></span>remove this feature
       <% end %>
     </li>
+    <% end %>
+
     <li>
       <%= link_to new_project_ticket_path(@project, :feature_id => @feature) do %>
       <span class="navico"><i class="icon-plus navico"></i></span>add a new ticket
