@@ -4,6 +4,7 @@ Conductor::Application.routes.draw do
   resources :users
 
   get 'projects/public' => 'projects#public'
+  get 'projects/:id/invite' => 'projects#invite', :as => :invite
 
   resources :projects do
     resources :tickets do

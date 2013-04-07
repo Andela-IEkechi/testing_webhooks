@@ -46,6 +46,13 @@ class ProjectsController < ApplicationController
     @projects = Project.public
   end
 
+  def invite
+    recipients = @project.participants.collect(&:email).uniq
+    InviteMailer.invite_request(recipients, current_user, @project).deliver
+    flash[:notice] = "Your request to join <b>#{@project.title}</b> was sent to the project administrator".html_safe
+    redirect_to projects_public_path
+  end
+
   private
 
   #I'm having massive headaches defining propper cancan rules for getting this done,

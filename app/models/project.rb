@@ -18,6 +18,7 @@ class Project < ActiveRecord::Base
 
   default_scope order('projects.title ASC')
 
+  # TODO Check warning "Creating scope :public. Overwriting existing method Project.public."
   scope :public, where(:private => false)
 
   def to_s

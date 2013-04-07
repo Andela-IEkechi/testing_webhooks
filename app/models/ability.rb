@@ -14,6 +14,7 @@ class Ability
     can :manage, Project, :user_id => user.id
     can :create, Project if user.confirmed?
     can :read, Project #we refine the perms in the controller, it's too trickey here :(
+    can :invite, Project
 
     can :manage, Feature
     can :manage, Sprint
