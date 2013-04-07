@@ -12,6 +12,7 @@
       <% end %>
     </li>
     <% end %>
+    <% if (@project.participants.include?(current_user)) %>
     <li>
       <%= link_to new_project_feature_path(@project) do %>
         <span class="navico"><i class="icon-plus"></i></span>add a new feature
@@ -22,6 +23,7 @@
         <span class="navico"><i class="icon-plus"></i></span>add a new sprint
       <% end %>
     </li>
+    <% end %>
     <li>
       <%= link_to new_project_ticket_path(@project) do %>
         <span class="navico"><i class="icon-plus"></i></span> add a new ticket
