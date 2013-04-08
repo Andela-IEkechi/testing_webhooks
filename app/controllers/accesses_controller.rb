@@ -11,15 +11,24 @@ class AccessesController < ApplicationController
     params[:project][:membership_ids] = [@project.memberships.where(:user_id => @project.user_id).first.try(:id)]
 
     params[:project][:memberships_attributes].each do |token, membership_attr|
-      user_attr = membership_attr[:user]
-      user = User.find_by_email(user_attr[:email].downcase)
-      user ||= User.invite!(:email => user_attr[:email].downcase) unless user_attr[:email].blank? || membership_attr[:_destroy] == '1'
-
-      membership = @project.memberships.find_or_create_by_user_id(:user_id => user.id) if user
-      membership.role = membership_attr[:role] if membership
-      membership.save
-      params[:project][:membership_ids] << membership.id
+      if membership_attr[:user_id]
+        user = User.find( membership_attr[:user_id])
+      else
+        user_attr = membership_attr[:user]
+        user = User.find_by_email(user_attr[:email].downcase)
+        user ||= User.invite!(:email => user_attr[:email].downcase) unless user_attr[:email].blank? || membership_attr[:_destroy] == '1'
+      end
+      if user && (membership = @project.memberships.find_or_create_by_user_id(:user_id => user.id))
+        membership.role = membership_attr[:role] if membership
+        membership.save
+        params[:project][:membership_ids] << membership.id
+      end
     end
+    #I've seen duplicates in console, just make sure we dont waste our time:
+    params[:project][:membership_ids].uniq!
+    #trash the memberships_attributes, it makes the update puke. Besides, we have already done the legwork up top
+    params[:project].delete('memberships_attributes')
+
     if @project.update_attributes(params[:project])
       flash[:notice] = "Project access updated"
       redirect_to edit_project_path(@project)

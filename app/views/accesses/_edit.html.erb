@@ -10,6 +10,7 @@
   %>
   <div class="row">
     <div class="span6">
+      <%= m_form.input :user_id, :as => :hidden %>
       <%= m_form.input :id, :as => :boolean, :label => membership.user.email, :wrapper => :inline_checkbox, :disabled => project_owner  %>
     </div>
     <div class="span6">

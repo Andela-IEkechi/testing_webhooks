@@ -20,7 +20,7 @@ describe ProjectsController, focus: true do
       response.should render_template("index")
     end
 
-    it "renders the projects we participate in" do
+    it "renders the projects we are members of" do
       assigns(:projects).should have(1).item
 
       new_project = create(:project)
