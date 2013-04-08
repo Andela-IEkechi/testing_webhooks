@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Membership, :focus => true do
+describe Membership do
   before(:each) do
     @membership = create(:membership)
   end
@@ -12,6 +12,6 @@ describe Membership, :focus => true do
   it 'should have a project' do
     @membership.project.should_not be_nil
   end
-  
+
 
 end

@@ -5,11 +5,12 @@ class Ability
   	can :manage, User
   	can :manage, Account
 
-  	can :read, Project, :memberships => {:user_id => user.id}
-  	can :manage, Project, :memberships => {:user_id => user.id, :role => 'admin'}
-		can :manage, Project, :user_id => user.id
+  	can :manage, Membership, :user_id => user.id
 
-  	can :manage, Membership
+    can :read, Project, :memberships => {:user_id => user.id}
+    can :manage, Project, :memberships => {:user_id => user.id, :role => 'admin'}
+    #even if we made the project, if we are no longer admins, we no can longer manage it
+    #can :manage, Project, :user_id => user.id
 
   	can :manage, Feature
   	can :manage, Sprint

@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
   has_many :sprints, :order => :due_on, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy
 
-  has_many :memberships, :include => :user, :order => 'users.email ASC'
+  has_many :memberships, :dependent => :destroy, :include => :user, :order => 'users.email ASC'
   has_many :api_keys, :dependent => :destroy
 
   attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids

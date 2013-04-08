@@ -8,15 +8,7 @@
      membership = m_form.object
      project_owner = membership.user_id == membership.project.user_id
   %>
-  <div class="row">
-    <div class="span6">
-      <%= m_form.input :user_id, :as => :hidden %>
-      <%= m_form.input :id, :as => :boolean, :label => membership.user.email, :wrapper => :inline_checkbox, :disabled => project_owner  %>
-    </div>
-    <div class="span6">
-      <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner %>
-    </div>
-  </div>
+    <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner, :label => membership.user.email, :include_blank => 'disable this user' %>
   <% end %>
 
   <input name="project[membership_ids][]" type="hidden" value="">
@@ -31,7 +23,7 @@
       <div class="control-group">
         <label class="control-label">Invite as</label>
         <div class="controls">
-          <%= m_form.select :role, options_for_select(Membership::ROLE_NAMES) %>
+          <%= m_form.select :role, options_for_select(Membership::ROLE_NAMES), :include_blank => false %>
         </div>
       </div>
 
