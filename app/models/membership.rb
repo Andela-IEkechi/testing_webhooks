@@ -16,11 +16,11 @@ class Membership < ActiveRecord::Base
     self.role == 'admin'
   end
 
-  def regular_user?
+  def regular?
     self.role == 'regular'
   end
 
-  def restricted_user?
+  def restricted?
     self.role == 'restricted'
   end
 
