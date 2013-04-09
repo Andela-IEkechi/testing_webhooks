@@ -20,7 +20,7 @@ describe ProjectsController do
       response.should render_template("index")
     end
 
-    it "renders the projects we are members of", focus: true do
+    it "renders the projects we are members of" do
       assigns(:projects).should have(1).item
 
       new_project = create(:project)
@@ -29,7 +29,7 @@ describe ProjectsController do
       assigns(:projects).should have(2).items
     end
 
-    it "does not render projects we are not members of", focus: true do
+    it "does not render projects we are not members of" do
       assigns(:projects).should have(1).item
 
       new_project = create(:project)
@@ -37,7 +37,7 @@ describe ProjectsController do
       assigns(:projects).should have(1).items
     end
 
-    it "renders each project only once", focus: true do
+    it "renders each project only once" do
       new_project = create(:project)
       new_project.memberships << create(:membership, :project => new_project, :user => @user)
 

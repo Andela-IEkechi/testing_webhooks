@@ -19,22 +19,22 @@ class Ability
 
     #only admin users can manage sprints and features and only on projects where they are members
     #we explicitly dont care who owns the project, no admin = no access
-    can :manage, Feature, :project => {:memberships => {:user_id => user.id, :role => ['admin']}}
-    can :manage, Sprint, :project => {:memberships => {:user_id => user.id, :role => ['admin']}}
+    can :manage, Feature, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
+    can :manage, Sprint, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
 
   	#anyone can read tickets on projects where they are a member
     can :read, Ticket, :project => {:memberships => {:user_id => user.id}}
 
     #users can manage tickets which belong to them
   	can :manage, Ticket do |ticket|
-		  (ticket.user.id rescue nil) == user.id
+      ticket.user_id == user.id
 		end
 
     #anyone can read a comments on a ticket which belongs to a project which they are a member of
 		can :read, Comment, :ticket => {:project => {:memberships => {:user_id => user.id}}}
 
     #anyone can manage a comment which belongs to them
-  	can :manage, Comment, :user_id => user.id
+    can :manage, Comment, :user_id => user.id, :ticket => {:project => {:memberships => {:user_id => user.id, :role => ['admin', 'regular']}}}
 
   end
 
