@@ -17,11 +17,12 @@
       <%= action_remove(@ticket)  if can?(:manage, @ticket) && @ticket %>
     <% end %>
 
-    <%= action_add(Project.new())           if !(@feature || @sprint || @ticket) %>
-    <% if @project %>
+    <%= action_add(Project.new()) if !(@feature || @sprint || @ticket || (@project && @project.new_record?)) %>
+    <% if @project && !@project.new_record? %>
       <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket) %>
       <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket) %>
       <%= action_add(@project.tickets.new())  if current_membership.admin? || current_membership.regular? && @project && (!(@feature || @sprint) || @ticket) %>
     <% end %>
+
 </ul>
 
