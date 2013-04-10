@@ -44,6 +44,8 @@ module ActionsHelper
       edit_project_feature_path(target.project, target)
     when 'Sprint'
       edit_project_sprint_path(target.project, target)
+    when 'Ticket'
+      edit_project_ticket_path(target.project, target)
     else '#'
     end
 
@@ -58,7 +60,7 @@ module ActionsHelper
     return unless target
 
     link_content = content_tag :span, :class => 'navico' do
-      content_tag(:i, :class => 'icon-trash', :method => :delete, :data => {:confirm => "Are you sure you want to delete this #{target.class.name.downcase}?"}) do
+      content_tag(:i, :class => 'icon-trash') do
         #block needs to be here to pass in the class !?
       end
     end
@@ -71,11 +73,13 @@ module ActionsHelper
       project_feature_path(target.project, target)
     when 'Sprint'
       project_sprint_path(target.project, target)
+    when 'Ticket'
+      project_ticket_path(target.project, target)
     else '#'
     end
 
     content_tag :li do
-      link_to link_path  do
+      link_to link_path, :method => :delete, :data => {:confirm => "Are you sure you want to delete this #{target.class.name.downcase}?"}  do
         link_content
       end
     end
