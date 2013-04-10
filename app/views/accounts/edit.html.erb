@@ -1,0 +1,27 @@
+<h3>Update Your Account</h3>
+<%= simple_nested_form_for([@account.user, @account]) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs pull-left">
+    <ul>
+      <% Plan::PLANS.each do |name, detail| %>
+        <li>
+          <div>
+            <%= detail[:title] %>
+          </div>
+          <div>
+            <%= link_to link_text(@account, Plan.new(name)), '#' unless @account.plan == name.to_s %>
+            <%= "your current plan" if @account.plan == name.to_s %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <div class="form-actions">
+    <%= link_to 'Cancel', root_path(), :class => 'btn' %>
+  </div>
+<% end %>
+
