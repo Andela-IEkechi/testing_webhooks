@@ -33,10 +33,9 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
-    t.string   "file"
+    t.string   "payload"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "payload"
   end
 
   create_table "comments", :force => true do |t|
@@ -69,12 +68,6 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
   end
 
   add_index "features", ["project_id"], :name => "index_features_on_project_id"
-
-  create_table "memberships", :force => true do |t|
-    t.integer "project_id"
-    t.integer "user_id"
-    t.string  "role",       :default => "Regular", :null => false
-  end
 
   create_table "projects", :force => true do |t|
     t.string   "title",                               :null => false
@@ -143,7 +136,6 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.string   "uid"
     t.string   "full_name"
     t.boolean  "terms",                                :default => false
-    t.text     "preferences"
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
