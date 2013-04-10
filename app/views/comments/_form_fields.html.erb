@@ -19,7 +19,7 @@
   <% end %>
 
   <%= comment_form.input :assigned_to do %>
-    <%= comment_form.select :assignee_id, @ticket.project.memberships.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
+    <%= comment_form.select :assignee_id, @ticket.project.memberships.all.map { |s| [s.email, s.user_id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
   <div class="attach-asset">
