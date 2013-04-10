@@ -31,8 +31,6 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.datetime "updated_at", :null => false
   end
 
-  add_index "api_keys", ["name"], :name => "index_api_keys_on_name", :unique => true
-
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
     t.string   "payload"
@@ -71,6 +69,12 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
 
   add_index "features", ["project_id"], :name => "index_features_on_project_id"
 
+  create_table "memberships", :force => true do |t|
+    t.integer "project_id"
+    t.integer "user_id"
+    t.string  "role",       :default => "regular", :null => false
+  end
+
   create_table "projects", :force => true do |t|
     t.string   "title",                               :null => false
     t.datetime "created_at",                          :null => false
@@ -80,11 +84,6 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.integer  "features_sequence", :default => 0
     t.integer  "sprints_sequence",  :default => 0
     t.boolean  "private",           :default => true
-  end
-
-  create_table "projects_users", :id => false, :force => true do |t|
-    t.integer "project_id"
-    t.integer "user_id"
   end
 
   create_table "sprints", :force => true do |t|
@@ -109,14 +108,12 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.string   "title",                          :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
-    t.string   "slug"
     t.integer  "last_comment_id"
     t.integer  "scoped_id",       :default => 0
   end
 
   add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
   add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
-  add_index "tickets", ["slug"], :name => "index_tickets_on_slug", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                                :default => "",    :null => false
