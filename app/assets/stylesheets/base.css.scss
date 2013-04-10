@@ -49,6 +49,10 @@ caption {
   }
 }
 
+table { table-layout: fixed; }
+table th, table td { overflow: hidden; }
+
+
 td.count {
   text-align: center;
 }
@@ -111,8 +115,24 @@ background-color: #fff;
     overflow:hidden;
   }
 
+  .width-50px {
+    width: 50px;
+  }
+
   .width-5 {
     width: 5%;
+  }
+
+  .width-7 {
+    width: 7%;
+  }
+
+  .width-10 {
+    width: 10%;
+  }
+
+  .width-15 {
+    width: 15%;
   }
 
   .width-20 {
