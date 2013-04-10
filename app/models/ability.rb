@@ -7,6 +7,7 @@ class Ability
 
     can :read, Project, :memberships => {:user_id => user.id}
     can :manage, Project, :memberships => {:user_id => user.id, :role => 'admin'}
+    can :create, Project
     #even if we made the project, if we are no longer admins, we no can longer manage it
     #can :manage, Project, :user_id => user.id
 
@@ -26,6 +27,7 @@ class Ability
     can :read, Ticket, :project => {:memberships => {:user_id => user.id}}
 
     #users can manage tickets which belong to them
+    can :create, Ticket
   	can :manage, Ticket do |ticket|
       ticket.user_id == user.id
 		end

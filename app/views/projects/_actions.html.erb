@@ -14,21 +14,27 @@
     </li>
     <% end %>
     <% end %>
+    <% if can?(:create, @project.features.new()) %>
     <li>
       <%= link_to new_project_feature_path(@project) do %>
         <span class="navico"><i class="icon-plus"></i></span>add a new feature
       <% end %>
     </li>
+    <% end %>
+    <% if can?(:create, @project.sprints.new()) %>
     <li>
       <%= link_to new_project_sprint_path(@project) do %>
         <span class="navico"><i class="icon-plus"></i></span>add a new sprint
       <% end %>
     </li>
+    <% end %>
+    <% if can?(:create, @project.tickets.new()) %>
     <li>
       <%= link_to new_project_ticket_path(@project) do %>
         <span class="navico"><i class="icon-plus"></i></span> add a new ticket
       <% end %>
     </li>
+    <% end %>
   <% end %>
   <% if action_name == 'edit' %>
     <% if can?(:manage, @project) %>
