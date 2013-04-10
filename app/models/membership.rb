@@ -8,6 +8,8 @@ class Membership < ActiveRecord::Base
   validates :user_id, :presence => true
   validates :project_id, :presence => true
 
+  scope :for_user, lambda{|user_id| {:conditions => {:user_id => user_id}}}
+
   attr_accessible :role, :user_id, :project_id
 
   delegate :email, :to => :user, :prefix => false, :allow_nil => true

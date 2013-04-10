@@ -1,21 +1,27 @@
 <ul class="nav nav-stacked">
-    <%= action_back_to(@project) if (@feature || @sprint || @ticket) %>
-    <%= action_back_to(@feature) if @ticket %>
-    <%= action_back_to(@sprint) if @ticket %>
+    <% if @project %>
+      <%= action_back_to(@project) if (@feature || @sprint || @ticket) %>
+      <%= action_back_to(@feature) if @ticket %>
+      <%= action_back_to(@sprint) if @ticket %>
 
-    <%= action_edit(@project) if @project && !(@feature || @sprint || @ticket) %>
-    <%= action_edit(@feature) if @feature && !@ticket %>
-    <%= action_edit(@sprint) if @sprint && !@ticket %>
-    <%= action_edit(@ticket) if @ticket %>
+      <%= action_edit(@project) if can?(:manage, @project) && @project && !(@feature || @sprint || @ticket) %>
+      <%= action_edit(@feature) if can?(:manage, @feature) && @feature && !@ticket %>
+      <%= action_edit(@sprint)  if can?(:manage, @sprint)  && @sprint  && !@ticket %>
+      <%= action_edit(@ticket)  if can?(:manage, @ticket)  && @ticket %>
+    <% end %>
 
-    <%= action_remove(@project) if @project && !(@feature || @sprint || @ticket) %>
-    <%= action_remove(@feature) if @feature && !@ticket %>
-    <%= action_remove(@sprint) if @sprint && !@ticket%>
-    <%= action_remove(@ticket) if @ticket %>
+    <% if @project %>
+      <%= action_remove(@project) if can?(:manage, @project) && @project && !(@feature || @sprint || @ticket) %>
+      <%= action_remove(@feature) if can?(:manage, @feature) && @feature && !@ticket %>
+      <%= action_remove(@sprint)  if can?(:manage, @sprint) && @sprint && !@ticket%>
+      <%= action_remove(@ticket)  if can?(:manage, @ticket) && @ticket %>
+    <% end %>
 
-    <%= action_add(Project.new()) if @project && !(@feature || @sprint || @ticket) %>
-    <%= action_add(@project.features.new()) if @project && !(@sprint || @ticket) %>
-    <%= action_add(@project.sprints.new()) if @project && !(@feature || @ticket) %>
-    <%= action_add(@project.tickets.new()) if @project && (!(@feature || @sprint) || @ticket) %>
+    <%= action_add(Project.new())           if !(@feature || @sprint || @ticket) %>
+    <% if @project %>
+      <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket) %>
+      <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket) %>
+      <%= action_add(@project.tickets.new())  if current_membership.admin? || current_membership.regular? && @project && (!(@feature || @sprint) || @ticket) %>
+    <% end %>
 </ul>
 
