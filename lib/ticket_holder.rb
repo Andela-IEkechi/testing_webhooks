@@ -2,9 +2,7 @@ module TicketHolder
   extend ActiveSupport::Concern
 
   included do
-    #has_many :tickets #tickets are tied to a project, so we dont destroy them if we
     has_many :comments
-    has_many :tickets, :through => :comments #dont use this, it replies with historic assignments
 
     before_destroy :orphan_comments!
 
@@ -17,14 +15,53 @@ module TicketHolder
     end
 
     def cost
-      self.assigned_tickets.sum(&:cost)
+      assigned_tickets.sum(&:cost)
     end
 
     def assigned_tickets
-      tickets.select do |ticket|
-        eval("ticket.#{self.class.name.foreign_key}") == self.id #rely on ticket to say if we are still assigned
-      end.uniq.compact
+      eval("Ticket.for_#{self.class.name.downcase}_id(#{self.id})")
     end
-  end
 
+    # returns ticket counts per status
+    # t = "open"
+    # f = "closed"
+    # a = "open" + "closed"
+    def ticket_status_count
+      @ticket_status_count  ||= begin
+        counts = { "a" => 0, "t" => 0, "f" => 0 }
+        counts.merge! assigned_tickets.joins(:status).sum(1, group: 'ticket_statuses.open')
+        counts.each{ |k,v| counts[k] = v.to_i; counts["a"] += counts[k] }
+      end
+    end
+
+    def progess_count
+      return 0 unless ticket_count > 0
+      (100*closed_ticket_count/ticket_count).round.to_i
+    end
+
+    def open_ticket_count
+      ticket_status_count["t"]
+    end
+
+    def closed_ticket_count
+      ticket_status_count["f"]
+    end
+
+    def ticket_count
+      ticket_status_count["a"]
+    end
+
+    def open_tickets
+      assigned_tickets.collect(&:status).select{|s| s.open}
+    end
+
+    def closed_tickets
+      assigned_tickets.collect(&:status).select{|s| !s.open}
+    end
+
+    def has_open_tickets?
+      open_tickets.count > 0
+    end
+
+  end
 end

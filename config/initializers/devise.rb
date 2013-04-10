@@ -4,7 +4,7 @@ Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = "registration@conductor-app.co.za"
+  config.mailer_sender = "registration@conductor-app.com"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
@@ -83,6 +83,31 @@ Devise.setup do |config|
 
   # Setup a pepper to generate the encrypted password.
   # config.pepper = "7889ee248af19d64c39c47256155ce3fffe773b019e814bf246809caca882b1d979b00793cc0b2c089e240e54b9c61f41b0ae8a37880ea2236c7256c37f74a27"
+
+  # ==> Configuration for :invitable
+  # The period the generated invitation token is valid, after
+  # this period, the invited resource won't be able to accept the invitation.
+  # When invite_for is 0 (the default), the invitation won't expire.
+  # config.invite_for = 2.weeks
+
+  # Number of invitations users can send.
+  # - If invitation_limit is nil, there is no limit for invitations, users can
+  # send unlimited invitations, invitation_limit column is not used.
+  # - If invitation_limit is 0, users can't send invitations by default.
+  # - If invitation_limit n > 0, users can send n invitations.
+  # You can change invitation_limit column for some users so they can send more
+  # or less invitations, even with global invitation_limit = 0
+  # Default: nil
+  # config.invitation_limit = 5
+
+  # The key to be used to check existing users when sending an invitation
+  # and the regexp used to test it when validate_on_invite is not set.
+  # config.invite_key = {:email => /\A[^@]+@[^@]+\z/}
+  # config.invite_key = {:email => /\A[^@]+@[^@]+\z/, :username => nil}
+
+  # Flag that force a record to be valid before being actually invited
+  # Default: false
+  # config.validate_on_invite = true
 
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without
@@ -205,7 +230,13 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  config.omniauth :github, '26f02576c0c2cca553cc', '9c360d2b2b4e0145cc9d8a17a45474a629a7a975', :scope => 'user,public_repo'
+  #staging:
+  #config.omniauth :github, 'bd6407eded6365278e4b', 'b5eb70fb4f6eee80c969435ddebe439ce45411e4' #, :scope => ''
+
+  #see config/environments for setting these values
+  config.omniauth :github, ENV['GITHUB_CLIENT_ID'] , ENV['GITHUB_CLIENT_SECRET'] #, :scope => ''
+
+  #see http://developer.github.com/v3/oauth/#scopes for scope details
   #go read https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview
   #for more options
 

@@ -1,15 +1,21 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
-gem 'rails', '3.2.7'
+gem 'rails', '~>3.2.11'
 gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
 gem 'devise'
+gem 'devise_invitable', '~> 1.1.0'
+
 gem 'cancan'
 gem 'omniauth-github'
 gem 'paper_trail'
 gem 'thin'
 gem 'rake'
+
+#paging
+gem 'kaminari'
+gem 'kaminari-bootstrap'
 
 #comment body markup
 gem 'redcarpet'
@@ -20,10 +26,15 @@ gem 'bootstrap-sass'
 
 #file uploads
 gem 'carrierwave'
+gem 'carrierwave_direct'
 gem "fog"
 
 #monitoring
 gem 'crashlog', '>= 1.0.4'
+gem 'newrelic_rpm'
+
+#searching
+gem 'meta_search'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -46,6 +57,7 @@ group :development,:test do
   gem 'rb-readline'
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'pry'
 end
 
 group :test do
@@ -55,7 +67,7 @@ group :test do
   gem 'guard-spork'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'rb-inotify'
+  gem 'rb-inotify', '~> 0.8.8'
 end
 
 group :development do

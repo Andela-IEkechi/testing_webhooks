@@ -57,6 +57,7 @@ module Conductor
 
     # Enable the asset pipeline
     config.assets.enabled = true
+    config.assets.initialize_on_precompile = false
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
@@ -71,5 +72,6 @@ module Conductor
         request_specs: true
       g.fixture_replacement :factory_girl, dir:"spec/factories"
     end
+
   end
 end

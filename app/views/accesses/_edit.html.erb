@@ -3,14 +3,14 @@
 <%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.association :participants, :as => :check_boxes, :collection=>@project.ordered_participants %>
   <%= f.simple_fields_for :participants, [] do |p_form| %>
-    <%= p_form.input :email %>
-    <%= p_form.input ' ' do %>
-      <%= p_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this invitation'  %>
-    <% end %>
+    <div class="well top-padding">
+      <%= p_form.input :email %>
+      <%= p_form.input ' ' do %>
+        <%= p_form.link_to_remove "remove", :class => 'btn btn-warning', :title => 'Remove this invitation'  %>
+      <% end %>
+    </div>
   <% end %>
-  <%= f.input :participants, :label => false do %>
-    <%= f.link_to_add "Invite a user", :participants, :class => 'btn btn-success' %>
-  <% end %>
+  <%= f.link_to_add "Invite a user", :participants, :class => 'btn btn-success offset2' %>
 
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>

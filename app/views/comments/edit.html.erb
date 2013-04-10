@@ -1,0 +1,9 @@
+
+<% content_for :form_heading do %>
+  <div class="ticket-title">
+    <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
+    <h3>Edit your comment on - <%= @ticket.title %>&nbsp;<small>made <%= distance_of_time_in_words_to_now @comment.updated_at %> ago</small></h3>
+  </div>
+
+<% end %>
+<%= render :partial => "form" %>

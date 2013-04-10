@@ -1,7 +1,14 @@
 class Ticket < ActiveRecord::Base
+  include Scoped
+
   belongs_to :project #always
-  has_many :comments, :include => :assets, :order => :id
-  #Status is linked through comments
+  has_many :comments, :order => :id
+
+  belongs_to :last_comment, :class_name => 'Comment'
+  has_one :assignee, :through => :last_comment
+  has_one :feature,  :through => :last_comment
+  has_one :sprint,   :through => :last_comment
+  has_one :status,   :through => :last_comment
 
   attr_accessible :project_id, :comments_attributes, :title
   accepts_nested_attributes_for :comments
@@ -13,56 +20,41 @@ class Ticket < ActiveRecord::Base
 
   scope :unassigned, lambda{ parent.is_a? Project}
 
+  scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment, :include => :status}}
+  scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment, :include => :status}}
+  scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment, :include => :status}}
+  scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.scoped_id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
+
+  delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
+
   def to_s
     title
   end
 
   def parent
-    get_last(:parent) || project
+    return last_comment.parent if last_comment
+    project
   end
 
   def body
-    get_current(:body)
-  end
-
-  def sprint
-    get_last(:sprint)
-  end
-
-  def sprint_id
-    get_last(:sprint) && get_last(:sprint).id || nil
-  end
-
-  def feature
-    get_last(:feature)
-  end
-
-  def feature_id
-    get_last(:feature) && get_last(:feature).id || nil
-  end
-
-  def assignee
-    get_last(:assignee)
-  end
-
-  def assignee_id
-    get_last(:assignee) && get_last(:assignee).id || nil
+    last_comment.body
   end
 
   def user
-    get_last(:user)
+    #the user is the guy who logged the ticket, ie, the owner of the first comment on the ticket.
+    comments.first.user
   end
 
   def user_id
-    get_last(:user) && get_last(:user).id || nil
+    user.id rescue nil
   end
 
-  def status
-    get_last(:status)
+  def sprint_id
+    (last_comment.sprint.id rescue nil)
   end
 
-  def cost
-    get_last(:cost)
+  def feature_id
+    (last_comment.feature.id rescue nil)
   end
 
   def assignees
@@ -74,21 +66,17 @@ class Ticket < ActiveRecord::Base
   end
 
   def open?
-    ticket_s
+    last_comment.status.open
   end
 
-  private
-
-  #this returns the CURRENTLY SET VALUE, in the history for this ticket
-  #ie, the value the last time it was set, even if that was 5 comments ago
-  def get_current(attr)
-    attr = attr.to_sym
-    comments.collect(&attr).compact.last
+  def closed?
+    !open?
   end
 
-  #this returns the values as set in the last comment
-  def get_last(attr)
-    comments.last.try(attr)
+  def update_last_comment!
+    self.last_comment = self.comments.last
+    self.save!
   end
+
 
 end
