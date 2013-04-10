@@ -10,7 +10,13 @@ class CreateMemberships < ActiveRecord::Migration
     # Use the existing data from project_users to populate memberships
     execute <<-SQL
       INSERT INTO memberships (project_id, user_id, role)
-      SELECT project_id, user_id, 'admin' FROM projects_users
+      SELECT pu.project_id, pu.user_id, 'admin' FROM projects_users pu, projects p
+      WHERE p.id = pu.project_id AND p.user_id = pu.user_id
+    SQL
+    execute <<-SQL
+      INSERT INTO memberships (project_id, user_id, role)
+      SELECT pu.project_id, pu.user_id, 'regular' FROM projects_users pu, projects p
+      WHERE p.id = pu.project_id AND p.user_id <> pu.user_id
     SQL
 
     drop_table :projects_users
