@@ -1,4 +1,4 @@
-<h3>Update Your Account Details</h3>
+<h3>Update Your Account</h3>
 <%= simple_nested_form_for([@account.user, @account]) do |f| %>
   <%= f.error_notification %>
 
@@ -11,6 +11,7 @@
           </div>
           <div>
             <%= link_to link_text(@account, Plan.new(name)), '#' unless @account.plan == name.to_s %>
+            <%= "your current plan" if @account.plan == name.to_s %>
           </div>
         </li>
       <% end %>
