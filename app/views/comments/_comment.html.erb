@@ -1,17 +1,5 @@
 <%
-  changeset = {}
-  previous = comment.previous
-
-  #get what changed
-  [:status_id, :feature_id, :sprint_id, :assignee_id, :cost, :assets].each do |attr|
-    now = comment.send(attr)
-    if previous
-      was = previous.send(attr)
-      changeset[attr] = [now] if now != was
-    else
-      changeset[attr] = [now]
-    end
-  end
+  changeset = change_set(comment)
 %>
 
 <% if comment.first? %>
@@ -21,7 +9,7 @@
 </div>
 <% end %>
 
-<div class="comment-container">
+<div class="comment-container" id="comment-<%= comment.id %>">
   <p class="muted"><%= author(comment) %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
   <div><%= comment.html.html_safe %></div>
 
@@ -37,7 +25,7 @@
             <span><i class='icon-edit'></i>edit</span>
           <% end %>
           &nbsp;
-          <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
+          <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :remote => true, :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
             <span><i class='icon-trash'></i>remove</span>
           <% end %>
       <% end %>

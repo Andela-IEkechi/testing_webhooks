@@ -2,6 +2,24 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.comment-collection div:first-child {
+	background-color: #F5F5F5;
+	padding: 20px;
+	margin-bottom: 30px;
+}
+
+.comment-collection div:nth-child(n+2) .comment-body {
+	padding: 5px 18px;
+	background-color: #F5F5F5;
+}
+
+/*this is in lieu of a plain span12 that kept stubborny insisting on giving a left margin, for reasons as yet unknown to humankind*/
+.twocolumn-container {
+	margin-left: 0;
+	width: 100%;
+}
+
+
 .comment-container {
   margin-bottom: 50px;
   p.muted {

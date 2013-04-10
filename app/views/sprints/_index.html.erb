@@ -3,7 +3,7 @@
     <div class="pull-right">
         Show Closed Sprints &nbsp;<%= check_box_tag :show_closed_sprints, true %>
     </div>
-    <h2>Sprints</h2>
+    <h4>Sprints</h4>
   </caption>
   <thead>
   <tr>
@@ -17,7 +17,7 @@
   <tbody>
   <% sprints.each do |sprint| %>
     <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
-      <td title="sprint number"><%= sprint.id %></td>
+      <td title="sprint number"><%= sprint.scoped_id %></td>
       <td>
         <%= link_to sprint.goal, project_sprint_path(sprint.project, sprint) %>
         <% if (sprint.closed?) %>
@@ -30,10 +30,10 @@
           <%= completion_str(sprint) %>
         </div>
         <div class="progress"  title="<%= completion_message(sprint) %>">
-          <div class="bar bar-<%= completion_state(sprint) %> " style="width: <%= completion_percentage(sprint) %>%;" ></div>
+          <div class="bar bar-<%= completion_state(sprint) %> " style="width: <%= sprint.progess_count %>%;" ></div>
         </div>
       </td>
-      <td  class="count" title="tickets in this sprint"><span class="badge badge-important"><%= sprint.assigned_tickets.count %></span></td>
+      <td  class="count" title="tickets in this sprint"><span class="badge badge-important"><%= sprint.ticket_count %></span></td>
     </tr>
   <% end %>
   <% if sprints.count == 0 %>

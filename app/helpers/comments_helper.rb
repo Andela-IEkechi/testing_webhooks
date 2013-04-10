@@ -8,6 +8,22 @@ module CommentsHelper
     end
   end
 
+  def change_set(comment)
+    changeset = {:user => comment.user.to_s}
+    previous = comment.previous
+    #get what changed
+    [:status_id, :feature_id, :sprint_id, :assignee_id, :cost, :assets].each do |attr|
+      now = comment.send(attr)
+      if previous
+        was = previous.send(attr)
+        changeset[attr] = [now] if now != was
+      else
+        changeset[attr] = [now]
+      end
+    end
+    changeset
+  end
+
   def cancel_link
     if @feature
       link_to 'cancel', project_feature_path(@ticket.project, @feature), :class => 'btn', :title => 'back to the feature'
@@ -21,8 +37,7 @@ module CommentsHelper
   end
 
   def author(comment)
-    return comment.user.to_s if !comment.user.nil?
-    return comment.api_key_name unless comment.api_key_name.blank?
-    'anonymous'
+    return "#{comment.commenter} via #{comment.api_key_name}" if !comment.api_key_name.blank?
+    comment.user || 'anonymous'
   end
 end

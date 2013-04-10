@@ -12,13 +12,14 @@ guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' }, :wait => 45 do
   watch(%r{^spec/factories/.+\.rb$}) { :rspec }
 end
 
-guard 'rspec', :cli => "--drb", :version => 2 do
+guard 'rspec', :cli => "--drb" do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^spec/models/.+_spec\.rb$})
   watch(%r{^spec/controllers/.+_spec\.rb$})
   watch(%r{^spec/libs/.+_spec\.rb$})
   watch(%r{^spec/uploaders/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
+  watch(%r{^spec/shared/.+\.rb$}) { |m| "spec/models" }
 
   # Rails example
   watch(%r{^app/(.+)\.rb$})                           { |m| "spec/#{m[1]}_spec.rb" }

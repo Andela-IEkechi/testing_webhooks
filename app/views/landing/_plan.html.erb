@@ -1,0 +1,11 @@
+
+<h4><%= plan[:title] %></h4>
+<ul>
+  <li class="first">
+    <div class="price-tag"><span class="price-value">$<%= plan[:price] %></span><span class="price-period">per month</span></div>
+  </li>
+  <li><strong><%= plan[:projects] %></strong> Projects</li>
+  <li><strong><%= plan[:users] %></strong> Users</li>
+  <li><strong><%= plan[:storage_gb] %>GB</strong> Storage</li>
+  <li class="last"><%= link_to 'Register a free account', new_registration_path(:user), class: "btn btn-large" %></li>
+</ul>

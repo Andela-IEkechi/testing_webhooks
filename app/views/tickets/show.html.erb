@@ -1,4 +1,4 @@
 <%= render :partial => '/comments/comment', :collection => @ticket.comments %>
-
-<%= render :partial => '/comments/form' %>
-
+<% unless current_membership.restricted? %>
+  <%= render :partial => '/comments/form' %>
+<% end %>

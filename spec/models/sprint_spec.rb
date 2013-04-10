@@ -1,11 +1,16 @@
 require 'spec_helper'
+require 'shared/examples_for_scoped'
 
 describe Sprint do
+  it_behaves_like 'scoped' do
+    let(:scoped_class) { Sprint }
+  end
+
   before(:each) do
     @sprint = create(:sprint)
   end
 
-  it "must have a working factory" do
+  it "must have a working factory"  do
 
     @sprint.should_not be_nil
   end

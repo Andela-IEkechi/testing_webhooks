@@ -15,11 +15,11 @@ describe TicketsController do
     describe "GET #index" do
       before(:each) do
         if @sprint
-          get :index, :project_id => @project.id, :sprint_id => @sprint.id
+          get :index, :project_id => @project.to_param, :sprint_id => @sprint.to_param
         elsif @feature
-          get :index, :project_id => @project.id, :feature_id => @feature.id
+          get :index, :project_id => @project.to_param, :feature_id => @feature.to_param
         else
-          get :index, :project_id => @project.id
+          get :index, :project_id => @project.to_param
         end
       end
 
@@ -35,7 +35,7 @@ describe TicketsController do
         end
       end
 
-      it "uses only tickets for the current @feature if it's assigned" do
+      it "uses only tickets for the current @feature or @sprint if it's assigned" do
         if @feature
           assigns(:tickets).each do |ticket|
             ticket.feature.should == @feature
@@ -43,24 +43,24 @@ describe TicketsController do
         end
         if @sprint
           assigns(:tickets).each do |ticket|
-            ticket.feature.should == @sprint
+            ticket.sprint.should == @sprint
           end
         end
       end
 
-      it "renders the :index template" do
-        response.should render_template(:index)
+      it "redirects to the project path on an HTML call" do
+        response.should redirect_to("/projects/#{@project.to_param}")
       end
     end
 
     describe "GET #show" do
       before(:each) do
         if @sprint
-          get :show, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket
+          get :show, :project_id => @project.to_param, :sprint_id => @sprint.to_param, :id => @ticket
         elsif @feature
-          get :show, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket
+          get :show, :project_id => @project.to_param, :feature_id => @feature.to_param, :id => @ticket
         else
-          get :show, :project_id => @project.id, :id => @ticket
+          get :show, :project_id => @project.to_param, :id => @ticket
         end
       end
 
@@ -72,11 +72,11 @@ describe TicketsController do
     describe "GET #new" do
       before(:each) do
         if @sprint
-          get :new, :project_id => @project.id, :sprint_id => @sprint.id
+          get :new, :project_id => @project.to_param, :sprint_id => @sprint.to_param
         elsif @feature
-          get :new, :project_id => @project.id, :feature_id => @feature.id
+          get :new, :project_id => @project.to_param, :feature_id => @feature.to_param
         else
-          get :new, :project_id => @project.id
+          get :new, :project_id => @project.to_param
         end
       end
 
@@ -86,15 +86,12 @@ describe TicketsController do
       end
 
       it "@ticket is scoped to the correct @project" do
-        assigns(:ticket).project.should == @project
+        @ticket.project.id.should == @project.id
       end
 
-      it "@ticket is scoped to the correct @feature" do
-        assigns(:ticket).feature.should == @feature
-      end
-
-      it "@ticket is scoped to the correct @sprint" do
-        assigns(:ticket).sprint.should == @sprint
+      it "@ticket is scoped to the correct @feature or @feature" do
+        @ticket.feature.id.should == @feature.id if @feature
+        @ticket.sprint.id.should == @sprint.id if @sprint
       end
 
       it "renders the :new template" do
@@ -105,11 +102,11 @@ describe TicketsController do
     describe "GET #edit" do
       before(:each) do
         if @sprint
-          get :edit, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket.scoped_id
+          get :edit, :project_id => @project.to_param, :sprint_id => @sprint.to_param, :id => @ticket.scoped_id
         elsif @feature
-          get :edit, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket.scoped_id
+          get :edit, :project_id => @project.to_param, :feature_id => @feature.to_param, :id => @ticket.scoped_id
         else
-          get :edit, :project_id => @project.id, :id => @ticket.scoped_id
+          get :edit, :project_id => @project.to_param, :id => @ticket.scoped_id
         end
       end
 
@@ -125,63 +122,33 @@ describe TicketsController do
     describe "POST #create" do
       context "with valid attributes" do
         before(:each) do
-          @attrs = attributes_for(:ticket, :project_id => @project.id)
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => @project.ticket_statuses.first.id)})
+          @attrs = attributes_for(:ticket, :project_id => @project.to_param)
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment)})
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :sprint_id => @sprint.to_param)}) if @sprint
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :feature_id => @feature.to_param)}) if @feature
         end
 
         it "saves a new ticket to the database" do
           expect {
-            if @sprint
-              @attrs.merge!(:project_id => @project.id, :sprint_id => @sprint.id)
-              post :create, :project_id => @project.id, :sprint_id => @sprint.id, :ticket => @attrs
-            elsif @feature
-              @attrs.merge!(:project_id => @project.id, :feature_id => @feature.id)
-              post :create, :project_id => @project.id, :feature_id => @feature.id, :ticket => @attrs
-            else
-              post :create, :project_id => @project.id, :ticket => @attrs
-            end
+            post :create, :project_id => @project.to_param, :ticket => @attrs
           }.to change(Ticket, :count).by(1)
         end
 
         it "redirects to show the ticket" do
-          if @sprint
-            @attrs.merge!(:project_id => @project.id, :sprint_id => @sprint.id)
-            post :create, :project_id => @project.id, :sprint_id => @sprint.id, :ticket => @attrs
-            response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id, :sprint_id => @sprint))
-          elsif @feature
-            @attrs.merge!(:project_id => @project.id, :feature_id => @feature.id)
-            post :create, :project_id => @project.id, :feature_id => @feature.id, :ticket => @attrs
-            response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id, :feature_id => @feature))
-          else
-            post :create, :project_id => @project.id, :ticket => @attrs
-            response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id))
-          end
+          post :create, :project_id => @project.to_param, :ticket => @attrs
+          response.should be_redirect
+          response.should redirect_to(project_ticket_path(@project, assigns(:ticket).to_param))
         end
       end
       context "with invalid attributes" do
         it "does not save a new ticket in the database" do
           expect {
-            if @sprint
-              post :create, :project_id => @project.id, :feature_id => @sprint.id, :ticket => attributes_for(:invalid_ticket, :project_id => @project.id, :sprint_id => @sprint.id)
-            elsif @feature
-              post :create, :project_id => @project.id, :feature_id => @feature.id, :ticket => attributes_for(:invalid_ticket, :project_id => @project.id, :feature_id => @feature.id)
-            else
-              post :create, :project_id => @project.id, :ticket => attributes_for(:invalid_ticket, :project_id => @project.id)
-            end
+            post :create, :project_id => @project.to_param, :ticket => attributes_for(:invalid_ticket, :project_id => @project.to_param)
           }.to_not change(Ticket, :count).by(1)
         end
 
         it "re-renders the :new template" do
-          if @sprint
-            post :create, :project_id => @project.id, :sprint_id => @sprint.id, :ticket => attributes_for(:invalid_ticket, :project_id => @project.id, :sprint_id => @sprint.id)
-          elsif @feature
-            post :create, :project_id => @project.id, :feature_id => @feature.id, :ticket => attributes_for(:invalid_ticket, :project_id => @project.id, :feature_id => @feature.id)
-          else
-            post :create, :project_id => @project.id, :ticket => attributes_for(:invalid_ticket, :project_id => @project.id)
-          end
+          post :create, :project_id => @project.to_param, :ticket => attributes_for(:invalid_ticket, :project_id => @project.to_param)
           response.should render_template(:new)
         end
       end
@@ -191,64 +158,41 @@ describe TicketsController do
       context "with valid attributes" do
         before(:each) do
           @attrs = attributes_for(:ticket)
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment)})
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :sprint_id => @sprint.to_param)}) if @sprint
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :feature_id => @feature.to_param)}) if @feature
         end
 
         it "updates a ticket in the database" do
           expect {
-            if @sprint
-              post :update, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket, :ticket => @attrs
-            elsif @feature
-              post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => @attrs
-            else
-              post :update, :project_id => @project.id, :id => @ticket, :ticket => @attrs
-            end
+            post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
             @ticket.reload
           }.to change(@ticket, :updated_at)
         end
 
         it "redirects to show the ticket" do
-          if @sprint
-            post :update, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket, :ticket => @attrs
-            response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id, :feature_id => @feature))
-          elsif @feature
-            post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => @attrs
-            response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id, :feature_id => @feature))
-          else
-            post :update, :project_id => @project.id, :id => @ticket, :ticket => @attrs
-            response.should be_redirect
-            response.should redirect_to(project_ticket_path(@project, assigns(:ticket).id))
-          end
+          post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
+          response.should be_redirect
+          response.should redirect_to(project_ticket_path(@project, @ticket.to_param))
         end
       end
       context "with invalid attributes" do
         before(:each) do
           @attrs = attributes_for(:invalid_ticket)
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => @project.ticket_statuses.first.id)})
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment)})
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :sprint_id => @sprint.to_param)}) if @sprint
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :feature_id => @feature.to_param)}) if @feature
         end
 
         it "does not update the ticket in the database" do
           updated_before = @ticket.updated_at
-          if @sprint
-            post :update, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket, :ticket => @attrs
-          elsif @feature
-            post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => @attrs
-          else
-            post :update, :project_id => @project.id, :id => @ticket, :ticket => @attrs
-          end
+          post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
           @ticket.reload
           @ticket.updated_at.to_s.should == updated_before.to_s
         end
 
         it "re-renders the :edit template" do
-          if @sprint
-            post :update, :project_id => @project.id, :sprint_id => @sprint.id, :id => @ticket, :ticket => @attrs
-          elsif @feature
-            post :update, :project_id => @project.id, :feature_id => @feature.id, :id => @ticket, :ticket => @attrs
-          else
-            post :update, :project_id => @project.id, :id => @ticket, :ticket => @attrs
-          end
+          post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
           response.should render_template(:edit)
         end
       end
@@ -257,38 +201,27 @@ describe TicketsController do
     describe "DELETE #destroy" do
       it "deletes a ticket from the database" do
         expect {
-          if @sprint
-            delete :destroy, :id => @ticket, :project_id => @project, :sprint_id => @sprint.id
-          elsif @feature
-            delete :destroy, :id => @ticket, :project_id => @project, :feature_id => @feature.id
-          else
-            delete :destroy, :id => @ticket, :project_id => @project
-          end
+          delete :destroy, :id => @ticket.to_param, :project_id => @project.to_param
         }.to change(Ticket, :count).by(-1)
       end
 
       it "redirects to the ticket index" do
-        if @sprint
-          delete :destroy, :id => @ticket, :project_id => @project, :sprint_id => @sprint.id
-          response.should redirect_to(project_feature_path(@project, @sprint))
-        elsif @feature
-          delete :destroy, :id => @ticket, :project_id => @project, :feature_id => @feature.id
-          response.should redirect_to(project_feature_path(@project, @feature))
-        else
-          delete :destroy, :id => @ticket, :project_id => @project
-          response.should redirect_to(project_path(@project))
-        end
+        delete :destroy, :id => @ticket.to_param, :project_id => @project.to_param
+        response.should redirect_to(project_path(@project))
       end
     end
   end
 
-  context "in the context of a project" do
+  context "in the context of a project" , focus: true do
     before(:each) do
       @ticket = create(:ticket, :project => @project)
+      create(:comment, :ticket => @ticket, :user => @user)
+      @ticket.reload
+      @ticket.user.should_not be_nil
       @another_ticket = create(:ticket, :project => @project)
+      create(:comment, :user => @user, :ticket => @another_ticket)
+      @another_ticket.reload
     end
-    it "assigns the current project to @project"
-    it "does not assign the @feature"
     it_behaves_like "access to tickets"
   end
 
@@ -296,14 +229,12 @@ describe TicketsController do
     before(:each) do
       @feature = create(:feature, :project => @project)
       @ticket = create(:ticket, :project => @project)
-      @ticket.comments << create(:comment, :feature => @feature)
-      @ticket.save
+      create(:comment, :feature => @feature, :user => @user, :ticket => @ticket)
+      @ticket.reload
       @another_ticket = create(:ticket, :project => @project)
-      @another_ticket.comments << create(:comment, :feature => @feature)
-      @another_ticket.save
+      create(:comment, :feature => @feature, :user => @user, :ticket => @another_ticket)
+      @another_ticket.reload
     end
-    it "assigns the current feature to @feature"
-    it "assigns the current project to @project"
     it_behaves_like "access to tickets"
   end
 
@@ -311,14 +242,12 @@ describe TicketsController do
     before(:each) do
       @sprint = create(:sprint, :project => @project)
       @ticket = create(:ticket, :project => @project)
-      @ticket.comments << create(:comment, :sprint => @sprint)
-      @ticket.save
+      comment = create(:comment, :sprint => @sprint, :user => @user, :ticket => @ticket)
+      @ticket.reload
       @another_ticket = create(:ticket, :project => @project)
-      @another_ticket.comments << create(:comment, :sprint => @sprint)
-      @another_ticket.save
+      create(:comment, :sprint => @sprint, :user => @user, :ticket => @another_ticket)
+      @another_ticket.reload
     end
-    it "assigns the current sprint to @sprint"
-    it "assigns the current project to @project"
     it_behaves_like "access to tickets"
   end
 
