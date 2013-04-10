@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   has_one :account
   has_many :projects, :dependent => :destroy #projects we own
-  has_and_belongs_to_many :participations, :association_foreign_key => 'project_id', :class_name => 'Project'
+  has_many :tickets, :through => :projects #tickets we are assigned to
+  has_many :memberships, :include => :project, :dependent => :destroy
 
   after_create :create_account
 
@@ -56,10 +57,6 @@ class User < ActiveRecord::Base
     user
   end
 
-  def trial?
-    (Date.today - created_at.to_date).to_i <= 30
-  end
-
   def soft_delete
     update_attribute(:deleted_at, Time.current)
   end
@@ -74,7 +71,6 @@ class User < ActiveRecord::Base
 
   # Prevent "soft deleted" users from signing in
   # http://stackoverflow.com/a/8107966/483566
-
   def active_for_authentication?
     super && !deleted_at
   end
