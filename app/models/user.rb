@@ -1,13 +1,14 @@
 class User < ActiveRecord::Base
   has_one :account
   has_many :projects, :dependent => :destroy #projects we own
-  has_and_belongs_to_many :participations, :association_foreign_key => 'project_id', :class_name => 'Project'
+  has_many :tickets, :through => :projects #tickets we are assigned to
+  has_many :memberships, :include => :project, :dependent => :destroy
 
   after_create :create_account
 
   # Include default devise modules. Others available are:
   #  :lockable, :timeoutable
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :confirmable,:token_authenticatable
 
@@ -57,9 +58,5 @@ class User < ActiveRecord::Base
       end
     end
     user
-  end
-
-  def trial?
-    (Date.today - created_at.to_date).to_i <= 30
   end
 end
