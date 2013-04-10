@@ -7,7 +7,7 @@
       <li>
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <% current_user.memberships.each do |membership| %>
+            <% current_user.memberships.sort{|a,b| a.project.title <=> b.project.title}.each do |membership| %>
               <li><%= link_to membership.project.title, project_path(membership.project) %></li>
             <% end %>
             <li class="divider"></li>
