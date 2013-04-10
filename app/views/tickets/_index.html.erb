@@ -45,24 +45,24 @@
     <% @tickets.each do |ticket| %>
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
       <td><%= ticket.scoped_id %></td>
-      <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
+      <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
       <td>
-        <div class="overflow">
+        <div class="overflow" title="<%= ticket.feature %>">
           <%= ticket.feature %>
         </div>
       </td>
       <td>
-        <div class="overflow">
+        <div class="overflow" title="<%= ticket.sprint %>">
           <%= ticket.sprint %>
         </div>
       </td>
       <td>
-        <div class="overflow">
+        <div class="overflow" title="<%= ticket.assignee %>">
           <%= ticket.assignee %>
         </div>
       </td>
       <td>
-        <div class="overflow">
+        <div class="overflow" title="<%= ticket.status %>">
           <%= ticket.status %>
         </div>
       </td>
