@@ -33,6 +33,10 @@ describe Project do
     project.user.should_not be_nil
   end
 
+  it "should have an owner membership" do
+    @project.memberships.collect(&:user_id).include?(@project.user_id).should be_true
+  end
+
   it "should not allow duplicate titles for the same user" do
     joe = create(:user)
     project_one = create(:project, :user => joe)
@@ -129,26 +133,25 @@ describe Project do
     @project.user.projects.all.collect(&:title) == @project.user.projects.all.collect(&:title).sort
   end
 
-  context "with participants" do
-    it "should have the project owner as a participant" do
-      @project.participants.should have(1).participant
-      @project.participants.first.id.should eq(@project.user.id)
+  context "with memberships" do
+    it "should have the project owner in a membership" do
+      @project.memberships.should have(1).membership
+      @project.memberships.first.user_id.should eq(@project.user.id)
     end
 
-    it "should allow multiple participants" do
-      @project.participants << create(:user)
-      @project.participants << create(:user)
-      @project.participants.should have(3).participants
+    it "should allow multiple memberships" do
+      @project.memberships << create(:membership)
+      @project.memberships << create(:membership)
+      @project.memberships.should have(3).memberships
     end
 
-    it "should sort participants by email ASC" do
-      ##NOTE, the :order directive on project.participants seems to have no effect!
+    it "should sort memberships by email ASC" do
       4.times do
-        @project.participants << create(:user)
+        @project.memberships << create(:membership)
       end
-      participant_emails = @project.ordered_participants.collect(&:email)
-      ordered_emails = @project.participants.all.sort{|a,b| a.email <=> b.email}.collect(&:email)
-      participant_emails.should == ordered_emails
+      membership_emails = @project.memberships.all.collect{|m| m.user.email}
+      ordered_emails = @project.memberships.all.sort{|a,b| a.user.email <=> b.user.email}.collect{ |m| m.user.email}
+      membership_emails.should == ordered_emails
     end
   end
 
