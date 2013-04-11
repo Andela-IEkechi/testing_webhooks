@@ -16,6 +16,9 @@
     <%= comment_form.input :sprint do %>
       <%= comment_form.select :sprint_id, @ticket.project.sprints.all.select(&:open?).map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
     <% end %>
+  <% else %>
+    <%= comment_form.hidden_field :sprint_id %>
+    <%= comment_form.hidden_field :feature_id %>
   <% end %>
 
   <%= comment_form.input :assigned_to do %>
