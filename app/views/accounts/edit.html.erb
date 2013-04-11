@@ -1,27 +1,37 @@
-<h3>Update Your Account</h3>
-<%= simple_nested_form_for([@account.user, @account]) do |f| %>
-  <%= f.error_notification %>
+<h3>
+  Update Your Account
+  <small> currently <%= @account.current_plan[:title] %> </small>
+</h3>
 
-  <div class="form-inputs pull-left">
-    <ul>
-      <% Plan::PLANS.each do |name, detail| %>
-        <li>
-          <div>
-            <%= detail[:title] %>
-          </div>
-          <div>
-            <%= link_to link_text(@account, Plan.new(name)), '#' unless @account.plan == name.to_s %>
-            <%= "your current plan" if @account.plan == name.to_s %>
-          </div>
-        </li>
-      <% end %>
-    </ul>
+<%= simple_form_for 'https://virtual.mygateglobal.com/PaymentPage.cfm', :name => 'Conductor App Payment', :method => :post do %>
+  <%= hidden_field_tag "Mode", (Rails.env.production? ? 1 : 0) %>
+
+  <%= hidden_field_tag "MerchantID", Rails.configuration.mygate_application_id %>
+  <%= hidden_field_tag "ApplicationID", Rails.configuration.mygate_application_id %>
+
+  <div class="row-fluid marketing">
+    <div class="tab-pane">
+      <div class="price-table price-table-three">
+        <% plans = Plan::PLANS.reject{|k,v| k.to_s == @account.plan} %>
+        <div class="price-column  price-column-first">
+          <%= render partial: 'plan', object: Plan.new(plans.keys[0]) %>
+        </div>
+        <div class="price-column  price-column-featured">
+          <%= render partial: 'plan', object: Plan.new(plans.keys[1]) %>
+        </div>
+        <div class="price-column  price-column-last">
+          <%= render partial: 'plan', object: Plan.new(plans.keys[2]) %>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="clearfix"></div>
+  <%= hidden_field_tag "Currency", "ZAR" %>
 
-  <div class="form-actions">
-    <%= link_to 'Cancel', root_path(), :class => 'btn' %>
-  </div>
+  <!---The result pages (Where MyGate returns the card holder to after the transaction)--->
+  <%= hidden_field_tag "RedirectSuccessfulURL", "http://localhost:3000/successfullurl" %>
+  <%= hidden_field_tag "RedirectFailedURL", "http://localhost:3000/failureurl" %>
+
+  <%= submit_tag "Process Transaction" %>
+
 <% end %>
-

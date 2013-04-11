@@ -1,0 +1,13 @@
+<h4><%= plan[:title] %></h4>
+<ul>
+  <li class="first">
+    <div class="price-tag"><span class="price-value">$<%= plan[:price] %></span><span class="price-period">per month</span></div>
+  </li>
+  <li><strong><%= plan[:projects] %></strong> Projects</li>
+  <li><strong><%= plan[:users] %></strong> Users</li>
+  <li><strong><%= plan[:storage_gb] %>GB</strong> Storage</li>
+  <li class="last">
+    <%= radio_button_tag 'Amount', plan[:price], @account.current_plan == plan, :disabled => !@account.can_downgrade?(plan), :id => "amount_#{plan}" %>
+    <%= label_tag "amount_#{plan}", plan.better_than?(@account.current_plan) ? 'Upgrade' : 'Downgrade', :class => "bigger" %>
+  </li>
+</ul>
