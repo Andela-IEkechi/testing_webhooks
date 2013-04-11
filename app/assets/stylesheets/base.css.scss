@@ -34,6 +34,17 @@ abbr[title] {
   margin: 30px auto;
 }
 
+.overflow-hidden{
+  overflow:hidden;
+}
+
+.float-left{
+  float:left;
+}
+.float-right{
+  float:right;
+}
+
 caption {
   text-align: left;
   color: #000;
@@ -130,4 +141,8 @@ background-color: #fff;
   .width-65 {
     width: 65%;
   }
+}
+
+.thumb-wrap{
+  padding: 20px;
 }
