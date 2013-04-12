@@ -2,7 +2,10 @@ Conductor::Application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks' , :invitations => 'users/invitations' }
 
   resources :users do
-    resource :account
+    resource :account do
+      post 'payment/failure' => 'accounts#payment_failure'
+      post 'payment/success' => 'accounts#payment_success'
+    end
   end
 
   resources :projects do
