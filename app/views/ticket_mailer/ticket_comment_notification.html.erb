@@ -1,3 +1,4 @@
+<p><b><%= @comment.project.title %></b></p>
 <p><%= @comment.user %> has updated this ticket:</p>
 
 <%
@@ -19,8 +20,9 @@
     <p>cost updated to: <b><%= cost_long(@comment.cost) %></b></p>
   <% end %>
   <div><%= @comment.html.html_safe %></div>
+
   <% @comment.assets && @comment.assets.each do |asset| %>
-    <%= link_to asset.name, asset.payload_url, :target => '_blank' %><br />
+    <%= link_to image_tag(asset.payload_url(:thumb_small), class: 'thumb_wrap'), asset.payload_url, :target => '_blank', :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
   <% end %>
 
 <p><%= link_to @comment.ticket, project_ticket_url(@comment.project, @comment.ticket) %></p>

@@ -3,13 +3,12 @@
 require 'carrierwave/processing/mime_types'
 
 class FileUploader < CarrierWave::Uploader::Base
+  include CarrierWave::RMagick
   include CarrierWave::MimeTypes
 
   process :set_content_type
-
-
+  
   # Include RMagick or MiniMagick support:
-  # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
 
   # Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
@@ -45,6 +44,18 @@ class FileUploader < CarrierWave::Uploader::Base
   # version :thumb do
   #   process :scale => [50, 50]
   # end
+
+  version :thumb_small do
+    process :resize_to_fill => [100, 100]
+  end
+
+  version :thumb do
+    process :resize_to_fill => [200, 200]
+  end
+
+  version :normal do
+    process :resize_to_fit => [650,0]
+  end
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
