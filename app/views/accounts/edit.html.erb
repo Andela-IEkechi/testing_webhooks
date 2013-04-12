@@ -3,11 +3,11 @@
   <small> currently <%= @account.current_plan[:title] %> </small>
 </h3>
 
-<%= simple_form_for 'https://virtual.mygateglobal.com/PaymentPage.cfm', :name => 'Conductor App Payment', :method => :post do %>
+<%= form_tag ENV['MYGATE_FORM_URL'], :name => 'Conductor Secure Payment', :method => :post do %>
   <%= hidden_field_tag "Mode", (Rails.env.production? ? 1 : 0) %>
 
-  <%= hidden_field_tag "MerchantID", Rails.configuration.mygate_application_id %>
-  <%= hidden_field_tag "ApplicationID", Rails.configuration.mygate_application_id %>
+  <%= hidden_field_tag "MerchantID", ENV['MYGATE_MERCHANT_ID'] %>
+  <%= hidden_field_tag "ApplicationID", ENV['MYGATE_APPLICATION_ID'] %>
 
   <div class="row-fluid marketing">
     <div class="tab-pane">
@@ -26,12 +26,28 @@
     </div>
   </div>
 
+  <%= hidden_field_tag "ACCB_Frequency", "M|1" %>
+  <%= hidden_field_tag "ACCB_StartDate", Date.today.strftime('%d-%^b-%Y') %>
+  <%= hidden_field_tag "ACCB_EndDate", (Date.today + 5.year).strftime('%d-%^b-%Y') %>
+  <!-- subsequent bills -->
+  <%= hidden_field_tag "ACCB_Amount", "0.01" %>
+
+  <!-- Client details are used for reporting features in the MyGate web console -->
+  <%= hidden_field_tag "ACCB_ClientName", current_user.full_name %>
+  <%= hidden_field_tag "ACCB_ClientAccountNo", current_user.id %>
+  <%= hidden_field_tag "ACCB_ClientEmailAddress", current_user.email %>
+
+  <%= hidden_field_tag "ACCB_ClientSendSMS", "0" %>
+  <%= hidden_field_tag "ACCB_ClientSendEmail", "0" %>
+
   <%= hidden_field_tag "Currency", "ZAR" %>
 
-  <!---The result pages (Where MyGate returns the card holder to after the transaction)--->
-  <%= hidden_field_tag "RedirectSuccessfulURL", "http://localhost:3000/successfullurl" %>
-  <%= hidden_field_tag "RedirectFailedURL", "http://localhost:3000/failureurl" %>
+  <%= hidden_field_tag "RedirectSuccessfulURL", payment_success_user_account_url(current_user, :auth_token => current_user.authentication_token) %>
+  <%= hidden_field_tag "RedirectFailedURL", payment_failure_user_account_url(current_user, :auth_token => current_user.authentication_token) %>
 
-  <%= submit_tag "Process Transaction" %>
+  <div class="row-fluid pagination-centered">
+    <br>
+    <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change' %>
+  </div>
 
 <% end %>
