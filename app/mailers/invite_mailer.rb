@@ -8,6 +8,14 @@ class InviteMailer < ActionMailer::Base
     @user = user
     @project = project
     mail(:to => "#{recipients.join(',')}", #http://www.ruby-forum.com/topic/185075
-         :subject => "#{@user.full_name} has requested access to #{@project.title}")
+         :subject => "#{@user.full_name} has requested access to join #{@project.title}")
   end
+
+  def invite_confirm(user, project)
+    @user = user
+    @project = project
+    mail(:to => "#{@user.email}",
+         :subject => "Your request to join #{@project.title} has been sent")
+  end
+
 end
