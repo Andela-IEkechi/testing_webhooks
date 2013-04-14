@@ -9,7 +9,7 @@
      membership = m_form.object
      project_owner = membership.user_id == membership.project.user_id
   %>
-    <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner, :label => membership.user.email, :include_blank => 'disable this user' %>
+    <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner, :label => membership.user.email, :include_blank => 'revoke this user' %>
   <% end %>
 
   <input name="project[membership_ids][]" type="hidden" value="">
