@@ -6,7 +6,7 @@
 <p>
   To add <strong><%= @user.full_name %></strong> to the participants of
   <strong><%= @project.title %></strong>, visit the
-  <%= link_to "project properties page", edit_project_url(@project) %>
+  <%= link_to "project properties page", edit_project_url(@project, :anchor => 'access') %>
   and add the email <tt><%= @user.email %></tt> to the list of participants
   and an email will be sent to <strong><%= @user.full_name %></strong> automatically.
 </p>
