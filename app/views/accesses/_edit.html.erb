@@ -1,6 +1,7 @@
-<h3>Access control</h3>
+<a name="access"></a>
+<h3>Access control for <%= @project.title %></h3>
 
-<%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
+<%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal memberships'}) do |f| %>
 
   <!-- memberships -->
   <%= f.simple_fields_for :memberships do |m_form| %>
