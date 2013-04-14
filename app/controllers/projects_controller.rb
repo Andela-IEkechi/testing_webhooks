@@ -47,7 +47,7 @@ class ProjectsController < ApplicationController
   end
 
   def invite
-    recipients = @project.participants.collect(&:email).uniq
+    recipients = @project.memberships.collect(&:email).uniq
     InviteMailer.invite_request(recipients, current_user, @project).deliver
     flash[:notice] = "Your request to join <b>#{@project.title}</b> was sent to the project administrator".html_safe
     redirect_to projects_public_path

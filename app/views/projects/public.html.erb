@@ -22,7 +22,7 @@
       <td><%= num %></td>
       <td><%= link_to project.title, project_path(project) %></td>
       <td>
-        <% if project.participants.include?(current_user) %>
+        <% if can? :manage, project %>
         You are already a participant on this group, great!
         <% else %>
         <%= link_to 'Request an invite', invite_path(project), :class => 'btn btn-small btn-primary' %>

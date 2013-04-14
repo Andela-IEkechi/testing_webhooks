@@ -6,8 +6,11 @@ class Ability
     can :manage, Account, :user => {:id => user.id}
 
     can :read, Project, :memberships => {:user_id => user.id}
+    can :read, Project, :private => false
     can :manage, Project, :memberships => {:user_id => user.id, :role => 'admin'}
     can :create, Project
+    can :invite, Project
+
     #even if we made the project, if we are no longer admins, we no can longer manage it
     #can :manage, Project, :user_id => user.id
 
@@ -16,7 +19,10 @@ class Ability
 
     #anyone can read features and sprints on projects where they are members
     can :read, Feature, :project => {:memberships => {:user_id => user.id}}
+    can :read, Feature, :project => {:private => false }
+
     can :read, Sprint, :project => {:memberships => {:user_id => user.id}}
+    can :read, Sprint, :project => {:private => false }
 
     #only admin users can manage sprints and features and only on projects where they are members
     #we explicitly dont care who owns the project, no admin = no access
@@ -25,9 +31,14 @@ class Ability
 
     #anyone can read tickets on projects where they are a member
     can :read, Ticket, :project => {:memberships => {:user_id => user.id}}
+    can :read, Ticket, :project => {:private => false }
 
     #users can manage tickets which belong to them
     can :create, Ticket
+    # can :create, Ticket do |ticket|
+    #   !ticket.project.private
+    # end
+
     can :manage, Ticket do |ticket|
       (ticket.user_id == user.id) && !ticket.project.memberships.for_user(user.id).first.restricted?
     end
