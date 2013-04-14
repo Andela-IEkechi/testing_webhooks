@@ -21,6 +21,9 @@ class TicketsController < ApplicationController
     @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
     @assignee_id = current_user.id if params[:assignee_id]
 
+    # tickets should be visible on public projects
+    @tickets = @project.tickets if @project && !@project.private
+
     #search he general case
     @search = @tickets.search(params[:search])
     @combined_search = @search.all
