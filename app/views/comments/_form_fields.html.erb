@@ -25,6 +25,8 @@
     <%= comment_form.select :assignee_id, @ticket.project.memberships.all.map { |s| [s.email, s.user_id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
+  <% end %>
+
   <div class="attach-asset">
     <%= comment_form.link_to_add "Attach a file", :assets %>
     <%= comment_form.simple_fields_for :assets, [] do |a_f| %>

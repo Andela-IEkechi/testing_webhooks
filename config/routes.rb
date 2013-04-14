@@ -1,9 +1,12 @@
 Conductor::Application.routes.draw do
-  devise_for :users, :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks' , :invitations => 'users/invitations' }
+  devise_for :users, :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks' , :invitations => 'users/invitations', :registrations => 'users/registrations' }
 
   resources :users do
     resource :account
   end
+
+  get 'projects/public' => 'projects#public'
+  get 'projects/:id/invite' => 'projects#invite', :as => :invite
 
   resources :projects do
     resources :tickets do

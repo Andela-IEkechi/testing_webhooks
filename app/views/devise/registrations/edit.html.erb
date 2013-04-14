@@ -17,7 +17,17 @@
 
   <div class="form-actions">
     <%= f.submit "Update", :class => "btn"  %>
-    <%= link_to 'cancel', root_path(), :class => 'btn' %>
+    <%= link_to 'Cancel', root_path(), :class => 'btn' %>
   </div>
 <% end %>
 
+<h3>Cancel your account</h3>
+
+<div>
+  If you cancel your account, all projects owned by you will be
+  permanently deleted.
+</div>
+
+<div class="form-actions">
+  <%= link_to "I know what I'm doing, cancel my account", registration_path(:user), :class => 'btn btn-danger', :confirm => 'You are about to cancel your account. Proceed?', :method => :delete %>
+</div>

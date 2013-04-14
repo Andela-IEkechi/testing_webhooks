@@ -19,6 +19,9 @@ class User < ActiveRecord::Base
 
   validates :terms, acceptance: {accept: true}
 
+  scope :active, where("deleted_at IS NULL")
+  scope :deleted, where("deleted_at IS NOT NULL")
+
   def to_s
     if confirmed?
       email
@@ -53,4 +56,28 @@ class User < ActiveRecord::Base
     end
     user
   end
+
+  def trial?
+    (Date.today - created_at.to_date).to_i <= 30
+  end
+
+  def soft_delete
+    update_attribute(:deleted_at, Time.current)
+  end
+
+  def active?
+    !deleted_at
+  end
+
+  def deleted?
+    !!deleted_at
+  end
+
+  # Prevent "soft deleted" users from signing in
+  # http://stackoverflow.com/a/8107966/483566
+
+  def active_for_authentication?
+    super && !deleted_at
+  end
+
 end
