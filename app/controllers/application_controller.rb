@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
+  before_filter :after_token_authentication
   before_filter :authenticate_user!
   protect_from_forgery
 
@@ -13,6 +14,13 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  def after_token_authentication
+    if params[:authentication_key].present?
+      @user = User.find_by_authentication_token(params[:authentication_key])
+      sign_in @user if @user
+    end
+  end
 
   def layout_by_resource
     if devise_controller? && action_name != 'edit'

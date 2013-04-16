@@ -16,6 +16,10 @@ class Plan
     @name.to_s
   end
 
+  def [](key)
+    PLANS[@name][key.to_sym]
+  end
+
   def upgrade_to?
     case @name.to_s
     when 'free'
