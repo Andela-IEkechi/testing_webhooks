@@ -3,11 +3,10 @@ class AccountsController < ApplicationController
   before_filter :load_account
 
   def edit
-    current_user.reset_authentication_token!
+    current_user.ensure_authentication_token!
   end
 
   def update
-    current_user.reset_authentication_token!
     if @account.update_attributes(params[:account])
       flash[:notice] = "Your account was updated"
     else
@@ -17,18 +16,20 @@ class AccountsController < ApplicationController
   end
 
   def payment_failure
-    current_user.reset_authentication_token!
     #do something if the payment failed
     flash[:alert] = "Payment could not be processed. Your subscription was not updated"
-    redirect_to edit_user_account_path(@account.user,@account)
+    redirect_to edit_user_account_path(@account.user)
   end
 
   def payment_success
-    current_user.reset_authentication_token!
     #get the new plan and update the user account
     @account.change_to(params[:plan])
-    flash[:notice] = "Payment was successful. Your subscription has been updated to #{current_user.account.current_plan[:title]}"
-    redirect_to edit_user_account_path(@account.user,@account)
+    if @account.save
+      flash[:notice] = "Payment was successful. Your subscription has been updated to #{@account.current_plan[:title]}"
+    else
+      flash[:alert] = "Payment was successful. However, we encountered a problem while updating your account. Please contact accounts@conductor-app.co.za for assistance"
+    end
+    redirect_to edit_user_account_path(@account.user)
   end
 
 

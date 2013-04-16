@@ -17,8 +17,8 @@ class Account < ActiveRecord::Base
     self.plan = Plan.new(self.plan).downgrade
   end
 
-  def change_to()
-    self.plan = Plan.new(new_plan)
+  def change_to(new_plan)
+    self.plan = Plan.new(new_plan).to_s
   end
 
   def can_downgrade?(new_plan)
