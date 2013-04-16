@@ -212,7 +212,7 @@ describe TicketsController do
     end
   end
 
-  context "in the context of a project" , focus: true do
+  context "in the context of a project" do
     before(:each) do
       @ticket = create(:ticket, :project => @project)
       create(:comment, :ticket => @ticket, :user => @user)
