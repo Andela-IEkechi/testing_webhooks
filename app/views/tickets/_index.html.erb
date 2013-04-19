@@ -1,8 +1,8 @@
 <%
   project ||= @project
   project_id ||= project && project.id
-  sprint_id ||= @sprint && @sprint.id
-  feature_id ||= @feature && @feature.id
+  sprint_id ||= @sprint && @sprint.to_param
+  feature_id ||= @feature && @feature.to_param
   assignee_id ||= @assignee_id
 
   parent = "sprint-#{sprint_id}" if sprint_id
@@ -33,38 +33,50 @@
     <thead>
     <tr>
       <th class="width-5">#</th>
-      <th class="width-45">Title</th>
-      <th class="width-20">Assignee</th>
-      <th class="width-25">State</th>
-      <th class="width-5">Cost</th>
+      <th>Title</th>
+      <th class="width-15">Feature</th>
+      <th class="width-15">Sprint</th>
+      <th class="width-15">Assignee</th>
+      <th class="width-10">State</th>
+      <th class="width-50px">Cost</th>
     </tr>
     </thead>
     <tbody>
     <% @tickets.each do |ticket| %>
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
       <td><%= ticket.scoped_id %></td>
-      <td><%= link_to ticket.title, project_ticket_path(ticket.project, ticket, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
+      <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
       <td>
-        <div class="overflow">
+        <div class="overflow" title="<%= ticket.feature %>">
+          <%= ticket.feature %>
+        </div>
+      </td>
+      <td>
+        <div class="overflow" title="<%= ticket.sprint %>">
+          <%= ticket.sprint %>
+        </div>
+      </td>
+      <td>
+        <div class="overflow" title="<%= ticket.assignee %>">
           <%= ticket.assignee %>
         </div>
       </td>
-      <td class="ticket-info">
-          <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
-          <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
-          <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
+      <td>
+        <div class="overflow" title="<%= ticket.status %>">
+          <%= ticket.status %>
+        </div>
       </td>
       <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
     </tr>
     <% end if @tickets %>
     <% if @tickets && @tickets.count == 0 %>
       <tr>
-        <td colspan="5">There are no tickets</td>
+        <td colspan="7">There are no tickets</td>
       </tr>
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="5"><%= link_to 'loading tickets...',
+        <td colspan="7"><%= link_to 'loading tickets...',
           project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
           :remote => true, :class => "autoload" %>
         </td>

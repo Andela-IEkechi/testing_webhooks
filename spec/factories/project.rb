@@ -2,7 +2,6 @@ FactoryGirl.define do
   factory :project do
     sequence(:title) {|n| "project-#{n}" }
     association(:user)
-    api_key {Digest::SHA1.hexdigest Time.now.to_s}
 
     factory :invalid_project do
       title nil
