@@ -18,20 +18,20 @@ describe Comment do
 
     it "should create a comment with a feature only" do
       comment = create(:comment_with_feature)
-      comment.feature.id.should_not be_nil
-      comment.sprint.id.should be_nil
+      comment.feature_id.should_not be_nil
+      comment.sprint_id.should be_nil
     end
 
     it "should create a comment with a sprint only" do
       comment = create(:comment_with_sprint)
-      comment.sprint.id.should_not be_nil
-      comment.feature.id.should be_nil
+      comment.sprint_id.should_not be_nil
+      comment.feature_id.should be_nil
     end
 
     it "should create a comment with a feature and a sprint" do
       comment = create(:comment_with_feature_and_sprint)
-      comment.feature.id.should_not be_nil
-      comment.sprint.id.should_not be_nil
+      comment.feature_id.should_not be_nil
+      comment.sprint_id.should_not be_nil
     end
   end
 

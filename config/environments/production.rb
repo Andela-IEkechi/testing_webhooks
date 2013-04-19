@@ -79,4 +79,11 @@ Conductor::Application.configure do
     ENV['GITHUB_CLIENT_ID'] = '1abb11e846fd47440d03'
     ENV['GITHUB_CLIENT_SECRET'] = '5f75803c2db451c7e69daf256dc8a6b24ed98d09'
   end
+
+  #set up the MyGate payment gateway values
+  config.before_configuration do
+    ENV['MYGATE_FORM_URL'] = 'https://virtual.mygateglobal.com/PaymentPage.cfm'
+    ENV['MYGATE_APPLICATION_ID'] = '27b51bf7-e1e2-45f7-8ad8-817462ca53dd'
+    ENV['MYGATE_MERCHANT_ID'] = '444b26e6-0b37-4215-8ea8-3c85bef5363e'
+  end
 end
