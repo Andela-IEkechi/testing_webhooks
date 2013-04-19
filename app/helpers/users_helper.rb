@@ -5,4 +5,8 @@ module UsersHelper
       gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
       image_tag(gravatar_url, alt: current_user, class: "gravatar #{css_class}")
   end
+
+  def hide_comments?
+    current_user.preferences.collapse_long_tickets == '1'
+  end
 end

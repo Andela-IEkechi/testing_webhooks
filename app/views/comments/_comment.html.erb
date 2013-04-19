@@ -2,7 +2,7 @@
   changeset = change_set(comment)
 %>
 
-<% if comment.first? %>
+<% if false && comment.first? %>
 <div class="ticket-title">
   <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
   <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
