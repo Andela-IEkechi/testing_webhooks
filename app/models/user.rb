@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   serialize :preferences
 
   after_initialize do |user|
+    user.preferences ||= {}
     user.preferences = OpenStruct.new(user.preferences)
   end
 

@@ -48,12 +48,12 @@
       <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
       <td>
         <div class="overflow" title="<%= ticket.feature %>">
-          <%= ticket.feature %>
+          <%= link_to ticket.feature, project_feature_path(ticket.project, ticket.feature) if ticket.feature %>
         </div>
       </td>
       <td>
         <div class="overflow" title="<%= ticket.sprint %>">
-          <%= ticket.sprint %>
+          <%= link_to ticket.sprint, project_sprint_path(ticket.project, ticket.sprint) if ticket.sprint %>
         </div>
       </td>
       <td>
@@ -76,7 +76,7 @@
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="7"><%= link_to 'loading tickets...',
+        <td colspan="6"><%= link_to 'loading tickets...',
           project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
           :remote => true, :class => "autoload" %>
         </td>
