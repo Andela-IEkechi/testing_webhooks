@@ -19,3 +19,4 @@
 .listen_test
 *.swp
 public/uploads
+*~

@@ -13,11 +13,41 @@ describe ProjectsController do
     end
 
     it "populates an array of projects" do
-      assigns(:projects).should have_at_least(1).items
+      assigns(:projects).should have(1).item
     end
 
     it "renders the :index template" do
       response.should render_template("index")
+    end
+
+    it "renders the projects we are members of" do
+      assigns(:projects).should have(1).item
+
+      new_project = create(:project)
+      new_project.memberships << create(:membership, :project => new_project, :user => @user)
+      get :index
+      assigns(:projects).should have(2).items
+    end
+
+    it "does not render projects we are not members of" do
+      assigns(:projects).should have(1).item
+
+      new_project = create(:project)
+      get :index
+      assigns(:projects).should have(1).items
+    end
+
+    it "renders each project only once" do
+      new_project = create(:project)
+      new_project.memberships << create(:membership, :project => new_project, :user => @user)
+
+      new_project.memberships << create(:membership, :project => new_project)
+      new_project.memberships << create(:membership, :project => new_project)
+      new_project.memberships << create(:membership, :project => new_project)
+
+      get :index
+      titles = assigns(:projects).collect(&:title)
+      titles.count.should eq(titles.uniq.count)
     end
   end
 

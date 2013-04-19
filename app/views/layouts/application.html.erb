@@ -9,7 +9,6 @@
 </head>
 <body>
   <div id="wrap">
-
     <div class="container-fluid">
       <div class="row-fluid">
         <%= render :partial => '/layouts/header' %>
@@ -23,13 +22,7 @@
           </div>
         </div>
         <div class="span3">
-          <%= render :partial => 'actions' %>
-          <% if current_user.trial? %>
-            <div class="alert alert-success fade in">
-              <a href="#" data-dismiss="alert" class="close">×</a>
-              You are on day <%= trial_days %> of your 30 day free trial.
-            </div>
-          <% end %>
+          <%= render :partial => '/shared/actions' %>
         </div>
         <% else %>
         <div class="span4">

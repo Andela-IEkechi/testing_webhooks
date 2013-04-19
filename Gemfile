@@ -5,6 +5,8 @@ gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
 gem 'devise'
+gem 'devise_invitable', '~> 1.1.0'
+
 gem 'cancan'
 gem 'omniauth-github'
 gem 'paper_trail'
@@ -65,7 +67,7 @@ group :test do
   gem 'guard-spork'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'rb-inotify', '~> 0.8.8'
+  gem 'rb-inotify', '~> 0.9'
 end
 
 group :development do

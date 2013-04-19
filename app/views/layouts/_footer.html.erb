@@ -1,15 +1,15 @@
 <div class="row-fluid">
-  <div class="span8 offset2 footer">
-    <p class="pull-left">Copyright &copy; 2013 <%= link_to 'Shuntyard Technologies', 'http://www.shuntyard.co.za' %>. All Rights Reserved.</p>
-    <ul class="inline pull-right">
-      <% if Rails.env.staging? || Rails.env.development? %>
-      <li>
-        <%= Rails.env %>
-      </li>
-      <% end %>
+  <div class="footer">
+    <p class="pull-left clearfix">Copyright &copy; 2013 <%= link_to 'Shuntyard Technologies', 'http://www.shuntyard.co.za' %>. All Rights Reserved.</p>
+    <ul class="inline pull-right clearfix">
       <li><%= link_to 'Support', landing_support_path() %></li>
       <li><%= link_to 'Privacy', landing_privacy_path() %></li>
       <li><%= link_to 'Terms of Service', landing_terms_path() %></li>
-    </ul>
+    </ul>    
+    <center>
+      <% if Rails.env.staging? || Rails.env.development? %>
+        <%= Rails.env %>
+      <% end %>
+    </center>
   </div>
 </div>
