@@ -25,6 +25,9 @@
 
 .ticket-title {
   h1 {
-    color: #579803;
+    color: $primary-link-color;
+    border: 2px solid lightblue;
+    border-radius: 5px;
+    padding: 10px;
   }
 }
