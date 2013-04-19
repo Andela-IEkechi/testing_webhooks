@@ -16,8 +16,9 @@ class RegistrationsController < Devise::RegistrationsController
       # Sign in the user bypassing validation in case his password changed
       sign_in @user, :bypass => true
 
-      #redirect to profile edit page again, not to root if we came from editing the profile
-      redirect_to after_update_path_for(@user)
+      #redirect to profile edit page again
+      #redirect_to after_update_path_for(@user)
+      redirect_to edit_user_registration_path()
 
     else
       render "edit"
