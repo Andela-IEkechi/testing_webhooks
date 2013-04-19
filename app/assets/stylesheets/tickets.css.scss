@@ -1,31 +1,6 @@
 .label {
   padding: 5px 2px;
 }
-.label-ticket {
-  width:96%;
-  display: inline-block;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.label-missing {
-  background: none;
-}
-.label-feature {
-  a {
-    color: #FFFFFF;
-  }
-  background-color: $label-feature-color;
-}
-.label-sprint {
-  a {
-    color: #FFFFFF;
-  }
-  background-color: $label-sprint-color;
-}
-.label-status {
-  //use default grey
-}
 
 #git-commands h5, #git-commands-toggle {
   cursor: pointer;

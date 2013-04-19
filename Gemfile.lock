@@ -57,6 +57,8 @@ GEM
       carrierwave
       fog
       uuid
+    childprocess (0.3.7)
+      ffi (~> 1.0, >= 1.0.6)
     childprocess (0.3.8)
       ffi (~> 1.0, >= 1.0.11)
     coderay (1.0.9)
@@ -238,7 +240,7 @@ GEM
       thor (>= 0.14.6, < 2.0)
     rake (10.0.3)
     rb-fsevent (0.9.3)
-    rb-inotify (0.8.8)
+    rb-inotify (0.9.0)
       ffi (>= 0.5.0)
     rb-readline (0.4.2)
     rdoc (3.12.2)
@@ -350,7 +352,7 @@ DEPENDENCIES
   rails-footnotes (>= 3.7.5.rc4)
   rake
   rb-fsevent
-  rb-inotify (~> 0.8.8)
+  rb-inotify (~> 0.9)
   rb-readline
   redcarpet
   rspec
