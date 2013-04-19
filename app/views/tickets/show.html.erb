@@ -1,12 +1,21 @@
+<%
+  comments = @ticket.comments
+  old_comments = []
+  if hide_comments?
+    comments = comments.last(5)
+    old_comments = @ticket.comments[0..-6]
+  end
+%>
+
 <div class="ticket-title">
   <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
   <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
 </div>
 
 <!-- render older comments if there are any -->
-<% if @ticket.comments.count > 5  %>
+<% if old_comments.any?  %>
 <div class="older_comments" style="display:none;">
-  <%= render :partial => '/comments/comment', :collection => @ticket.comments[0..-6] %>
+  <%= render :partial => '/comments/comment', :collection => old_comments %>
 </div>
 <div class="show-hide-toggle">
   <%= link_to '#', :class => 'hide_older', :style=>"display:none;" do %>
@@ -18,8 +27,7 @@
 </div>
 <% end %>
 
-<!-- render last 5 comments comments -->
-<%= render :partial => '/comments/comment', :collection => @ticket.comments.last(5) %>
+<%= render :partial => '/comments/comment', :collection => comments %>
 <% unless current_membership.restricted? %>
   <%= render :partial => '/comments/form' %>
 <% end %>
