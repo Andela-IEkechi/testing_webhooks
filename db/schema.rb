@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.text     "preferences"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
