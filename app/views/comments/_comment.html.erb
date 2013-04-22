@@ -2,13 +2,6 @@
   changeset = change_set(comment)
 %>
 
-<% if comment.first? %>
-  <div class="ticket-title">
-    <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
-    <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
-  </div>
-<% end %>
-
 <div class="comment-container" id="comment-<%= comment.id %>">
   <p class="muted"><%= author(comment) %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
   <div><%= comment.html.html_safe %></div>
