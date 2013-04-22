@@ -45,7 +45,7 @@ class FileUploader < CarrierWave::Uploader::Base
   #   process :scale => [50, 50]
   # end
 
-  version :thumb do
+  version :thumb, :if => :image? do
     process :resize_to_fill => [100, 100]
   end
 
@@ -60,5 +60,9 @@ class FileUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
+
+  def image?(thing)
+    thing.content_type.include? 'image'
+  end
 
 end
