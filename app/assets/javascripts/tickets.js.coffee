@@ -11,3 +11,14 @@ $ ->
     action = action + '?create_another=true'
     $(this).parentsUntil('form').parent().attr('action', action)
 
+  $('a.show_older').click ->
+    $('.older_comments').slideDown();
+    $(this).hide();
+    $('.hide_older').show();
+
+  $('a.hide_older').click ->
+    $('.older_comments').slideUp();
+    $(this).hide();
+    $('.show_older').show();
+
+

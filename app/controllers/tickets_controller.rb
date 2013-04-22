@@ -39,7 +39,7 @@ class TicketsController < ApplicationController
 
     #need to re-sort both because we added to the set, and because metasearch seems to kill the model ordering
     @combined_search.sort!{|a,b| a.id<=>b.id}.uniq!
-    @tickets = Kaminari::paginate_array(@combined_search).page(params[:page])
+    @tickets = Kaminari::paginate_array(@combined_search).page(params[:page]).per(current_user.preferences.page_size.to_i)
 
     respond_to do |format|
       format.js do
