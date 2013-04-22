@@ -35,7 +35,7 @@ describe Account do
     end
   end
 
-  context "when changing plans", :focus => true do
+  context "when changing plans" do
     it "should respond to :upgrade" do
       @account.should respond_to :upgrade
     end
