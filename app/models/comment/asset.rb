@@ -9,4 +9,8 @@ class Comment::Asset < ActiveRecord::Base
     payload.file.filename rescue payload
   end
 
+  def image?
+    payload.file.content_type.include? 'image' rescue false
+  end
+
 end
