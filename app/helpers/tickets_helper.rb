@@ -4,6 +4,7 @@ module TicketsHelper
     :id => :scoped_id_equals,
     :title => :title_contains,
     :assigned => :assignee_email_contains,
+    :assignee => :assignee_email_contains,
     :status => :status_name_contains,
     :feature => :feature_title_contains,
     :sprint => :sprint_goal_contains,
