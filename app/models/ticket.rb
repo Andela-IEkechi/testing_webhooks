@@ -78,5 +78,4 @@ class Ticket < ActiveRecord::Base
     self.save!
   end
 
-
 end

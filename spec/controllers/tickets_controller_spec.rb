@@ -128,7 +128,7 @@ describe TicketsController do
           @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :feature_id => @feature.to_param)}) if @feature
         end
 
-        it "saves a new ticket to the database", :focus => true do
+        it "saves a new ticket to the database" do
           expect {
             post :create, :project_id => @project.to_param, :ticket => @attrs
           }.to change(Ticket, :count).by(1)
