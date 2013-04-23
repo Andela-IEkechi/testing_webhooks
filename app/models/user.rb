@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   has_one :account
   has_many :projects, :dependent => :destroy #projects we own
-  has_and_belongs_to_many :participations, :association_foreign_key => 'project_id', :class_name => 'Project'
+  has_many :tickets, :through => :projects #tickets we are assigned to
+  has_many :memberships, :include => :project, :dependent => :destroy
 
   after_create :create_account
 
@@ -14,12 +15,19 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
-                  :terms, :chosen_plan
+                  :terms, :chosen_plan, :preferences
 
   validates :terms, acceptance: {accept: true}
 
   scope :active, where("deleted_at IS NULL")
   scope :deleted, where("deleted_at IS NOT NULL")
+
+  serialize :preferences
+
+  after_initialize do |user|
+    user.preferences ||= {}
+    user.preferences = OpenStruct.new(user.preferences)
+  end
 
   def to_s
     if confirmed?

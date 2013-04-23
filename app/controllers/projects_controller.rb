@@ -1,6 +1,5 @@
 class ProjectsController < ApplicationController
   load_and_authorize_resource :project
-  before_filter :filter_by_participation
 
   def index
   end
@@ -12,6 +11,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
+    @project.user = current_user
     if @project.save
       flash[:notice] = "Project was added"
       redirect_to project_path(@project)

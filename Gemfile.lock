@@ -57,6 +57,8 @@ GEM
       carrierwave
       fog
       uuid
+    childprocess (0.3.7)
+      ffi (~> 1.0, >= 1.0.6)
     childprocess (0.3.8)
       ffi (~> 1.0, >= 1.0.11)
     coderay (1.0.9)
@@ -247,6 +249,7 @@ GEM
     ref (1.0.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rmagick (2.13.2)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -353,6 +356,7 @@ DEPENDENCIES
   rb-inotify (~> 0.9)
   rb-readline
   redcarpet
+  rmagick
   rspec
   rspec-rails
   sass-rails (~> 3.2.3)
