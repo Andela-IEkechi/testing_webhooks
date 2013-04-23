@@ -8,6 +8,6 @@ class InviteMailer < ActionMailer::Base
     @user = user
     @project = project
     mail(:to => "#{recipients.join(',')}", #http://www.ruby-forum.com/topic/185075
-         :subject => "#{@user.full_name} has requested access to #{@project.title}")
+         :subject => "#{@user.full_name}(#{@user.email}) has requested access to #{@project.title}")
   end
 end
