@@ -14,18 +14,19 @@
     </tr>
   </thead>
   <tbody>
-    <% num = 0
-       @projects.each do |project|
-       num = num + 1
-       %>
+    <% 
+      num = 0
+      @projects.each do |project|
+      num = num + 1
+    %>
     <tr>
       <td><%= num %></td>
       <td><%= link_to project.title, project_path(project) %></td>
       <td>
-        <% if project.participants.include?(current_user) %>
-        You are already a participant on this group, great!
+        <% if project.memberships.select{|s| s.user == current_user} %>
+          You are already a participant on this group, great!
         <% else %>
-        <%= link_to 'Request an invite', project_path(project), :class => 'btn btn-small btn-primary' %>
+          <%= link_to 'Request an invite', project_path(project), :class => 'btn btn-small btn-primary' %>
         <% end %>
       </td>
     </tr>
