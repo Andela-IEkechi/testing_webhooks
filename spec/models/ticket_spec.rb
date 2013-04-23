@@ -55,8 +55,20 @@ describe Ticket do
       @ticket.feature_id.should eq(@feature.id)
     end
 
-    it "should return the feature id for the feature in the last comment" do
+    it "should update the last_comment association when a new comment is added" do
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      @ticket.last_comment_id.should eq(new_comment.id)
+    end
 
+    it "should update the last_comment association when a comment is removed" do
+      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      @ticket.last_comment_id.should eq(new_comment.id)
+      @ticket.last_comment.destroy
+      @ticket.reload
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      @ticket.last_comment_id.should eq(@comment.id)
     end
   end
 
