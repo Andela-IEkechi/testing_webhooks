@@ -9,6 +9,7 @@ class Membership < ActiveRecord::Base
   validates :project_id, :presence => true
 
   scope :for_user, lambda{|user_id| {:conditions => {:user_id => user_id}}}
+  scope :admin, where(:role => 'admin')
 
   attr_accessible :role, :user_id, :project_id
 

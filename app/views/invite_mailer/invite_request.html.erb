@@ -1,13 +1,12 @@
 <p>
   <strong><%= @user.full_name %></strong> (<%= @user.email %>) has requested
-  access to <strong><%= @project.title %></strong> as a participant.
+  access to <strong><%= @project.title %></strong>.
 </p>
 
 <p>
-  To add <strong><%= @user.full_name %></strong> to the participants of
-  <strong><%= @project.title %></strong>, visit the
+  To update <strong><%= @project.title %></strong> membership, visit the
   <%= link_to "project properties page", edit_project_url(@project) %>
-  and add the email <tt><%= @user.email %></tt> to the list of participants
-  and an email will be sent to <strong><%= @user.full_name %></strong> automatically.
+  and add <tt><%= @user.email %></tt> to the list of memberships.
+  <strong><%= @user.full_name %></strong> will automatically be informed via email.
 </p>
 

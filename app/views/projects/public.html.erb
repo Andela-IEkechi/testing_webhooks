@@ -1,4 +1,3 @@
-
 <h3>Public projects</h3>
 
 <table class="table table-bordered table-striped" id="public-project-list">
@@ -22,8 +21,8 @@
       <td><%= num %></td>
       <td><%= link_to project.title, project_path(project) %></td>
       <td>
-        <% if project.participants.include?(current_user) %>
-        You are already a participant on this group, great!
+        <% if project.memberships.collect(&:user_id).include?(current_user.id) %>
+        You are already participating in this project.
         <% else %>
         <%= link_to 'Request an invite', invite_path(project), :class => 'btn btn-small btn-primary' %>
         <% end %>
