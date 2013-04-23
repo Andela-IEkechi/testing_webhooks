@@ -1,7 +1,12 @@
 Conductor::Application.routes.draw do
-  devise_for :users, :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks' , :invitations => 'users/invitations' }
+  devise_for :users, :token_authentication_key => 'authentication_key', :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks' , :invitations => 'users/invitations', :registrations => "registrations" }
 
-  resources :users
+  resources :users do
+    resource :account do
+      match 'payment/failure' => 'accounts#payment_failure'
+      match 'payment/success' => 'accounts#payment_success'
+    end
+  end
 
   resources :projects do
     resources :tickets do

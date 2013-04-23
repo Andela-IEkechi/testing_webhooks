@@ -32,7 +32,8 @@ class Ticket < ActiveRecord::Base
   end
 
   def parent
-    last_comment.try(:parent) || project
+    return last_comment.parent if last_comment
+    project
   end
 
   def body
@@ -76,6 +77,5 @@ class Ticket < ActiveRecord::Base
     self.last_comment = self.comments.last
     self.save!
   end
-
 
 end

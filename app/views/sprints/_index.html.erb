@@ -8,21 +8,18 @@
   <thead>
   <tr>
     <th class="width-5">#</th>
-    <th class="width-45">Goal</th>
-    <th class="width-20">Due Date</th>
+    <th>Goal</th>
+    <th class="width-15">Due Date</th>
     <th class="width-25">Progress</th>
-    <th class="width-5">Tickets</th>
+    <th class="width-50px">Tickets</th>
   </tr>
   </thead>
   <tbody>
   <% sprints.each do |sprint| %>
     <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
       <td title="sprint number"><%= sprint.scoped_id %></td>
-      <td>
+      <td class="overflow" title="<%= sprint.goal %>">
         <%= link_to sprint.goal, project_sprint_path(sprint.project, sprint) %>
-        <% if (sprint.closed?) %>
-          <span class="label label-ticket pull-right">Closed</span>
-        <% end %>
       </td>
       <td title="due date"><%= sprint.due_on.to_s(:long) %></td>
       <td>

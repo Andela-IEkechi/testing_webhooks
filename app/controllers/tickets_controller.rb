@@ -39,7 +39,7 @@ class TicketsController < ApplicationController
 
     #need to re-sort both because we added to the set, and because metasearch seems to kill the model ordering
     @combined_search.sort!{|a,b| a.id<=>b.id}.uniq!
-    @tickets = Kaminari::paginate_array(@combined_search).page(params[:page])
+    @tickets = Kaminari::paginate_array(@combined_search).page(params[:page]).per(current_user.preferences.page_size.to_i)
 
     respond_to do |format|
       format.js do
@@ -72,13 +72,13 @@ class TicketsController < ApplicationController
   def create
     @ticket.comments.build() unless @ticket.comments.first
     @ticket.comments.first.user = current_user
-
     if @ticket.save
-      flash.keep[:notice] = "Ticket was added"
       if params[:create_another]
+        flash.keep[:notice] = "Ticket ##{@ticket.scoped_id} was added. #{@ticket.title}"
         @ticket.reload #refresh the assoc to last_comment
         redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature, :sprint_id => @ticket.sprint)
       else
+        flash.keep[:notice] = "Ticket was added."
         redirect_to project_ticket_path(@ticket.project, @ticket)
       end
     else
