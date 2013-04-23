@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController, focus: true do
+describe GithubController do
 
   before :each do
     @project = create(:project)
@@ -8,7 +8,7 @@ describe GithubController, focus: true do
 
     @ticket = create(:ticket, :project => @project)
     #we have to add a comment to the ticket, the factory does not because it sticks to the model's rules, not the business logic
-    @ticket.comments << create(:comment, :ticket => @ticket, :user=>@user)
+    @ticket.comments << create(:comment, :ticket => @ticket, :user => @user)
 
     @key = create(:api_key, :project => @project)
   	@payload = {

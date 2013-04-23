@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  before_create :owner_participation
+  before_create :owner_membership
   after_create :default_statuses
 
   belongs_to :user
@@ -7,11 +7,12 @@ class Project < ActiveRecord::Base
   has_many :tickets, :dependent => :destroy, :include => :comments, :order => :id
   has_many :sprints, :order => :due_on, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy
-  has_many :api_keys, :dependent => :destroy
-  has_and_belongs_to_many :participants, :association_foreign_key => 'user_id', :class_name => 'User', :order => 'email asc'
 
-  attr_accessible :title, :private, :ticket_statuses_attributes, :user_id, :participant_ids, :participants_attributes, :api_keys_attributes, :api_key_ids
-  accepts_nested_attributes_for :ticket_statuses, :participants
+  has_many :memberships, :dependent => :destroy, :include => :user
+  has_many :api_keys, :dependent => :destroy
+
+  attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids
+  accepts_nested_attributes_for :ticket_statuses, :memberships
   accepts_nested_attributes_for :api_keys, :allow_destroy => true
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}
@@ -24,10 +25,6 @@ class Project < ActiveRecord::Base
     title
   end
 
-  def ordered_participants
-    self.participants.order(:email)
-  end
-
   private
   def default_statuses
     #when we create a new project, we make sure we create at least two statuses for the tickets in the project
@@ -35,8 +32,8 @@ class Project < ActiveRecord::Base
     self.ticket_statuses.create(:name => 'closed', :open => false)
   end
 
-  def owner_participation
-    self.participants << self.user
+  def owner_membership
+    self.memberships.build(:user_id => self.user_id, :role => 'admin')
   end
 
 end
