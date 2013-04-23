@@ -2,46 +2,42 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
+  	can :manage, User, :id => user.id
+  	can :manage, Account, :user => {:id => user.id}
 
-    can :manage, User, :id => user.id
-    can :manage, Account, :user_id => user.id
+    can :read, Project, :memberships => {:user_id => user.id}
+    can :manage, Project, :memberships => {:user_id => user.id, :role => 'admin'}
+    can :create, Project
+    #even if we made the project, if we are no longer admins, we no can longer manage it
+    #can :manage, Project, :user_id => user.id
 
-    can :manage, Project, :user_id => user.id
-    can :create, Project if user.confirmed?
-    can :read, Project #we refine the perms in the controller, it's too trickey here :(
+    #anyone can manage membership to a project if they are an admin
+  	can :manage, Membership, :project => {:user_id => user.id, :role => 'admin'}
 
-    can :manage, Feature
-    can :manage, Sprint
+    #anyone can read features and sprints on projects where they are members
+  	can :read, Feature, :project => {:memberships => {:user_id => user.id}}
+    can :read, Sprint, :project => {:memberships => {:user_id => user.id}}
 
-    can [:read, :create], Ticket
-    can :manage, Ticket do |ticket|
-      (ticket.user.id rescue nil) == user.id
+    #only admin users can manage sprints and features and only on projects where they are members
+    #we explicitly dont care who owns the project, no admin = no access
+    can :manage, Feature, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
+    can :manage, Sprint, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
+
+  	#anyone can read tickets on projects where they are a member
+    can :read, Ticket, :project => {:memberships => {:user_id => user.id}}
+
+    #users can manage tickets which belong to them
+    can :create, Ticket
+  	can :manage, Ticket do |ticket|
+      (ticket.user_id == user.id) && !ticket.project.memberships.for_user(user.id).first.restricted?
     end
 
-    can [:read, :create], Comment
-    can :manage, Comment, :user_id => user.id
+    #anyone can read a comments on a ticket which belongs to a project which they are a member of
+		can :read, Comment, :ticket => {:project => {:memberships => {:user_id => user.id}}}
 
-    #
-    # The first argument to `can` is the action you are giving the user permission to do.
-    # If you pass :manage it will apply to every action. Other common actions here are
-    # :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on. If you pass
-    # :all it will apply to every resource. Otherwise pass a Ruby class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
+    #anyone can manage a comment which belongs to them
+    can :manage, Comment, :user_id => user.id, :ticket => {:project => {:memberships => {:user_id => user.id, :role => ['admin', 'regular']}}}
+
   end
+
 end

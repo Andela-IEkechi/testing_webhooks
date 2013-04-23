@@ -1,32 +1,53 @@
-<h3>Update Your Account Details</h3><br>
-<%= simple_nested_form_for([@account.user, @account]) do |f| %>
-  <%= f.error_notification %>
+<h3>
+  Update Your Account
+  <small> currently <%= @account.current_plan[:title] %> </small>
+</h3>
 
-  <div class="form-inputs">
-      <% Plan::PLANS.each do |name, detail| %> 
-        <div class="well pull-left account-box">   
-          <div class="small-heading">
-            <%=  name.to_s.humanize %>           
-          </div>
-          <div>
-            <h5><%= detail[:title] %></h5>
-            <%= "$ #{detail[:price]} pm <br />".html_safe unless detail[:price] == 0 %>
-            <%= detail[:users] %> Users<br />
-            <%= detail[:projects] %> Projects<br />
-            <%= detail[:storage_gb] %>gb Storage<br />
-          </div>
-          <div class="account-buttons">
-            <%= link_to link_text(@account, Plan.new(name)), '#', :class => 'btn btn-info', :disabled => disabled?(name) %>
-          </div>
+<%= form_tag ENV['MYGATE_FORM_URL'], :name => 'Conductor Secure Payment', :method => :post do %>
+  <%= hidden_field_tag "Mode", (Rails.env.production? ? 1 : 0) %>
+
+  <%= hidden_field_tag "MerchantID", ENV['MYGATE_MERCHANT_ID'] %>
+  <%= hidden_field_tag "ApplicationID", ENV['MYGATE_APPLICATION_ID'] %>
+
+  <div class="row-fluid marketing">
+    <div class="tab-pane">
+      <div class="price-table price-table-three">
+        <% plans = Plan::PLANS.reject{|k,v| k.to_s == @account.plan} %>
+        <div class="price-column  price-column-first">
+          <%= render partial: 'plan', object: Plan.new(plans.keys[0]) %>
         </div>
-
-      <% end %>
+        <div class="price-column  price-column-last">
+          <%= render partial: 'plan', object: Plan.new(plans.keys[1]) %>
+        </div>
+        <div class="price-column  price-column-last">
+          <%= render partial: 'plan', object: Plan.new(plans.keys[2]) %>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="clearfix"></div>
+  <%= hidden_field_tag "ACCB_Frequency", "M|1" %>
+  <%= hidden_field_tag "ACCB_StartDate", Date.today.strftime('%d-%^b-%Y') %>
+  <%= hidden_field_tag "ACCB_EndDate", (Date.today + 5.year).strftime('%d-%^b-%Y') %>
+  <!-- subsequent bills -->
+  <%= hidden_field_tag "ACCB_Amount", "0.01" %>
 
-  <div class="form-actions">
-    <%= link_to 'Cancel', root_path(), :class => 'btn' %>
+  <!-- Client details are used for reporting features in the MyGate web console -->
+  <%= hidden_field_tag "ACCB_ClientName", current_user.full_name %>
+  <%= hidden_field_tag "ACCB_ClientAccountNo", current_user.id %>
+  <%= hidden_field_tag "ACCB_ClientEmailAddress", current_user.email %>
+
+  <%= hidden_field_tag "ACCB_ClientSendSMS", "0" %>
+  <%= hidden_field_tag "ACCB_ClientSendEmail", "0" %>
+
+  <%= hidden_field_tag "Currency", "ZAR" %>
+
+  <%= hidden_field_tag "RedirectSuccessfulURL", payment_success_user_account_url(current_user, :authentication_key => current_user.authentication_token) %>
+  <%= hidden_field_tag "RedirectFailedURL", payment_failure_user_account_url(current_user, :authentication_key => current_user.authentication_token) %>
+
+  <div class="row-fluid pagination-centered">
+    <br>
+    <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change' %>
   </div>
+
 <% end %>
-

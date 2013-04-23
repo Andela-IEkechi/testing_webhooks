@@ -1,21 +1,15 @@
-.small-heading {
-	color: $top-nav-link-color;
-	background-color: $top-nav-bg-color;
-	padding: 6px;
-	font-weight: bold;
-	font-family: arial;
-	text-transform: uppercase;
-	text-align: center;
-	margin-bottom: 10px;
-}
+// Place all the styles related to the accounts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
 
-.account-box {
-	margin-right: 30px;
-	height: 220px;
-	width: 150px;
-	position:relative;
-	.account-buttons {
-		position: absolute; 
-		bottom: 20px;
-	}
+li.last {
+  input {
+    margin-bottom: 10px;
+  }
+
+  label.bigger {
+    font-size: 20px;
+    margin-top: 6px;
+    display: inline;
+  }
 }
