@@ -10,7 +10,9 @@ class RansackHelper
     id:       :scoped_id_eq,
     cost:     :last_comment_cost_eq,
     title:    :title_cont,
+    assignee: :assignee_email_cont,
     assigned: :assignee_email_cont,
+    state:    :status_name_cont,
     status:   :status_name_cont,
     feature:  :feature_title_cont,
     sprint:   :sprint_goal_cont
