@@ -27,7 +27,10 @@ gem 'bootstrap-sass'
 #file uploads
 gem 'carrierwave'
 gem 'carrierwave_direct'
-gem "fog"
+gem 'fog'
+
+#image manimpulation
+gem 'rmagick'
 
 #monitoring
 gem 'crashlog', '>= 1.0.4'

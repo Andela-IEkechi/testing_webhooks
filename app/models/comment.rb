@@ -1,6 +1,7 @@
 class Comment < ActiveRecord::Base
   include Markdownable
   after_create :update_ticket
+  after_destroy :revert_ticket
 
   belongs_to :ticket #always
   belongs_to :user #the person who made the comment
@@ -52,6 +53,10 @@ class Comment < ActiveRecord::Base
   private
 
   def update_ticket
+    self.ticket.update_last_comment! if self.ticket
+  end
+
+  def revert_ticket
     self.ticket.update_last_comment! if self.ticket
   end
 end
