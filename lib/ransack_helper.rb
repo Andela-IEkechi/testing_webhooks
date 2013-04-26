@@ -18,20 +18,68 @@ class RansackHelper
     sprint:   :sprint_goal_cont
   }.freeze
 
-  def initialize(query)
-      @search_term  = (query.values.first.blank? ? nil : query.values.first) if query
-      @mapped_terms = @search_term.scan(/(\w+):(\w+)/).map{ |k,v| {TICKET_KEYWORDS_MAP[k.to_sym] => v} } if @search_term
+  TICKET_KEYWORDS = TICKET_KEYWORDS_MAP.keys.map(&:to_s).freeze
+
+  def initialize(term)
+    return unless term
+
+    @search_term  = term.blank? ? nil : term
+    @search_terms = @search_term.scan(/([\w@\-\.]+):([\w@\-\.]+)/i) if @search_term
+    @mapped_terms = @search_terms.map{ |k,v| {TICKET_KEYWORDS_MAP[k.to_sym] => v} } if @search_terms
   end
 
   def predicates
-    return nil unless @search_term
+    return unless valid_search
 
-    label_search_with_or  ||
-    label_search_with_and ||
+    label_search_with_and_or ||
+    label_search_with_or     ||
+    label_search_with_and    ||
     basic_search
   end
 
   private
+
+  def basic_search
+    Rails.logger.debug "SEARCH# search using basic_search: #{@search_term}"
+    ransack_group('or', all_terms)
+  end
+
+  def label_search_with_and
+    return unless @search_term.match(":")
+
+    Rails.logger.debug "SEARCH# search using label_search_with_and: #{@search_term}"
+    ransack_group('and', @mapped_terms)
+  end
+
+  def label_search_with_or
+    return unless @search_term.match(":") && @search_term.match(" or ")
+
+    Rails.logger.debug "SEARCH# search using label_search_with_or: #{@search_term}"
+    ransack_group('or', @mapped_terms)
+  end
+
+  # for no we only support multiple or'd conditions. later on we will allow
+  # brackets for more flexibility.
+  # e.g this turns "assignee:angus AND status:new OR status:open"
+  # into ((assignee like '%angus%') AND (status like '%new%' OR status like '%open%'))
+  # e.g this turns "assignee:jean AND assignee:angus AND status:new OR status:open"
+  # into ((assignee like '%angus%' OR assignee like '%jean%') AND (status like '%new%' OR status like '%open%'))
+  def label_search_with_and_or
+    return unless @search_term.match(":") && @search_term.match(" or ") && @search_term.match(" and ")
+
+    Rails.logger.debug "SEARCH# search using label_search_with_and_or: #{@search_term}"
+    @anded_terms = @search_term.scan(/(.+) and (.+)/i).flatten
+    multiple_ransack_groups @anded_terms.map{ |term| RansackHelper.new(term).predicates }
+  end
+
+  # we need to make sure they pass a valid search term else ransack
+  # doesnt know what to do. Need to make sure search format keyword:term
+  # has a valid keyword too.
+  def valid_search
+    return false unless @search_term
+    return false if @search_term.match(":") && (@search_terms.map(&:first) & TICKET_KEYWORDS).empty?
+    true
+  end
 
   # the default db value for cost is 0. If you search an integer field with
   # a string e.g. "xxx" ransack just makes it 0. That kills search as tickets
@@ -58,17 +106,10 @@ class RansackHelper
     }
   end
 
-  def basic_search
-    ransack_group('or', all_terms)
-  end
-
-  def label_search_with_and
-    return nil unless @search_term.match(":")
-    ransack_group('and', @mapped_terms)
-  end
-
-  def label_search_with_or
-    return nil unless @search_term.match(":") && @search_term.match(" or ")
-    ransack_group('or', @mapped_terms)
+  # match multiple seperate conditions
+  def multiple_ransack_groups(ransack_groups)
+    {
+      g: ransack_groups
+    }
   end
 end
