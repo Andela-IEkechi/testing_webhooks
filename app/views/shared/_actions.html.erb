@@ -18,7 +18,7 @@
     <% end %>
 
     <%= action_add(Project.new()) if !(@feature || @sprint || @ticket || (@project && @project.new_record?)) %>
-    <% if @project && !@project.new_record? %>
+    <% if @project && !@project.new_record? && current_membership %>
       <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket) %>
       <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket) %>
       <%= action_add(@project.tickets.new())  if current_membership.admin? || (current_membership.regular? && @project) %>
