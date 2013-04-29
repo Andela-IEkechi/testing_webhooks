@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController do
+describe GithubController, focus: true do
 
   before :each do
     @project = create(:project)
@@ -39,7 +39,7 @@ describe GithubController do
 
   it 'assigns a commit message to a ticket' do
     expect do
-      post :commit, :token => @key.token, "payload" => JSON(@payload)
+      post :commit, :token => @key.token, :payload => @payload.to_json
     end.to change{@ticket.comments.count}.from(1).to(2)
   end
 
@@ -50,7 +50,7 @@ describe GithubController do
     @payload[:commits].first[:message] = "a commit message with more than one ticket [##{@ticket.scoped_id}] [##{ticket2.scoped_id}]"
 
     expect do
-      post :commit, :token => @key.token, "payload" => JSON(@payload)
+      post :commit, :token => @key.token, :payload => @payload.to_json
     end.to change{@ticket.comments.count + ticket2.comments.count}.from(2).to(4)
 
     @ticket.comments.count.should eq(2)
@@ -62,20 +62,20 @@ describe GithubController do
     @ticket.feature = feature
     @ticket.save
     @ticket.feature.should_not be_nil
-    post :commit, :token => @key.token, "payload" => JSON(@payload)
+    post :commit, :token => @key.token, :payload => @payload.to_json
     @ticket.feature.id.should eq feature.id
   end
 
   it "should assign the commenter to the comment" do
-    post :commit, :token => @key.token, "payload" => JSON(@payload)
+    post :commit, :token => @key.token, :payload => @payload.to_json
     @ticket.reload
     @ticket.last_comment.commenter.should eq(@user.email)
   end
 
   it "should not add the same comment to a ticket twice" do
     expect do
-      post :commit, :token => @key.token, "payload" => JSON(@payload)
-      post :commit, :token => @key.token, "payload" => JSON(@payload)
+      post :commit, :token => @key.token, :payload => @payload.to_json
+      post :commit, :token => @key.token, :payload => @payload.to_json
     end.to_not change{@ticket.comments.count}.by(2)
   end
 
