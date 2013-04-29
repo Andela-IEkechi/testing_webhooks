@@ -7,7 +7,8 @@ describe GithubController do
     @user    = create(:user)
 
     @ticket = create(:ticket, :project => @project)
-    #we have to add a comment to the ticket, the factory does not because it sticks to the model's rules, not the business logic
+    #we have to add a comment to the ticket, the factory does not because it sticks to
+    #the model's rules, not the business logic
     @ticket.comments << create(:comment, :ticket => @ticket, :user => @user)
 
     @key = create(:api_key, :project => @project)
@@ -71,11 +72,11 @@ describe GithubController do
     @ticket.last_comment.commenter.should eq(@user.email)
   end
 
-  it "should not add the same comment to ticket twice" do
+  it "should not add the same comment to a ticket twice" do
     expect do
       post :commit, :token => @key.token, "payload" => JSON(@payload)
       post :commit, :token => @key.token, "payload" => JSON(@payload)
-    end.to change{@ticket.comments.count}.from(1).to(2)
+    end.to_not change{@ticket.comments.count}.by(2)
   end
 
   it "should not assign a user to the new comment" do
