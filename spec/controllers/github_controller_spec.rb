@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController, focus: true do
+describe GithubController do
 
   before :each do
     @project = create(:project)
@@ -37,9 +37,9 @@ describe GithubController, focus: true do
     }
   end
 
-  it 'assigns a commit message to a ticket' do
+  it 'assigns a commit message to a ticket', focus: true do
     expect do
-      post :commit, :token => @key.token, :payload => @payload.to_json
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     end.to change{@ticket.comments.count}.from(1).to(2)
   end
 
@@ -50,7 +50,7 @@ describe GithubController, focus: true do
     @payload[:commits].first[:message] = "a commit message with more than one ticket [##{@ticket.scoped_id}] [##{ticket2.scoped_id}]"
 
     expect do
-      post :commit, :token => @key.token, :payload => @payload.to_json
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     end.to change{@ticket.comments.count + ticket2.comments.count}.from(2).to(4)
 
     @ticket.comments.count.should eq(2)
@@ -62,26 +62,26 @@ describe GithubController, focus: true do
     @ticket.feature = feature
     @ticket.save
     @ticket.feature.should_not be_nil
-    post :commit, :token => @key.token, :payload => @payload.to_json
+    post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.feature.id.should eq feature.id
   end
 
   it "should assign the commenter to the comment" do
-    post :commit, :token => @key.token, :payload => @payload.to_json
+    post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.reload
     @ticket.last_comment.commenter.should eq(@user.email)
   end
 
   it "should not add the same comment to a ticket twice" do
     expect do
-      post :commit, :token => @key.token, :payload => @payload.to_json
-      post :commit, :token => @key.token, :payload => @payload.to_json
-    end.to_not change{@ticket.comments.count}.by(2)
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+    end.to change{@ticket.comments.count}.by(1)
   end
 
   it "should not assign a user to the new comment" do
     @ticket.comments.last.user.should_not be_nil
-    post :commit, :token => @key.token, "payload" => JSON(@payload)
+    post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.reload
     @ticket.comments.last.user.should be_nil
   end

@@ -5,6 +5,7 @@ class GithubController < ApplicationController
 
   def commit
     if api_key = ApiKey.find_by_token(params["token"])
+      p params
       @project = api_key.project
       payload = JSON.parse(params["payload"])
       payload["commits"].each do |commit|
