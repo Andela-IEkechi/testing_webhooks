@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CommentsController, focus: true do
+describe CommentsController do
   describe "GET #index" do
     it "does nothing"
   end
@@ -20,10 +20,10 @@ describe CommentsController, focus: true do
   describe "POST #create" do
     context "with valid attributes" do
       it "saves a new comment to the database"
-      context "for project administrators"
+      context "for project administrators" do
         it "overrides the current sprint and feature"
       end
-      context "for regular users"
+      context "for regular users" do
         it "does not override the current sprint and feature"
       end
       it "redirects to show the comment's ticket"
@@ -37,10 +37,10 @@ describe CommentsController, focus: true do
   describe "POST #update" do
     context "with valid attributes" do
       it "updates a comment in the database"
-      context "for project administrators"
+      context "for project administrators" do
         it "overrides the current sprint and feature"
       end
-      context "for regular users"
+      context "for regular users" do
         it "does not override the current sprint and feature"
       end
       it "redirects to show the comment's ticket"
