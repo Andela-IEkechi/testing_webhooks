@@ -30,7 +30,7 @@
   <%= hidden_field_tag "ACCB_StartDate", Date.today.strftime('%d-%^b-%Y') %>
   <%= hidden_field_tag "ACCB_EndDate", (Date.today + 5.year).strftime('%d-%^b-%Y') %>
   <!-- subsequent bills -->
-  <%= hidden_field_tag "ACCB_Amount", "0.01" %>
+  <%= hidden_field_tag "ACCB_Amount", "0.0" %>
 
   <!-- Client details are used for reporting features in the MyGate web console -->
   <%= hidden_field_tag "ACCB_ClientName", current_user.full_name %>

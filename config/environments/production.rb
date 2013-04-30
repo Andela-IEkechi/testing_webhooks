@@ -74,7 +74,7 @@ Conductor::Application.configure do
     :password  => "cb7fae88-04ef-44e9-9d33-b848e302e3a2"
   }
 
-  #set up the GH values on prod
+  #set up the GH values on prod for authentication
   config.before_configuration do
     ENV['GITHUB_CLIENT_ID'] = '1abb11e846fd47440d03'
     ENV['GITHUB_CLIENT_SECRET'] = '5f75803c2db451c7e69daf256dc8a6b24ed98d09'
@@ -83,7 +83,7 @@ Conductor::Application.configure do
   #set up the MyGate payment gateway values
   config.before_configuration do
     ENV['MYGATE_FORM_URL'] = 'https://virtual.mygateglobal.com/PaymentPage.cfm'
-    ENV['MYGATE_APPLICATION_ID'] = '27b51bf7-e1e2-45f7-8ad8-817462ca53dd'
-    ENV['MYGATE_MERCHANT_ID'] = '444b26e6-0b37-4215-8ea8-3c85bef5363e'
+    ENV['MYGATE_APPLICATION_ID'] = '9008ae61-9093-4ba4-b403-36a489c9c4b0'
+    ENV['MYGATE_MERCHANT_ID'] = 'e54a95cc-12da-412a-8a3c-ec12efe41b5c'
   end
 end
