@@ -2,7 +2,7 @@ class Ticket < ActiveRecord::Base
   include Scoped
 
   belongs_to :project #always
-  has_many :comments, :order => :id
+  has_many :comments, :order => :created_at
 
   belongs_to :last_comment, :class_name => 'Comment'
   has_one :assignee, :through => :last_comment

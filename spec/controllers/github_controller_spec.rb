@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController do
+describe GithubController, focus: false do
 
   before :each do
     @project = create(:project)
@@ -52,7 +52,9 @@ describe GithubController do
 
     expect do
       post :commit, :token => @key.token, :payload => JSON.generate(@payload)
-    end.to change{@ticket.comments.count + ticket2.comments.count}.from(2).to(4)
+      @ticket.reload
+      ticket2.reload
+    end.to change{@ticket.comments.count + ticket2.comments.count}.by(2)
 
     @ticket.comments.count.should eq(2)
     ticket2.comments.count.should eq(2)
@@ -67,7 +69,7 @@ describe GithubController do
     @ticket.feature.id.should eq feature.id
   end
 
-  context "with a ticket the sets extra attributes", focus: true do
+  context "with a commit message that provides extra attributes" do
     it "changes the assigned user" do
       user = create(:user)
       @project.memberships.create(:user_id => user.id)
@@ -175,6 +177,16 @@ describe GithubController do
     post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.reload
     @ticket.comments.last.user.should be_nil
+  end
+
+  it "should create a comment with the commit date as the create_at date" do
+    timestring = 5.days.ago.to_s
+    @payload[:commits].first[:timestamp] = timestring
+    expect do
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+      @ticket.reload
+    end.to change{@ticket.comments.count}.by(1)
+    @ticket.comments.last.created_at.should eq(timestring)
   end
 
 end
