@@ -1,8 +1,8 @@
 <%
   project ||= @project
   project_id ||= project && project.id
-  sprint_id ||= @sprint && @sprint.id
-  feature_id ||= @feature && @feature.id
+  sprint_id ||= @sprint && @sprint.to_param
+  feature_id ||= @feature && @feature.to_param
   assignee_id ||= @assignee_id
 
   parent = "sprint-#{sprint_id}" if sprint_id
@@ -10,14 +10,13 @@
   parent ||= "project-#{project_id}" if project_id
  %>
 
-<div id="tickets-list-container-<%= parent %>">
+ <div id="tickets-list-container-<%= parent %>">
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
-      <div>
-        <h2>Tickets</h2>
+      <div class="pull-right">
         <% if @search %>
           <%= simple_form_for @search,
-                :url => tickets_path(),
+                :url => project_tickets_path(project),
                 :html => {:method => :get, :class => 'form-search'}, :remote => true do |f| %>
             <%= f.input_field :title_or_assignee_email_or_sprint_goal_or_feature_title_or_status_name_contains, :label => false, :placeholder => 'search' %>
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
@@ -28,43 +27,62 @@
           <% end %>
         <% end %>
       </div>
+      <h2>Tickets</h2>
     </caption>
     <!--title row -->
+    <thead>
     <tr>
-      <th class="span1">#</th>
+      <th class="width-5">#</th>
       <th>Title</th>
-      <th>Assignee</th>
-      <th>State</th>
-      <th class="span1">Cost</th>
+      <th class="width-15">Feature</th>
+      <th class="width-15">Sprint</th>
+      <th class="width-15">Assignee</th>
+      <th class="width-10">State</th>
+      <th class="width-50px">Cost</th>
     </tr>
+    </thead>
+    <tbody>
     <% @tickets.each do |ticket| %>
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
-      <td class="span1"><%= ticket.id %></td>
-      <td><%= link_to ticket.title, ticket_path(ticket, :project_id => ticket.project_id, :feature_id => ticket.feature_id, :sprint_id => ticket.sprint_id) %></td>
-      <td><%= ticket.assignee %></td>
-      <td class="ticket-info">
-        <div class="pull-right">
-          <span class="label label-ticket <%= ticket.sprint && 'label-sprint' || 'label-missing'%>"><%= ticket.sprint %></span>
-          <span class="label label-ticket <%= ticket.feature && 'label-feature' || 'label-missing'%>"><%= ticket.feature %></span>
-          <span class="label label-ticket <%= ticket.status && 'label-status' || 'label-missing'%>"><%= ticket.status %></span>
+      <td><%= ticket.scoped_id %></td>
+      <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
+      <td>
+        <div class="overflow" title="<%= ticket.feature %>">
+          <%= link_to ticket.feature, project_feature_path(ticket.project, ticket.feature) if ticket.feature %>
         </div>
       </td>
-      <td class="span1 count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
+      <td>
+        <div class="overflow" title="<%= ticket.sprint %>">
+          <%= link_to ticket.sprint, project_sprint_path(ticket.project, ticket.sprint) if ticket.sprint %>
+        </div>
+      </td>
+      <td>
+        <div class="overflow" title="<%= ticket.assignee %>">
+          <%= ticket.assignee %>
+        </div>
+      </td>
+      <td>
+        <div class="overflow" title="<%= ticket.status %>">
+          <%= ticket.status %>
+        </div>
+      </td>
+      <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
     </tr>
     <% end if @tickets %>
     <% if @tickets && @tickets.count == 0 %>
       <tr>
-        <td colspan="5">There are no tickets</td>
+        <td colspan="7">There are no tickets</td>
       </tr>
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="5"><%= link_to 'loading tickets...',
-          tickets_path(:project_id => project_id, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
+        <td colspan="6"><%= link_to 'loading tickets...',
+          project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
           :remote => true, :class => "autoload" %>
         </td>
       </tr>
     <% end %>
+    </tbody>
   </table>
   <%= paginate @tickets,
         :params => {

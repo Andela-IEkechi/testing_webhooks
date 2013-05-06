@@ -1,0 +1,51 @@
+.signup {
+  margin: 45px auto;
+  width: 400px;
+  padding: 0 25px 0 25px;
+
+  p {
+    border-bottom: 1px solid #E5E5E5;
+    margin: 20px 0 20px 0;
+  }
+
+  #flash-message {
+    p {
+      margin: 0px;
+    }
+
+  }
+
+  input[type='text'], input[type='password'], input[type='email'] {
+    color: #8E8D8D;
+    padding: 11px 6px 10px 6px;
+    background-color: #FDFDFD;
+    width: 380px;
+    display: block;
+    margin: 0;
+    box-shadow: inset 2px 2px 4px #F1F1F1;
+    font-size: 18px;
+  }
+  input:focus, textarea:focus {
+    border: 1px solid rgba(82, 168, 236, 0.8) !important;
+  }
+
+  .checkbox {
+    padding-left: 15px;
+  }
+
+  .form-actions {
+    padding: 20px 5px 0 0;
+    .control-group {
+      width: 270px;
+      @extend .pull-left;
+    }
+  }
+
+  form {
+    margin: 0 auto;
+    input[type='submit'] {
+      @extend .pull-right;
+    }
+  }
+}
+

@@ -79,4 +79,20 @@ Conductor::Application.configure do
     :password  => "cb7fae88-04ef-44e9-9d33-b848e302e3a2"
   }
 
+  #set up the GH values
+  #we DONT HAVE TO do this on heroku, I just put the values in here for reference.
+  #Heroku already has a configured set of these values on the staging server
+  # config.before_configuration do
+  #   ENV['GITHUB_CLIENT_ID'] = 'bd6407eded6365278e4b'
+  #   ENV['GITHUB_CLIENT_SECRET'] = 'b5eb70fb4f6eee80c969435ddebe439ce45411e4'
+  # end
+
+  #set up the MyGate payment gateway values
+  #we DONT HAVE TO do this on heroku, I just put the values in here for reference.
+  #Heroku already has a configured set of these values on the staging server
+  # config.before_configuration do
+  #   ENV['MYGATE_FORM_URL'] = 'https://dev-virtual.mygateglobal.com/PaymentPage.cfm'
+  #   ENV['MYGATE_APPLICATION_ID'] = '27b51bf7-e1e2-45f7-8ad8-817462ca53dd'
+  #   ENV['MYGATE_MERCHANT_ID'] = '444b26e6-0b37-4215-8ea8-3c85bef5363e'
+  # end
 end

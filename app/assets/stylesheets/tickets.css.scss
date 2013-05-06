@@ -1,32 +1,5 @@
-// Place all the styles related to the tickets controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
-.ticket-info {
-  width: 335px;
-}
-
 .label {
   padding: 5px 2px;
-  text-shadow: none;
-}
-.label-ticket {
-  width:100px;
-  display: inline-block;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.label-missing {
-  width:100px;
-  display: inline-block;
-  background: none;
-}
-.label-feature {
-  background-color: #579803;
-}
-.label-sprint {
-  background-color: darkcyan;
 }
 
 #git-commands h5, #git-commands-toggle {
@@ -44,4 +17,19 @@
   font-weight: lighter;
   line-height: 10px;
   height: 10px;
+}
+
+.form-search {
+  margin: 0 0 5px;
+}
+
+.ticket-title {
+  h1 {
+    color: $primary-link-color;
+    border: 2px solid lightblue;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: -5px;
+
+  }
 }

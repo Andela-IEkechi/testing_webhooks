@@ -15,12 +15,6 @@ describe Project do
     project_with_tickets.should have_at_least(1).tickets
   end
 
-  it "should have a working factory that does not have an API key"  do
-    project_without_api = build(:no_api_project)
-    project_without_api.should_not be_nil
-    project_without_api.api_key.should be_nil
-  end
-
   it "gives it's title on to_s" do
     @project.title = "A testing project"
     @project.to_s.should eq(@project.title)
@@ -39,9 +33,8 @@ describe Project do
     project.user.should_not be_nil
   end
 
-  it "should have a sprint duration" do
-      project = create(:project)
-      project.sprint_duration.should_not be_nil
+  it "should have an owner membership" do
+    @project.memberships.collect(&:user_id).include?(@project.user_id).should be_true
   end
 
   it "should not allow duplicate titles for the same user" do
@@ -66,9 +59,13 @@ describe Project do
   end
 
   it "should delete related features when it's destroyed" do
-    create(:feature, :project => @project)
-    @project.features.count.should_not be_nil
-    @project.destroy
+    expect {
+      create(:feature, :project => @project)
+      create(:feature, :project => @project)
+    }.to change(Feature, :count).by(2)
+    expect {
+      @project.destroy
+    }.to change(Feature,:count).by(-2)
   end
 
   it "should delete related tickets when it's destroyed" do
@@ -98,40 +95,63 @@ describe Project do
     }.to change(TicketStatus,:count).by(-2) #two default statuses
   end
 
-  it "should have an API key to allow external parties to interface with it" do
-    @project.api_key.should_not be_nil
+  it "should have optional API keys to allow external parties to interface with it" do
+    @project.api_keys.should have(0).entries
+    expect {
+      @project.api_keys << create(:api_key, :project => @project, :name => "key one")
+      @project.api_keys << create(:api_key, :project => @project, :name => "key two")
+    }.to change{@project.api_keys.count}.from(0).to(2)
   end
 
-  it "should not have an API key" do
-    project_without_api = build(:no_api_project)
-    project_without_api.api_key.should be_nil
+  it "should be a private project by default" do
+    @project.should be_private
   end
 
-  it "should generate an api_key on create" do
-    project_without_api = create(:no_api_project)
-    project_without_api.api_key.should_not be_blank
+  it "should be able to be a public project" do
+    @project.private = false
+    @project.should_not be_private
   end
 
-  context "with participants" do
-    it "should have the project owner as a participant" do
-      @project.participants.should have(1).participant
-      @project.participants.first.id.should eq(@project.user.id)
+  it "should not have an API key by default" do
+    @project.should have(0).api_keys
+  end
+
+  it "should be sorted alphabetically by default" do
+    #create a few projects
+    5.times do
+      create(:project, :title => [*('A'..'Z')].sample(6).join)
+    end
+    Project.all.collect(&:title) == Project.all.collect(&:title).sort
+  end
+
+  it "should be sorted alphabetically for a user" do
+    #create a few projects for a single user
+    5.times do
+      create(:project, :title => [*('A'..'Z')].sample(6).join, :user => @project.user)
+    end
+    @project.user.projects.count.should eq(6)
+    @project.user.projects.all.collect(&:title) == @project.user.projects.all.collect(&:title).sort
+  end
+
+  context "with memberships" do
+    it "should have the project owner in a membership" do
+      @project.memberships.should have(1).membership
+      @project.memberships.first.user_id.should eq(@project.user.id)
     end
 
-    it "should allow multiple participants" do
-      @project.participants << create(:user)
-      @project.participants << create(:user)
-      @project.participants.should have(3).participants
+    it "should allow multiple memberships" do
+      @project.memberships << create(:membership)
+      @project.memberships << create(:membership)
+      @project.memberships.should have(3).memberships
     end
 
-    it "should sort participants by email ASC" do
-      ##NOTE, the :order directive on project.participants seems to have no effect!
+    it "should sort memberships by email ASC" do
       4.times do
-        @project.participants << create(:user)
+        @project.memberships << create(:membership)
       end
-      participant_emails = @project.ordered_participants.collect(&:email)
-      ordered_emails = @project.participants.all.sort{|a,b| a.email <=> b.email}.collect(&:email)
-      participant_emails.should == ordered_emails
+      membership_emails = @project.memberships.all.collect{|m| m.user.email}
+      ordered_emails = @project.memberships.all.sort{|a,b| a.user.email <=> b.user.email}.collect{ |m| m.user.email}
+      membership_emails.should == ordered_emails
     end
   end
 
@@ -159,3 +179,4 @@ describe Project do
   end
 end
 
+>>>>>>> master

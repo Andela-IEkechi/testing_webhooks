@@ -1,6 +1,11 @@
 require 'spec_helper'
+require 'shared/examples_for_scoped'
 
 describe Ticket do
+  it_behaves_like 'scoped' do
+    let(:scoped_class) { Ticket }
+  end
+
   before(:each) do
     @ticket = create(:ticket)
   end
@@ -32,8 +37,49 @@ describe Ticket do
     @ticket.should respond_to(:comments)
   end
 
-  context "filter summary" do 
+  context "last_comment" do
+    before(:each) do
+      @sprint = create(:sprint, :project => @ticket.project)
+      @feature = create(:feature, :project => @ticket.project)
+      @comment = create(:comment, :ticket => @ticket)
+      @ticket.reload
+    end
 
+    it "should return the sprint and feature ids set in the last comment" do
+      @ticket.sprint_id.should be_nil
+      @ticket.feature_id.should be_nil
+
+      create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      @ticket.sprint_id.should eq(@sprint.id)
+      @ticket.feature_id.should eq(@feature.id)
+    end
+
+    it "should update the last_comment association when a new comment is added" do
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      @ticket.last_comment_id.should eq(new_comment.id)
+    end
+
+    it "should update the last_comment association when a comment is removed" do
+      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      @ticket.last_comment_id.should eq(new_comment.id)
+      @ticket.last_comment.destroy
+      @ticket.reload
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      @ticket.last_comment_id.should eq(@comment.id)
+    end
+  end
+
+  it "should respond to :sprint_id" do
+    @ticket.should respond_to(:sprint_id)
+  end
+
+  it "should respond to :feature_id" do
+    @ticket.should respond_to(:feature_id)
+  end
+
+  context "filter summary" do
     it "should be present" do
       @ticket.should respond_to :filter_summary
     end
@@ -60,9 +106,10 @@ describe Ticket do
     end
 
     it "the parent is a feature, if there is no sprint" do
-      @ticket.feature.should be_nil
+      @ticket.sprint.should be_nil
       @ticket.comments << create(:comment_with_feature, :ticket => @ticket)
       @ticket.should be_valid
+      @ticket.feature.should_not be_nil
       @ticket.parent.should eq(@ticket.feature)
     end
 
@@ -91,5 +138,4 @@ describe Ticket do
       @ticket.sprint.should_not be_nil
     end
   end
-
 end
