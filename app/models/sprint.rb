@@ -4,7 +4,6 @@ class Sprint < ActiveRecord::Base
 
   belongs_to :project #not optional
 
-
   attr_accessible :goal, :due_on
 
   validates :project_id, :presence => true
