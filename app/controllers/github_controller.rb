@@ -1,9 +1,11 @@
 class GithubController < ApplicationController
   skip_before_filter :authenticate_user!, :only => [:commit]
+  skip_before_filter :load_membership #we act as the project on commit hooks, not as a user
   protect_from_forgery :except => :commit
 
   def commit
     if api_key = ApiKey.find_by_token(params["token"])
+      p params
       @project = api_key.project
       payload = JSON.parse(params["payload"])
       payload["commits"].each do |commit|

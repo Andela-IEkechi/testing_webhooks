@@ -7,8 +7,9 @@ describe GithubController do
     @user    = create(:user)
 
     @ticket = create(:ticket, :project => @project)
-    #we have to add a comment to the ticket, the factory does not because it sticks to the model's rules, not the business logic
-    @ticket.comments << create(:comment, :ticket => @ticket, :user=>@user)
+    #we have to add a comment to the ticket, the factory does not because it sticks to
+    #the model's rules, not the business logic
+    @ticket.comments << create(:comment, :ticket => @ticket, :user => @user)
 
     @key = create(:api_key, :project => @project)
   	@payload = {
@@ -36,9 +37,9 @@ describe GithubController do
     }
   end
 
-  it 'assigns a commit message to a ticket' do
+  it 'assigns a commit message to a ticket', focus: true do
     expect do
-      post :commit, :token => @key.token, "payload" => JSON(@payload)
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     end.to change{@ticket.comments.count}.from(1).to(2)
   end
 
@@ -49,7 +50,7 @@ describe GithubController do
     @payload[:commits].first[:message] = "a commit message with more than one ticket [##{@ticket.scoped_id}] [##{ticket2.scoped_id}]"
 
     expect do
-      post :commit, :token => @key.token, "payload" => JSON(@payload)
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     end.to change{@ticket.comments.count + ticket2.comments.count}.from(2).to(4)
 
     @ticket.comments.count.should eq(2)
@@ -61,8 +62,8 @@ describe GithubController do
     @ticket.feature = feature
     @ticket.save
     @ticket.feature.should_not be_nil
-    post :commit, :token => @key.token, "payload" => JSON(@payload)
-    @ticket.feature_id.should eq feature.id
+    post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+    @ticket.feature.id.should eq feature.id
   end
 
   it "changes ticket attributes from the commit message" do
@@ -99,21 +100,21 @@ describe GithubController do
   end
 
   it "should assign the commenter to the comment" do
-    post :commit, :token => @key.token, "payload" => JSON(@payload)
+    post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.reload
     @ticket.last_comment.commenter.should eq(@user.email)
   end
 
-  it "should not add the same comment to ticket twice" do
+  it "should not add the same comment to a ticket twice" do
     expect do
-      post :commit, :token => @key.token, "payload" => JSON(@payload)
-      post :commit, :token => @key.token, "payload" => JSON(@payload)
-    end.to change{@ticket.comments.count}.from(1).to(2)
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+    end.to change{@ticket.comments.count}.by(1)
   end
 
   it "should not assign a user to the new comment" do
     @ticket.comments.last.user.should_not be_nil
-    post :commit, :token => @key.token, "payload" => JSON(@payload)
+    post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.reload
     @ticket.comments.last.user.should be_nil
   end

@@ -36,8 +36,29 @@ body.landing {
 
   .container-jumbotron {
     background: #FAFAFA;
-    border-bottom: 1px solid #E0E0E0;        
-    border-top: 1px solid #E0E0E0;        
+    border-bottom: 1px solid #E0E0E0;
+    border-top: 1px solid #E0E0E0;
+  }
+
+  .logo {
+    img {
+      margin-right: 10px;
+      padding-bottom: 10px;
+    }
+    color: $top-nav-bg-color;
+    font-family: 'logofont';
+    text-transform: uppercase;
+  }
+
+  #flash-message {
+    margin-top: 20px;
+    p {
+      margin: 0;
+    }
   }
 }
 
+.ss-shadow {
+  box-shadow: 3px 3px 4px #E0E0E0;
+  margin-bottom: 30px;
+}

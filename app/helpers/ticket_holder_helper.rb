@@ -1,20 +1,13 @@
 module TicketHolderHelper
 
-  def completion_percentage(holder)
-    return nil unless holder.respond_to?(:assigned_tickets) && holder.respond_to?(:closed_tickets)
-    return 0 if holder.assigned_tickets.count == 0
-    (100.0*holder.closed_tickets.count/(holder.assigned_tickets.count)).round(0)
-  end
-
   def completion_message(holder)
-    return nil unless holder.respond_to?(:assigned_tickets) && holder.respond_to?(:closed_tickets)
-    return "nothing assigned" if holder.assigned_tickets.count == 0
-    "#{holder.closed_tickets.count} of #{holder.assigned_tickets.count} tickets closed"
+    return "nothing assigned" if holder.assigned_tickets.blank?
+    "#{holder.closed_ticket_count} of #{holder.ticket_count} tickets closed"
   end
 
   #helps to set the color for the progress bar
   def completion_state(holder)
-    case completion_percentage(holder)
+    case holder.progess_count
     when 0..25
       return "danger"
     when 26..75
@@ -25,7 +18,7 @@ module TicketHolderHelper
   end
 
   def completion_str(holder)
-    return "not started" if completion_percentage(holder) == 0
-    "#{completion_percentage(holder)}%"
+    return "not started" if holder.progess_count == 0
+    "#{holder.progess_count}%"
   end
 end

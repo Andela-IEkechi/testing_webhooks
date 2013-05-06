@@ -1,7 +1,32 @@
+<p><b><%= @comment.project.title %></b></p>
 <p><%= @comment.user %> has updated this ticket:</p>
 
-<div>
-  <%= @comment.html.html_safe %>
-</div>
+<%
+  changeset = change_set(@comment)
+%>
+  <% if changeset[:status_id] %>
+    <p>status changed to <b><%= @comment.status %></b></p>
+  <% end %>
+  <% if changeset[:feature_id] %>
+    <p>now part of feature: <b><%= @comment.feature || 'none' %></b></p>
+  <% end %>
+  <% if changeset[:sprint_id] %>
+    <p>now part of sprint: <b><%= @comment.sprint || 'none' %></b></p>
+  <% end %>
+  <% if changeset[:assignee_id] %>
+    <p>assigned to: <b><%= @comment.assignee || 'none' %></b></p>
+  <% end %>
+  <% if changeset[:cost] %>
+    <p>cost updated to: <b><%= cost_long(@comment.cost) %></b></p>
+  <% end %>
+  <div><%= @comment.html.html_safe %></div>
+
+  <% @comment.assets && @comment.assets.each do |asset| %>
+  <%
+    link_name = image_tag(asset.payload_url(:thumb), class: 'img-polaroid img-padded')  if asset.image?
+    link_name ||= asset.name
+  %>
+    <%= link_to link_name, asset.payload_url, :target => '_blank', :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
+  <% end %>
 
 <p><%= link_to @comment.ticket, project_ticket_url(@comment.project, @comment.ticket) %></p>

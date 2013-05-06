@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130202094723) do
+ActiveRecord::Schema.define(:version => 20130222153534) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -31,12 +31,13 @@ ActiveRecord::Schema.define(:version => 20130202094723) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "api_keys", ["name"], :name => "index_api_keys_on_name", :unique => true
+
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
-    t.string   "file"
+    t.string   "payload"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "payload"
   end
 
   create_table "comments", :force => true do |t|
@@ -70,19 +71,21 @@ ActiveRecord::Schema.define(:version => 20130202094723) do
 
   add_index "features", ["project_id"], :name => "index_features_on_project_id"
 
+  create_table "memberships", :force => true do |t|
+    t.integer "project_id"
+    t.integer "user_id"
+    t.string  "role",       :default => "regular", :null => false
+  end
+
   create_table "projects", :force => true do |t|
-    t.string   "title",                            :null => false
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.integer  "user_id",                          :null => false
+    t.string   "title",                               :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+    t.integer  "user_id",                             :null => false
     t.integer  "tickets_sequence",  :default => 0
     t.integer  "features_sequence", :default => 0
     t.integer  "sprints_sequence",  :default => 0
-  end
-
-  create_table "projects_users", :id => false, :force => true do |t|
-    t.integer "project_id"
-    t.integer "user_id"
+    t.boolean  "private",           :default => true
   end
 
   create_table "sprints", :force => true do |t|
@@ -107,20 +110,22 @@ ActiveRecord::Schema.define(:version => 20130202094723) do
     t.string   "title",                          :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+    t.string   "slug"
     t.integer  "last_comment_id"
     t.integer  "scoped_id",       :default => 0
   end
 
   add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
   add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
+  add_index "tickets", ["slug"], :name => "index_tickets_on_slug", :unique => true
 
   create_table "users", :force => true do |t|
-    t.string   "email",                  :default => "",    :null => false
-    t.string   "encrypted_password",     :default => "",    :null => false
+    t.string   "email",                                :default => "",    :null => false
+    t.string   "encrypted_password",                   :default => ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          :default => 0
+    t.integer  "sign_in_count",                        :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -130,17 +135,26 @@ ActiveRecord::Schema.define(:version => 20130202094723) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.string   "authentication_token"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                              :null => false
+    t.datetime "updated_at",                                              :null => false
     t.string   "provider"
     t.string   "uid"
     t.string   "full_name"
-    t.boolean  "terms",                  :default => false
+    t.boolean  "terms",                                :default => false
+    t.string   "invitation_token",       :limit => 60
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer  "invitation_limit"
+    t.integer  "invited_by_id"
+    t.string   "invited_by_type"
+    t.text     "preferences"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["invitation_token"], :name => "index_users_on_invitation_token"
+  add_index "users", ["invited_by_id"], :name => "index_users_on_invited_by_id"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "versions", :force => true do |t|

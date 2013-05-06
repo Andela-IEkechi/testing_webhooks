@@ -2,14 +2,13 @@
 <html>
 <head>
   <title><%= tab_heading %></title>
-  <link rel="icon" href="/assets/favicon.ico" type="image/ico" />
+  <link rel="icon" href="/favicon.ico" type="image/ico" />
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <div id="wrap">
-
     <div class="container-fluid">
       <div class="row-fluid">
         <%= render :partial => '/layouts/header' %>
@@ -18,10 +17,12 @@
         <% if user_signed_in? %>
         <div class="span9">
           <%= render :partial => '/shared/flash_messages' %>
-          <%= yield %>
+          <div class="well">
+            <%= yield %>
+          </div>
         </div>
         <div class="span3">
-          <%= render :partial => 'actions' %>
+          <%= render :partial => '/shared/actions' %>
         </div>
         <% else %>
         <div class="span4">
@@ -31,7 +32,7 @@
           <%= render :partial => '/shared/flash_messages' %>
           <%= yield %>
         </div>
-        <% end %>        
+        <% end %>
       </div>
     </div>
 

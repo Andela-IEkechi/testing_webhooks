@@ -14,8 +14,8 @@ module ApplicationHelper
 
   def progress_meter(progress=50)
     raw "<div class='meter clearfix'>
-      <div class='progress-done' style='width: #{progress}%'>&nbsp;</div>    
-      <div class='progress-left' style='width: #{100-progress}%'>&nbsp;</div>    
+      <div class='progress-done' style='width: #{progress}%'>&nbsp;</div>
+      <div class='progress-left' style='width: #{100-progress}%'>&nbsp;</div>
     </div>"
   end
 end

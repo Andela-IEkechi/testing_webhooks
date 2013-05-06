@@ -5,6 +5,8 @@ class CommentsController < ApplicationController
   load_and_authorize_resource :ticket, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :comment, :through => :ticket
 
+  before_filter :set_feature_and_sprint, :only => [:create, :update]
+
   def new
   end
 
@@ -18,7 +20,7 @@ class CommentsController < ApplicationController
       @ticket = @comment.ticket
     end
 
-   redirect_to project_ticket_path(@comment.project, @comment.ticket)
+    redirect_to project_ticket_path(@comment.project, @comment.ticket)
   end
 
   def edit
@@ -61,6 +63,16 @@ class CommentsController < ApplicationController
     params[:comment][:assets_attributes] ||= []
     params[:comment][:assets_attributes].each do |id, attrs|
       params[:comment][:assets_attributes].delete(id) unless attrs[:payload]
+    end
+  end
+
+  #used to set the current sprint and feature of a ticket if a regular user comments on it.
+  #regular users are not allowed to change the sprint/feature assignment, so the fields are not passed back,
+  #causing it to unintentionally un-assigned if not for this.
+  def set_feature_and_sprint
+    if cannot? :manage, @project
+      @comment.feature = @ticket.feature
+      @comment.sprint = @ticket.sprint
     end
   end
 end

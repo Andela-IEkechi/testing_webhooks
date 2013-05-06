@@ -5,6 +5,7 @@ FactoryGirl.define do
     association(:ticket)
     association(:user)
     cost 0
+    status nil
 
     before(:create) do |comment|
       comment.status = create(:ticket_status, :project => comment.project)

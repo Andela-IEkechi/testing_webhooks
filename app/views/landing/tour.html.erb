@@ -1,31 +1,62 @@
 <% content_for :jumbotron do %>
   <div class="jumbotron">
-    <h1 class="super">Super awesome marketing speak!</h1>
-    <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-    <a class="btn btn-large btn-info" href="#">Sign up today</a>
+    <h1 >Simple ticket management at last!</h1>
+    <p class="lead">Take a tour of Conductor and learn why you won't use anything else ever again!</p>
+    <%= link_to 'Sign up today', new_registration_path(:user), class: "btn btn-large btn-info" %>
   </div>
 <% end %>
 
 <div class="row-fluid marketing">
-  <div class="span6">
-    <h4>Subheading</h4>
-    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+  <div class="span12">
+    <div class="row">
+      <div class="span6">
+        <h4>Overviews</h4>
+        <p>Conductor makes it easy to review your progress at a glance. Each feature and sprint in your project has a progress indicator on the project overview page.</p>
+      </div>
+      <div class="span6">
+        <img src="/tour/ss-overview.gif" class="ss-shadow">
+      </div>
+    </div>
 
-    <h4>Subheading</h4>
-    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+    <div class="row">
+      <div class="span6">
+        <img src="/tour/ss-projects.jpg" class="ss-shadow">
+      </div>
+      <div class="span6">
+        <h4>Project setup</h4>
+        <p>Creating a new project is a single easy step. You can invite others to join in on your project by simply inviting them from the project management page.</p>
+      </div>
+    </div>
 
-    <h4>Subheading</h4>
-    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-  </div>
+    <div class="row">
+      <div class="span6">
+        <h4>Features and Sprints</h4>
+        <p>Organize deliverables and plan delivery with features and sprints. Sprints are short term goals that get you to the finish line.</p>
+      </div>
+      <div class="span6">
+        <img src="/tour/ss-sprints.jpg" class="ss-shadow">
+      </div>
+    </div>
 
-  <div class="span6">
-    <h4>Subheading</h4>
-    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+    <div class="row">
+      <div class="span6">
+        <img src="/tour/ss-tickets.jpg" class="ss-shadow">
+      </div>
+      <div class="span6">
+        <h4>Tickets</h4>
+        <p>Create tickets in your project to manage the tasks you have to complete. Tickets are short, simple objectives. Each ticket can be assigned to a feature and a sprint. It's easy to capture multiple tickets with our &quot; Create another &quot; button.</p>
+      </div>
+    </div>
 
-    <h4>Subheading</h4>
-    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+    <div class="row">
+      <div class="span6">
+        <h4>Comments</h4>
+        <p>Users can comment on a ticket they are participating on. They can also upload files or change the status of a ticket. All comments are attributed to the user who made them, so it's easy to see the life of a ticket as it flows between users</p>
+      </div>
+      <div class="span6">
+        <img src="/tour/ss-comments.jpg" class="ss-shadow">
+      </div>
+    </div>
 
-    <h4>Subheading</h4>
-    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
   </div>
 </div>
