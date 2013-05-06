@@ -6,7 +6,6 @@ describe Ticket do
     let(:scoped_class) { Ticket }
   end
 
-
   before(:each) do
     @ticket = create(:ticket)
   end
@@ -139,5 +138,4 @@ describe Ticket do
       @ticket.sprint.should_not be_nil
     end
   end
-
 end

@@ -37,7 +37,7 @@ describe GithubController do
     }
   end
 
-  it 'assigns a commit message to a ticket', focus: true do
+  it 'assigns a commit message to a ticket' do
     expect do
       post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     end.to change{@ticket.comments.count}.from(1).to(2)
