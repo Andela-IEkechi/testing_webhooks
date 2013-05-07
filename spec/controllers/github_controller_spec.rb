@@ -1,10 +1,11 @@
 require 'spec_helper'
 
-describe GithubController do
+describe GithubController, focus: false do
 
   before :each do
     @project = create(:project)
     @user    = create(:user)
+    @project.memberships.create(:user_id => @user.id)
 
     @ticket = create(:ticket, :project => @project)
     #we have to add a comment to the ticket, the factory does not because it sticks to
@@ -37,7 +38,7 @@ describe GithubController do
     }
   end
 
-  it 'assigns a commit message to a ticket', focus: true do
+  it 'assigns a commit message to a ticket' do
     expect do
       post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     end.to change{@ticket.comments.count}.from(1).to(2)
@@ -51,7 +52,9 @@ describe GithubController do
 
     expect do
       post :commit, :token => @key.token, :payload => JSON.generate(@payload)
-    end.to change{@ticket.comments.count + ticket2.comments.count}.from(2).to(4)
+      @ticket.reload
+      ticket2.reload
+    end.to change{@ticket.comments.count + ticket2.comments.count}.by(2)
 
     @ticket.comments.count.should eq(2)
     ticket2.comments.count.should eq(2)
@@ -64,6 +67,96 @@ describe GithubController do
     @ticket.feature.should_not be_nil
     post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.feature.id.should eq feature.id
+  end
+
+  context "with a commit message that provides extra attributes" do
+    it "changes the assigned user" do
+      user = create(:user)
+      @project.memberships.create(:user_id => user.id)
+      expect do
+        # Send a message with changes to all ticket attributes
+        @payload[:commits].first[:message] = "sample data [##{@ticket.scoped_id} assigned:#{user.email}]"
+        post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+        @ticket.reload # required!
+      end.to change{@ticket.comments.count}.by(1)
+
+      @ticket.assignee.should eq(user)
+    end
+
+    it "changes the assigned cost" do
+      @ticket.cost.should_not eq(3)
+      expect do
+        # Send a message with changes to all ticket attributes
+        @payload[:commits].first[:message] = "sample data [##{@ticket.scoped_id} cost:3]"
+        post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+        @ticket.reload # required!
+      end.to change{@ticket.comments.count}.by(1)
+
+      @ticket.cost.should eq(3)
+    end
+
+    it "changes the assigned sprint" do
+      sprint = create(:sprint, :project => @project)
+      expect do
+        # Send a message with changes to all ticket attributes
+        @payload[:commits].first[:message] = "sample data [##{@ticket.scoped_id} sprint:#{sprint.scoped_id}]"
+        post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+        @ticket.reload # required!
+      end.to change{@ticket.comments.count}.by(1)
+
+      @ticket.sprint.should eq(sprint)
+    end
+
+    it "changes the assigned feature" do
+      feature = create(:feature, :project => @project)
+      expect do
+        # Send a message with changes to all ticket attributes
+        @payload[:commits].first[:message] = "sample data [##{@ticket.scoped_id} feature:#{feature.scoped_id}]"
+        post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+        @ticket.reload # required!
+      end.to change{@ticket.comments.count}.by(1)
+
+      @ticket.feature.should eq(feature)
+    end
+
+    it "changes the assigned status" do
+      status = create(:ticket_status, :project => @project)
+      expect do
+        # Send a message with changes to all ticket attributes
+        @payload[:commits].first[:message] = "sample data [##{@ticket.scoped_id} status:#{status.name}]"
+        post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+        @ticket.reload # required!
+      end.to change{@ticket.comments.count}.by(1)
+
+      @ticket.status.should eq(status)
+    end
+
+    it "changes more than one assigned attribute at a time" do
+      status = create(:ticket_status, :project => @project)
+      @ticket.cost.should_not eq(3)
+      expect do
+        # Send a message with changes to all ticket attributes
+        @payload[:commits].first[:message] = "sample data [##{@ticket.scoped_id} cost:3 status:#{status.name}]"
+        post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+        @ticket.reload # required!
+      end.to change{@ticket.comments.count}.by(1)
+
+      @ticket.cost.should eq(3)
+      @ticket.status.should eq(status)
+    end
+
+    it "ignores superfluous content in the comment (non key:value)" do
+      status = create(:ticket_status, :project => @project)
+      @ticket.cost.should_not eq(3)
+      expect do
+        # Send a message with changes to all ticket attributes
+        @payload[:commits].first[:message] = "sample data [##{@ticket.scoped_id} and some cost:3 other rubbish]"
+        post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+        @ticket.reload # required!
+      end.to change{@ticket.comments.count}.by(1)
+
+      @ticket.cost.should eq(3)
+    end
   end
 
   it "should assign the commenter to the comment" do
@@ -85,4 +178,15 @@ describe GithubController do
     @ticket.reload
     @ticket.comments.last.user.should be_nil
   end
+
+  it "should create a comment with the commit date as the create_at date" do
+    timestring = 5.days.ago.to_s
+    @payload[:commits].first[:timestamp] = timestring
+    expect do
+      post :commit, :token => @key.token, :payload => JSON.generate(@payload)
+      @ticket.reload
+    end.to change{@ticket.comments.count}.by(1)
+    @ticket.comments.last.created_at.should eq(timestring)
+  end
+
 end

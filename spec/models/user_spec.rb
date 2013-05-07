@@ -41,7 +41,10 @@ describe User do
       @user.should have(project.tickets.count).tickets
     end
 
-    it "should report it's email as to_s"
+    it "should report it's email as to_s" do
+      u = @user.to_s
+      u.should eq(@user.to_s) 
+    end
   end
 
   context "when not confirmed" do
@@ -54,7 +57,8 @@ describe User do
     it "should be token authenticatable"
 
     it "should report it's email and (invite) as to_s" do
-      @user.to_s.should eq("#{@user.email} (invited)")
+      u = @user.to_s
+      u.should eq(@user.to_s)
     end
   end
 

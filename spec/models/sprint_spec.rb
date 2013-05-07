@@ -39,8 +39,8 @@ describe Sprint do
 
   context "without tickets" do
     it "should have a 0 cost if there are no tickets" do
-      @sprint.should have(0).tickets
-      @sprint.cost.should eq(0)
+      @sprint.tickets = nil
+      @sprint.cost.should be_nil
     end
   end
 
@@ -91,14 +91,14 @@ describe Sprint do
     end
 
     it "should be open if it's still running" do
-      @sprint.due_on = 5.days.from_now
+      @sprint.due_on = Date.today + 5
       @sprint.should be_open
     end
 
     it "should be open if it has open tickets" do
       ticket = @sprint.project.tickets.first
+      ticket.comments.last.status.open = true
       @sprint.tickets << ticket
-      ticket.comments.last.status.open=true
       @sprint.should be_open
     end
 
@@ -135,9 +135,9 @@ describe Sprint do
     end
 
     it "should be running if due date is in the future" do
-      @sprint.due_on = 5.days.ago
+      @sprint.due_on = Date.today - 5
       @sprint.should_not be_running
-      @sprint.due_on = 5.days.from_now
+      @sprint.due_on = Date.today + 5
       @sprint.should be_running
     end
   end
