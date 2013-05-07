@@ -1,7 +1,8 @@
 <%= yield :form_heading %>
 
 <%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
-  <%= f.input :title, :input_html => {:class => 'span3'} %>
+  <%= f.input :title, :input_html => {:class => 'span6'} %>
+  <%= f.input :description, :input_html => {:class => 'span6', :rows => 4} %>
   <%= f.input :private, :as=>:radio_buttons, :hint => 'You can create as many public projects as you want.' %>
   <% unless @project.new_record? %>
     <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
