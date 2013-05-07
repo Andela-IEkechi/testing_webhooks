@@ -26,6 +26,8 @@ class RansackHelper
     @search_term  = term.blank? ? nil : term
     @search_terms = @search_term.scan(/([\w@\-\.]+):([\w@\-\.]+)/i) if @search_term
     @mapped_terms = @search_terms.map{ |k,v| {TICKET_KEYWORDS_MAP[k.to_sym] => v} } if @search_terms
+    #reject {nil => 'somevalue'} keys we cant use (did not recognise)
+    @mapped_terms.reject!{|t| t.keys.first.nil?}
   end
 
   def predicates
