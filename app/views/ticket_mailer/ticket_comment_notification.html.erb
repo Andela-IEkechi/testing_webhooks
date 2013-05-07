@@ -1,5 +1,5 @@
 <p><b><%= @comment.project.title %></b></p>
-<p><%= @comment.user %> has updated this ticket:</p>
+<p><%= author(@comment) %> has updated this ticket:</p>
 
 <%
   changeset = change_set(@comment)
