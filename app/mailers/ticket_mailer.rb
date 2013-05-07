@@ -8,6 +8,6 @@ class TicketMailer < ActionMailer::Base
     @comment = comment
     #attachments.inline["logo.png"] = File.read("#{Rails.root}/public/images/logo.png")
     mail(:to => "#{recipients.join(',')}", #http://www.ruby-forum.com/topic/185075
-         :subject => "#{@comment.project.title} ticket ##{@comment.ticket.scoped_id} (#{@comment.ticket}) has been updated")
+         :subject => "#{@comment.project.title} ##{@comment.ticket.scoped_id} (#{@comment.ticket}) has been updated")
   end
 end
