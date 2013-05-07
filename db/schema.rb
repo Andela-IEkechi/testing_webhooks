@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130222153534) do
+ActiveRecord::Schema.define(:version => 20130422140500) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -30,8 +30,6 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
-
-  add_index "api_keys", ["name"], :name => "index_api_keys_on_name", :unique => true
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
@@ -110,14 +108,12 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.string   "title",                          :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
-    t.string   "slug"
     t.integer  "last_comment_id"
     t.integer  "scoped_id",       :default => 0
   end
 
   add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
   add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
-  add_index "tickets", ["slug"], :name => "index_tickets_on_slug", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                                :default => "",    :null => false
@@ -148,6 +144,7 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
     t.text     "preferences"
+    t.datetime "deleted_at"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
