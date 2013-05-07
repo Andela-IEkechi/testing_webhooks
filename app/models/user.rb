@@ -57,8 +57,28 @@ class User < ActiveRecord::Base
     user
   end
 
+  # con 782
   def soft_delete
-    update_attribute(:deleted_at, Time.current)
+
+    # First check the user's own projects:
+    # - if the project didn't have other users, delete it
+    self.projects.select{|p| p.memberships.size == 1}.each do |p|
+      p.memberships.first.delete
+      p.delete
+    end
+
+    # - if there are other admins, the project stays the same
+    # - if there are no other admins, all remaining are upgraded to admin
+    self.projects.each do |p|
+      # if only one user is and admin of the project, it's the owner
+      if (p.memberships.select{|m| m.role == 'admin'}.size == 1)
+        p.memberships.each{|m| m.update_attribute(:role, "admin")}
+      end
+    end
+
+    self.memberships.each{|m| m.delete} # remove any other memberships
+    update_attribute(:deleted_at, Time.current) # finally, set deletion timestamp
+
   end
 
   def active?

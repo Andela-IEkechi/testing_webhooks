@@ -93,4 +93,42 @@ describe User do
     user.deleted?.should be_true
   end
 
+  it "should promote others to admin on projects he created" do
+    user = create(:user)
+    other_user = create(:user)
+    project = create(:project, :user => user)
+    membership_other = create(:membership, :user => other_user, :project => project, :role => "regular")
+    user.reload
+
+    user.soft_delete
+    membership_other.reload
+    membership_other.role.should eq("admin")
+  end
+
+  it "should leave memberships untouched if there are other admins in projects" do
+    user = create(:user)
+    other_admin = create(:user)
+    other_regular = create(:user)
+    project = create(:project, :user => user)
+    membership1 = create(:membership, :user => other_admin, :project => project, :role => "admin")
+    membership2 = create(:membership, :user => other_regular, :project => project, :role => "regular")
+    user.reload
+
+    user.soft_delete
+    project.reload
+
+    project.memberships.select{|m| m.role == "admin"}.size.should eq(1)
+    project.memberships.select{|m| m.role == "regular"}.size.should eq(1)
+  end
+
+  it "should delete his projects when he's the only member and he leaves" do
+    num_projects = Project.all.size
+    user = create(:user)
+    create(:project, :user => user)
+    user.reload
+
+    user.soft_delete
+    Project.all.size.should eq(num_projects)
+  end
+
 end
