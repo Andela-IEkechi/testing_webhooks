@@ -13,7 +13,7 @@ class TicketsController < ApplicationController
 
   def index
     @search  = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
-    @tickets = Kaminari::paginate_array(@search.result).page(params[:page])
+    @tickets = Kaminari::paginate_array(@search.result.order(:id)).page(params[:page])
     @term    = (params[:q] && params[:q][:title_cont] || '')
 
     respond_to do |format|
