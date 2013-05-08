@@ -37,7 +37,7 @@ describe Ticket do
     @ticket.should respond_to(:comments)
   end
 
-  it "should return it's comments ordered by created_at", focus: true do
+  it "should return it's comments ordered by created_at" do
     @ticket.comments << create(:comment, :ticket => @ticket, :created_at => 3.days.ago)
     @ticket.comments << create(:comment, :ticket => @ticket, :created_at => 2.days.ago)
     @ticket.comments << create(:comment, :ticket => @ticket, :created_at => 4.days.ago)
