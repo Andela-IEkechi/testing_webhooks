@@ -1,5 +1,5 @@
 class Comment::Asset < ActiveRecord::Base
-  belongs_to      :comment
+  belongs_to      :comment, :dependent => :destroy
   has_one         :ticket, :through => :comment
   mount_uploader  :payload, FileUploader
 

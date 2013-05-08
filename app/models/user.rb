@@ -70,10 +70,13 @@ class User < ActiveRecord::Base
 
     #remove any memberships to projects we don't own
     self.memberships.each do |m|
-      unless m.project.user_id == self.user_id
+      unless m.project.user_id == self.id
         m.destroy
       end
     end
+
+    #delete all our own projects
+    self.projects.find_each(&:destroy)
 
     update_attribute(:deleted_at, Time.current) # finally, set deletion timestamp
   end

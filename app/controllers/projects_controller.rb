@@ -32,7 +32,11 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project was updated"
       #remove the current user from the project memberships
       unless new_user_id.blank?
+        #assign the new owner
         @project.update_attribute(:user_id, new_user_id.to_i)
+        #make sure they are an admin
+        @project.memberships.for_user(@project.user_id).first.admin!
+
         flash[:notice] = "Project was transfered to #{@project.user}"
         if remove_user
           @project.memberships.for_user(current_user.id).first.delete

@@ -28,4 +28,11 @@ class Membership < ActiveRecord::Base
     self.role == 'restricted'
   end
 
+  def admin!
+    unless self.admin?
+      self.role = 'admin'
+      self.save
+    end
+  end
+
 end
