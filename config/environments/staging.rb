@@ -73,10 +73,11 @@ Conductor::Application.configure do
   config.action_mailer.default :charset => "utf-8"
 
   config.action_mailer.smtp_settings = {
-    :address   => "mailtrap.io",
-    :port      => 2525,
-    :user_name => "wami-staging",
-    :password  => "64c3622fdac7fe21"
+    :user_name => 'conductor-staging-b88c4e57477a9aa4',
+    :password => 'b97f8e3834e1897e',
+    :address => 'mailtrap.io',
+    :port => '2525',
+    :authentication => :plain
   }
 
   #set up the GH values
