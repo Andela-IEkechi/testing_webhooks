@@ -7,8 +7,8 @@
       <li>
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <% current_user.participations.each do |project| %>
-              <li><%= link_to project.title, project_path(project) %></li>
+            <% current_user.memberships.sort{|a,b| a.project.title <=> b.project.title}.each do |membership| %>
+              <li><%= link_to membership.project.title, project_path(membership.project) %></li>
             <% end %>
             <li class="divider"></li>
             <li><%= link_to 'new project', new_project_path %></li>
@@ -35,9 +35,12 @@
               <div class="profile-splurb">
                 <strong><%= current_user.full_name %></strong><br>
                 <small><%= current_user.email %></small><br>
-                <%= link_to 'Manage profile', edit_user_registration_path, class: 'btn btn-info' %>
               </div>
             </div>
+          </li>
+          <li>
+            <%= link_to 'Manage profile', edit_user_registration_path %>
+            <%= link_to 'Manage account', edit_user_account_path(current_user) if current_user.email =~ /.*shuntyard.co.za/ %>
           </li>
           <li class="last"><%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'sign-out' %></li>
         </ul>
