@@ -7,7 +7,7 @@ class Comment < ActiveRecord::Base
   belongs_to :user #the person who made the comment
   belongs_to :api_key, :foreign_key => 'api_key_name', :class_name => 'ApiKey'
   has_one    :project, :through => :ticket
-  has_many   :assets
+  has_many   :assets, :dependent => :destroy
 
   belongs_to :sprint
   belongs_to :feature

@@ -116,10 +116,11 @@ class TicketsController < ApplicationController
     end
   end
 
+  #TODO: refactor this method
   def scoped_tickets
     @tickets = @sprint.assigned_tickets                  if @sprint
-    @tickets = @feature.assigned_tickets                 if @feature
-    @tickets = @project.tickets                          if @project
+    @tickets ||= @feature.assigned_tickets               if @feature
+    @tickets ||= @project.tickets                        if @project
     @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
     @tickets
   end
