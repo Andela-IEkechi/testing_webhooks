@@ -188,6 +188,14 @@ describe ProjectsController do
         assigns(:project)
       end
 
+      it "should make the new owner an admin" do
+        attrs = {user_id: @new_owner.id, remove_me: '0'}
+        post :update, :id => @project, :project => attrs
+        @project.reload
+        @project.user_id.should eq(@new_owner.id)
+        @project.memberships.for_user(@new_owner.id).should be_admin
+      end
+
       it "should remove the previous owner from the project" do
         attrs = {user_id: @new_owner.id, remove_me: '1'}
         post :update, :id => @project, :project => attrs
