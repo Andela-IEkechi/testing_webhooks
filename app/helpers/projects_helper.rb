@@ -5,6 +5,6 @@ module ProjectsHelper
   end
 
   def can_transfer_project?(project)
-    valid_transfer_members(project).any?
+    (project.user_id == current_user.id) && valid_transfer_members(project).any?
   end
 end
