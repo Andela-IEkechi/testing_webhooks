@@ -48,9 +48,12 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    if @project.destroy
+    title = @project.to_s
+    if (@project.user_id == current_user.id) && @project.destroy
+      flash[:notice] = "#{title} has been permanently deleted"
       redirect_to projects_path()
     else
+      flash[:notice] = "#{title} could not be deleted"
       redirect_to project_path(@project)
     end
   end

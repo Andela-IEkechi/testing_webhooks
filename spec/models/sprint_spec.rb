@@ -7,6 +7,8 @@ describe Sprint do
   end
 
   before(:each) do
+    #make sure we have no users in the system, faker sometimes gets tripped up ?!
+    User.all.each(&:destroy)
     @sprint = create(:sprint)
   end
 
@@ -38,16 +40,20 @@ describe Sprint do
   end
 
   context "without tickets" do
-    it "should have a 0 cost if there are no tickets" do
-      @sprint.tickets = nil
-      @sprint.cost.should be_nil
+    it "should have a 0 cost" do
+      @sprint.assigned_tickets.each(&:destroy)
+      @sprint.reload
+      @sprint.assigned_tickets.count.should eq(0)
+      @sprint.cost.should be_zero
     end
   end
 
   context "with tickets" do
     before(:each) do
-      create(:ticket, :project => @sprint.project)
-      create(:ticket, :project => @sprint.project)
+      ticket1 = create(:ticket, :project => @sprint.project)
+      create(:comment, :ticket => ticket1)
+      ticket2 = create(:ticket, :project => @sprint.project)
+      create(:comment, :ticket => ticket2)
     end
 
     it "should report on the assigned tickets" do
@@ -59,7 +65,7 @@ describe Sprint do
     end
 
     it "must be able to contain tickets" do
-      @sprint.should respond_to(:tickets)
+      @sprint.should respond_to(:assigned_tickets)
     end
 
     it "must sum the costs of all the tickets in it" do
@@ -97,8 +103,9 @@ describe Sprint do
 
     it "should be open if it has open tickets" do
       ticket = @sprint.project.tickets.first
-      ticket.comments.last.status.open = true
-      @sprint.tickets << ticket
+      ticket.sprint = @sprint
+      ticket.status.open = true
+      ticket.save
       @sprint.should be_open
     end
 
@@ -107,26 +114,39 @@ describe Sprint do
     end
 
     it "should be closed if its not running and has no open tickets" do
+      @sprint.assigned_tickets.each do |t|
+        t.sprint = nil
+        t.save
+      end
       ticket = @sprint.project.tickets.first
-      @sprint.tickets << ticket
+      ticket.sprint = @sprint
+      ticket.save
 
       @sprint.due_on = 5.days.from_now
       #running with an open ticket!
-      ticket.comments.last.status.open=true
+      ticket.status.open=true
+      ticket.save
+      @sprint.reload
       @sprint.should_not be_closed
 
       #running with a closed ticket!
-      ticket.comments.last.status.open=false
+      ticket.status.open=false
+      ticket.save
+      @sprint.reload
       @sprint.should_not be_closed
 
-
-      @sprint.due_on = 5.days.ago
       #not running with an open ticket!
-      ticket.comments.last.status.open=true
+      @sprint.due_on = 5.days.ago
+      ticket.status.open=true
+      ticket.save
+      @sprint.reload
       @sprint.should_not be_closed
 
       #not running with a closed ticket!
-      ticket.comments.last.status.open=false
+      @sprint.due_on = 5.days.ago
+      ticket.status.open=false
+      ticket.save
+      @sprint.reload
       @sprint.should be_closed
     end
 

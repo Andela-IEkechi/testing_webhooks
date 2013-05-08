@@ -170,7 +170,7 @@ describe ProjectsController do
         assigns(:project).should == @project
       end
     end
-    context "when transferring ownership", focus: true do
+    context "when transferring ownership" do
       before(:each) do
         #create a user to transfer to
         @new_owner = create(:user)
@@ -220,21 +220,17 @@ describe ProjectsController do
       }.to change(Project, :count).by(-1)
     end
 
+    it "does not delete a project if the owner is not the current user" do
+      new_owner = create(:user)
+      some_project = create(:project, :user => new_owner)
+      expect {
+        delete :destroy, :id => some_project
+      }.to raise_error(CanCan::AccessDenied)
+    end
+
     it "redirects to the project index" do
       delete :destroy, :id => @project
       response.should be_redirect
-    end
-
-    it "cannot be destroyed if it has features" do
-      create(:feature, :project => @project)
-      delete :destroy, :id => @project
-      response.should_not be_success
-    end
-
-    it "cannot be destroyed if it has sprints" do
-      create(:sprint, :project => @project)
-      delete :destroy, :id => @project
-      response.should_not be_success
     end
 
     it "should redirect to show the project if delete fails" do
