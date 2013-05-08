@@ -64,27 +64,18 @@ class User < ActiveRecord::Base
     user
   end
 
-  # con 782
   def soft_delete
-    # First check the user's own projects:
-    # - if the project didn't have other users, delete it
-    self.projects.select{|p| p.memberships.size == 1}.each do |p|
-      p.memberships.first.delete
-      p.delete
-    end
+    #we dont allow users to delete themselves if they have open projects
+    return if self.projects.select{|p| p.memberships.count > 1}.compact.size > 0
 
-    # - if there are other admins, the project stays the same
-    # - if there are no other admins, all remaining are upgraded to admin
-    self.projects.each do |p|
-      # if only one user is and admin of the project, it's the owner
-      if (p.memberships.select{|m| m.role == 'admin'}.size == 1)
-        p.memberships.each{|m| m.update_attribute(:role, "admin")}
+    #remove any memberships to projects we don't own
+    self.memberships.each do |m|
+      unless m.project.user_id == self.user_id
+        m.destroy
       end
     end
 
-    self.memberships.each{|m| m.delete} # remove any other memberships
     update_attribute(:deleted_at, Time.current) # finally, set deletion timestamp
-
   end
 
   def active?
@@ -98,7 +89,7 @@ class User < ActiveRecord::Base
   # Prevent "soft deleted" users from signing in
   # http://stackoverflow.com/a/8107966/483566
   def active_for_authentication?
-    super && !deleted_at
+    super && self.active?
   end
 
 end
