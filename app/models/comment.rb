@@ -1,6 +1,7 @@
 class Comment < ActiveRecord::Base
   include Markdownable
   after_create :update_ticket
+  after_destroy :revert_ticket
 
   belongs_to :ticket #always
   belongs_to :user #the person who made the comment
@@ -15,7 +16,7 @@ class Comment < ActiveRecord::Base
 
   accepts_nested_attributes_for :assets
 
-  attr_accessible :body, :cost, :rendered_body, :commenter, :git_commit_uuid
+  attr_accessible :body, :cost, :rendered_body, :commenter, :git_commit_uuid, :created_at
   attr_accessible :ticket_id, :user_id, :status_id, :feature_id, :sprint_id, :assignee_id, :assets_attributes, :api_key_name
 
   #we can't enforce this in the model, or nested create fails : validates :ticket_id, :presence => true
@@ -52,6 +53,10 @@ class Comment < ActiveRecord::Base
   private
 
   def update_ticket
+    self.ticket.update_last_comment! if self.ticket
+  end
+
+  def revert_ticket
     self.ticket.update_last_comment! if self.ticket
   end
 end

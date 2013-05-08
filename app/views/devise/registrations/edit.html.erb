@@ -12,8 +12,16 @@
   </div>
 
   <%= gravatar_for @current_user, 200, 'pull-left img-polaroid' %>
-
   <div class="clearfix"></div>
+
+<h3>Preferences</h3>
+
+  <div class="form-inputs">
+    <%= f.simple_fields_for :preferences, OpenStruct.new(resource.preferences) do |prefs| %>
+      <%= prefs.input :page_size, :collection => [5,10,15,20].map{|x| [x,x]}, :include_blank => false %>
+      <%= prefs.input :collapse_long_tickets, :as => :boolean, :hint => 'show only the last 5 comments on a ticket by default' %>
+    <% end %>
+  </div>
 
   <div class="form-actions">
     <%= f.submit "Update", :class => "btn"  %>

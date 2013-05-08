@@ -15,12 +15,19 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
-                  :terms, :chosen_plan
+                  :terms, :chosen_plan, :preferences
 
   validates :terms, acceptance: {accept: true}
 
   scope :active, where("deleted_at IS NULL")
   scope :deleted, where("deleted_at IS NOT NULL")
+
+  serialize :preferences
+
+  after_initialize do |user|
+    user.preferences ||= {}
+    user.preferences = OpenStruct.new(user.preferences)
+  end
 
   def to_s
     if confirmed?
@@ -59,7 +66,6 @@ class User < ActiveRecord::Base
 
   # con 782
   def soft_delete
-
     # First check the user's own projects:
     # - if the project didn't have other users, delete it
     self.projects.select{|p| p.memberships.size == 1}.each do |p|

@@ -7,10 +7,6 @@ describe TicketsController do
     @project = create(:project, :user => @user)
   end
 
-  it "should have a current_user" do
-    subject.current_user.should_not be_nil
-  end
-
   shared_examples("access to tickets") do
     describe "GET #index" do
       before(:each) do
@@ -122,10 +118,11 @@ describe TicketsController do
     describe "POST #create" do
       context "with valid attributes" do
         before(:each) do
+          status = create(:ticket_status, :project => @project)
           @attrs = attributes_for(:ticket, :project_id => @project.to_param)
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment)})
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :sprint_id => @sprint.to_param)}) if @sprint
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :feature_id => @feature.to_param)}) if @feature
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => status.id)})
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => status.id, :sprint_id => @sprint.to_param)}) if @sprint
+          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => status.id, :feature_id => @feature.to_param)}) if @feature
         end
 
         it "saves a new ticket to the database" do
@@ -157,10 +154,9 @@ describe TicketsController do
     describe "POST #update" do
       context "with valid attributes" do
         before(:each) do
-          @attrs = attributes_for(:ticket)
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment)})
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :sprint_id => @sprint.to_param)}) if @sprint
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :feature_id => @feature.to_param)}) if @feature
+          @attrs = @ticket.attributes.reject{|attr| ["id", "created_at", "updated_at", "slug", "last_comment_id", "scoped_id"].include?(attr) }
+          #mess with the title
+          @attrs[:title] = "updated ticket title"
         end
 
         it "updates a ticket in the database" do
@@ -178,10 +174,9 @@ describe TicketsController do
       end
       context "with invalid attributes" do
         before(:each) do
-          @attrs = attributes_for(:invalid_ticket)
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment)})
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :sprint_id => @sprint.to_param)}) if @sprint
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :feature_id => @feature.to_param)}) if @feature
+          @attrs = @ticket.attributes.reject{|attr| ["id", "created_at", "updated_at", "slug", "last_comment_id", "scoped_id"].include?(attr) }
+          #mess with the title to make it INVALID
+          @attrs[:title] = "x" #too short
         end
 
         it "does not update the ticket in the database" do
@@ -207,12 +202,14 @@ describe TicketsController do
 
       it "redirects to the ticket index" do
         delete :destroy, :id => @ticket.to_param, :project_id => @project.to_param
-        response.should redirect_to(project_path(@project))
+        response.should redirect_to(project_path(@project)) unless (@sprint || @feature)
+        response.should redirect_to(project_sprint_path(@project, @sprint)) if @sprint
+        response.should redirect_to(project_feature_path(@project, @feature)) if @feature
       end
     end
   end
 
-  context "in the context of a project" , focus: true do
+  context "in the context of a project" do
     before(:each) do
       @ticket = create(:ticket, :project => @project)
       create(:comment, :ticket => @ticket, :user => @user)

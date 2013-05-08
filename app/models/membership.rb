@@ -9,6 +9,7 @@ class Membership < ActiveRecord::Base
   validates :project_id, :presence => true
 
   scope :for_user, lambda{|user_id| {:conditions => {:user_id => user_id}}}
+  scope :by_email, lambda{|email| {:conditions => ['LOWER(users.email) = LOWER(?)', email], :joins => :user}}
 
   attr_accessible :role, :user_id, :project_id
 
