@@ -170,6 +170,47 @@ describe ProjectsController do
         assigns(:project).should == @project
       end
     end
+    context "when transferring ownership", focus: true do
+      before(:each) do
+        #create a user to transfer to
+        @new_owner = create(:user)
+        @project.memberships.create(user_id: @new_owner.id)
+      end
+
+      it "should transfer the project to a new user" do
+        attrs = {user_id: @new_owner.id, remove_me: '0'}
+        post :update, :id => @project, :project => attrs
+        @project.reload
+        @project.user_id.should eq(@new_owner.id)
+
+        #we should redirect to the project
+        response.should be_redirect
+        assigns(:project)
+      end
+
+      it "should remove the previous owner from the project" do
+        attrs = {user_id: @new_owner.id, remove_me: '1'}
+        post :update, :id => @project, :project => attrs
+        @project.reload
+        @project.user_id.should eq(@new_owner.id)
+
+        #we should redirect to the project
+        response.should be_redirect
+        assigns(:projects)
+      end
+
+      it "should not transfer the project if no user is specified" do
+        attrs = {user_id: '', remove_me: '0'}
+        post :update, :id => @project, :project => attrs
+        @project.reload
+        @project.user_id.should_not eq(@new_owner.id)
+
+        #we should redirect to the project
+        response.should be_redirect
+        assigns(:project)
+      end
+
+    end
   end
 
   describe "DELETE #destroy" do

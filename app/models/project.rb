@@ -17,6 +17,8 @@ class Project < ActiveRecord::Base
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}
 
+  attr :remove_me
+
   default_scope order('projects.title ASC')
 
   def to_s
