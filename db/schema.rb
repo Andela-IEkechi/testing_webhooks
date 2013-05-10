@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130307011400) do
+ActiveRecord::Schema.define(:version => 20130422140500) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(:version => 20130307011400) do
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.text     "preferences"
     t.datetime "deleted_at"
   end
 

@@ -15,10 +15,16 @@
     <caption>
       <div class="pull-right">
         <% if @search %>
-          <%= simple_form_for @search,
-                :url => project_tickets_path(project),
-                :html => {:method => :get, :class => 'form-search'}, :remote => true do |f| %>
-            <%= f.input_field :title_or_assignee_email_or_sprint_goal_or_feature_title_or_status_name_contains, :label => false, :placeholder => 'search' %>
+          <%= search_form_for @search,
+                url:     project_tickets_path(project),
+                html:    {:method => :get, :class => 'form-search'},
+                remote:  true,
+                builder: SimpleForm::FormBuilder do |f| %>
+
+            <% # this field can be any valid ransack term as it gets  %>
+            <% # overwritten in the backend based on seach type       %>
+            <%= f.input_field :title_cont, label: false, placeholder: 'search', value: @term %>
+
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
             <%= f.hidden_field :feature_id, :value => feature_id %>
             <%= f.hidden_field :project_id, :value => project_id %>
@@ -48,12 +54,12 @@
       <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
       <td>
         <div class="overflow" title="<%= ticket.feature %>">
-          <%= ticket.feature %>
+          <%= link_to ticket.feature, project_feature_path(ticket.project, ticket.feature) if ticket.feature %>
         </div>
       </td>
       <td>
         <div class="overflow" title="<%= ticket.sprint %>">
-          <%= ticket.sprint %>
+          <%= link_to ticket.sprint, project_sprint_path(ticket.project, ticket.sprint) if ticket.sprint %>
         </div>
       </td>
       <td>
@@ -76,7 +82,7 @@
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="7"><%= link_to 'loading tickets...',
+        <td colspan="6"><%= link_to 'loading tickets...',
           project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
           :remote => true, :class => "autoload" %>
         </td>

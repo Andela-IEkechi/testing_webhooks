@@ -42,9 +42,8 @@
             </div>
           </li>
           <li>
-                <%= link_to 'Manage profile', edit_user_registration_path %>
-                <%= link_to 'Manage account', edit_user_account_path(current_user) %>
-
+            <%= link_to 'Manage profile', edit_user_registration_path %>
+            <%= link_to 'Manage account', edit_user_account_path(current_user) if current_user.email =~ /.*shuntyard.co.za/ %>
           </li>
           <li class="last"><%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'sign-out' %></li>
         </ul>

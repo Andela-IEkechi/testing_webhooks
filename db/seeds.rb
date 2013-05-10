@@ -8,22 +8,22 @@
 
 #create a user
 User.find_each(&:destroy)
-jlr = User.create(:email => 'jean@shuntyard.co.za', :password => 'secret', :password_confirmation => 'secret')
+jlr = User.create(:email => 'jean@shuntyard.co.za', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 jlr.confirm!
 
-barbara = User.create(:email => 'barbara@shuntyard.co.za', :password => 'conductor', :password_confirmation => 'conductor')
+barbara = User.create(:email => 'barbara@shuntyard.co.za', :password => 'conductor', :password_confirmation => 'conductor', :terms => true)
 barbara.confirm!
-user = User.create(:email => 'user@example.com', :password => 'secret', :password_confirmation => 'secret')
+user = User.create(:email => 'user@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 user.confirm!
 
-greg = User.create(:email => 'greg@shuntyard.co.za', :password => 'Password1', :password_confirmation => 'Password1')
+greg = User.create(:email => 'greg@shuntyard.co.za', :password => 'Password1', :password_confirmation => 'Password1', :terms => true)
 greg.confirm!
 
-restricted = User.create(:email => 'restricted@example.com', :password => 'secret', :password_confirmation => 'secret')
+restricted = User.create(:email => 'restricted@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 restricted.confirm!
-regular = User.create(:email => 'regular@example.com', :password => 'secret', :password_confirmation => 'secret')
+regular = User.create(:email => 'regular@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 regular.confirm!
-admin = User.create(:email => 'admin@example.com', :password => 'secret', :password_confirmation => 'secret')
+admin = User.create(:email => 'admin@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 admin.confirm!
 
 #create some projects

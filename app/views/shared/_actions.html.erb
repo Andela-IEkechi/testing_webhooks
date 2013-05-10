@@ -11,7 +11,10 @@
     <% end %>
 
     <% if @project %>
-      <%= action_remove(@project) if can?(:manage, @project) && @project && !(@feature || @sprint || @ticket) %>
+      <%
+        #we explicitly dont render the remove project link in the quick action menus
+        #action_remove(@project) if can?(:manage, @project) && @project && !(@feature || @sprint || @ticket)
+      %>
       <%= action_remove(@feature) if can?(:manage, @feature) && @feature && !@ticket %>
       <%= action_remove(@sprint)  if can?(:manage, @sprint) && @sprint && !@ticket%>
       <%= action_remove(@ticket)  if can?(:manage, @ticket) && @ticket %>
@@ -21,7 +24,7 @@
     <% if @project && !@project.new_record? && current_membership  %>
       <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket) %>
       <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket) %>
-      <%= action_add(@project.tickets.new())  if current_membership.admin? || current_membership.regular? && @project && (!(@feature || @sprint) || @ticket) %>
+      <%= action_add(@project.tickets.new())  if current_membership.admin? || (current_membership.regular? && @project) %>
     <% end %>
 
 </ul>

@@ -4,8 +4,8 @@ class Project < ActiveRecord::Base
 
   belongs_to :user
   has_many :features, :dependent => :destroy, :order => :scoped_id
-  has_many :tickets, :dependent => :destroy, :include => :comments, :order => :id
-  has_many :sprints, :order => :due_on, :dependent => :destroy, :order => :scoped_id
+  has_many :tickets, :dependent => :destroy, :include => :comments
+  has_many :sprints, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy
 
   has_many :memberships, :dependent => :destroy, :include => :user
@@ -16,6 +16,8 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :api_keys, :allow_destroy => true
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}
+
+  attr :remove_me
 
   default_scope order('projects.title ASC')
 

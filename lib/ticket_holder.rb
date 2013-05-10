@@ -2,7 +2,7 @@ module TicketHolder
   extend ActiveSupport::Concern
 
   included do
-    has_many :comments
+    has_many :comments #dont destroy comments here, they are nuked
 
     before_destroy :orphan_comments!
 

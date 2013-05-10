@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Plan, :focus => true do
+describe Plan do
 
   it "define PLANS as a hash of plan types" do
     Plan::PLANS.should_not be_nil
@@ -48,7 +48,7 @@ describe Plan, :focus => true do
     plan.to_s.should eq('free')
   end
 
-  it "should compare plans with :better_than?" do 
+  it "should compare plans with :better_than?" do
     plan = Plan.new('small')
     plan.better_than?('medium').should be_false
     plan = Plan.new('medium')

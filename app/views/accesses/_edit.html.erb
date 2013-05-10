@@ -1,4 +1,3 @@
-<a name="access"></a>
 <h3>Access control for <%= @project.title %></h3>
 
 <%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal memberships'}) do |f| %>
@@ -9,7 +8,7 @@
      membership = m_form.object
      project_owner = membership.user_id == membership.project.user_id
   %>
-    <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner, :label => membership.user.email, :include_blank => 'revoke this user' %>
+    <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner, :label => membership.user.email, :include_blank => 'revoke access' %>
   <% end %>
 
   <input name="project[membership_ids][]" type="hidden" value="">
