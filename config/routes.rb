@@ -8,6 +8,9 @@ Conductor::Application.routes.draw do
     end
   end
 
+  get 'projects/public' => 'projects#public'
+  get 'projects/:id/invite' => 'projects#invite', :as => :invite
+
   resources :projects do
     resources :tickets do
       resources :comments

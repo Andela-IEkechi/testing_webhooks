@@ -1,0 +1,12 @@
+<p>
+  <strong><%= @user.full_name %></strong> (<%= @user.email %>) has requested
+  access to <strong><%= @project.title %></strong>.
+</p>
+
+<p>
+  To add them to the project, visit the
+  <%= link_to "project properties page", edit_project_url(@project, :anchor => 'access') %>
+  and add their email <tt><%= @user.email %></tt> to the list of participants
+  and an email will be sent to them automatically.
+</p>
+
