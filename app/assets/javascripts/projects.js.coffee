@@ -9,6 +9,6 @@ $ ->
   $(".memberships").submit ->
     values = (sel.value for sel in $('.memberships select'))
     if (values.indexOf("") > -1)
-      if (!confirm("You will revoke the membership of some users. You want to continue?"))
+      if (!confirm("You are about to revoke the membership of some users. Are you sure?"))
         return false
 
