@@ -28,6 +28,6 @@
 <% end %>
 
 <%= render :partial => '/comments/comment', :collection => comments %>
-<% unless current_membership.restricted? %>
+<% unless @ticket.project.public? || current_membership.restricted? %>
   <%= render :partial => '/comments/form' %>
 <% end %>

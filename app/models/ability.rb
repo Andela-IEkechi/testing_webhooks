@@ -35,12 +35,9 @@ class Ability
 
     #users can manage tickets which belong to them
     can :create, Ticket
-    # can :create, Ticket do |ticket|
-    #   !ticket.project.private
-    # end
-
     can :manage, Ticket do |ticket|
-      (ticket.user_id == user.id) && !ticket.project.memberships.for_user(user.id).first.restricted?
+      #the ticket has to be yours and you have to be a non-restricted member on the project
+      (ticket.user_id == user.id) && (ticket.project.memberships.for_user(user.id).any? && !ticket.project.memberships.for_user(user.id).first.restricted?)
     end
 
     #anyone can read a comments on a ticket which belongs to a project which they are a member of
