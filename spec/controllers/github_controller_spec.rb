@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController, focus: false do
+describe GithubController do
 
   before :each do
     @project = create(:project)
@@ -179,7 +179,7 @@ describe GithubController, focus: false do
     @ticket.comments.last.user.should be_nil
   end
 
-  it "should create a comment with the commit date as the create_at date" do
+  it "should create a comment with the commit date as the create_at date", focus: true do
     timestring = 5.days.ago.to_s
     @payload[:commits].first[:timestamp] = timestring
     expect do
