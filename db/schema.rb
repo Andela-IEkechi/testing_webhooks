@@ -144,6 +144,7 @@ ActiveRecord::Schema.define(:version => 20130422140500) do
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
     t.text     "preferences"
+    t.datetime "deleted_at"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true

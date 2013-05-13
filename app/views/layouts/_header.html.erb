@@ -11,11 +11,14 @@
               <li><%= link_to membership.project.title, project_path(membership.project) %></li>
             <% end %>
             <li class="divider"></li>
-            <li><%= link_to 'new project', new_project_path %></li>
+            <li><%= link_to 'New project', new_project_path %></li>
           </ul>
       </li>
       <li>
-        <%= link_to "My Tickets", projects_path %>
+        <%= link_to "Public projects", projects_public_path %>
+      </li>
+      <li>
+        <%= link_to "My tickets", projects_path %>
       </li>
       <% if @project && !@project.new_record? %>
         <li class="heading"><%= link_to @project, project_path(@project) %></li>

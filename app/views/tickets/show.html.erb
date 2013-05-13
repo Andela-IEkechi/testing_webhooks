@@ -19,15 +19,15 @@
 </div>
 <div class="show-hide-toggle">
   <%= link_to '#', :class => 'hide_older', :style=>"display:none;" do %>
-    hide older comments <i class='icon-chevron-up'></i>
+    hide <%= old_comments.count %> older comments <i class='icon-chevron-up'></i>
   <% end %>
   <%= link_to '#', :class => 'show_older' do %>
-    show older comments <i class='icon-chevron-down'></i>
+    show <%= old_comments.count %> older comments <i class='icon-chevron-down'></i>
   <% end %>
 </div>
 <% end %>
 
 <%= render :partial => '/comments/comment', :collection => comments %>
-<% unless current_membership.restricted? %>
+<% unless @ticket.project.public? || current_membership.restricted? %>
   <%= render :partial => '/comments/form' %>
 <% end %>
