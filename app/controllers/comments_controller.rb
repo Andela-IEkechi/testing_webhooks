@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_filter :strip_empty_assets, :except => ["edit","destroy"]
+  before_filter :strip_empty_assets, :except => ["edit","destroy", "preview"]
 
   load_and_authorize_resource :project
   load_and_authorize_resource :ticket, :through => :project, :find_by => :scoped_id
@@ -59,12 +59,8 @@ class CommentsController < ApplicationController
 
   def preview
     authorize! :create, Comment
-
-    renderer   = PygmentizeHTML
-    extensions = {fenced_code_blocks: true}
-    redcarpet  = Redcarpet::Markdown.new(renderer, extensions)
-
-    render :json => { 'rendered_content' => redcarpet.render(params[:comment]['body']).strip }
+    params["comment"] ||= {"body" => ""}
+    render :json => { 'rendered_body' => Markdownable.to_html(params["comment"]["body"]) }
   end
 
   private
