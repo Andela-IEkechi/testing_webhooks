@@ -73,10 +73,11 @@ Conductor::Application.configure do
   config.action_mailer.default :charset => "utf-8"
 
   config.action_mailer.smtp_settings = {
-    :address   => "smtp.mandrillapp.com",
-    :port      => 587,
-    :user_name => "mandrill@shuntyard.co.za",
-    :password  => "cb7fae88-04ef-44e9-9d33-b848e302e3a2"
+    :user_name => 'conductor-staging-b88c4e57477a9aa4',
+    :password => 'b97f8e3834e1897e',
+    :address => 'mailtrap.io',
+    :port => '2525',
+    :authentication => :plain
   }
 
   #set up the GH values
@@ -87,4 +88,12 @@ Conductor::Application.configure do
   #   ENV['GITHUB_CLIENT_SECRET'] = 'b5eb70fb4f6eee80c969435ddebe439ce45411e4'
   # end
 
+  #set up the MyGate payment gateway values
+  #we DONT HAVE TO do this on heroku, I just put the values in here for reference.
+  #Heroku already has a configured set of these values on the staging server
+  # config.before_configuration do
+  #   ENV['MYGATE_FORM_URL'] = 'https://dev-virtual.mygateglobal.com/PaymentPage.cfm'
+  #   ENV['MYGATE_APPLICATION_ID'] = '27b51bf7-e1e2-45f7-8ad8-817462ca53dd'
+  #   ENV['MYGATE_MERCHANT_ID'] = '444b26e6-0b37-4215-8ea8-3c85bef5363e'
+  # end
 end

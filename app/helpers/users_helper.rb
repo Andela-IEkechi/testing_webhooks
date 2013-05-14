@@ -5,4 +5,13 @@ module UsersHelper
       gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
       image_tag(gravatar_url, alt: current_user, class: "gravatar #{css_class}")
   end
+
+  def hide_comments?
+    current_user.preferences.collapse_long_tickets == '1'
+  end
+
+  def can_delete_account?
+    #if we have projects which have members, then we cant delete our account
+    current_user.projects.select{|p| p.memberships.count > 1}.compact.none?
+  end
 end

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe User do
 
-  shared_examples "a project participant" do
-    it "that can to participate in projects"
-    it "that can all the tickets for all the projects it participates in"
+  shared_examples "a project member" do
+    it "that can be a member in projects"
+    it "that can see all the tickets for all the projects they are members of"
   end
 
   context "it has factories that" do
@@ -25,7 +25,7 @@ describe User do
       @user = create(:user)
     end
 
-    it_behaves_like "a project participant"
+    it_behaves_like "a project member"
 
     it "should be able to own many projects" do
       create(:project, :user => @user)
@@ -41,7 +41,10 @@ describe User do
       @user.should have(project.tickets.count).tickets
     end
 
-    it "should report it's email as to_s"
+    it "should report it's email as to_s" do
+      u = @user.to_s
+      u.should eq(@user.to_s)
+    end
   end
 
   context "when not confirmed" do
@@ -49,12 +52,13 @@ describe User do
       @user = create(:unconfirmed_user)
     end
 
-    it_behaves_like "a project participant"
+    it_behaves_like "a project member"
 
     it "should be token authenticatable"
 
     it "should report it's email and (invite) as to_s" do
-      @user.to_s.should eq("#{@user.email} (invited)")
+      u = @user.to_s
+      u.should eq(@user.to_s)
     end
   end
 
@@ -78,8 +82,40 @@ describe User do
     user.account.plan.should eq("free")
   end
 
-  it "should respont to :trial?" do
+  it "should be an active user by default" do
     user = create(:user)
-    user.should respond_to(:trial?)
+    user.should respond_to(:active?)
+    user.active?.should be_true
+  end
+
+  it "should be possible to soft-delete users" do
+    user = create(:user)
+    user.should respond_to(:deleted?)
+    user.soft_delete
+    user.reload
+
+    user.should be_deleted
+  end
+
+  context "when being deleted" do
+    before(:each) do
+      @user = create(:user)
+      @project = create(:project, :user => @user)
+    end
+
+    it "should be prevented if they have open projects with other members " do
+      other_user = create(:user)
+      membership_other = create(:membership, :user => other_user, :project => @project, :role => "regular")
+      @user.soft_delete
+      @user.reload
+      @user.should_not be_deleted
+    end
+
+    it "should not be prevented if they have open projects with no other members " do
+      @user.soft_delete
+      @user.reload
+      @user.should_not be_deleted
+    end
+
   end
 end

@@ -13,11 +13,41 @@ describe ProjectsController do
     end
 
     it "populates an array of projects" do
-      assigns(:projects).should have_at_least(1).items
+      assigns(:projects).should have(1).item
     end
 
     it "renders the :index template" do
       response.should render_template("index")
+    end
+
+    it "renders the projects we are members of" do
+      assigns(:projects).should have(1).item
+
+      new_project = create(:project)
+      new_project.memberships << create(:membership, :project => new_project, :user => @user)
+      get :index
+      assigns(:projects).should have(2).items
+    end
+
+    it "does not render projects we are not members of" do
+      assigns(:projects).should have(1).item
+
+      new_project = create(:project)
+      get :index
+      assigns(:projects).should have(1).items
+    end
+
+    it "renders each project only once" do
+      new_project = create(:project)
+      new_project.memberships << create(:membership, :project => new_project, :user => @user)
+
+      new_project.memberships << create(:membership, :project => new_project)
+      new_project.memberships << create(:membership, :project => new_project)
+      new_project.memberships << create(:membership, :project => new_project)
+
+      get :index
+      titles = assigns(:projects).collect(&:title)
+      titles.count.should eq(titles.uniq.count)
     end
   end
 
@@ -140,6 +170,55 @@ describe ProjectsController do
         assigns(:project).should == @project
       end
     end
+    context "when transferring ownership" do
+      before(:each) do
+        #create a user to transfer to
+        @new_owner = create(:user)
+        @project.memberships.create(user_id: @new_owner.id)
+      end
+
+      it "should transfer the project to a new user" do
+        attrs = {user_id: @new_owner.id, remove_me: '0'}
+        post :update, :id => @project, :project => attrs
+        @project.reload
+        @project.user_id.should eq(@new_owner.id)
+
+        #we should redirect to the project
+        response.should be_redirect
+        assigns(:project)
+      end
+
+      it "should make the new owner an admin" do
+        attrs = {user_id: @new_owner.id, remove_me: '0'}
+        post :update, :id => @project, :project => attrs
+        @project.reload
+        @project.user_id.should eq(@new_owner.id)
+        @project.memberships.for_user(@new_owner.id).should be_admin
+      end
+
+      it "should remove the previous owner from the project" do
+        attrs = {user_id: @new_owner.id, remove_me: '1'}
+        post :update, :id => @project, :project => attrs
+        @project.reload
+        @project.user_id.should eq(@new_owner.id)
+
+        #we should redirect to the project
+        response.should be_redirect
+        assigns(:projects)
+      end
+
+      it "should not transfer the project if no user is specified" do
+        attrs = {user_id: '', remove_me: '0'}
+        post :update, :id => @project, :project => attrs
+        @project.reload
+        @project.user_id.should_not eq(@new_owner.id)
+
+        #we should redirect to the project
+        response.should be_redirect
+        assigns(:project)
+      end
+
+    end
   end
 
   describe "DELETE #destroy" do
@@ -149,21 +228,17 @@ describe ProjectsController do
       }.to change(Project, :count).by(-1)
     end
 
+    it "does not delete a project if the owner is not the current user" do
+      new_owner = create(:user)
+      some_project = create(:project, :user => new_owner)
+      expect {
+        delete :destroy, :id => some_project
+      }.to raise_error(CanCan::AccessDenied)
+    end
+
     it "redirects to the project index" do
       delete :destroy, :id => @project
       response.should be_redirect
-    end
-
-    it "cannot be destroyed if it has features" do
-      create(:feature, :project => @project)
-      delete :destroy, :id => @project
-      response.should_not be_success
-    end
-
-    it "cannot be destroyed if it has sprints" do
-      create(:sprint, :project => @project)
-      delete :destroy, :id => @project
-      response.should_not be_success
     end
 
     it "should redirect to show the project if delete fails" do
