@@ -179,7 +179,7 @@ describe GithubController do
     @ticket.comments.last.user.should be_nil
   end
 
-  it "should create a comment with the commit date as the create_at date", focus: true do
+  it "should create a comment with the commit date as the create_at date" do
     timestring = 5.days.ago.to_s
     @payload[:commits].first[:timestamp] = timestring
     expect do
