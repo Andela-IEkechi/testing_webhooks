@@ -1,7 +1,7 @@
 <div>
   <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span11', :rows => 12}%>
-</div>
-<div>
+  <!-- TODO: stick a preview link in here for #729>
+
   <%= comment_form.input :status do %>
     <%= comment_form.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
   <% end %>
@@ -30,3 +30,4 @@
   </div>
 
 </div>
+

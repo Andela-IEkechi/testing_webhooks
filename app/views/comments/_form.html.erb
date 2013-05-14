@@ -2,8 +2,6 @@
 
 <br>
 
-<%= render :partial => '/comments/preview' %>
-
 <%= simple_nested_form_for([@ticket.project, @ticket, @comment], :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
   <div class="row">
     <%= render :partial => '/comments/form_fields', :locals => {:comment_form => f} %>
@@ -11,8 +9,6 @@
 
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
-    <a id="button_preview" class="btn">Preview comment</a>
     <%= cancel_link %>
-
   </div>
 <% end %>
