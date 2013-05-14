@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130222153534) do
+ActiveRecord::Schema.define(:version => 20130422140500) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -33,10 +33,9 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
 
   create_table "comment_assets", :force => true do |t|
     t.integer  "comment_id", :null => false
-    t.string   "file"
+    t.string   "payload"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "payload"
   end
 
   create_table "comments", :force => true do |t|
@@ -73,7 +72,7 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
   create_table "memberships", :force => true do |t|
     t.integer "project_id"
     t.integer "user_id"
-    t.string  "role",       :default => "Regular", :null => false
+    t.string  "role",       :default => "regular", :null => false
   end
 
   create_table "projects", :force => true do |t|
@@ -85,11 +84,6 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.integer  "features_sequence", :default => 0
     t.integer  "sprints_sequence",  :default => 0
     t.boolean  "private",           :default => true
-  end
-
-  create_table "projects_users", :id => false, :force => true do |t|
-    t.integer "project_id"
-    t.integer "user_id"
   end
 
   create_table "sprints", :force => true do |t|
@@ -143,13 +137,14 @@ ActiveRecord::Schema.define(:version => 20130222153534) do
     t.string   "uid"
     t.string   "full_name"
     t.boolean  "terms",                                :default => false
-    t.text     "preferences"
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.text     "preferences"
+    t.datetime "deleted_at"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
