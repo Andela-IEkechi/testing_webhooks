@@ -5,6 +5,8 @@ gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
 gem 'devise'
+gem 'devise_invitable', '~> 1.1.0'
+
 gem 'cancan'
 gem 'omniauth-github'
 gem 'paper_trail'
@@ -25,14 +27,17 @@ gem 'bootstrap-sass'
 #file uploads
 gem 'carrierwave'
 gem 'carrierwave_direct'
-gem "fog"
+gem 'fog'
+
+#image manimpulation
+gem 'rmagick'
 
 #monitoring
 gem 'crashlog', '>= 1.0.4'
 gem 'newrelic_rpm'
 
 #searching
-gem 'meta_search'
+gem 'ransack'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -65,7 +70,7 @@ group :test do
   gem 'guard-spork'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'rb-inotify', '~> 0.8.8'
+  gem 'rb-inotify', '~> 0.9'
 end
 
 group :development do

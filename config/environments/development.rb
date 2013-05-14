@@ -10,7 +10,7 @@ Conductor::Application.configure do
   config.whiny_nils = true
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local       = false #true
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send
@@ -36,4 +36,11 @@ Conductor::Application.configure do
   config.assets.debug = false
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+  #set up the MyGate payment gateway values
+  config.before_configuration do
+    ENV['MYGATE_FORM_URL'] = 'https://dev-virtual.mygateglobal.com/PaymentPage.cfm'
+    ENV['MYGATE_APPLICATION_ID'] = '27b51bf7-e1e2-45f7-8ad8-817462ca53dd'
+    ENV['MYGATE_MERCHANT_ID'] = '444b26e6-0b37-4215-8ea8-3c85bef5363e'
+  end
 end

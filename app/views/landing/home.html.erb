@@ -1,10 +1,10 @@
 <% content_for :jumbotron do %>
   <div class="jumbotron">
-    <%= image_tag 'landing/sample-product.png' %>
+    <%= image_tag 'landing/sample-product.png', class: "ss-shadow" %>
     <div class="left">
       <h1>Simple Ticketing and Project Management</h1>
       <p class="lead">Get projects out the door faster and with less hassle. Organise your projects with <strong>features</strong> and <strong>sprints</strong> and start getting things done!</p>
-      <%= link_to 'Start your Free Trial', new_registration_path(:user), class: "btn btn-large btn-info" %>
+      <%= link_to 'Register a free account', new_registration_path(:user), class: "btn btn-large btn-info" %>
     </div>
   </div>
 <% end %>
