@@ -5,13 +5,18 @@ module Markdownable
     before_save :render_body
   end
 
-  private
-  def render_body
-    return if self.body.blank?
+  def self.to_html(markdown)
+    return if markdown.blank?
     renderer = PygmentizeHTML
     extensions = {fenced_code_blocks: true}
     redcarpet = Redcarpet::Markdown.new(renderer, extensions)
-    self.rendered_body = redcarpet.render(self.body).strip
+    redcarpet.render(markdown).strip
+  end
+
+  private
+
+  def render_body
+    return self.rendered_body = to_html(self.body)
   end
 end
 
