@@ -20,12 +20,7 @@ Conductor::Application.routes.draw do
     resources :sprints
   end
 
-  post 'comments/preview'
-
-  # Ridiculous as it seems, without this route, previewing an existing comment
-  # that you're editing posts text/html, not application/json to the server,
-  # resulting in a 500 error
-  put 'comments/preview' 
+  post 'comments/preview', :as => :comment_preview
 
   post 'github/commit/:token' => 'github#commit'
 
