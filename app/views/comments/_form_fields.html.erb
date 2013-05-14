@@ -1,6 +1,24 @@
 <div>
   <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span11', :rows => 12}%>
-  <!-- TODO: stick a preview link in here for #729 -->
+
+  <div class="control-group">
+    <div class="controls offset9">
+      <a href="#previewModal" role="button" data-toggle="modal" class="btn">
+        Show preview</a>
+    </div>
+  </div>
+
+  <!-- Preview DIV -->
+  <div id="previewModal" class="modal hide fade" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal"
+              aria-hidden="true">&times;</button>
+      <h3>Ticket preview</h3>
+    </div>
+
+    <div id="ticket_preview" class="modal-body"></div>
+  </div>
 
   <%= comment_form.input :status do %>
     <%= comment_form.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
