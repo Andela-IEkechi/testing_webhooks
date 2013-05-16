@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Markdownable, focus: true do
+describe Markdownable do
   before(:all) do
     @markdown = "
 #this is a heading
