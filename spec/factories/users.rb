@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :user do
-    sequence(:email) {Faker::Internet.email()}
+    email {Faker::Internet.email()}
     terms true
     full_name {Faker::Name.name()}
 
