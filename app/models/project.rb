@@ -4,7 +4,7 @@ class Project < ActiveRecord::Base
 
   belongs_to :user
   has_many :features, :dependent => :destroy, :order => :scoped_id
-  has_many :tickets, :dependent => :destroy, :include => :comments
+  has_many :tickets, :dependent => :destroy, :include => :comments, :order => 'tickets.id'
   has_many :sprints, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy
 
