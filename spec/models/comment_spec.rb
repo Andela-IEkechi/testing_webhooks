@@ -87,7 +87,7 @@ describe Comment do
       @comment.should be_valid
     end
 
-    it 'stores the parsed parkdown' do
+    it 'stores the parsed markdown' do
       @comment.body = "#markdown text"
       @comment.rendered_body.should be_blank
       @comment.save
