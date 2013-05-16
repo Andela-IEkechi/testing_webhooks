@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe RansackHelper do
-  before(:all) do
-    #clear all the users, for some reason they dont
-    User.find_each(&:destroy)
+  before(:each) do
     @user    = create(:user)
     @project = create(:project, user: @user)
     @sprint  = create(:sprint, project: @project, goal: 'sprint-xxx')
@@ -14,7 +12,7 @@ describe RansackHelper do
     @ticket.reload
     @scoped_tickets = @project.tickets
 
-    TEST_MAP = {
+    @test_map = {
       id:       @ticket.scoped_id.to_s,
       cost:     @comment.cost.to_s,
       title:    @ticket.title,
@@ -40,7 +38,7 @@ describe RansackHelper do
   context "search for tickets" do
     RansackHelper::TICKET_KEYWORDS_MAP.each do |k,v|
       it "filtered by #{k}" do
-        term = TEST_MAP[k]
+        term = @test_map[k]
 
         # we know what predicates must look like
         predicates = RansackHelper.new("#{k}:#{term}").predicates
@@ -51,7 +49,7 @@ describe RansackHelper do
       end
 
       it "filtered by a value" do
-        term = TEST_MAP[k]
+        term = @test_map[k]
 
         # we know it must always return one record
         predicates = RansackHelper.new(term).predicates
@@ -59,7 +57,7 @@ describe RansackHelper do
       end
 
       it "filtered by #{k} and something else using OR" do
-        term = TEST_MAP[k]
+        term = @test_map[k]
 
         # test OR searches using unknown values
         predicates = RansackHelper.new("#{k}:#{term} OR #{k}:xxxx").predicates
@@ -68,12 +66,12 @@ describe RansackHelper do
 
         # test OR searches using known values
         key = RansackHelper::TICKET_KEYWORDS_MAP.except(k).keys.sample
-        predicates = RansackHelper.new("#{k}:#{term} OR #{key}:#{TEST_MAP[key]}").predicates
+        predicates = RansackHelper.new("#{k}:#{term} OR #{key}:#{@test_map[key]}").predicates
         @scoped_tickets.search(predicates).result.size.should == 1
       end
 
       it "filtered by #{k} and something else using AND" do
-        term = TEST_MAP[k]
+        term = @test_map[k]
 
         # test AND searches using unknown values
         predicates = RansackHelper.new("#{k}:#{term} AND #{k}:xxxx").predicates
@@ -82,12 +80,12 @@ describe RansackHelper do
 
         # test AND searches using known values
         key = RansackHelper::TICKET_KEYWORDS_MAP.except(k).keys.sample
-        predicates = RansackHelper.new("#{k}:#{term} AND #{key}:#{TEST_MAP[key]}").predicates
+        predicates = RansackHelper.new("#{k}:#{term} AND #{key}:#{@test_map[key]}").predicates
         @scoped_tickets.search(predicates).result.size.should == 1
       end
 
       it "filtered by #{k} and something else using AND and OR" do
-        term = TEST_MAP[k]
+        term = @test_map[k]
 
         # test AND/OR searches using unknown values
         predicates = RansackHelper.new("#{k}:#{term} AND #{k}:xxxx OR #{k}:yyyy").predicates
@@ -96,7 +94,7 @@ describe RansackHelper do
         # test AND/OR searches using known values
         key1 = RansackHelper::TICKET_KEYWORDS_MAP.except(k).keys.sample
         key2 = RansackHelper::TICKET_KEYWORDS_MAP.except(k).keys.sample
-        predicates = RansackHelper.new("#{k}:#{term} AND #{key1}:#{TEST_MAP[key1]} OR #{key2}:#{TEST_MAP[key2]}").predicates
+        predicates = RansackHelper.new("#{k}:#{term} AND #{key1}:#{@test_map[key1]} OR #{key2}:#{@test_map[key2]}").predicates
         @scoped_tickets.search(predicates).result.size.should == 1
       end
     end
