@@ -15,7 +15,7 @@ module TicketHolder
     end
 
     def cost
-      assigned_tickets.sum(&:cost)
+      assigned_tickets.sum(&:cost) || 0
     end
 
     def assigned_tickets
