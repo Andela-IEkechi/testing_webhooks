@@ -34,7 +34,7 @@ class Ability
     can :read, Ticket, :project => {:private => false }
 
     #users can manage tickets which belong to them
-    can :create, Ticket
+    can :create, Ticket, :project => {:memberships => {:user_id => user.id, :role => ['admin', 'regular']}}
     can :manage, Ticket do |ticket|
       #the ticket has to be yours and you have to be a non-restricted member on the project
       (ticket.user_id == user.id) && (ticket.project.memberships.for_user(user.id).any? && !ticket.project.memberships.for_user(user.id).first.restricted?)
