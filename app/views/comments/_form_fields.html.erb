@@ -1,23 +1,35 @@
 <div>
   <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span11', :rows => 12}%>
 
-  <div class="control-group">
-    <div class="controls offset9">
-      <a href="#previewModal" role="button" data-toggle="modal" class="btn">
-        Show preview</a>
+  <div class="control">
+    <a href="#markdownModal" role="button" data-toggle="modal" class="btn span2 offset7 btn-info">
+      <i class="icon-info-sign"></i>
+      syntax help
+    </a>
+    <a href="#previewModal" role="button" data-toggle="modal" class="btn span2 btn-info" id="comment_preview_button">
+      <i class="icon-eye-open"></i>
+      Show preview
+    </a>
+  </div>
+
+  <!-- help DIV -->
+  <div id="markdownModal" class="modal hide comment-container" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4>Markdown syntax</h4>
+    </div>
+    <div class="modal-body comment-body">
+      <%= render :partial => '/comments/markdown' %>
     </div>
   </div>
 
   <!-- Preview DIV -->
-  <div id="previewModal" class="modal hide fade" tabindex="-1" role="dialog"
-       aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id="previewModal" class="modal hide comment-container" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal"
-              aria-hidden="true">&times;</button>
-      <h3>Ticket preview</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4>Comment preview...</h4>
     </div>
-
-    <div id="ticket_preview" class="modal-body"></div>
+    <div id="ticket_preview" class="modal-body comment-body"></div>
   </div>
 
   <%= comment_form.input :status do %>

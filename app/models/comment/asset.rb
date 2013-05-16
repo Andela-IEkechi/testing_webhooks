@@ -4,6 +4,7 @@ class Comment::Asset < ActiveRecord::Base
   mount_uploader  :payload, FileUploader
 
   attr_accessible :payload
+  validates :comment, :presence => true
 
   def name
     payload.file.filename rescue payload

@@ -114,7 +114,7 @@ describe User do
     it "should not be prevented if they have open projects with no other members " do
       @user.soft_delete
       @user.reload
-      @user.should_not be_deleted
+      @user.should be_deleted
     end
 
   end
