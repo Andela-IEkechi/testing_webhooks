@@ -87,7 +87,7 @@ describe Comment do
       @comment.should be_valid
     end
 
-    it 'stores the parsed parkdown' do
+    it 'stores the parsed markdown' do
       @comment.body = "#markdown text"
       @comment.rendered_body.should be_blank
       @comment.save
@@ -101,7 +101,7 @@ describe Comment do
     end
   end
 
-  it "is deleted when it's parent ticket is destroyed", focus: true do
+  it "is deleted when it's parent ticket is destroyed" do
     comment = create(:comment)
     expect {
       comment.ticket.destroy

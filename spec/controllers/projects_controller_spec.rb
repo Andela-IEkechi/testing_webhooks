@@ -170,6 +170,7 @@ describe ProjectsController do
         assigns(:project).should == @project
       end
     end
+
     context "when transferring ownership" do
       before(:each) do
         #create a user to transfer to
@@ -193,7 +194,7 @@ describe ProjectsController do
         post :update, :id => @project, :project => attrs
         @project.reload
         @project.user_id.should eq(@new_owner.id)
-        @project.memberships.for_user(@new_owner.id).should be_admin
+        @project.memberships.for_user(@new_owner.id).first.should be_admin
       end
 
       it "should remove the previous owner from the project" do
