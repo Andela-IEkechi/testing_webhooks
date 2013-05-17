@@ -9,6 +9,10 @@ describe Project do
     create(:project).should_not be_nil
   end
 
+  it "should make a private project by default" do
+    create(:project).should be_private
+  end
+
   it "should have a working factory that adds tickets" do
     project_with_tickets = create(:project_with_tickets)
     project_with_tickets.should_not be_nil

@@ -1,4 +1,5 @@
-<% @projects.uniq.each do |project| %>
+<% @projects.each do |project| %>
   <h3><%= link_to project.title, project_path(project) %></h3>
   <%= render :partial => 'tickets/index', :locals => { :project => project, :assignee_id => current_user.id }%>
 <% end %>
+

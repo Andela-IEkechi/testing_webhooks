@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :project do
     sequence(:title) {|n| "project-#{n}" }
     association(:user)
+    #projects are private by default
 
     factory :invalid_project do
       title nil

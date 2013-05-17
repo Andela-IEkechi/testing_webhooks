@@ -1,7 +1,9 @@
 class ProjectsController < ApplicationController
-  load_and_authorize_resource :project
+  load_and_authorize_resource :project, :except => [:index]
 
   def index
+    #limit the projects to the ones we have memberships to
+    @projects = current_user.memberships.collect(&:project)
   end
 
   def show
