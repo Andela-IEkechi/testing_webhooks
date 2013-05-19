@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130422140500) do
+ActiveRecord::Schema.define(:version => 20130507200105) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(:version => 20130422140500) do
     t.integer  "features_sequence", :default => 0
     t.integer  "sprints_sequence",  :default => 0
     t.boolean  "private",           :default => true
+    t.text     "description"
   end
 
   create_table "sprints", :force => true do |t|
