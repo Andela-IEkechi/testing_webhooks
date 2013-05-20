@@ -1,0 +1,14 @@
+class Overview < ActiveRecord::Base
+  belongs_to :user, :dependent => :destroy
+  has_and_belongs_to_many :projects
+
+  attr_accessible :title, :filter
+
+  validates :title, :length => {:minimum => 3, :maximum => 10}, :uniqueness => {:scope => :user_id}
+  validates :filter, :presence => true
+  validates :user_id, :presence => true
+
+  def any_project?
+    !projects.any? #true if we dont have any specific projects
+  end
+end
