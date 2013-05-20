@@ -29,7 +29,7 @@ class GithubController < ApplicationController
               #will be in chronological order
               :created_at => commit["timestamp"]
             }
-            attributes.merge!(ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at user_id).include?(k) }) if ticket.last_comment
+            attributes.merge!(ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at user_id).include?(k) }) if (ticket && ticket.last_comment)
             attributes.merge!(comment_to_hash(others, ticket)) unless others.blank?
             ticket.comments.create(attributes)
           end
