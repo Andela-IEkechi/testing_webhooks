@@ -1,0 +1,16 @@
+<div class="overview-title">
+  <h3><%= @overview.title %></h3>
+</div>
+
+<div>
+  <h4>Projects</h4>
+  <% unless @overview.any_project? %>
+  <ul>
+  <% @overview.projects.collect(&:title).each do |project| %>
+    <li><%= project %></li>
+  <% end %>
+  </ul>
+  <% else %>
+    Applies to all projects
+  <% end %>
+</div>

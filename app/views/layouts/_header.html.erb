@@ -18,8 +18,8 @@
         <li class="dropdown">
           <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Overviews&nbsp;<b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-            <% current_user.overviews.sort{|a,b| a.title.downcase <=> b.title.downcase}.each do |overview| %>
-              <li><%= link_to overview.title, user_overview_path(current_user, overview) %></li>
+            <% current_user.overviews.reject(&:new_record?).sort{|a,b| a.title.downcase <=> b.title.downcase}.each do |overview| %>
+              <li><%= link_to overview.title, user_overview_path(current_user.id, overview.id) %></li>
             <% end %>
             <li class="divider"></li>
             <li><%= link_to 'New overview', new_user_overview_path(current_user) %></li>
