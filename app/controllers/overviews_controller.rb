@@ -2,6 +2,9 @@ class OverviewsController < ApplicationController
   load_and_authorize_resource :overview, :through => :current_user
 
   def show
+    #return all the projects for this overview
+    @projects = @overview.projects unless @overview.any_project?
+    @projects ||= Membership.for_user(current_user.id).collect(&:project)
   end
 
   def new
@@ -24,8 +27,22 @@ class OverviewsController < ApplicationController
   end
 
   def update
+    if @overview.update_attributes(params[:overview])
+      flash[:notice] = "Overview was updated"
+      redirect_to user_overview_path(@overview.user, @overview)
+    else
+      flash[:alert] = "Overview could not be updated"
+      render 'edit'
+    end
   end
 
   def destroy
+    if @overview.destroy
+      redirect_to root_path()
+    else
+      flash[:alert] = "Overview could not be deleted"
+      render 'show'
+    end
   end
+
 end

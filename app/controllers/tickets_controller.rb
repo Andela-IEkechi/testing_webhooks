@@ -18,6 +18,9 @@ class TicketsController < ApplicationController
     @tickets = Kaminari::paginate_array(@search.result.order(:id)).page(params[:page]).per(page_size)
     @term    = (params[:q] && params[:q][:title_cont] || '')
 
+    @title = params[:title] if params[:title]
+    @show_search = true unless params[:show_search] == 'false'
+
     respond_to do |format|
       format.js do
         render :partial => '/shared/index'

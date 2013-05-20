@@ -11,4 +11,8 @@ class Overview < ActiveRecord::Base
   def any_project?
     !projects.any? #true if we dont have any specific projects
   end
+
+  def to_s
+    title
+  end
 end
