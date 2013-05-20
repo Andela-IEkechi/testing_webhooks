@@ -8,7 +8,16 @@ ul.nav {
       font-size: 15px;
     }
   }
+  li.open {
+  }
 }
+
+/*crude fix for open dropdown color*/
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  background-color: $top-nav-bg-color;
+  color: $top-nav-link-color;
+}
+
 
 .navbar .nav > li > a.login, .navbar .nav > li > a.login:hover {
   font-size: 12px;
@@ -46,6 +55,7 @@ ul.nav {
     color: $primary-link-color;
   }
 }
+
 
 .caret
 {
