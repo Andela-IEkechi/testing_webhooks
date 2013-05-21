@@ -35,7 +35,7 @@ describe RansackHelper do
     RansackHelper::TICKET_KEYWORDS.should_not be_empty
   end
 
-  context "search for tickets" do
+  context "search for tickets by keyword" do
     RansackHelper::TICKET_KEYWORDS_MAP.each do |k,v|
       it "filtered by #{k}" do
         term = @test_map[k]
@@ -99,4 +99,5 @@ describe RansackHelper do
       end
     end
   end
+
 end
