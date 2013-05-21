@@ -1,5 +1,8 @@
 class OverviewsController < ApplicationController
+  before_filter :pick_projects, :only => [:create, :update]
+
   load_and_authorize_resource :overview, :through => :current_user
+
 
   def show
     #return all the projects for this overview
@@ -45,4 +48,13 @@ class OverviewsController < ApplicationController
     end
   end
 
+  private
+
+  def pick_projects
+    if params[:overview][:project_all]
+      params[:overview][:project_ids] = [] if "1" == params[:overview][:project_all]
+      params[:overview].delete(:project_all)
+    end
+    p params
+  end
 end
