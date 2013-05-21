@@ -1,4 +1,12 @@
 <% @projects.sort{|a,b| a.title.downcase <=> b.title.downcase}.each do |project| %>
-  <h3><%= link_to project.title, project_path(project) %></h3>
+<div class="project-block">
+  <h4>
+    <%= link_to project.title, project_path(project) %>
+    <br>
+    <small>
+      <%= project.description %>
+    </small>
+  </h4>
+</div>
 <% end %>
 
