@@ -1,5 +1,4 @@
 class TicketsController < ApplicationController
-
   include TicketsHelper
 
   before_filter :load_search_resources, :only => :index
@@ -8,6 +7,7 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :sprint,  :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :ticket,  :through => :project, :find_by => :scoped_id, :except => :index
+  load_and_authorize_resource :overview
 
   before_filter :load_ticket_parents
 
@@ -20,9 +20,14 @@ class TicketsController < ApplicationController
     @search  = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
 
     #figure out how to order the results
-    @order = SortHelper.new(params[:q] && params[:q][:title_cont])
+    sort_order = SortHelper.new(params[:q] && params[:q][:title_cont]).sort_order
+    sort_order = 'tickets.id' if sort_order.blank?
 
-    @tickets = Kaminari::paginate_array(@search.result.includes(:last_comment => [:sprint, :feature, :assignee, :status]).order(@order.sort_order)).page(params[:page]).per(page_size)
+    results = @search.result.includes(:last_comment => [:sprint, :feature, :assignee, :status]).order(sort_order)
+
+    @tickets = Kaminari::paginate_array(results).page(params[:page]).per(page_size) unless "false" == params[:paginate]
+    @tickets ||= results
+
     @term    = (params[:q] && params[:q][:title_cont] || '')
 
     @title = params[:title] if params[:title]

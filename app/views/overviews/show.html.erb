@@ -5,7 +5,7 @@
 <% @projects.each do |project| %>
 <div>
   <div id="tickets-list-container-project-<%=project.id%>">
-    <%= link_to 'loading overview...', project_tickets_path(project, :q => {:title_cont => @overview.filter}, :title => project.title, :show_search => false), :remote => true, :class => "autoload" %>
+    <%= ticket_load_link 'loading overview...', {:project_id => project.id}, {:class => "autoload"} %>
   </div>
 </div>
 <% end %>
