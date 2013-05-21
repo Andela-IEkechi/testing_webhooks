@@ -46,6 +46,9 @@ class Ability
     #anyone can manage a comment which belongs to them
     can :manage, Comment, :user_id => user.id, :ticket => {:project => {:memberships => {:user_id => user.id, :role => ['admin', 'regular']}}}
 
+    #users can manage their own overviews
+    can :manage, Overview, :user_id => user.id
+
   end
 
 end

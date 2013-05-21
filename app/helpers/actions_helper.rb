@@ -1,7 +1,7 @@
 module ActionsHelper
 
   def action_back_to(target)
-    return unless target
+    return unless target && can?(:read, target)
 
     link_content = content_tag :span, :class => 'navico' do
       content_tag(:i, :class => 'icon-arrow-left') do
@@ -28,7 +28,7 @@ module ActionsHelper
   end
 
   def action_edit(target)
-    return unless target
+    return unless target && can?(:edit, target)
 
     link_content = content_tag :span, :class => 'navico' do
       content_tag(:i, :class => 'icon-edit') do
@@ -46,6 +46,8 @@ module ActionsHelper
       edit_project_sprint_path(target.project, target)
     when 'Ticket'
       edit_project_ticket_path(target.project, target)
+    when 'Overview'
+      edit_user_overview_path(target.user, target)
     else '#'
     end
 
@@ -57,7 +59,7 @@ module ActionsHelper
   end
 
   def action_remove(target)
-    return unless target
+    return unless target && can?(:delete, target)
 
     link_content = content_tag :span, :class => 'navico' do
       content_tag(:i, :class => 'icon-trash') do
@@ -75,6 +77,8 @@ module ActionsHelper
       project_sprint_path(target.project, target)
     when 'Ticket'
       project_ticket_path(target.project, target)
+    when 'Overview'
+      user_overview_path(target.user, target)
     else '#'
     end
 
@@ -86,7 +90,7 @@ module ActionsHelper
   end
 
   def action_add(target)
-    return unless target
+    return unless target && can?(:create, target)
 
     link_content = content_tag :span, :class => 'navico' do
       content_tag(:i, :class => 'icon-plus') do
@@ -104,6 +108,8 @@ module ActionsHelper
       new_project_sprint_path(target.project)
     when 'Ticket'
       new_project_ticket_path(target.project, :sprint_id => (@sprint rescue nil), :feature_id => (@feature rescue nil))
+    when 'Overview'
+      new_user_overview_path(target.user)
     else '#'
     end
 
