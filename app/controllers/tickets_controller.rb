@@ -15,7 +15,7 @@ class TicketsController < ApplicationController
     @search  = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
     page_size = (current_user.preferences.page_size.to_i rescue 10)
     page_size = 10 unless page_size > 0
-    @tickets = Kaminari::paginate_array(@search.result.order(:id)).page(params[:page]).per(page_size)
+    @tickets = Kaminari::paginate_array(@search.result.order('tickets.id')).page(params[:page]).per(page_size)
     @term    = (params[:q] && params[:q][:title_cont] || '')
 
     respond_to do |format|
@@ -118,10 +118,8 @@ class TicketsController < ApplicationController
 
   #TODO: refactor this method
   def scoped_tickets
-    @tickets = @sprint.assigned_tickets                  if @sprint
-    @tickets ||= @feature.assigned_tickets               if @feature
-    @tickets ||= @project.tickets                        if @project
-    @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
-    @tickets
+    return @sprint.assigned_tickets if @sprint
+    return @feature.assigned_tickets if @feature
+    return @project.tickets if @project
   end
 end

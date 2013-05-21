@@ -90,9 +90,11 @@ class RansackHelper
   def all_terms
     return unless @search_term
 
-    terms = TICKET_KEYWORDS_MAP.map{ |k,v| {v => @search_term} }
-    terms.map!{ |t| t.has_key?(:last_comment_cost_eq) ? {last_comment_cost_eq: -1} : t } unless @search_term.integer?
-    terms
+    terms_hash = {}
+    TICKET_KEYWORDS_MAP.each { |k,v| terms_hash[v] = @search_term }
+    terms_hash.delete(:last_comment_cost_eq) unless @search_term.integer?
+    terms_hash.delete(:scoped_id_eq) unless @search_term.integer?
+    terms_hash.collect {|k, v| {k => v}}
   end
 
   # one ransack group with multiple conditions. the method can be

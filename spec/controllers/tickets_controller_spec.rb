@@ -239,13 +239,38 @@ describe TicketsController do
     before(:each) do
       @sprint = create(:sprint, :project => @project)
       @ticket = create(:ticket, :project => @project)
-      comment = create(:comment, :sprint => @sprint, :user => @user, :ticket => @ticket)
+      create(:comment, :sprint => @sprint, :user => @user, :ticket => @ticket)
       @ticket.reload
       @another_ticket = create(:ticket, :project => @project)
       create(:comment, :sprint => @sprint, :user => @user, :ticket => @another_ticket)
       @another_ticket.reload
     end
     it_behaves_like "access to tickets"
+  end
+
+  context "when searching for a term" do
+    before(:each) do
+      @ticket = create(:ticket, :project => @project)
+      create(:comment, :user => @user, :ticket => @ticket, :assignee => @user)
+      @ticket.reload
+      @another_ticket = create(:ticket, :project => @project)
+      create(:comment, :user => @user, :ticket => @another_ticket, :assignee => @user)
+      @another_ticket.reload
+    end
+
+    it "finds only tickets that match the search" do
+      get :index, :project_id => @project.to_param, :q => {:title_cont => @ticket.title}
+      assigns(:tickets).size.should eq(1)
+      assigns(:tickets).first.title.should eq(@ticket.title)
+    end
+
+    it "orders tickets by id" do
+      get :index, :project_id => @project.to_param, :q => {:title_cont => @user.email}
+      assigns(:tickets).size.should eq(2)
+      result_ids = assigns(:tickets).collect(&:scoped_id)
+      result_ids.should == result_ids.sort
+    end
+
   end
 
 end
