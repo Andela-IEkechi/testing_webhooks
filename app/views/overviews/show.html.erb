@@ -1,0 +1,12 @@
+<div class="overview-title">
+  <h3><%= @overview.title %>&nbsp;<small><%= @overview.filter %></small></h3>
+</div>
+
+<% @projects.each do |project| %>
+<div>
+  <div id="tickets-list-container-project-<%=project.id%>">
+    <%= ticket_load_link 'loading overview...', {:project_id => project.id}, {:class => "autoload"} %>
+  </div>
+</div>
+<% end %>
+

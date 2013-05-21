@@ -6,6 +6,7 @@ Conductor::Application.routes.draw do
       match 'payment/failure' => 'accounts#payment_failure'
       match 'payment/success' => 'accounts#payment_success'
     end
+    resources :overviews
   end
 
   get 'projects/public' => 'projects#public'

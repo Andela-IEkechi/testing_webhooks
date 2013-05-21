@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :projects, :dependent => :destroy #projects we own
   has_many :tickets, :through => :projects #tickets we are assigned to
   has_many :memberships, :include => :project, :dependent => :destroy
+  has_many :overviews, :dependent => :destroy
 
   after_create :create_account
 
@@ -27,6 +28,7 @@ class User < ActiveRecord::Base
   after_initialize do |user|
     user.preferences ||= {}
     user.preferences = OpenStruct.new(user.preferences)
+    user.preferences.page_size ||= 10 #default it to something sane
   end
 
   def to_s

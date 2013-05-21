@@ -24,6 +24,13 @@ describe Project do
     @project.to_s.should eq(@project.title)
   end
 
+  it "optionally has a description", focus: true do
+    @project.description = be_nil
+    @project.should be_valid
+    @project.description = Faker::Lorem.sentence
+    @project.should be_valid
+  end
+
   it "should create default statuses of new and closed" do
     project = create(:project, :title => "with statuses")
     project.should have(2).ticket_statuses
