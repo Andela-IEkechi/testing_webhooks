@@ -85,7 +85,7 @@
     <% end %>
     </tbody>
   </table>
-  <% if @tickets && ((@tickets.total_pages rescue 0) > 0) %>
+  <% if @tickets && @tickets.respond_to?(:total_pages) && (@tickets.total_pages > 1) %>
     <%= paginate @tickets,
         :params => {
           :controller => 'tickets',
@@ -94,7 +94,7 @@
         :remote => true if @tickets %>
     <%= ticket_load_link 'show all', {:paginate => false} %>
   <% end %>
-  <% if @tickets && ((@tickets.total_pages rescue 0) > 0) %>
+  <% if @tickets && !@tickets.respond_to?(:total_pages) && (@tickets.count > (current_user.preferences.page_size.to_i)) %>
     <%= ticket_load_link 'show paged' %>
   <% end %>
 

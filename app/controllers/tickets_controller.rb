@@ -12,12 +12,8 @@ class TicketsController < ApplicationController
   before_filter :load_ticket_parents
 
   def index
-    #figure out the page size
-    page_size = (current_user.preferences.page_size.to_i rescue 10)
-    page_size = 10 unless page_size > 0
-
     #get the search warmed up
-    @search  = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
+    @search = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
 
     #figure out how to order the results
     sort_order = SortHelper.new(params[:q] && params[:q][:title_cont]).sort_order
@@ -25,10 +21,10 @@ class TicketsController < ApplicationController
 
     results = @search.result.includes(:last_comment => [:sprint, :feature, :assignee, :status]).order(sort_order)
 
-    @tickets = Kaminari::paginate_array(results).page(params[:page]).per(page_size) unless "false" == params[:paginate]
+    @tickets = Kaminari::paginate_array(results).page(params[:page]).per(current_user.preferences.page_size.to_i) unless "false" == params[:paginate]
     @tickets ||= results
 
-    @term    = (params[:q] && params[:q][:title_cont] || '')
+    @term = (params[:q] && params[:q][:title_cont] || '')
 
     @title = params[:title] if params[:title]
     @show_search = true unless params[:show_search] == 'false'
