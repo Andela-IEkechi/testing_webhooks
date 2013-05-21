@@ -1,0 +1,12 @@
+<%= yield :form_heading %>
+
+<%= simple_form_for([current_user, @overview], :html => {:class=>'form-horizontal'}) do |f| %>
+  <%= f.input :title, :input_html => {:class => 'span6'}%>
+  <%= f.input :filter, :input_html => {:class => 'span6'}%>
+  <%= f.input :project_ids, :as => :check_boxes, :collection => current_user.memberships.collect{|m| [m.project.title, m.project_id]}, :label => 'Projects' %>
+
+  <div class="form-actions">
+    <%= f.submit :class=>'btn' %>
+    <%= cancel_button %>
+  </div>
+<% end %>

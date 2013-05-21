@@ -14,7 +14,7 @@
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
       <div class="pull-right">
-        <% if @search && @show_search %>
+        <% if @search %>
           <%= search_form_for @search,
                 url:     project_tickets_path(project),
                 html:    {:method => :get, :class => 'form-search'},
@@ -33,7 +33,7 @@
           <% end %>
         <% end %>
       </div>
-      <h4><%= @title || 'Tickets' %></h4>
+      <h2>Tickets</h2>
     </caption>
     <!--title row -->
     <thead>
