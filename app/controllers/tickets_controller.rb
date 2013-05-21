@@ -12,10 +12,17 @@ class TicketsController < ApplicationController
   before_filter :load_ticket_parents
 
   def index
-    @search  = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
+    #figure out the page size
     page_size = (current_user.preferences.page_size.to_i rescue 10)
     page_size = 10 unless page_size > 0
-    @tickets = Kaminari::paginate_array(@search.result.order('tickets.id')).page(params[:page]).per(page_size)
+
+    #get the search warmed up
+    @search  = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
+
+    #figure out how to order the results
+    @order = SortHelper.new(params[:q] && params[:q][:title_cont])
+
+    @tickets = Kaminari::paginate_array(@search.result.includes(:last_comment => [:sprint, :feature, :assignee, :status]).order(@order.sort_order)).page(params[:page]).per(page_size)
     @term    = (params[:q] && params[:q][:title_cont] || '')
 
     @title = params[:title] if params[:title]

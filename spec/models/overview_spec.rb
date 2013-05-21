@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Overview , focus: true do
+describe Overview do
   context "factories" do
     it "has a valid factory" do
       overview = create(:overview)
