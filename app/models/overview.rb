@@ -5,7 +5,7 @@ class Overview < ActiveRecord::Base
   attr_accessor :project_all
   attr_accessible :title, :filter, :project_ids, :project_all
 
-  validates :title, :length => {:minimum => 3, :maximum => 10}, :uniqueness => {:scope => :user_id}
+  validates :title, :length => {:minimum => 3, :maximum => 20}, :uniqueness => {:scope => :user_id}
   validates :filter, :presence => true
   validates :user_id, :presence => true
 

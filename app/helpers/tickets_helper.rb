@@ -13,7 +13,7 @@ module TicketsHelper
     {
       :paginate => true,
       :show_search => !@overview,
-      :title => (@overview && @project && @project.title) || 'Tickets',
+      :title => (@overview && options[:project_id] && Project.find(options[:project_id]).title) || 'Tickets',
       :project_id => @project && @project.id,
       :sprint_id => @sprint && @sprint.to_param,
       :feature_id => @feature && @feature.to_param,

@@ -5,7 +5,6 @@
 <% @projects.each do |project| %>
 <div>
   <div id="tickets-list-container-project-<%=project.id%>">
-    <% @project = project %>
     <%= ticket_load_link 'loading overview...', {:project_id => project.id}, {:class => "autoload"} %>
   </div>
 </div>
