@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :projects, :dependent => :destroy #projects we own
   has_many :tickets, :through => :projects #tickets we are assigned to
   has_many :memberships, :include => :project, :dependent => :destroy
+  has_many :overviews, :dependent => :destroy
 
   after_create :create_account
 
@@ -19,11 +20,15 @@ class User < ActiveRecord::Base
 
   validates :terms, acceptance: {accept: true}
 
+  scope :active, where("deleted_at IS NULL")
+  scope :deleted, where("deleted_at IS NOT NULL")
+
   serialize :preferences
 
   after_initialize do |user|
     user.preferences ||= {}
     user.preferences = OpenStruct.new(user.preferences)
+    user.preferences.page_size ||= 10 #default it to something sane
   end
 
   def to_s
@@ -60,4 +65,36 @@ class User < ActiveRecord::Base
     end
     user
   end
+
+  def soft_delete
+    #we dont allow users to delete themselves if they have open projects
+    return if self.projects.select{|p| p.memberships.count > 1}.compact.size > 0
+
+    #remove any memberships to projects we don't own
+    self.memberships.each do |m|
+      unless m.project.user_id == self.id
+        m.destroy
+      end
+    end
+
+    #delete all our own projects
+    self.projects.find_each(&:destroy)
+
+    update_attribute(:deleted_at, Time.current) # finally, set deletion timestamp
+  end
+
+  def active?
+    !deleted_at
+  end
+
+  def deleted?
+    !!deleted_at
+  end
+
+  # Prevent "soft deleted" users from signing in
+  # http://stackoverflow.com/a/8107966/483566
+  def active_for_authentication?
+    super && self.active?
+  end
+
 end

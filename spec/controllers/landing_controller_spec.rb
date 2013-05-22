@@ -23,14 +23,6 @@ describe LandingController do
     end
   end
 
-  describe "GET 'signup'" do
-    it "returns http success" do
-      get 'signup'
-      response.should be_success
-    end
-  end
-
-
   describe "GET 'support'" do
     it "returns http success" do
       get 'support'
@@ -38,14 +30,12 @@ describe LandingController do
     end
   end
 
-
   describe "GET 'privacy'" do
     it "returns http success" do
       get 'privacy'
       response.should be_success
     end
   end
-
 
   describe "GET 'terms'" do
     it "returns http success" do

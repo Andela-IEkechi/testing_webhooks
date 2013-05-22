@@ -27,7 +27,7 @@ class RansackHelper
     @search_terms = @search_term.scan(/([\w@\-\.]+):([\w@\-\.]+)/i) if @search_term
     @mapped_terms = @search_terms.map{ |k,v| {TICKET_KEYWORDS_MAP[k.to_sym] => v} } if @search_terms
     #reject {nil => 'somevalue'} keys we cant use (did not recognise)
-    @mapped_terms.reject!{|t| t.keys.first.nil?}
+    @mapped_terms.reject!{|t| t.keys.first.nil?} if @mapped_terms
   end
 
   def predicates
@@ -90,9 +90,11 @@ class RansackHelper
   def all_terms
     return unless @search_term
 
-    terms = TICKET_KEYWORDS_MAP.map{ |k,v| {v => @search_term} }
-    terms.map!{ |t| t.has_key?(:last_comment_cost_eq) ? {last_comment_cost_eq: -1} : t } unless @search_term.integer?
-    terms
+    terms_hash = {}
+    TICKET_KEYWORDS_MAP.each { |k,v| terms_hash[v] = @search_term }
+    terms_hash.delete(:last_comment_cost_eq) unless @search_term.integer?
+    terms_hash.delete(:scoped_id_eq) unless @search_term.integer?
+    terms_hash.collect {|k, v| {k => v}}
   end
 
   # one ransack group with multiple conditions. the method can be
