@@ -1,5 +1,5 @@
 class Overview < ActiveRecord::Base
-  belongs_to :user, :dependent => :destroy
+  belongs_to :user
   has_and_belongs_to_many :projects
 
   attr_accessor :project_all

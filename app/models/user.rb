@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_one :account
+  has_one :account, :dependent => :destroy
   has_many :projects, :dependent => :destroy #projects we own
   has_many :tickets, :through => :projects #tickets we are assigned to
   has_many :memberships, :include => :project, :dependent => :destroy
