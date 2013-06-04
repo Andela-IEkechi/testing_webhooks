@@ -5,6 +5,9 @@ describe ProjectsController do
     login_user
     #create a project we can assign tickets to
     @project = create(:project, :user => @user)
+    create(:project) # a private project we are not a member of
+    create(:project, :private => false) # a public project we are not a member of
+    @pub_proj = create(:project, :user => @user, :private => false)
   end
 
   describe "GET #index" do
@@ -13,7 +16,7 @@ describe ProjectsController do
     end
 
     it "populates an array of projects" do
-      assigns(:projects).should have(1).item
+      assigns(:projects).should be_any
     end
 
     it "renders the :index template" do
@@ -21,7 +24,7 @@ describe ProjectsController do
     end
 
     it "renders the projects we are members of" do
-      assigns(:projects).should have(1).item
+      assigns(:projects).should have(2).item
 
       new_project = create(:project)
       new_project.memberships << create(:membership, :project => new_project, :user => @user)
@@ -30,11 +33,8 @@ describe ProjectsController do
     end
 
     it "does not render projects we are not members of" do
-      assigns(:projects).should have(1).item
-
-      new_project = create(:project)
-      get :index
-      assigns(:projects).should have(1).items
+      assigns(:projects).should have(2).item
+      assigns(:projects).collect(&:id).sort.should eq([@project.id, @pub_proj.id].sort)
     end
 
     it "renders each project only once" do
@@ -170,6 +170,7 @@ describe ProjectsController do
         assigns(:project).should == @project
       end
     end
+
     context "when transferring ownership" do
       before(:each) do
         #create a user to transfer to
@@ -193,7 +194,7 @@ describe ProjectsController do
         post :update, :id => @project, :project => attrs
         @project.reload
         @project.user_id.should eq(@new_owner.id)
-        @project.memberships.for_user(@new_owner.id).should be_admin
+        @project.memberships.for_user(@new_owner.id).first.should be_admin
       end
 
       it "should remove the previous owner from the project" do

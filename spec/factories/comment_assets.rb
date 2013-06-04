@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :comment_asset, :class => 'Comment::Asset' do
     association :comment
-    file nil
+    payload nil
 
     factory :comment_asset_with_no_comment do
       comment nil

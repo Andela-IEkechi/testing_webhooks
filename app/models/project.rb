@@ -4,14 +4,14 @@ class Project < ActiveRecord::Base
 
   belongs_to :user
   has_many :features, :dependent => :destroy, :order => :scoped_id
-  has_many :tickets, :dependent => :destroy, :include => :comments
+  has_many :tickets, :dependent => :destroy, :include => :comments, :order => "tickets.id"
   has_many :sprints, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy
 
   has_many :memberships, :dependent => :destroy, :include => :user
   has_many :api_keys, :dependent => :destroy
 
-  attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids
+  attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids, :description
   accepts_nested_attributes_for :ticket_statuses, :memberships
   accepts_nested_attributes_for :api_keys, :allow_destroy => true
 
@@ -21,8 +21,7 @@ class Project < ActiveRecord::Base
 
   default_scope order('projects.title ASC')
 
-  # TODO Check warning "Creating scope :public. Overwriting existing method Project.public."
-  scope :public, where(:private => false)
+  scope :opensource, where(:private => false)
 
   def to_s
     title

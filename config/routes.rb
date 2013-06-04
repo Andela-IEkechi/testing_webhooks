@@ -1,11 +1,18 @@
 Conductor::Application.routes.draw do
-  devise_for :users, :token_authentication_key => 'authentication_key', :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks' , :invitations => 'users/invitations', :registrations => "users/registrations" }
+  devise_for :users,
+    :token_authentication_key => 'authentication_key',
+    :controllers => {
+      :omniauth_callbacks => 'users/omniauth_callbacks',
+      :invitations => 'users/invitations',
+      :registrations => "registrations"
+    }
 
   resources :users do
     resource :account do
       match 'payment/failure' => 'accounts#payment_failure'
       match 'payment/success' => 'accounts#payment_success'
     end
+    resources :overviews
   end
 
   get 'projects/public' => 'projects#public'
@@ -27,7 +34,6 @@ Conductor::Application.routes.draw do
   get 'landing/home'
   get 'landing/tour'
   get 'landing/pricing'
-  get 'landing/signup'
 
   get 'landing/support'
   get 'landing/privacy'

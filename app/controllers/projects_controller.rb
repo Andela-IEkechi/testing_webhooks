@@ -1,7 +1,9 @@
 class ProjectsController < ApplicationController
-  load_and_authorize_resource :project
+  load_and_authorize_resource :project, :except => [:index]
 
   def index
+    #limit the projects to the ones we have memberships to
+    @projects = current_user.memberships.collect(&:project)
   end
 
   def show
@@ -63,7 +65,7 @@ class ProjectsController < ApplicationController
   end
 
   def public
-    @projects = Project.public
+    @projects = Project.opensource
   end
 
   def invite
@@ -72,6 +74,5 @@ class ProjectsController < ApplicationController
     flash[:notice] = "Your request to join <b>#{@project.title}</b> was sent to the project administrator".html_safe
     redirect_to projects_public_path
   end
-
 end
 
