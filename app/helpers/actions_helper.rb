@@ -1,0 +1,123 @@
+module ActionsHelper
+
+  def action_back_to(target)
+    return unless target && can?(:read, target)
+
+    link_content = content_tag :span, :class => 'navico' do
+      content_tag(:i, :class => 'icon-arrow-left') do
+        #block needs to be here to pass in the class !?
+      end
+    end
+    link_content += "back to #{target.class.name.downcase}"
+
+    link_path = case target.class.name
+    when 'Project'
+      project_path(target)
+    when 'Feature'
+      project_feature_path(target.project, target)
+    when 'Sprint'
+      project_sprint_path(target.project, target)
+    else '#'
+    end
+
+    content_tag :li do
+      link_to link_path  do
+        link_content
+      end
+    end
+  end
+
+  def action_edit(target)
+    return unless target && can?(:edit, target)
+
+    link_content = content_tag :span, :class => 'navico' do
+      content_tag(:i, :class => 'icon-edit') do
+        #block needs to be here to pass in the class !?
+      end
+    end
+    link_content += "edit this #{target.class.name.downcase}"
+
+    link_path = case target.class.name
+    when 'Project'
+      edit_project_path(target)
+    when 'Feature'
+      edit_project_feature_path(target.project, target)
+    when 'Sprint'
+      edit_project_sprint_path(target.project, target)
+    when 'Ticket'
+      edit_project_ticket_path(target.project, target)
+    when 'Overview'
+      edit_user_overview_path(target.user, target)
+    else '#'
+    end
+
+    content_tag :li do
+      link_to link_path  do
+        link_content
+      end
+    end
+  end
+
+  def action_remove(target)
+    return unless target && can?(:delete, target)
+
+    link_content = content_tag :span, :class => 'navico' do
+      content_tag(:i, :class => 'icon-trash') do
+        #block needs to be here to pass in the class !?
+      end
+    end
+    link_content += "remove this #{target.class.name.downcase}"
+
+    link_path = case target.class.name
+    when 'Project'
+      project_path(target)
+    when 'Feature'
+      project_feature_path(target.project, target)
+    when 'Sprint'
+      project_sprint_path(target.project, target)
+    when 'Ticket'
+      project_ticket_path(target.project, target)
+    when 'Overview'
+      user_overview_path(target.user, target)
+    else '#'
+    end
+
+    content_tag :li do
+      link_to link_path, :method => :delete, :data => {:confirm => "Are you sure you want to delete this #{target.class.name.downcase}?"}  do
+        link_content
+      end
+    end
+  end
+
+  def action_add(target)
+    return unless target && can?(:create, target)
+
+    link_content = content_tag :span, :class => 'navico' do
+      content_tag(:i, :class => 'icon-plus') do
+        #block needs to be here to pass in the class !?
+      end
+    end
+    link_content += "add a new #{target.class.name.downcase}"
+
+    link_path = case target.class.name
+    when 'Project'
+      new_project_path()
+    when 'Feature'
+      new_project_feature_path(target.project)
+    when 'Sprint'
+      new_project_sprint_path(target.project)
+    when 'Ticket'
+      new_project_ticket_path(target.project, :sprint_id => (@sprint rescue nil), :feature_id => (@feature rescue nil))
+    when 'Overview'
+      new_user_overview_path(target.user)
+    else '#'
+    end
+
+    content_tag :li do
+      link_to link_path  do
+        link_content
+      end
+    end
+  end
+
+end

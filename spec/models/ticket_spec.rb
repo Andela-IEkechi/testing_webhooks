@@ -6,7 +6,6 @@ describe Ticket do
     let(:scoped_class) { Ticket }
   end
 
-
   before(:each) do
     @ticket = create(:ticket)
   end
@@ -38,6 +37,17 @@ describe Ticket do
     @ticket.should respond_to(:comments)
   end
 
+  it "should return it's comments ordered by created_at" do
+    timestamp = Time.now.utc
+    @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 3.days).to_s)
+    @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 2.days).to_s)
+    @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 4.days).to_s)
+    @ticket.reload
+    @ticket.comments.first.created_at.to_s.should eq((timestamp - 4.days).to_s)
+    @ticket.comments.last.created_at.to_s.should eq((timestamp - 2.days).to_s)
+    @ticket.last_comment.created_at.to_s.should eq((timestamp - 2.days).to_s)
+  end
+
   context "last_comment" do
     before(:each) do
       @sprint = create(:sprint, :project => @ticket.project)
@@ -55,8 +65,20 @@ describe Ticket do
       @ticket.feature_id.should eq(@feature.id)
     end
 
-    it "should return the feature id for the feature in the last comment" do
+    it "should update the last_comment association when a new comment is added" do
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      @ticket.last_comment_id.should eq(new_comment.id)
+    end
 
+    it "should update the last_comment association when a comment is removed" do
+      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      @ticket.last_comment_id.should eq(new_comment.id)
+      @ticket.last_comment.destroy
+      @ticket.reload
+      @ticket.last_comment_id.should eq(@ticket.comments.last.id)
+      @ticket.last_comment_id.should eq(@comment.id)
     end
   end
 
@@ -127,5 +149,4 @@ describe Ticket do
       @ticket.sprint.should_not be_nil
     end
   end
-
 end

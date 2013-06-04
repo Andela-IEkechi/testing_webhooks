@@ -2,19 +2,16 @@
   changeset = change_set(comment)
 %>
 
-<% if comment.first? %>
-<div class="ticket-title">
-  <h1 class="pull-right ">#<%= @ticket.scoped_id %></h1>
-  <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
-</div>
-<% end %>
-
 <div class="comment-container" id="comment-<%= comment.id %>">
   <p class="muted"><%= author(comment) %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
-  <div><%= comment.html.html_safe %></div>
+  <div class="comment-body"><%= comment.html.html_safe %></div>
 
   <% comment.assets && comment.assets.each do |asset| %>
-    <%= link_to asset.name, asset.payload_url, :target => '_blank', :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %><br />
+  <%
+    link_name = image_tag(asset.payload_url(:thumb), class: 'img-polaroid img-padded')  if asset.image?
+    link_name ||= asset.name
+  %>
+    <%= link_to link_name, asset.payload_url, :target => '_blank', :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
   <% end %>
 
   <div class="comment-statusbar">

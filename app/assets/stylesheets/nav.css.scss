@@ -8,7 +8,16 @@ ul.nav {
       font-size: 15px;
     }
   }
+  li.open {
+  }
 }
+
+/*crude fix for open dropdown color*/
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  background-color: $top-nav-bg-color;
+  color: $top-nav-link-color;
+}
+
 
 .navbar .nav > li > a.login, .navbar .nav > li > a.login:hover {
   font-size: 12px;
@@ -38,13 +47,15 @@ ul.nav {
 }
 
 .dropdown-menu li > a {
+  color: $primary-link-color;
   &:hover,
   &:active {
     background-color: $alt-table-row-bg-color;
     background-image: none;
-    color: $primary-text-color;
+    color: $primary-link-color;
   }
 }
+
 
 .caret
 {
@@ -67,10 +78,8 @@ ul.nav {
 
 .navbar-inner {
 	background-color: $top-nav-bg-color;
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from($top-nav-bg-color), to($top-nav-bg-color));
-	background-image: -o-linear-gradient(top, $top-nav-bg-color, $top-nav-bg-color);
-	background-image: linear-gradient(top, $top-nav-bg-color, $top-nav-bg-color);
-  background-image: -moz-linear-gradient(top, $top-nav-bg-color, $top-nav-bg-color);
+	background-image: none;
+  filter:none;
 }
 
 span.navico {
@@ -94,8 +103,7 @@ span.navico {
 
 .navbar-profile {
   width: 270px;
-  height: 120px;
-  padding: 3px 20px;
+  padding: 15px 20px;
   background-color: #fff;
   border-bottom: 1px solid #BEBEBE;
   @extend .clearfix;
@@ -106,7 +114,6 @@ span.navico {
   .profile-splurb {
     @extend .pull-right;
     width: 150px;
-    padding-top: 20px
   }
 }
 
@@ -115,12 +122,12 @@ span.navico {
   li.last {
     margin-top: 0px;
     margin-bottom: 5px;
-    .sign-out {
-      @extend .btn;
-      @extend .pull-right;
-      margin-right: 10px;
-      width: 50px;
-    }
+  }
+  .sign-out {
+    @extend .btn;
+    @extend .pull-right;
+    margin-right: 10px;
+    width: 50px;
   }
 }
 

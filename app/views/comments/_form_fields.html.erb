@@ -1,23 +1,55 @@
 <div>
   <%= comment_form.input :body, :as => :text, :input_html => {:class => 'span11', :rows => 12}%>
-</div>
-<div>
+
+  <div class="control">
+    <a href="#markdownModal" role="button" data-toggle="modal" class="offset7">
+      <i class="icon-info-sign"></i>
+      syntax help
+    </a>
+    <a href="#previewModal" role="button" data-toggle="modal" id="comment_preview_button" class="offset1">
+      <i class="icon-eye-open"></i>
+      preview
+    </a>
+  </div>
+
+  <!-- help DIV -->
+  <div id="markdownModal" class="modal hide comment-container" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4>Markdown syntax</h4>
+    </div>
+    <div class="modal-body comment-body">
+      <%= render :partial => '/comments/markdown' %>
+    </div>
+  </div>
+
+  <!-- Preview DIV -->
+  <div id="previewModal" class="modal hide comment-container" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4>Comment preview...</h4>
+    </div>
+    <div id="ticket_preview" class="modal-body comment-body">Nothing to show yet...</div>
+  </div>
+
   <%= comment_form.input :status do %>
     <%= comment_form.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
   <% end %>
 
   <%= comment_form.input :cost, :collection => Ticket::COST.map{|x| [(x == 0)? "unknown" : x.to_s,x]}, :include_blank => false %>
 
-  <%= comment_form.input :feature do %>
-    <%= comment_form.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
-  <% end %>
+  <% if can? :manage, @project %>
+    <%= comment_form.input :feature do %>
+      <%= comment_form.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
+    <% end %>
 
-  <%= comment_form.input :sprint do %>
-    <%= comment_form.select :sprint_id, @ticket.project.sprints.all.select(&:open?).map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
+    <%= comment_form.input :sprint do %>
+      <%= comment_form.select :sprint_id, @ticket.project.sprints.all.select(&:open?).map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
+    <% end %>
   <% end %>
 
   <%= comment_form.input :assigned_to do %>
-    <%= comment_form.select :assignee_id, @ticket.project.ordered_participants.all.map { |s| [s.email, s.id] }, :include_blank => '- unassigned -'  %>
+    <%= comment_form.select :assignee_id, @ticket.project.memberships.all.map { |s| [s.email, s.user_id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
   <div class="attach-asset">
