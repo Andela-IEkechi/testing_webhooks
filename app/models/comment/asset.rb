@@ -5,6 +5,9 @@ class Comment::Asset < ActiveRecord::Base
 
   attr_accessible :payload
 
+  #NOTE: DO NOT validate this, it prevents us from saving new assest on new comments (on new tickets implicitly)
+  #validates :comment_id, :presence => true
+
   def name
     payload.file.filename rescue payload
   end

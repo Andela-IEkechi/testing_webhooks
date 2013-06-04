@@ -6,7 +6,6 @@ describe Feature do
     let(:scoped_class) { Feature }
   end
 
-
   before(:each) do
     @feature = create(:feature)
   end
@@ -67,9 +66,8 @@ describe Feature do
   end
 
   context "without tickets" do
-
     it "should have a 0 cost if there are no tickets" do
-      @feature.should have(0).tickets
+      @feature.should have(0).assigned_tickets
       @feature.cost.should eq(0)
     end
 
@@ -90,7 +88,7 @@ describe Feature do
     end
 
     it "must be able to contain tickets" do
-      @feature.should respond_to(:tickets)
+      @feature.should respond_to(:assigned_tickets)
     end
 
     it "must sum the costs of all the tickets in it" do
@@ -118,4 +116,3 @@ describe Feature do
   end
 
 end
-

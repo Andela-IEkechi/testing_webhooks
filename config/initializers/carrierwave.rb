@@ -1,5 +1,6 @@
 CarrierWave.configure do |config|
   if Rails.env.production?
+    config.storage = :fog
     config.fog_credentials = {
       :provider               => 'AWS',       # required
       :aws_access_key_id      => 'AKIAJ3XPAWJPN6KR2QPQ',       # required
@@ -14,6 +15,7 @@ CarrierWave.configure do |config|
     config.storage = :file
     config.enable_processing = false
   else #dev and staging
+    config.storage = :fog
     config.fog_credentials = {
       :provider               => 'AWS',       # required
       :aws_access_key_id      => 'AKIAJ3XPAWJPN6KR2QPQ',       # required

@@ -1,5 +1,5 @@
 <% content_for :form_heading do %>
-  <h3>Edit <%= @ticket %></h3>
+  <h3>Edit <%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
 <% end %>
 
 <%= render :partial => 'form' %>
