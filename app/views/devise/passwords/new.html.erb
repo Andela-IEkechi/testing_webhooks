@@ -1,25 +1,23 @@
 <% content_for :jumbotron do %>
-<div class="round-and-shaded signup clearfix">
+  <div class="round-and-shaded signup clearfix">
+    <center>
+      <h2>Forgot your password?</h2>
+      <p class="muted">Request your password reset by entering your email below</p>
+    </center>
 
-  <h2>Forgot your password?</h2>
+    <%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+      <div class="form-inputs">
+        <%= f.input :email, :required => true %>
+      </div>
 
-  <p class="muted centered">Request your password reset by entering your email below</p>
-
-  <%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
-  <%= f.error_notification %>
-
-  <div class="form-inputs">
-    <%= f.input :email, :required => true %>
+      <div class="form-actions">
+        <%= f.submit "Send me password reset instructions", :class => "btn btn-info" %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="form-actions">
-    <%= f.submit "Send me reset password instructions", :class => "btn btn-info" %>
-  </div>
-  <% end %>
-  <% end %>
 
   <center>
     <%= render "devise/shared/links" %>
   </center>
 
-</div>
+<% end %>
