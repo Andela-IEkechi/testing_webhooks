@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
   end
 
   def public
-    @projects = Project.public
+    @projects = Project.opensource
   end
 
   def invite

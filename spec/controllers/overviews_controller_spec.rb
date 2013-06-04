@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe OverviewsController, focus: true do
+describe OverviewsController do
   before (:each) do
     login_user
     @overview = create(:overview, :user => @user)

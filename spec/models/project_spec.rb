@@ -24,7 +24,7 @@ describe Project do
     @project.to_s.should eq(@project.title)
   end
 
-  it "optionally has a description", focus: true do
+  it "optionally has a description" do
     @project.description = be_nil
     @project.should be_valid
     @project.description = Faker::Lorem.sentence
