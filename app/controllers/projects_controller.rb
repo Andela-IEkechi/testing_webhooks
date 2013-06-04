@@ -74,6 +74,5 @@ class ProjectsController < ApplicationController
     flash[:notice] = "Your request to join <b>#{@project.title}</b> was sent to the project administrator".html_safe
     redirect_to projects_public_path
   end
-
 end
 
