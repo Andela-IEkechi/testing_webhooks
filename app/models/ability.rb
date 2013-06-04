@@ -10,6 +10,7 @@ class Ability
     can :manage, Project, :memberships => {:user_id => user.id, :role => 'admin'}
     can :create, Project
     can :invite, Project
+
     #even if we made the project, if we are no longer admins, we no can longer manage it
     #can :manage, Project, :user_id => user.id
 
@@ -43,6 +44,9 @@ class Ability
 
     #anyone can manage a comment which belongs to them
     can :manage, Comment, :user_id => user.id, :ticket => {:project => {:memberships => {:user_id => user.id, :role => ['admin', 'regular']}}}
+
+    #users can manage their own overviews
+    can :manage, Overview, :user_id => user.id
 
   end
 

@@ -2,6 +2,8 @@ FactoryGirl.define do
   factory :project do
     sequence(:title) {|n| "project-#{n}" }
     association(:user)
+    #projects are private by default
+    description {Faker::Lorem.sentence}
 
     factory :invalid_project do
       title nil

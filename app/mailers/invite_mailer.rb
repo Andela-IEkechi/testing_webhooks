@@ -4,10 +4,19 @@ class InviteMailer < ActionMailer::Base
 
   layout 'email'
 
-  def invite_request(recipients, user, project)
+  def invite_request(user, project)
     @user = user
     @project = project
+    recipients = @project.memberships.admins.collect(&:email)
     mail(:to => "#{recipients.join(',')}", #http://www.ruby-forum.com/topic/185075
-         :subject => "#{@user.full_name}(#{@user.email}) has requested access to #{@project.title}")
+         :subject => "#{@user.email} has requested access to #{@project.title}")
   end
+
+  def invite_confirm(user, project)
+    @user = user
+    @project = project
+    mail(:to => "#{@user.email}",
+         :subject => "Your request to join #{@project.title} has been sent to the project administrators")
+  end
+
 end

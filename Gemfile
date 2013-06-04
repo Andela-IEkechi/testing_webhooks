@@ -37,7 +37,7 @@ gem 'crashlog', '>= 1.0.4'
 gem 'newrelic_rpm'
 
 #searching
-gem 'meta_search'
+gem 'ransack'
 
 # Gems used only for assets and not required
 # in production environments by default.

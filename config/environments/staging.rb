@@ -73,10 +73,11 @@ Conductor::Application.configure do
   config.action_mailer.default :charset => "utf-8"
 
   config.action_mailer.smtp_settings = {
-    :address   => "smtp.mandrillapp.com",
-    :port      => 587,
-    :user_name => "mandrill@shuntyard.co.za",
-    :password  => "cb7fae88-04ef-44e9-9d33-b848e302e3a2"
+    :user_name => 'conductor-staging-b88c4e57477a9aa4',
+    :password => 'b97f8e3834e1897e',
+    :address => 'mailtrap.io',
+    :port => '2525',
+    :authentication => :plain
   }
 
   #set up the GH values

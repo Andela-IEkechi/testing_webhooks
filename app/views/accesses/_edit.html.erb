@@ -1,6 +1,7 @@
-<h3>Access control</h3>
+<a name="access"></a> <!-- anchor for quick jumping from emails, dont remove it -->
+<h3>Access control for <%= @project.title %></h3>
 
-<%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
+<%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal memberships'}) do |f| %>
 
   <!-- memberships -->
   <%= f.simple_fields_for :memberships do |m_form| %>
@@ -8,7 +9,7 @@
      membership = m_form.object
      project_owner = membership.user_id == membership.project.user_id
   %>
-    <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner, :label => membership.user.email, :include_blank => 'disable this user' %>
+    <%= m_form.input :role, :collection => Membership::ROLE_NAMES, :disabled => project_owner, :label => membership.user.email, :include_blank => 'revoke access' %>
   <% end %>
 
   <input name="project[membership_ids][]" type="hidden" value="">

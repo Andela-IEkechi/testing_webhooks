@@ -1,5 +1,4 @@
 <h3>Manage Profile</h3>
-
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class=> 'form-horizontal', :method => :put }) do |f| %>
   <%= f.error_notification %>
 
@@ -14,12 +13,18 @@
   <%= gravatar_for @current_user, 200, 'pull-left img-polaroid' %>
   <div class="clearfix"></div>
 
-<h3>Preferences</h3>
+  <div class="form-actions">
+    <%= f.submit "Update", :class => "btn"  %>
+    <%= link_to 'Cancel', root_path(), :class => 'btn' %>
+  </div>
+<% end %>
 
+<h3>Preferences</h3>
+<%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class=> 'form-horizontal', :method => :put }) do |f| %>
   <div class="form-inputs">
-    <%= f.simple_fields_for :preferences, OpenStruct.new(resource.preferences) do |prefs| %>
+    <%= f.simple_fields_for :preferences, resource.preferences do |prefs| %>
       <%= prefs.input :page_size, :collection => [5,10,15,20].map{|x| [x,x]}, :include_blank => false %>
-      <%= prefs.input :collapse_long_tickets, :as => :boolean, :hint => 'show only the last 5 comments on a ticket by default' %>
+      <%= prefs.input :collapse_long_tickets, :as => :boolean, :hint => 'only show the 5 most recent comments' %>
     <% end %>
   </div>
 
@@ -30,12 +35,30 @@
 <% end %>
 
 <h3>Cancel your account</h3>
+<%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class=> 'form-horizontal', :method => :put }) do |f| %>
+  <div class="form-inputs offset2">
+    <p class="text-error">
+      If you cancel your account, all projects owned by you will be permanently deleted.
+    </p>
+    <% if !can_delete_account? %>
+      <p>
+        You cannot cancel your account if you own projects where others participate.
+      </p>
+      <ul class="text-warning">These projects all have users and cannot be deleted automatically.
+        <% current_user.projects.select{|p| p.memberships.count > 1}.each do |p| %>
+        <li><%= link_to p, edit_project_path(p) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
 
-<div>
-  If you cancel your account, all projects owned by you will be
-  permanently deleted.
-</div>
-
-<div class="form-actions">
-  <%= link_to "I know what I'm doing, cancel my account", registration_path(:user), :class => 'btn btn-danger', :confirm => 'You are about to cancel your account. Proceed?', :method => :delete %>
-</div>
+  <div class="form-actions">
+    <% if can_delete_account? %>
+      <%= link_to "I know what I'm doing, cancel my account", registration_path(:user), :class => 'btn btn-danger', :confirm => 'You are about to cancel your account. Are you sure?', :method => :delete %>
+    <% else %>
+      <span class='btn btn-danger disabled'>
+        I know what I'm doing, cancel my account
+      </span>
+    <% end %>
+  </div>
+<% end %>

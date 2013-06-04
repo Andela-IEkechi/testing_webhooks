@@ -12,6 +12,7 @@ Conductor::Application.routes.draw do
       match 'payment/failure' => 'accounts#payment_failure'
       match 'payment/success' => 'accounts#payment_success'
     end
+    resources :overviews
   end
 
   get 'projects/public' => 'projects#public'
@@ -26,12 +27,13 @@ Conductor::Application.routes.draw do
     resources :sprints
   end
 
+  post 'comments/preview', :as => :comment_preview
+
   post 'github/commit/:token' => 'github#commit'
 
   get 'landing/home'
   get 'landing/tour'
   get 'landing/pricing'
-  get 'landing/signup'
 
   get 'landing/support'
   get 'landing/privacy'

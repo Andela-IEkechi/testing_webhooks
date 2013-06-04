@@ -2,29 +2,26 @@
 
 <table class="table table-bordered table-striped" id="public-project-list">
   <caption>
-    Create free Public Projects on any plan and we won't charge you a cent!
+    Create public projects on any plan, for free.
   </caption>
   <!--title row -->
   <thead>
     <tr>
-      <th class="width-5">#</th>
-      <th class="width-45">Title</th>
-      <th class="width-45">Request an invite</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th class="width-20">Request an invite</th>
     </tr>
   </thead>
   <tbody>
-    <% num = 0
-       @projects.each do |project|
-       num = num + 1
-       %>
+    <% @projects.each do |project| %>
     <tr>
-      <td><%= num %></td>
       <td><%= link_to project.title, project_path(project) %></td>
+      <td><%= project.description %></td>
       <td>
-        <% if project.memberships.collect(&:user_id).include?(current_user.id) %>
-        You are already participating in this project.
+        <% if can? :manage, project %>
+          <span class="text-success">Already collaborating!</span>
         <% else %>
-        <%= link_to 'Request an invite', invite_path(project), :class => 'btn btn-small btn-primary' %>
+          <%= link_to 'Request an invite', invite_path(project), :class => 'btn btn-small btn' %>
         <% end %>
       </td>
     </tr>
