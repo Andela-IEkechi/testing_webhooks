@@ -9,6 +9,10 @@ describe Project do
     create(:project).should_not be_nil
   end
 
+  it "should make a private project by default" do
+    create(:project).should be_private
+  end
+
   it "should have a working factory that adds tickets" do
     project_with_tickets = create(:project_with_tickets)
     project_with_tickets.should_not be_nil
@@ -18,6 +22,13 @@ describe Project do
   it "gives it's title on to_s" do
     @project.title = "A testing project"
     @project.to_s.should eq(@project.title)
+  end
+
+  it "optionally has a description" do
+    @project.description = be_nil
+    @project.should be_valid
+    @project.description = Faker::Lorem.sentence
+    @project.should be_valid
   end
 
   it "should create default statuses of new and closed" do
@@ -178,4 +189,3 @@ describe Project do
     end
   end
 end
-

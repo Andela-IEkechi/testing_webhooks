@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
 
   #if there is a project in context, we need to load the membership of the current user
   def load_membership
-    if @project
+    if @project && current_user
       @current_membership = @project.memberships.for_user(current_user.id).first
     else
       @current_membership = nil

@@ -9,4 +9,9 @@ module UsersHelper
   def hide_comments?
     current_user.preferences.collapse_long_tickets == '1'
   end
+
+  def can_delete_account?
+    #if we have projects which have members, then we cant delete our account
+    current_user.projects.select{|p| p.memberships.count > 1}.compact.none?
+  end
 end
