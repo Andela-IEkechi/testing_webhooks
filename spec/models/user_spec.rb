@@ -43,7 +43,7 @@ describe User do
 
     it "should report it's email as to_s" do
       u = @user.to_s
-      u.should eq(@user.to_s) 
+      u.should eq(@user.to_s)
     end
   end
 
@@ -80,5 +80,42 @@ describe User do
   it "should have a free plan by default" do
     user = create(:user)
     user.account.plan.should eq("free")
+  end
+
+  it "should be an active user by default" do
+    user = create(:user)
+    user.should respond_to(:active?)
+    user.active?.should be_true
+  end
+
+  it "should be possible to soft-delete users" do
+    user = create(:user)
+    user.should respond_to(:deleted?)
+    user.soft_delete
+    user.reload
+
+    user.should be_deleted
+  end
+
+  context "when being deleted" do
+    before(:each) do
+      @user = create(:user)
+      @project = create(:project, :user => @user)
+    end
+
+    it "should be prevented if they have open projects with other members " do
+      other_user = create(:user)
+      membership_other = create(:membership, :user => other_user, :project => @project, :role => "regular")
+      @user.soft_delete
+      @user.reload
+      @user.should_not be_deleted
+    end
+
+    it "should not be prevented if they have open projects with no other members " do
+      @user.soft_delete
+      @user.reload
+      @user.should be_deleted
+    end
+
   end
 end

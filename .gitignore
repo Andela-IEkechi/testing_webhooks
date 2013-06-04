@@ -20,3 +20,7 @@
 *.swp
 public/uploads
 *~
+.idea
+.ruby-version
+.ruby-gemset
+.rvmrc

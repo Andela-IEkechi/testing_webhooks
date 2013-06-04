@@ -1,5 +1,4 @@
 class TicketsController < ApplicationController
-
   include TicketsHelper
 
   before_filter :load_search_resources, :only => :index
@@ -8,15 +7,27 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :sprint,  :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :ticket,  :through => :project, :find_by => :scoped_id, :except => :index
+  load_and_authorize_resource :overview
 
   before_filter :load_ticket_parents
 
   def index
-    @search  = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
-    page_size = (current_user.preferences.page_size.to_i rescue 10)
-    page_size = 10 unless page_size > 0
-    @tickets = Kaminari::paginate_array(@search.result.order(:id)).page(params[:page]).per(page_size)
-    @term    = (params[:q] && params[:q][:title_cont] || '')
+    #get the search warmed up
+    @search = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
+
+    #figure out how to order the results
+    sort_order = SortHelper.new(params[:q] && params[:q][:title_cont]).sort_order
+    sort_order = 'tickets.id' if sort_order.blank?
+
+    results = @search.result.includes(:last_comment => [:sprint, :feature, :assignee, :status]).order(sort_order)
+
+    @tickets = Kaminari::paginate_array(results).page(params[:page]).per(current_user.preferences.page_size.to_i) unless "false" == params[:paginate]
+    @tickets ||= results
+
+    @term = (params[:q] && params[:q][:title_cont] || '')
+
+    @title = params[:title] if params[:title]
+    @show_search = true unless params[:show_search] == 'false'
 
     respond_to do |format|
       format.js do
@@ -116,11 +127,10 @@ class TicketsController < ApplicationController
     end
   end
 
+  #TODO: refactor this method
   def scoped_tickets
-    @tickets = @sprint.assigned_tickets                  if @sprint
-    @tickets = @feature.assigned_tickets                 if @feature
-    @tickets = @project.tickets                          if @project
-    @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
-    @tickets
+    return @sprint.assigned_tickets if @sprint
+    return @feature.assigned_tickets if @feature
+    return @project.tickets if @project
   end
 end

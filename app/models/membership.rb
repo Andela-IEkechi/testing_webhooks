@@ -10,6 +10,7 @@ class Membership < ActiveRecord::Base
 
   scope :for_user, lambda{|user_id| {:conditions => {:user_id => user_id}}}
   scope :by_email, lambda{|email| {:conditions => ['LOWER(users.email) = LOWER(?)', email], :joins => :user}}
+  scope :admins, where(:role => 'admin')
 
   attr_accessible :role, :user_id, :project_id
 
@@ -25,6 +26,13 @@ class Membership < ActiveRecord::Base
 
   def restricted?
     self.role == 'restricted'
+  end
+
+  def admin!
+    unless self.admin?
+      self.role = 'admin'
+      self.save
+    end
   end
 
 end

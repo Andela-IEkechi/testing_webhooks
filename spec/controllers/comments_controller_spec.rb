@@ -40,9 +40,6 @@ describe CommentsController do
       context "for project administrators" do
         it "overrides the current sprint and feature"
       end
-      context "for project administrators" do
-        it "overrides the current sprint and feature"
-      end
       context "for regular users" do
         it "does not override the current sprint and feature"
       end

@@ -4,8 +4,8 @@ class Project < ActiveRecord::Base
 
   belongs_to :user
   has_many :features, :dependent => :destroy, :order => :scoped_id
-  has_many :tickets, :dependent => :destroy, :include => :comments
-  has_many :sprints, :order => :due_on, :dependent => :destroy, :order => :scoped_id
+  has_many :tickets, :dependent => :destroy, :include => :comments, :order => "tickets.id"
+  has_many :sprints, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy
 
   has_many :memberships, :dependent => :destroy, :include => :user
@@ -17,10 +17,18 @@ class Project < ActiveRecord::Base
 
   validates :title, :presence => true, :uniqueness => {:scope => :user_id}
 
+  attr :remove_me
+
   default_scope order('projects.title ASC')
+
+  scope :opensource, where(:private => false)
 
   def to_s
     title
+  end
+
+  def public?
+    !private
   end
 
   private

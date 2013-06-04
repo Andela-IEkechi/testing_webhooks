@@ -15,7 +15,7 @@ class Sprint < ActiveRecord::Base
   end
 
   def running?
-    Date.today <= due_on
+    Date.today <= due_on.to_date
   end
 
   def open?

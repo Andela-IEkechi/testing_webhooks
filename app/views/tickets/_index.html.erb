@@ -1,9 +1,7 @@
 <%
-  project ||= @project
-  project_id ||= project && project.id
+  project_id ||= @project && @project.id
   sprint_id ||= @sprint && @sprint.to_param
   feature_id ||= @feature && @feature.to_param
-  assignee_id ||= @assignee_id
 
   parent = "sprint-#{sprint_id}" if sprint_id
   parent ||= "feature-#{feature_id}" if feature_id
@@ -14,9 +12,9 @@
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
       <div class="pull-right">
-        <% if @search %>
+        <% if @search && @show_search %>
           <%= search_form_for @search,
-                url:     project_tickets_path(project),
+                url:     project_tickets_path(@project),
                 html:    {:method => :get, :class => 'form-search'},
                 remote:  true,
                 builder: SimpleForm::FormBuilder do |f| %>
@@ -28,12 +26,11 @@
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
             <%= f.hidden_field :feature_id, :value => feature_id %>
             <%= f.hidden_field :project_id, :value => project_id %>
-            <%= f.hidden_field :assignee_id, :value => assignee_id %>
             <%= f.submit 'Search' %>
           <% end %>
         <% end %>
       </div>
-      <h2>Tickets</h2>
+      <h4><%= @title || 'Tickets' %></h4>
     </caption>
     <!--title row -->
     <thead>
@@ -82,24 +79,25 @@
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="6"><%= link_to 'loading tickets...',
-          project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
-          :remote => true, :class => "autoload" %>
+        <td colspan="6"><%= ticket_load_link 'loading tickets...', {}, {:class => "autoload"} %>
         </td>
       </tr>
     <% end %>
     </tbody>
   </table>
-  <%= paginate @tickets,
+  <% if @tickets && @tickets.respond_to?(:total_pages) && (@tickets.total_pages > 1) %>
+    <%= paginate @tickets,
         :params => {
           :controller => 'tickets',
           :action => 'index',
-          :id => nil,
-          :project_id => project_id,
-          :sprint_id => sprint_id,
-          :feature_id => feature_id,
-          :assignee_id => assignee_id
-        },
+        }.merge(ticket_url_params),
         :remote => true if @tickets %>
+    <%= ticket_load_link 'show all', {:paginate => false} %>
+  <% end %>
+  <% if @tickets && !@tickets.respond_to?(:total_pages) && (@tickets.count > (current_user.preferences.page_size.to_i)) %>
+    <%= ticket_load_link 'show paged' %>
+  <% end %>
+
+
 
 </div>
