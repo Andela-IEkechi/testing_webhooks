@@ -7,7 +7,7 @@
   <li><strong><%= (plan[:users].to_i != 999) ? "#{plan[:users]}" : 'Unlimited' %></strong>&nbsp;<%= 'User'.pluralize(plan[:users]) %></li>
   <li><strong><%= plan[:storage_gb] %>GB</strong>&nbsp;Storage</li>
   <li class="last">
-    <%= radio_button_tag 'Amount', plan[:price], @account.current_plan.upgrade_to? == plan.to_s, :disabled => !@account.can_downgrade?(plan), :id => "amount_#{plan}" %>
+    <%= radio_button_tag 'Amount', plan[:price], @account.current_plan.upgrade_to? == plan.to_s, :disabled => !@account.can_downgrade?(plan), :id => "amount_#{plan}", :'data-paypal' => "#{plan[:paypal]}" %>
     <%= label_tag "amount_#{plan}", plan.better_than?(@account.current_plan) ? 'Upgrade' : 'Downgrade', :class => "bigger" %>
   </li>
 </ul>

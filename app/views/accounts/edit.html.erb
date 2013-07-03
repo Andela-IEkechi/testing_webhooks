@@ -3,11 +3,12 @@
   <small> currently <%= @account.current_plan[:title] %> </small>
 </h3>
 
-<%= form_tag ENV['MYGATE_FORM_URL'], :name => 'Conductor Secure Payment', :method => :post do %>
-  <%= hidden_field_tag "Mode", (Rails.env.production? ? 1 : 0) %>
-
-  <%= hidden_field_tag "MerchantID", ENV['MYGATE_MERCHANT_ID'] %>
-  <%= hidden_field_tag "ApplicationID", ENV['MYGATE_APPLICATION_ID'] %>
+<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :name => 'Conductor Secure Payment', :method => :post do %>
+  <%= hidden_field_tag "cmd", "_s-xclick" %>
+  <%= hidden_field_tag "hosted_button_id", "STE5347YGNW2W" %>
+  <%= hidden_field_tag "currency_code", "USD" %>
+  <%= hidden_field_tag "on0", "Plans" %>
+  <%= hidden_field_tag "os0", @account.current_plan[:paypal] %>
 
   <div class="row-fluid marketing">
     <div class="tab-pane">
@@ -26,28 +27,18 @@
     </div>
   </div>
 
-  <%= hidden_field_tag "ACCB_Frequency", "M|1" %>
-  <%= hidden_field_tag "ACCB_StartDate", Date.today.strftime('%d-%^b-%Y') %>
-  <%= hidden_field_tag "ACCB_EndDate", (Date.today + 5.year).strftime('%d-%^b-%Y') %>
-  <!-- subsequent bills -->
-  <%= hidden_field_tag "ACCB_Amount", "0.0" %>
-
-  <!-- Client details are used for reporting features in the MyGate web console -->
-  <%= hidden_field_tag "ACCB_ClientName", current_user.full_name %>
-  <%= hidden_field_tag "ACCB_ClientAccountNo", current_user.id %>
-  <%= hidden_field_tag "ACCB_ClientEmailAddress", current_user.email %>
-
-  <%= hidden_field_tag "ACCB_ClientSendSMS", "0" %>
-  <%= hidden_field_tag "ACCB_ClientSendEmail", "0" %>
-
-  <%= hidden_field_tag "Currency", "ZAR" %>
-
-  <%= hidden_field_tag "RedirectSuccessfulURL", payment_success_user_account_url(current_user, :authentication_key => current_user.authentication_token) %>
-  <%= hidden_field_tag "RedirectFailedURL", payment_failure_user_account_url(current_user, :authentication_key => current_user.authentication_token) %>
-
+  <% if false %>
+  <!-- keep this around, we might want to change the look to be more obviously paypal -->
+  <div class="row-fluid pagination-centered">
+    <br>
+    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+  </div>
+  <% else %>
   <div class="row-fluid pagination-centered">
     <br>
     <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change' %>
   </div>
-
+  <% end %>
 <% end %>
+

@@ -14,5 +14,6 @@ $ ->
   $('input[name="Amount"]').change ->
     $('input[name="Amount"]').parent().parent().parent().removeClass('price-column-featured')
     $(this).parent().parent().parent().addClass('price-column-featured')
+    $('input[name="os0"]').val($(this).attr('data-paypal'))
 
   $('input[name="Amount"]:checked').parent().parent().parent().addClass('price-column-featured')
