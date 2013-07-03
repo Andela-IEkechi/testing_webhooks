@@ -1,5 +1,4 @@
 class TicketsController < ApplicationController
-
   include TicketsHelper
 
   before_filter :load_search_resources, :only => :index
@@ -8,38 +7,27 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :sprint,  :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :ticket,  :through => :project, :find_by => :scoped_id, :except => :index
+  load_and_authorize_resource :overview
 
   before_filter :load_ticket_parents
 
   def index
-    redirect_to project_path(@project) && return unless @project
+    #get the search warmed up
+    @search = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
 
-    @tickets = @sprint.assigned_tickets if @sprint
-    @tickets ||= @feature.assigned_tickets if @feature
-    @tickets ||= @project.tickets if @project
+    #figure out how to order the results
+    sort_order = SortHelper.new(params[:q] && params[:q][:title_cont]).sort_order
+    sort_order = 'tickets.id' if sort_order.blank?
 
-    @tickets = @tickets.for_assignee_id(current_user.id) if params[:assignee_id]
-    @assignee_id = current_user.id if params[:assignee_id]
+    results = @search.result.includes(:last_comment => [:sprint, :feature, :assignee, :status]).order(sort_order)
 
-    #search he general case
-    @search = @tickets.search(params[:search])
-    @combined_search = @search.all
+    @tickets = Kaminari::paginate_array(results).page(params[:page]).per(current_user.preferences.page_size.to_i) unless "false" == params[:paginate]
+    @tickets ||= results
 
-    #search on qualifiers like foo:bar
-    search_hash = false
-    if params[:search]
-      search_hash = search_query_to_hash(params[:search][:title_or_assignee_email_or_sprint_goal_or_feature_title_or_status_name_contains])
-      if search_hash # if meaningful hash could be obtained (con707)
-        @combined_search += @tickets.search(search_hash).all
-      end
-    end
+    @term = (params[:q] && params[:q][:title_cont] || '')
 
-    #remember not to search for blank IDs, it will find '%%' matches, which deplicates results: con671
-    @combined_search += @tickets.search_by_partial_id(params[:search].values.first) if params[:search] && !params[:search].values.first.blank?
-
-    #need to re-sort both because we added to the set, and because metasearch seems to kill the model ordering
-    @combined_search.sort!{|a,b| a.id<=>b.id}.uniq!
-    @tickets = Kaminari::paginate_array(@combined_search).page(params[:page]).per(current_user.preferences.page_size.to_i)
+    @title = params[:title] if params[:title]
+    @show_search = true unless params[:show_search] == 'false'
 
     respond_to do |format|
       format.js do
@@ -74,11 +62,11 @@ class TicketsController < ApplicationController
     @ticket.comments.first.user = current_user
     if @ticket.save
       if params[:create_another]
-        flash.keep[:notice] = "Ticket ##{@ticket.scoped_id} was added. #{@ticket.title}"
+        flash.keep[:notice] = "Ticket was added. ##{@ticket.scoped_id} #{@ticket.title}"
         @ticket.reload #refresh the assoc to last_comment
         redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature, :sprint_id => @ticket.sprint)
       else
-        flash.keep[:notice] = "Ticket was added."
+        flash.keep[:notice] = "Ticket was added"
         redirect_to project_ticket_path(@ticket.project, @ticket)
       end
     else
@@ -123,10 +111,10 @@ class TicketsController < ApplicationController
   end
 
   def load_search_resources
-    if params[:search]
+    if params[:q]
       [:project_id, :feature_id, :sprint_id, :assignee_id].each do |val|
-        params[val] ||= params[:search][val] if params[:search][val] && !params[:search][val].empty?
-        params[:search].delete(val)
+        params[val] ||= params[:q][val] if params[:q][val] && !params[:q][val].empty?
+        params[:q].delete(val)
       end
     end
   end
@@ -134,9 +122,15 @@ class TicketsController < ApplicationController
   def load_ticket_parents
     #if we dont pass the feature_id/sprint_id in on the url, we grab the ones from the ticket, if any
     if @ticket
-      @sprint ||= @ticket.sprint
+      @sprint  ||= @ticket.sprint
       @feature ||= @ticket.feature
     end
   end
 
+  #TODO: refactor this method
+  def scoped_tickets
+    return @sprint.assigned_tickets if @sprint
+    return @feature.assigned_tickets if @feature
+    return @project.tickets if @project
+  end
 end

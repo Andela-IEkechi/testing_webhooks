@@ -6,7 +6,6 @@ describe Ticket do
     let(:scoped_class) { Ticket }
   end
 
-
   before(:each) do
     @ticket = create(:ticket)
   end
@@ -36,6 +35,17 @@ describe Ticket do
 
   it "should have comments" do
     @ticket.should respond_to(:comments)
+  end
+
+  it "should return it's comments ordered by created_at" do
+    timestamp = Time.now.utc
+    @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 3.days).to_s)
+    @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 2.days).to_s)
+    @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 4.days).to_s)
+    @ticket.reload
+    @ticket.comments.first.created_at.to_s.should eq((timestamp - 4.days).to_s)
+    @ticket.comments.last.created_at.to_s.should eq((timestamp - 2.days).to_s)
+    @ticket.last_comment.created_at.to_s.should eq((timestamp - 2.days).to_s)
   end
 
   context "last_comment" do
@@ -139,5 +149,4 @@ describe Ticket do
       @ticket.sprint.should_not be_nil
     end
   end
-
 end
