@@ -16,9 +16,6 @@ barbara.confirm!
 user = User.create(:email => 'user@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 user.confirm!
 
-greg = User.create(:email => 'greg@shuntyard.co.za', :password => 'Password1', :password_confirmation => 'Password1', :terms => true)
-greg.confirm!
-
 restricted = User.create(:email => 'restricted@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 restricted.confirm!
 regular = User.create(:email => 'regular@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
