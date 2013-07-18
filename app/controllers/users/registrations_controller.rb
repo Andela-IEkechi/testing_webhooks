@@ -12,7 +12,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @user = User.find(current_user.id)
     # remove the virtual current_password attribute update_without_password
     # doesn't know how to ignore it
-    binding.pry
     params[:user].delete(:current_password) unless needs_password?(@user, params) 
 
     if (needs_password?(@user, params) ? @user.update_with_password(params[:user]) : @user.update_without_password(params[:user]))
