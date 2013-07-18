@@ -12,6 +12,7 @@ gem 'omniauth-github'
 gem 'paper_trail'
 gem 'thin'
 gem 'rake'
+gem 'ruby-uuid'
 
 #paging
 gem 'kaminari'
@@ -60,7 +61,10 @@ group :development,:test do
   gem 'rb-readline'
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'pry'
+  gem 'pry-rails' # for better console debugging
+  gem 'pry-debugger'
+  gem 'pry-remote' 
+  gem 'puma'
 end
 
 group :test do
@@ -76,3 +80,6 @@ end
 group :development do
   gem 'rails-footnotes', '>= 3.7.5.rc4'
 end
+
+# for payment processing on paypal gateway
+gem "paypal-recurring"

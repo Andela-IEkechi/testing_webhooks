@@ -1,0 +1,11 @@
+<% if can_transfer_project?(@project) %>
+<%= simple_form_for(@project, html: {class: 'form-horizontal'}) do |f| %>
+<%= f.association :user, collection: valid_transfer_members(@project), include_blank: 'Select a new owner', label: 'Transfer to a new owner'%>
+<%= f.input :remove_me, as: :boolean, label: 'Remove me', hint: 'Your membership to the project will be revoked. Alternatively you will remain as an admin.'%>
+<div class="form-actions">
+	<%= f.submit 'Transfer this project', class: 'btn btn-warning', confirm: 'Are you sure you want to transfer ownerhship of this project?' %>
+	<%= hidden_field_tag :current_tab, 'transfer-project' %>
+	<%= link_to 'cancel', project_path(@project), class: 'btn' unless @project.new_record? %>
+</div>
+<% end %>
+<% end %>
