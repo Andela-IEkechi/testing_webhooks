@@ -4,7 +4,7 @@ Conductor::Application.routes.draw do
     :controllers => {
       :omniauth_callbacks => 'users/omniauth_callbacks',
       :invitations => 'users/invitations',
-      :registrations => "registrations"
+      :registrations => "users/registrations"
     }
 
   resources :users do
