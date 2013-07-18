@@ -1,5 +1,4 @@
 <a name="access"></a> <!-- anchor for quick jumping from emails, dont remove it -->
-<h3>Access control for <%= @project.title %></h3>
 
 <%= simple_nested_form_for(@project, :url => project_access_path(@project), :method => :put, :html => {:class=>'form-horizontal memberships'}) do |f| %>
 
@@ -38,6 +37,7 @@
 
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
+    <%= hidden_field_tag :current_tab, 'access-control' %>
     <%= link_to 'cancel', project_path(@project), :class => 'btn' %>
   </div>
 <% end %>

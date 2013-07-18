@@ -1,36 +1,65 @@
-<% content_for :form_heading do %>
-  <h3>Edit <%= @project %></h3>
-<% end %>
+<% @current_tab = params[:current_tab]||'basic-info'%>
+<h3>Edit <%= @project %></h3>
+<div class="tabbable tabs-left">
+	<ul class="nav nav-tabs">
+		<li <% if @current_tab == 'basic-info' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-basic-info">basic info</a>
+		</li>
+		<% unless @project.new_record? %>
+		<li <% if @current_tab == 'states' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-states">project states</a>
+		</li>
+		<% end %>
+		<li  <% if @current_tab == 'access-control' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-access-control">access control</a>
+		</li>
+		<li <% if @current_tab == 'API-keys' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-api-keys">API keys</a>
+		</li>
+		<% if can_transfer_project?(@project) %>
+			<li <% if @current_tab == 'transfer-project' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-transfer-project">transfer project</a>
+			</li>
+		<% end %>
+		<% if can_delete_project?(@project) %> 
+			<li <% if @current_tab == 'delete-project' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-delete-project">delete project</a>
+			</li>
+		<% end %>
+	</ul>
+	<div class="tab-content">
+		
+		<div id="pane-basic-info" class="tab-pane <% if @current_tab == 'basic-info' %>active<%end%> ">
+			<p>
+				<%= render :partial => 'info_form' %>
+			</p>
+		</div>
+		<div id="pane-states" class="tab-pane <% if @current_tab == 'states' %>active<%end%>">
+			<p>
+				<%= render :partial => 'states_form' %>
+			</p>
+		</div>
 
-<%= render :partial => 'form' %>
+		<div id="pane-access-control" class="tab-pane <% if @current_tab == 'access-control' %>active<%end%>">
+			<p>
+				<%= render :partial => '/accesses/edit' %>
+			</p>
+		</div>
+		<div id="pane-api-keys" class="tab-pane <% if @current_tab == 'API-keys' %>active<%end%>">
+			<p>
+				<%= render :partial => '/projects/keys/edit' %>
+			</p>
+		</div>
+		<div id="pane-transfer-project" class="tab-pane <% if @current_tab == 'transfer-project' %>active<%end%> ">
+			<p>
+				<%= render :partial => 'transfer_form' %>
+			</p>
+		</div>
+		<div id="pane-delete-project" class="tab-pane <% if @current_tab == 'delete-project' %>active<%end%> ">
+			<p>
+				<%= render :partial => 'delete_form' %>
+			</p>
+		</div>
+	</div>
+</div>
 
-<%= render :partial => '/accesses/edit' %>
-
-<%= render :partial => '/projects/keys/edit' %>
-
-<% if can_transfer_project?(@project) %>
-  <h3>Transfer to a new owner</h3>
-  <%= simple_form_for(@project, html: {class: 'form-horizontal'}) do |f| %>
-    <%= f.association :user, collection: valid_transfer_members(@project), include_blank: 'Select a new owner', label: 'Transfer to a new owner'%>
-    <%= f.input :remove_me, as: :boolean, label: 'Remove me', hint: 'Your membership to the project will be revoked. Alternatively you will remain as an admin.'%>
-    <div class="form-actions">
-      <%= f.submit 'Transfer this project', class: 'btn btn-warning', confirm: 'Are you sure you want to transfer ownerhship of this project?' %>
-      <%= link_to 'cancel', project_path(@project), class: 'btn' unless @project.new_record? %>
-    </div>
-  <% end %>
-<% end %>
-
-<% if can_delete_project?(@project) %>
-  <h3>Delete this project</h3>
-  <%= simple_form_for(@project, html: {class: 'form-horizontal'}) do |f| %>
-    <p class="text-warning">
-      Since you are the owner of this project, you are allowed to delete it.
-      <br><br>
-      This is irreversible. Deleting a project will delete all the tickets and related information about the project.
-    </p>
-    <div class="form-actions">
-      <%= link_to "Yes, I understand. Delete '#{@project}' project anyway.", project_path(@project), :method => 'delete', confirm: "Are you sure you want to permanently delete this project, along with all of it's tickets?", class: 'btn btn-danger' %>
-    </div>
-  <% end %>
-
-<% end %>

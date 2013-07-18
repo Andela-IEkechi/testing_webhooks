@@ -46,7 +46,7 @@ class ProjectsController < ApplicationController
           redirect_to projects_path() and return
         end
       end
-      redirect_to edit_project_path(@project)
+      redirect_to edit_project_path(@project, :current_tab => params[:current_tab]|| 'basic-info')
     else
       flash[:alert] = "Project could not be updated"
       render 'edit'
@@ -60,7 +60,7 @@ class ProjectsController < ApplicationController
       redirect_to projects_path()
     else
       flash[:notice] = "#{title} could not be deleted"
-      redirect_to project_path(@project)
+      redirect_to project_path(@project, :current_tab => 'delete-project')
     end
   end
 

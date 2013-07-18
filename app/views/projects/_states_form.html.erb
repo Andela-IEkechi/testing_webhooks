@@ -1,0 +1,21 @@
+<% unless @project.new_record? %>
+	<%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
+	    <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
+	      <div class="well top-padding">
+	        <%= ts_form.input :name, :input_html => {:class => 'span3'} %>
+	        <%= ts_form.input :open, :as => :radio_buttons, :collection => [['Open', true] ,['Closed', false]], :label => false, :html => {:class => 'pull-right'} %>
+	        <%= ts_form.input ' ' do %>
+	          <%= ts_form.link_to_remove "Remove", :class => 'btn btn-warning btn-small', :title => 'Remove this status' %>
+	        <% end %>
+	      </div>
+	    <% end %>
+	    <%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-success offset2' %>
+	  
+	  <div class="form-actions">
+	    <%= f.submit :class=>'btn' %>
+	    <%= hidden_field_tag :current_tab, 'states' %>
+	    <%= link_to 'cancel', project_path(@project), :class => 'btn' unless @project.new_record? %>
+	    <%= link_to 'cancel', root_path(), :class => 'btn' if @project.new_record? %>
+	  </div>
+	<% end %>
+<% end %>

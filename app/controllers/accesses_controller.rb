@@ -31,7 +31,7 @@ class AccessesController < ApplicationController
     end
 
     flash[:notice] = "Project access updated"
-    redirect_to edit_project_path(@project)
+    redirect_to edit_project_path(@project, :current_tab => 'access-control')
   end
 end
 
