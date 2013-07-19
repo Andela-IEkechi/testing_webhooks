@@ -24,3 +24,8 @@ en:
     #     username: 'User name to sign in.'
     #     password: 'No special characters, please.'
 
+    labels:
+      comment:
+        # Renames the "Assets" field on the comment edit form to "Attachments"
+        assets: "Attachments"
+
