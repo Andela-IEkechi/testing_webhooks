@@ -209,6 +209,14 @@ describe TicketsController do
     end
   end
 
+  it "should open URL slugs correctly" do
+    @ticket = create(:ticket, :project => @project, :title => 'alpha beta gamma')
+    @ticket.reload
+    get :show, :project_id => @project.id, :id => "#{@ticket.id}-alpha-beta-gamma"
+
+    response.should render_template(:show)
+  end
+
   context "in the context of a project" do
     before(:each) do
       @ticket = create(:ticket, :project => @project)
