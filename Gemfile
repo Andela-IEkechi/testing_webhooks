@@ -13,6 +13,7 @@ gem 'paper_trail'
 gem 'thin'
 gem 'rake'
 gem 'ruby-uuid'
+gem "friendly_id", ">=4.0.9"
 
 #paging
 gem 'kaminari'

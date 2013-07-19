@@ -97,7 +97,7 @@ GEM
     diff-lcs (1.2.1)
     erubis (2.7.0)
     eventmachine (1.0.0)
-    excon (0.6.6)
+    excon (0.16.10)
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (4.2.0)
@@ -121,6 +121,7 @@ GEM
       nokogiri (>= 1.4.4)
       ruby-hmac
     formatador (0.2.4)
+    friendly_id (4.0.9)
     guard (1.6.2)
       listen (>= 0.6.0)
       lumberjack (>= 1.0.2)
@@ -136,11 +137,14 @@ GEM
       spork (>= 0.8.4)
     hashie (1.2.0)
     hashr (0.0.22)
-    heroku (2.25.0)
+    heroku (2.34.0)
+      heroku-api (~> 0.3.7)
       launchy (>= 0.3.2)
       netrc (~> 0.7.1)
       rest-client (~> 1.6.1)
       rubyzip
+    heroku-api (0.3.7)
+      excon (~> 0.16.10)
     highline (1.6.15)
     hike (1.2.1)
     httpauth (0.2.0)
@@ -351,6 +355,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fog
+  friendly_id (>= 4.0.9)
   guard-rspec
   guard-spork
   heroku
