@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130521184232) do
+ActiveRecord::Schema.define(:version => 20130722151738) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.integer "project_id",                   :null => false
     t.string  "name",                         :null => false
     t.boolean "open",       :default => true
+    t.integer "sort_index"
   end
 
   create_table "tickets", :force => true do |t|

@@ -23,7 +23,9 @@ gem 'redcarpet'
 gem 'pygmentize'
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'bootstrap-sass'
+gem "font-awesome-rails"
 
 #file uploads
 gem 'carrierwave'
