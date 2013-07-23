@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: memberships
+#
+#  id         :integer          not null, primary key
+#  project_id :integer
+#  user_id    :integer
+#  role       :string(255)      default("regular"), not null
+#
+
 class Membership < ActiveRecord::Base
   belongs_to :user
   belongs_to :project

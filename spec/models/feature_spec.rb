@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: features
+#
+#  id          :integer          not null, primary key
+#  title       :string(255)      not null
+#  description :string(255)
+#  due_on      :date
+#  project_id  :integer          not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  scoped_id   :integer          default(0)
+#
+
 require 'spec_helper'
 require 'shared/examples_for_scoped'
 

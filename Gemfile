@@ -81,7 +81,10 @@ end
 
 group :development do
   gem 'rails-footnotes', '>= 3.7.5.rc4'
+  #annotate the models
+  gem 'annotate', ">=2.5.0" , :group => "development"
 end
 
 # for payment processing on paypal gateway
 gem "paypal-recurring"
+
