@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: comments
+#
+#  id              :integer          not null, primary key
+#  ticket_id       :integer          not null
+#  feature_id      :integer
+#  sprint_id       :integer
+#  assignee_id     :integer
+#  status_id       :integer
+#  body            :text
+#  cost            :integer          default(0)
+#  user_id         :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  rendered_body   :text
+#  api_key_name    :string(255)
+#  commenter       :string(255)
+#  git_commit_uuid :string(255)
+#
+
 class Comment < ActiveRecord::Base
   include Markdownable
   after_create :update_ticket
