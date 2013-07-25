@@ -8,7 +8,7 @@
 </p>
 <b>These projects all have users and cannot be deleted automatically.</b>
 <ol>
-	<% current_user.projects.select{|p| p.memberships.count > 1}.each do |p| %>
+	<% current_user.projects.includes(:memberships).select{|p| p.memberships.count > 1}.each do |p| %>
 	<li>
 		<%= link_to p, edit_project_path(p) %>
 	</li>
