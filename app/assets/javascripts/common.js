@@ -11,4 +11,17 @@ $(function(){
 			return false;
 		}
 	});
+
+	$(document).on('click', "[data-toggle]", function(e){
+		var elementsToToggle=$(this).attr('data-toggle');
+		if($(this).html() == $(this).attr('data-shown')){
+			$(elementsToToggle).hide();
+			$(this).html($(this).attr('data-hidden'))
+		}else{
+			$(elementsToToggle).show();
+			$(this).html($(this).attr('data-shown'))
+		}		
+	});
+
+	
 });
