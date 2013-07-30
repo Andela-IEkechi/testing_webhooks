@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'rails', '~>3.2.11'
 gem 'pg'
@@ -65,7 +65,7 @@ group :development,:test do
   gem 'faker'
   gem 'pry-rails' # for better console debugging
   gem 'pry-debugger'
-  gem 'pry-remote' 
+  gem 'pry-remote'
   gem 'puma'
 end
 
