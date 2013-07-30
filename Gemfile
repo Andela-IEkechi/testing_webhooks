@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'rails', '~>3.2.11'
 gem 'pg'
@@ -64,7 +64,7 @@ group :development,:test do
   gem 'faker'
   gem 'pry-rails' # for better console debugging
   gem 'pry-debugger'
-  gem 'pry-remote' 
+  gem 'pry-remote'
   gem 'puma'
 end
 
@@ -78,9 +78,6 @@ group :test do
   gem 'rb-inotify', '~> 0.9'
 end
 
-group :development do
-  gem 'rails-footnotes', '>= 3.7.5.rc4'
-end
-
-# for payment processing on paypal gateway
-gem "paypal-recurring"
+# group :development do
+#   gem 'rails-footnotes', '>= 3.7.5.rc4'
+# end
