@@ -1,68 +1,79 @@
 <% @current_tab = params[:current_tab]||'basic-info'%>
-<div class="tabbable tabs-left">
-	<ul class="nav nav-tabs">
-		<li <% if @current_tab == 'basic-info' %>class="active" <%end%> >
-			<a data-toggle="tab" href="#pane-basic-info">basic info</a>
-		</li>
-		<% unless @project.new_record? %>
-			<li <% if @current_tab == 'states' %>class="active" <%end%> >
-				<a data-toggle="tab" href="#pane-states">project states</a>
-			</li>
-			<li  <% if @current_tab == 'access-control' %>class="active" <%end%> >
-				<a data-toggle="tab" href="#pane-access-control">access control</a>
-			</li>
-			<li <% if @current_tab == 'API-keys' %>class="active" <%end%> >
-				<a data-toggle="tab" href="#pane-api-keys">API keys</a>
-			</li>
-
-			<% if can_transfer_project?(@project) %>
-				<li <% if @current_tab == 'transfer-project' %>class="active" <%end%> >
-					<a data-toggle="tab" href="#pane-transfer-project">transfer project</a>
-				</li>
-			<% end %>
-			<% if can_delete_project?(@project) %> 
-				<li <% if @current_tab == 'delete-project' %>class="active" <%end%> >
-					<a data-toggle="tab" href="#pane-delete-project">delete project</a>
-				</li>
-			<% end %>
-		<% end %>
-
-	</ul>
-	<div class="tab-content">
+<div class='row-fluid'>
+	<div class='span2 well well-small'>
 		
-		<div id="pane-basic-info" class="tab-pane <% if @current_tab == 'basic-info' %>active<%end%> ">
-			<p>
-				<%= render :partial => 'info_form' %>
-			</p>
-		</div>
-		<% unless @project.new_record? %>
-			<div id="pane-states" class="tab-pane <% if @current_tab == 'states' %>active<%end%>">
-				<p>
-					<%= render :partial => 'states_form' %>
-				</p>
-			</div>
+		<ul class="nav nav nav-list">
+			<li <% if @current_tab == 'basic-info' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-basic-info">basic info</a>
+			</li>
+			<% unless @project.new_record? %>
+				<li <% if @current_tab == 'statuses' %>class="active" <%end%> >
+					<a data-toggle="tab" href="#pane-statuses">ticket statuses</a>
+				</li>
+				<li  <% if @current_tab == 'access-control' %>class="active" <%end%> >
+					<a data-toggle="tab" href="#pane-access-control">access control</a>
+				</li>
+				<li <% if @current_tab == 'API-keys' %>class="active" <%end%> >
+					<a data-toggle="tab" href="#pane-api-keys">API keys</a>
+				</li>
 
-			<div id="pane-access-control" class="tab-pane <% if @current_tab == 'access-control' %>active<%end%>">
+				<% if can_transfer_project?(@project) %>
+					<li <% if @current_tab == 'transfer-project' %>class="active" <%end%> >
+						<a data-toggle="tab" href="#pane-transfer-project">transfer project</a>
+					</li>
+				<% end %>
+				<% if can_delete_project?(@project) %> 
+					<li <% if @current_tab == 'delete-project' %>class="active" <%end%> >
+						<a data-toggle="tab" href="#pane-delete-project">delete project</a>
+					</li>
+				<% end %>
+			<% end %>
+
+		</ul>
+	 </div>
+	 <div class='span10'>
+		<div class="tab-content">
+			
+			<div id="pane-basic-info" class="tab-pane <% if @current_tab == 'basic-info' %>active<%end%> ">
+				<h4>Basic info</h4>
 				<p>
-					<%= render :partial => '/accesses/edit' %>
+					<%= render :partial => 'info_form' %>
 				</p>
 			</div>
-			<div id="pane-api-keys" class="tab-pane <% if @current_tab == 'API-keys' %>active<%end%>">
-				<p>
-					<%= render :partial => '/projects/keys/edit' %>
-				</p>
-			</div>
-			<div id="pane-transfer-project" class="tab-pane <% if @current_tab == 'transfer-project' %>active<%end%> ">
-				<p>
-					<%= render :partial => 'transfer_form' %>
-				</p>
-			</div>
-			<div id="pane-delete-project" class="tab-pane <% if @current_tab == 'delete-project' %>active<%end%> ">
-				<p>
-					<%= render :partial => 'delete_form' %>
-				</p>
-			</div>
-		<% end %>
+			<% unless @project.new_record? %>
+				<div id="pane-statuses" class="tab-pane <% if @current_tab == 'statuses' %>active<%end%>">
+					<h4>Ticket statuses</h4>
+					<p>
+						<%= render :partial => 'statuses_form' %>
+					</p>
+				</div>
+
+				<div id="pane-access-control" class="tab-pane <% if @current_tab == 'access-control' %>active<%end%>">
+					<h4>Access Control</h4>
+					<p>
+						<%= render :partial => '/accesses/edit' %>
+					</p>
+				</div>
+				<div id="pane-api-keys" class="tab-pane <% if @current_tab == 'API-keys' %>active<%end%>">
+					<h4>API keys</h4>
+					<p>
+						<%= render :partial => '/projects/keys/edit' %>
+					</p>
+				</div>
+				<div id="pane-transfer-project" class="tab-pane <% if @current_tab == 'transfer-project' %>active<%end%> ">
+					<h4>Trasfer project</h4>
+					<p>
+						<%= render :partial => 'transfer_form' %>
+					</p>
+				</div>
+				<div id="pane-delete-project" class="tab-pane <% if @current_tab == 'delete-project' %>active<%end%> ">
+					<h4>Delete project</h4>
+					<p>
+						<%= render :partial => 'delete_form' %>
+					</p>
+				</div>
+			<% end %>
+		</div>
 	</div>
 </div>
 

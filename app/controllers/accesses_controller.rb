@@ -12,7 +12,7 @@ class AccessesController < ApplicationController
     params[:project][:memberships_attributes].each do |token, membership_attr|
       if membership_attr[:id]
         membership = Membership.where(:project_id => @project.id).includes(:user).find(membership_attr[:id])
-        if membership_attr[:role] && membership_attr[:role].empty?    
+        if membership.user_id != membership.project.user_id && membership_attr[:role] && membership_attr[:role].empty?   
           membership.unassign_user_from_tickets!(current_user)      
           membership.destroy  #clean house if the member is removed
         else

@@ -26,9 +26,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
         #the project owner has to be a member
        params[:memberships].each_pair do |id, role_hash| 
          unless role_hash[:role].present?         
-            membership = Membership.where(:user_id => current_user.id).includes(:project).find(id)          
-            membership.unassign_user_from_tickets!(current_user)      
-            membership.destroy  #clean house if the member is removed
+            membership = Membership.where(:user_id => current_user.id).includes(:project).find(id)   
+            if membership.user_id != membership.project.user_id       
+              membership.unassign_user_from_tickets!(current_user)      
+              membership.destroy  #clean house if the member is removed
+            end
           end
         end
         flash[:notice] = "Profile was updated successfully"

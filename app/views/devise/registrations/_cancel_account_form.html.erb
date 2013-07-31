@@ -16,16 +16,15 @@
 </ol>
 
 <% else%>
-<p class="alert alert-error">
-	<b>Warning</b>
-	<br/>
-	If you cancel your account, all projects owned by you will be permanently deleted.
-</p>
+	<p class="alert alert-error">
+		<b>Warning</b>
+		<br/>
+		If you cancel your account, all projects owned by you will be permanently deleted.
+	</p>
 <% end %>
 
 <div class="form-actions">
-	<% if can_delete_account? %>
-		<%= hidden_field_tag  %>
+	<% if can_delete_account? %>		
 		<%= link_to "I know what I'm doing, cancel my account", registration_path(:user, :current_tab => 'cancel-account'), :class => 'btn btn-danger', :confirm => 'You are about to cancel your account. Are you sure?', :method => :delete %>
 	<% else %>
 		<span class='btn btn-danger disabled'> I know what I'm doing, cancel my account </span>

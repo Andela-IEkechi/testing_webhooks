@@ -50,8 +50,8 @@ class Project < ActiveRecord::Base
   private
   def default_statuses
     #when we create a new project, we make sure we create at least two statuses for the tickets in the project
-    self.ticket_statuses.create(:name => 'new')
-    self.ticket_statuses.create(:name => 'closed', :open => false)
+    self.ticket_statuses.create(:name => 'new', :system_default => true)
+    self.ticket_statuses.create(:name => 'closed', :open => false, :system_default => true)
   end
 
   def owner_membership
