@@ -122,12 +122,14 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.string   "title",                          :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+    t.string   "slug"
     t.integer  "last_comment_id"
     t.integer  "scoped_id",       :default => 0
   end
 
   add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
   add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
+  add_index "tickets", ["slug"], :name => "index_tickets_on_slug", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                                :default => "",    :null => false
@@ -151,13 +153,13 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.string   "uid"
     t.string   "full_name"
     t.boolean  "terms",                                :default => false
+    t.text     "preferences"
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
-    t.text     "preferences"
     t.datetime "deleted_at"
   end
 
