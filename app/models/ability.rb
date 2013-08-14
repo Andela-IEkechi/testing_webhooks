@@ -36,8 +36,9 @@ class Ability
     #users can manage tickets which belong to them
     can :create, Ticket
     can :manage, Ticket do |ticket|
-      (ticket.user_id == user.id) && !ticket.project.memberships.for_user(user.id) && !ticket.project.memberships.for_user(user.id).first.restricted?
+        ticket.user_id == user.id
     end
+    can :manage, Ticket, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
 
     #anyone can read a comments on a ticket which belongs to a project which they are a member of
     can :read, Comment, :ticket => {:project => {:memberships => {:user_id => user.id}}}
