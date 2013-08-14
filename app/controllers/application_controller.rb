@@ -7,10 +7,14 @@ class ApplicationController < ActionController::Base
   load_resource :project, :if => @current_user
   before_filter :load_membership
 
-  helper_method :current_membership
+  helper_method :current_membership, :current_domain_is?
 
   def current_membership
     @current_membership
+  end
+
+  def current_domain_is?(value="co.za")
+    !(request.domain =~ /#{value}$/).nil?
   end
 
   protected
