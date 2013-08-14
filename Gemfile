@@ -59,12 +59,13 @@ group :development,:test do
   gem 'capistrano-ext'
   gem 'rspec-rails'
   gem 'guard-rspec'
-  gem 'rb-readline'
+  gem 'rb-readline', '~> 0.4.2'
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'pry-rails' # for better console debugging
-  gem 'pry-debugger'
-  gem 'pry-remote'
+  gem 'pry'
+  # gem 'pry-rails' # for better console debugging
+  # gem 'pry-debugger'
+  # gem 'pry-remote'
   gem 'puma'
 end
 
