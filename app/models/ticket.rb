@@ -85,16 +85,6 @@ class Ticket < ActiveRecord::Base
   end
 
   private
-
-  #this returns the values as set in the last comment
-  def get_first(attr)
-    comments.first.try(attr)
-  end
-
-  def get_last(attr)
-    comments.last.try(attr)
-  end
-
   def custom_slug
     [self.scoped_id, self.title].join('-')
   end
