@@ -3,7 +3,6 @@ class Ticket < ActiveRecord::Base
   extend FriendlyId
   friendly_id :custom_slug, use: :slugged
 
-
   belongs_to :project #always
   has_many :comments, :order => :created_at, :dependent => :destroy
 
