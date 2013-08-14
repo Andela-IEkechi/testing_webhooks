@@ -169,7 +169,7 @@ describe TicketsController do
         it "redirects to show the ticket" do
           post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
           response.should be_redirect
-          response.should redirect_to(project_ticket_path(@project, @ticket.to_param))
+          response.should redirect_to(project_ticket_path(@project, assigns(:ticket).to_param))
         end
       end
       context "with invalid attributes" do
