@@ -16,7 +16,8 @@ class GithubController < ApplicationController
 
           #parse the message to get the ticket number(s)
           #which looks like [#123<...>]
-          commit_msg.scan(/\[#(\d+)(.*)\]/).each do |ticket_ref,others|
+          commit_msg.scan(/\[#(\d+)([^\]]*)\]/).each do |ticket_ref,others|
+            binding.pry
             #find the ticket the matches
             ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
             if ticket
