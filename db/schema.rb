@@ -122,7 +122,6 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.string   "title",                          :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
-    t.string   "slug"
     t.integer  "last_comment_id"
     t.integer  "scoped_id",       :default => 0
     t.string   "slug"
@@ -154,13 +153,13 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.string   "uid"
     t.string   "full_name"
     t.boolean  "terms",                                :default => false
-    t.text     "preferences"
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.text     "preferences"
     t.datetime "deleted_at"
   end
 
