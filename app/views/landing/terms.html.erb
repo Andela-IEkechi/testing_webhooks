@@ -70,7 +70,7 @@
     <p>
       <ol>
         <li>Shuntyard Technologies reserves the right at any time and from time to time to modify or discontinue, temporarily or permanently, the Service (or any part thereof) with or without notice.</li>
-        <li>Prices of all Services, including but not limited to monthly subscription plan fees to the Service, are subject to change upon 30 days notice from us. Such notice may be provided at any time by posting the changes to the <a href="http://<%=request.domain%>">Conductor Site</a> or the Service itself.</li>
+        <li>Prices of all Services, including but not limited to monthly subscription plan fees to the Service, are subject to change upon 30 days notice from us. Such notice may be provided at any time by posting the changes to the <a href="<%= root_url() %>">Conductor Site</a> or the Service itself.</li>
         <li>Shuntyard Technologies shall not be liable to you or to any third party for any modification, price change, suspension or discontinuance of the Service.</li>
       </ol>
     </p>
@@ -139,14 +139,13 @@
     <h4>Contact Information</h4>
     <p>
       If you have any questions or comments about these our Terms and Conditions as outlined above, you can contact us at:
-      <br /><br />
-      Conductor<br />
-      <%= link_to request.domain, "http://#{request.domain}" %><br />
+      <br />
+      <%= link_to "Conductor App", root_url %><br />
       <br />
       14 Caledon St,<br />
       Somerset West,<br />
       7130<br />
-      South-Africa<br />
+      South Africa<br />
       <br />
       021 851 9374<br />
       <%= mail_to "info@shuntyard.co.za" %><br />
