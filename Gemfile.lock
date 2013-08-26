@@ -223,8 +223,6 @@ GEM
       activesupport (= 3.2.14)
       bundler (~> 1.0)
       railties (= 3.2.14)
-    rails-footnotes (3.7.9)
-      rails (>= 3.0.0)
     railties (3.2.14)
       actionpack (= 3.2.14)
       activesupport (= 3.2.14)
@@ -335,7 +333,6 @@ DEPENDENCIES
   puma
   pygmentize
   rails (~> 3.2.12)
-  rails-footnotes (>= 3.7.5.rc4)
   rake
   ransack
   rb-readline (~> 0.4.2)

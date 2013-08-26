@@ -73,6 +73,6 @@ group :test do
   gem 'database_cleaner'
 end
 
-group :development do
-  gem 'rails-footnotes', '>= 3.7.5.rc4'
-end
+# group :development do
+#   gem 'rails-footnotes', '>= 3.7.5.rc4'
+# end
