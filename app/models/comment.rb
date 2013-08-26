@@ -1,24 +1,3 @@
-# == Schema Information
-#
-# Table name: comments
-#
-#  id              :integer          not null, primary key
-#  ticket_id       :integer          not null
-#  feature_id      :integer
-#  sprint_id       :integer
-#  assignee_id     :integer
-#  status_id       :integer
-#  body            :text
-#  cost            :integer          default(0)
-#  user_id         :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  rendered_body   :text
-#  api_key_name    :string(255)
-#  commenter       :string(255)
-#  git_commit_uuid :string(255)
-#
-
 class Comment < ActiveRecord::Base
   include Markdownable
   after_create :update_ticket
@@ -38,7 +17,7 @@ class Comment < ActiveRecord::Base
   accepts_nested_attributes_for :assets
 
   attr_accessible :body, :cost, :rendered_body, :commenter, :git_commit_uuid, :created_at
-  attr_accessible :ticket_id, :user_id, :status_id, :feature_id, :sprint_id, :assignee_id, :assets_attributes, :api_key_name
+  attr_accessible :ticket_id, :user_id, :status_id, :feature_id, :sprint_id, :assignee_id, :assets_attributes, :api_key_name, :asset_ids
 
   #we can't enforce this in the model, or nested create fails : validates :ticket_id, :presence => true
   validates :cost, :inclusion => {:in => Ticket::COST}

@@ -1,15 +1,3 @@
-# == Schema Information
-#
-# Table name: accounts
-#
-#  id         :integer          not null, primary key
-#  user_id    :integer
-#  plan       :string(255)      default("free")
-#  enabled    :boolean          default(TRUE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 class Account < ActiveRecord::Base
   belongs_to :user, :dependent => :destroy #also destroy the user if we destroy the account.
   attr_accessible :enabled, :plan

@@ -15,13 +15,13 @@
       <div class="price-table price-table-three">
         <% plans = Plan::PLANS.reject{|k,v| k.to_s == @account.plan} %>
         <div class="price-column  price-column-first">
-          <%= render partial: 'plan', object: Plan.new(plans.keys[0]) %>
+          <%= render partial: '/shared/plan', object: Plan.new(plans.keys[0]) %>
         </div>
         <div class="price-column  price-column-last">
-          <%= render partial: 'plan', object: Plan.new(plans.keys[1]) %>
+          <%= render partial: '/shared/plan', object: Plan.new(plans.keys[1]) %>
         </div>
         <div class="price-column  price-column-last">
-          <%= render partial: 'plan', object: Plan.new(plans.keys[2]) %>
+          <%= render partial: '/shared/plan', object: Plan.new(plans.keys[2]) %>
         </div>
       </div>
     </div>
