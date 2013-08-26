@@ -60,7 +60,6 @@ group :development,:test do
   gem 'capistrano-ext'
   gem 'rspec-rails'
   gem 'rb-readline', '~> 0.4.2'
-  gem 'rb-readline'
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'pry-rails' # for better console debugging
