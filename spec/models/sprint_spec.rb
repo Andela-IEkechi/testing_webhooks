@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: sprints
+#
+#  id         :integer          not null, primary key
+#  due_on     :date             not null
+#  goal       :string(255)      not null
+#  project_id :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  scoped_id  :integer          default(0)
+#
+
 require 'spec_helper'
 require 'shared/examples_for_scoped'
 

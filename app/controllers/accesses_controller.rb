@@ -10,10 +10,10 @@ class AccessesController < ApplicationController
     #create new users based on membership attributes
     #the project owner has to be a member
     params[:project][:memberships_attributes].each do |token, membership_attr|
-
       if membership_attr[:id]
-        membership = Membership.find(membership_attr[:id])
-        if membership_attr[:role] && membership_attr[:role].empty?
+        membership = Membership.where(:project_id => @project.id).includes(:user).find(membership_attr[:id])
+        if membership_attr[:role] && membership_attr[:role].empty?    
+          membership.unassign_user_from_tickets!(current_user)      
           membership.destroy  #clean house if the member is removed
         else
           user = membership.user

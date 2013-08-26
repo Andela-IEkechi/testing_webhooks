@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: overviews
+#
+#  id         :integer          not null, primary key
+#  title      :string(255)      not null
+#  filter     :string(255)      default(""), not null
+#  user_id    :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Overview < ActiveRecord::Base
   belongs_to :user
   has_and_belongs_to_many :projects

@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: tickets
+#
+#  id              :integer          not null, primary key
+#  project_id      :integer          not null
+#  title           :string(255)      not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  last_comment_id :integer
+#  scoped_id       :integer          default(0)
+#
+
 class Ticket < ActiveRecord::Base
   include Scoped
 

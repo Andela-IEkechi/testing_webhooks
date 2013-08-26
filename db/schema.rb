@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130521184232) do
+ActiveRecord::Schema.define(:version => 20130722151738) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.integer "project_id",                   :null => false
     t.string  "name",                         :null => false
     t.boolean "open",       :default => true
+    t.integer "sort_index"
   end
 
   create_table "tickets", :force => true do |t|
@@ -124,10 +125,12 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.datetime "updated_at",                     :null => false
     t.integer  "last_comment_id"
     t.integer  "scoped_id",       :default => 0
+    t.string   "slug"
   end
 
   add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
   add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
+  add_index "tickets", ["slug"], :name => "index_tickets_on_slug", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                                :default => "",    :null => false

@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'rails', '~>3.2.11'
 gem 'pg'
@@ -23,7 +23,9 @@ gem 'redcarpet'
 gem 'pygmentize'
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'bootstrap-sass'
+gem "font-awesome-rails"
 
 #file uploads
 gem 'carrierwave'
@@ -63,7 +65,7 @@ group :development,:test do
   gem 'faker'
   gem 'pry-rails' # for better console debugging
   gem 'pry-debugger'
-  gem 'pry-remote' 
+  gem 'pry-remote'
   gem 'puma'
 end
 
@@ -79,7 +81,10 @@ end
 
 group :development do
   gem 'rails-footnotes', '>= 3.7.5.rc4'
+  #annotate the models
+  gem 'annotate', ">=2.5.0" , :group => "development"
 end
 
 # for payment processing on paypal gateway
 gem "paypal-recurring"
+
