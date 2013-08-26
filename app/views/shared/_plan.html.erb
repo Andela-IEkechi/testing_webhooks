@@ -1,0 +1,22 @@
+<%
+  price_with_symbol = "$#{plan[:price_usd]}" if current_domain_is?('com')
+  price_with_symbol = "R#{plan[:price_zar]}" if current_domain_is?('co.za')
+%>
+<h4><%= plan[:title] %></h4>
+<ul>
+  <li class="first">
+    <div class="price-tag"><span class="price-value"><%= price_with_symbol %></span><span class="price-period">per month</span></div>
+  </li>
+  <li><strong><%= plan[:projects] %></strong>&nbsp;<%= 'Project'.pluralize(plan[:projects]) %></li>
+  <li><strong><%= (plan[:users].to_i != 999) ? plan[:users].to_s : 'Unlimited' %></strong>&nbsp;<%= 'User'.pluralize(plan[:users].to_i) %></li>
+  <li><strong><%= plan[:storage_gb] %>GB</strong>&nbsp;Storage</li>
+  <li class="last">
+  <% if current_user && @account %>
+    <%= radio_button_tag 'Amount', plan[:price_usd], @account.current_plan.upgrade_to? == plan.to_s, :disabled => !@account.can_downgrade?(plan), :id => "amount_#{plan}" %>
+    <%= label_tag "amount_#{plan}", plan.better_than?(@account.current_plan) ? 'Upgrade' : 'Downgrade', :class => "bigger" %>
+  <% else %>
+    <%= link_to 'Register a free account', new_registration_path(:user), class: "btn btn-large" %>
+  <% end %>
+  </li>
+</ul>
+

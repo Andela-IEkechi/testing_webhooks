@@ -1,5 +1,3 @@
-<h3>API keys</h3>
-
 <%= simple_nested_form_for(@project, :url => project_path(@project), :method => :put, :html => {:class=>'form-horizontal'}) do |f| %>
   <%= f.simple_fields_for :api_keys do |k_form| %>
     <div class="well top-padding">
@@ -18,6 +16,7 @@
 
   <div class="form-actions">
     <%= f.submit :class=>'btn' %>
+    <%= hidden_field_tag :current_tab, 'API-keys' %>
     <%= link_to 'cancel', project_path(@project), :class => 'btn' %>
   </div>
 <% end %>

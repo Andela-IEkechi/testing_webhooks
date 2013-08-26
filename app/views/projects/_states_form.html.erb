@@ -1,0 +1,54 @@
+<% unless @project.new_record? %>
+
+	<%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
+		<div id='sortable-states'>
+		    <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
+		      <div class="well well-small ui-state-default">
+		      	<%= ts_form.input_field :sort_index, :as => "hidden", 'data-sort-index'=> 1 %>		      	
+		      	<div class='row-fluid ' >
+		      	  <div class='span1' title='Reorder' style="cursor:move;"><i class="icon-resize-vertical"></i>&nbsp;<i class='icon-reorder'></i></div>
+		      	  <div class='span8'>   	    		
+	    	    	<%= ts_form.input_field :name, :class => 'input-medium', :placeholder => "Name" %>
+			        <%= ts_form.input_field :open, :as => :select, :include_blank  => false, :collection => [['Open', true] ,['Closed', false]], :class => 'input-small' %>	      	  	
+		      	  </div>
+		      	  <div class='span3'>
+		            <%= ts_form.link_to_remove raw("<i class='icon-remove'></i>"), :class => 'btn btn-warning btn-small pull-right', :title => 'Remove this status' %>  </div>
+		      	  <% if ts_form.object.errors.any? %>
+		      	  	<div class="text-error" ><%= ts_form.object.errors.full_messages.join(", ") %></div>
+		      	  <% end %>
+		      	</div>		 
+		      </div>
+		    <% end %>
+		    <%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-success offset2' %>
+	     </div>
+	  
+	  <div class="form-actions">
+	    <%= f.submit :class=>'btn' %>
+	    <%= hidden_field_tag :current_tab, 'states' %>
+	    <%= link_to 'cancel', project_path(@project), :class => 'btn' unless @project.new_record? %>
+	    <%= link_to 'cancel', root_path(), :class => 'btn' if @project.new_record? %>
+	  </div>
+	<% end %>		
+<% end %>
+
+ <script>
+$(function() {
+	$( "#sortable-states" ).sortable({
+			placeholder: "well well-small alert alert-info"
+		  }
+		);	
+		// to cater for adding/sorting/removing of inner elements
+	  	$("#sortable-states").on("DOMSubtreeModified", function(event){
+	  		if($(event.target).is("div#sortable-states")){
+	  		  adjustStatesSortableIndexes();
+	  		}	  	   
+	    });
+	});
+    
+    function adjustStatesSortableIndexes(){
+		$("#sortable-states .ui-state-default [data-sort-index]").each(function(index, element){
+			$(element).val(index * 1000 );
+		})
+    }
+
+</script>

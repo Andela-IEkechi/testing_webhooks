@@ -8,13 +8,13 @@
     <div class="tab-pane">
       <div class="price-table price-table-three">
         <div class="price-column  price-column-first">
-          <%= render partial: 'plan', object: @plans[:small] %>
+          <%= render partial: '/shared/plan', object: @plans[:small] %>
         </div>
         <div class="price-column price-column-featured">
-          <%= render partial: 'plan', object: @plans[:medium] %>
+          <%= render partial: '/shared/plan', object: @plans[:medium] %>
         </div>
         <div class="price-column  price-column-last">
-          <%= render partial: 'plan', object: @plans[:large] %>
+          <%= render partial: '/shared/plan', object: @plans[:large] %>
         </div>
       </div>
     </div>

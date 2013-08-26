@@ -8,17 +8,6 @@
 
 #create a user
 User.find_each(&:destroy)
-jlr = User.create(:email => 'jean@shuntyard.co.za', :password => 'secret', :password_confirmation => 'secret', :terms => true)
-jlr.confirm!
-
-barbara = User.create(:email => 'barbara@shuntyard.co.za', :password => 'conductor', :password_confirmation => 'conductor', :terms => true)
-barbara.confirm!
-user = User.create(:email => 'user@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
-user.confirm!
-
-greg = User.create(:email => 'greg@shuntyard.co.za', :password => 'Password1', :password_confirmation => 'Password1', :terms => true)
-greg.confirm!
-
 restricted = User.create(:email => 'restricted@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 restricted.confirm!
 regular = User.create(:email => 'regular@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
@@ -28,16 +17,15 @@ admin.confirm!
 
 #create some projects
 Project.find_each(&:destroy)
-mhp = jlr.projects.create(:title => "Manhattan Project")
-app = jlr.projects.create(:title => "Allan Parsons Project")
+mhp = admin.projects.create(:title => "Manhattan Project")
+app = admin.projects.create(:title => "Allan Parsons Project")
 app.memberships.create(:user_id => restricted.id, :role => 'restricted')
-app.memberships.create(:user_id => admin.id, :role => 'admin')
 app.memberships.create(:user_id => regular.id, :role => 'regular')
 
 #create a test sprint
 Sprint.find_each(&:destroy)
 3.times do
-  sprint = mhp.sprints.build(:goal => [*('A'..'Z')].sample(12).join)
+  sprint = mhp.sprints.build(:goal => Faker::Lorem.sentence)
   sprint.due_on = Date.today + 7
   sprint.save!
 end
@@ -46,14 +34,13 @@ sprint = mhp.sprints.last
 
 #create some dummy tickets
 Ticket.find_each(&:destroy)
-100.times do |x|
-  title = [*('A'..'Z')].sample(8).join
-  ticket = mhp.tickets.create(title: title)
-  (1..20).to_a.each do |x|
-    comment = ticket.comments.build(:body => 'a comment', :status_id => mhp.ticket_statuses.first.id)
+25.times do |x|
+  ticket = mhp.tickets.create(title: Faker::Lorem.words(4).join(' '))
+  (1..15).to_a.each do |x|
+    comment = ticket.comments.build(:body => Faker::Lorem.paragraph, :status_id => mhp.ticket_statuses.first.id)
     comment.sprint = sprint if x == 1
-    comment.user = jlr
-    comment.assignee = jlr if x == 20
+    comment.user = admin
+    comment.assignee = regular if x == 20
     comment.save
   end
 end

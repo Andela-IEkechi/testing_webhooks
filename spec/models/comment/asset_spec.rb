@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: comment_assets
+#
+#  id         :integer          not null, primary key
+#  comment_id :integer          not null
+#  payload    :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 require 'spec_helper'
 
 describe Comment::Asset do

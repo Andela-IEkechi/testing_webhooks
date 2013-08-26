@@ -37,10 +37,4 @@ Conductor::Application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  #set up the MyGate payment gateway values
-  config.before_configuration do
-    ENV['MYGATE_FORM_URL'] = 'https://dev-virtual.mygateglobal.com/PaymentPage.cfm'
-    ENV['MYGATE_APPLICATION_ID'] = '27b51bf7-e1e2-45f7-8ad8-817462ca53dd'
-    ENV['MYGATE_MERCHANT_ID'] = '444b26e6-0b37-4215-8ea8-3c85bef5363e'
-  end
 end

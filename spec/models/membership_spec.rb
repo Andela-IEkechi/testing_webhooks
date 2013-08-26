@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: memberships
+#
+#  id         :integer          not null, primary key
+#  project_id :integer
+#  user_id    :integer
+#  role       :string(255)      default("regular"), not null
+#
+
 require 'spec_helper'
 
 describe Membership do

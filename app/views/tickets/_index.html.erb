@@ -8,7 +8,7 @@
   parent ||= "project-#{project_id}" if project_id
  %>
 
- <div id="tickets-list-container-<%= parent %>">
+ <div id="tickets-list-container-<%= parent %>" <%if params[:hide_empty_tickets] && @tickets.empty? %> data-hide-empty-tickets  style="display:none;" <% end %> >
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
       <div class="pull-right">

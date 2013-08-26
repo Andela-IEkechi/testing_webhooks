@@ -28,6 +28,9 @@ class CommentsController < ApplicationController
   end
 
   def update
+    # Delete unwanted asset payloads by looking at the updated asset_ids
+    @comment.assets.select{|a| !(params[:comment][:asset_ids].include? a.id.to_s)}.each(&:remove_payload!)
+
     if @comment.update_attributes(params[:comment])
       flash[:notice] = "Comment was updated"
       redirect_to project_ticket_path(@comment.project, @comment.ticket)
