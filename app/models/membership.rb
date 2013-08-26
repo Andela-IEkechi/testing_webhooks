@@ -1,13 +1,3 @@
-# == Schema Information
-#
-# Table name: memberships
-#
-#  id         :integer          not null, primary key
-#  project_id :integer
-#  user_id    :integer
-#  role       :string(255)      default("regular"), not null
-#
-
 class Membership < ActiveRecord::Base
   belongs_to :user
   belongs_to :project
@@ -26,7 +16,7 @@ class Membership < ActiveRecord::Base
 
   delegate :email, :to => :user, :prefix => false, :allow_nil => true
 
-  
+
 
   def admin?
     self.role == 'admin'
@@ -53,7 +43,7 @@ class Membership < ActiveRecord::Base
     user_assinged_tickets =  project.tickets.
       joins(:comments).
       where(['comments.id = tickets.last_comment_id and comments.assignee_id=?', user_id]).
-      includes(:last_comment => :status) 
+      includes(:last_comment => :status)
      user_assinged_tickets.each do |ticket|
         # just another measure, dont worry, last_comment is already loaded(performance :-))
         if user_id == ticket.last_comment.assignee_id && ticket.last_comment.status.open?
@@ -66,10 +56,10 @@ class Membership < ActiveRecord::Base
                                      :body        => "#{user} removed from project",
                                      :cost        => ticket.cost)
               comment.user = current_user
-              
-             comment.save! # let it fail if there is something wrong 
-        end  
+
+             comment.save! # let it fail if there is something wrong
+        end
     end
-    return true         
+    return true
   end
 end
