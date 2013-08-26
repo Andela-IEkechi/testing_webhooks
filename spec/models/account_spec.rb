@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: accounts
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  plan       :string(255)      default("free")
+#  enabled    :boolean          default(TRUE)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 require 'spec_helper'
 
 describe Account do
@@ -36,40 +48,29 @@ describe Account do
   end
 
   context "when changing plans" do
-    before(:each) do
-      @plans = Account::PLANS.keys
+    it "should respond to :upgrade" do
+      @account.should respond_to :upgrade
     end
 
-    it "should know which plan to upgrade to next" do
-      @account.should respond_to :'upgrade_to?'
-      @plans.each_with_index do |plan, index|
-        @account.plan = plan
-        @account.upgrade_to?.should eq(@plans[index+1] || @plans.last)
-      end
-    end
-
-    it "should know which plan to downgrade to next" do
-      @account.should respond_to :'downgrade_to?'
-      @plans.reverse.each_with_index do |plan, index|
-        @account.plan = plan
-        @account.downgrade_to?.should eq(@plans.reverse[index+1] || @plans.reverse.last)
-      end
+    it "should respond to :downgrade" do
+      @account.should respond_to :downgrade
     end
 
     it "should be able to upgrade" do
-      @plans.each_with_index do |plan, index|
-        @account.plan = plan
-        @account.upgrade
-        @account.plan.should eq(@plans[index+1] || @plans.last)
+      if !(@account.plan == 'large')
+        expect {
+          @account.upgrade
+        }.to change(@account, :plan)
       end
     end
 
     it "should be able to downgrade" do
-      @plans.reverse.each_with_index do |plan, index|
-        @account.plan = plan
-        @account.downgrade
-        @account.plan.should eq(@plans.reverse[index+1] || @plans.reverse.last)
+      if !(@account.plan == 'free')
+        expect {
+          @account.downgrade
+        }.to change(@account, :plan)
       end
     end
+
   end
 end

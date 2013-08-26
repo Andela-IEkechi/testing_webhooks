@@ -11,10 +11,7 @@ class LandingController < ApplicationController
   end
 
   def pricing
-    @plans = Account::PLANS.reject{|k,v| k == 'free'}
-  end
-
-  def signup
+    @plans = Plan::PLANS.reject{|k,v| k == 'free'}
   end
 
   def support

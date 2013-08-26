@@ -1,3 +1,18 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+$ ->
+
+  $('#comment_preview_button').click ->
+    fetch_preview()
+
+  fetch_preview = ->
+    output = $("#ticket_preview")
+    output.html("Loading preview...")
+
+    jQuery.ajax(
+      url: "/comments/preview",
+      # Not very elegant, but it works
+      data: {"[comment][body]": $("textarea").first().val() },
+      type: 'POST',
+      dataType: 'json'
+      success: (response) ->
+          output.html(response.rendered_body)
+    )

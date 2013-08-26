@@ -11,18 +11,6 @@
     <meta name="keywords" content="project management, issue tracking, ticketing system">
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= csrf_meta_tags %>
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-                                   <link rel="shortcut icon" href="../assets/images/favicon.ico">
   </head>
   <body class="landing">
     <div class="container">
@@ -33,7 +21,7 @@
           <li class="<%= 'active' if current_page?(landing_pricing_path) %>"><%= link_to 'Pricing & Signup', landing_pricing_path %></li>
           <li class="<%= 'active' if current_page?(landing_support_path) %>"><%= link_to 'Support', landing_support_path %></li>
           <% unless current_user %>
-          <li><%= link_to 'Sign in', new_session_path(:user) %></li>
+          <li class="<%= 'active' if current_page?(new_user_session_path) %>"><%= link_to 'Sign in', new_session_path(:user) %></li>
           <% end %>
         </ul>
         <h3 class="muted logo"><%= link_to image_tag('logo-blue.png')+'Conductor', root_path %></h3>
@@ -43,6 +31,7 @@
     <div class="container-fluid container-jumbotron">
       <div class="row-fluid">
         <div class="container">
+          <%= render :partial => '/shared/flash_messages' %>
           <%= yield :jumbotron %>
         </div>
       </div>
@@ -62,12 +51,12 @@
                 <p>Conductor is maintained by an enthusiastic team. We use Conductor to manage Conductor. You can find us at <%= link_to 'Shuntyard Technologies', 'http://www.shuntyard.co.za' %>.</p>
               </div>
               <div class="span3">
-                <h4>Terms of Service</h4>
-                <p>Conductor is a subscription based service to manage project delivery. By using Conductor, you agree to our terms of service, available <%= link_to 'here', landing_terms_path() %>.</p>
+                <h4>Terms and Conditions</h4>
+                <p>Conductor is a subscription based service to manage project delivery. By using Conductor, you agree to our <%= link_to 'terms and conditions', landing_terms_path() %>.</p>
               </div>
               <div class="span3">
                 <h4>Pricing</h4>
-                <p>We offer a range of plans that will suit your needs. Public projects are free. Read more about our pricing options <%= link_to 'here', landing_pricing_path() %>.</p>
+                <p>We offer a range of plans that will suit your needs. Public projects are free. Read more about our <%= link_to 'pricing options', landing_pricing_path() %>.</p>
               </div>
               <div class="span3">
                 <h4>Contact Us</h4>
@@ -83,6 +72,11 @@
         </div>
       </div>
     </div>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
     <%= javascript_include_tag "application" %>
     <script type="text/javascript">

@@ -1,0 +1,33 @@
+<h3>Public projects</h3>
+
+<table class="table table-bordered table-striped" id="public-project-list">
+  <caption>
+    Create public projects on any plan, for free.
+  </caption>
+  <!--title row -->
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th class="width-20">Participate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @projects.each do |project| %>
+    <tr>
+      <td><%= link_to project.title, project_path(project) %></td>
+      <td><%= project.description %></td>
+      <td>
+        <% if can? :manage, project %>
+          <span class="text-success">Already collaborating!</span>
+        <% else %>
+          <%= link_to 'Request an invite', invite_path(project), :class => 'btn btn-small btn' %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+

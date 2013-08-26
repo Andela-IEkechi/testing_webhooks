@@ -1,23 +1,40 @@
-<h3>Manage Profile</h3>
+<% @current_tab = params[:current_tab]||'basic-info'%> <h3>Manage Profile</h3>
+<div class="tabbable tabs-left">
+	<ul class="nav nav-tabs">
+		<li <% if @current_tab == 'basic-info' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-basic-info">basic info</a>
+		</li>
+		<li <% if @current_tab == 'preferences' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-preferences">preferences</a>
+		</li>
+		<li <% if @current_tab == 'projects-membership' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-projects-membership">projects membership</a>
+		</li>		
+		<li <% if @current_tab == 'cancel-account' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-cancel-account">cancel account</a>
+		</li>
+	</ul>
 
-<%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class=> 'form-horizontal', :method => :put }) do |f| %>
-  <%= f.error_notification %>
-
-  <div class="form-inputs pull-left">
-    <%= f.input :full_name, :required => true, :autofocus => true %>
-    <%= f.input :email, :required => true %>
-    <%= f.input :password, :autocomplete => "off", :hint => "leave it blank if you don't want to change it", :required => false %>
-    <%= f.input :password_confirmation, :required => false %>
-    <%= f.input :current_password, :hint => "we need your current password to confirm your changes", :required => true %>
-  </div>
-
-  <%= gravatar_for @current_user, 200, 'pull-left img-polaroid' %>
-
-  <div class="clearfix"></div>
-
-  <div class="form-actions">
-    <%= f.submit "Update", :class => "btn"  %>
-    <%= link_to 'cancel', root_path(), :class => 'btn' %>
-  </div>
-<% end %>
-
+	<div class="tab-content">
+		<div id="pane-basic-info" class="tab-pane <% if @current_tab == 'basic-info' %>active<%end%> ">
+			<p>
+				<%= render :partial => 'info_form' %>
+			</p>
+		</div>
+		<div id="pane-preferences" class="tab-pane <% if @current_tab == 'preferences' %>active<%end%> ">
+			<p>
+				<%= render :partial => 'preferences_form' %>
+			</p>
+		</div>
+		<div id="pane-projects-membership" class="tab-pane <% if @current_tab == 'projects-membership' %>active<%end%> ">
+			<p>
+				<%= render :partial => '/accesses/user_projects_accesses_form' %>
+			</p>
+		</div>
+		<div id="pane-cancel-account" class="tab-pane <% if @current_tab == 'cancel-account' %>active<%end%> ">
+			<p>
+				<%= render :partial => 'cancel_account_form' %>
+			</p>
+		</div>
+	</div>
+</div>

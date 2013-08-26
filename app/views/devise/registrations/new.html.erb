@@ -14,7 +14,6 @@
     </center>
 
     <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-      <%= f.error_notification %>
       <div class="form-inputs">
         <%= f.input :full_name, required: true, autofocus: true, input_html: {tabindex: 1} %>
         <%= f.input :email, required: true, input_html: {tabindex: 2} %>
@@ -23,10 +22,14 @@
       </div>
 
       <div class="form-actions">
-        <%= f.input :terms, label: "I have read and agree with the Terms of Use.", required: true, input_html: {tabindex: 5}, :wrapper => :inline_checkbox %>
+        <%= f.input :terms, label: "I have read and agree with the #{link_to 'Terms and Conditions',  landing_terms_path(), :target => '_blank'} and #{link_to 'Privacy policy', landing_privacy_path(), :target => '_blank'}.", required: true, input_html: {tabindex: 5}, :wrapper => :inline_checkbox %>
         <%= f.submit "Sign up", :class => "btn btn-primary btn-large", tabindex: 6 %>
       </div>
     <% end %>
+  </div>
 
+  <center>
+    <%= render "devise/shared/links" %>
+  </center>
 <% end %>
 

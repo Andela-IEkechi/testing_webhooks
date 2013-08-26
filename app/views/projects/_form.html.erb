@@ -1,24 +1,68 @@
-<%= yield :form_heading %>
+<% @current_tab = params[:current_tab]||'basic-info'%>
+<div class="tabbable tabs-left">
+	<ul class="nav nav-tabs">
+		<li <% if @current_tab == 'basic-info' %>class="active" <%end%> >
+			<a data-toggle="tab" href="#pane-basic-info">basic info</a>
+		</li>
+		<% unless @project.new_record? %>
+			<li <% if @current_tab == 'states' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-states">project states</a>
+			</li>
+			<li  <% if @current_tab == 'access-control' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-access-control">access control</a>
+			</li>
+			<li <% if @current_tab == 'API-keys' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-api-keys">API keys</a>
+			</li>
 
-<%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
-  <%= f.input :title, :input_html => {:class => 'span3'} %>
-  <%= f.input :private, :as=>:radio_buttons, :hint => 'You can create as many public projects as you want.' %>
-  <% unless @project.new_record? %>
-    <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
-      <div class="well top-padding">
-        <%= ts_form.input :name, :input_html => {:class => 'span3'} %>
-        <%= ts_form.input :open, :as => :radio_buttons, :collection => [['Open', true] ,['Closed', false]], :label => false, :html => {:class => 'pull-right'} %>
-        <%= ts_form.input ' ' do %>
-          <%= ts_form.link_to_remove "Remove", :class => 'btn btn-warning btn-small', :title => 'Remove this status' %>
-        <% end %>
-      </div>
-    <% end %>
-    <%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-success offset2' %>
-  <% end %>
+			<% if can_transfer_project?(@project) %>
+				<li <% if @current_tab == 'transfer-project' %>class="active" <%end%> >
+					<a data-toggle="tab" href="#pane-transfer-project">transfer project</a>
+				</li>
+			<% end %>
+			<% if can_delete_project?(@project) %> 
+				<li <% if @current_tab == 'delete-project' %>class="active" <%end%> >
+					<a data-toggle="tab" href="#pane-delete-project">delete project</a>
+				</li>
+			<% end %>
+		<% end %>
 
-  <div class="form-actions">
-    <%= f.submit :class=>'btn' %>
-    <%= link_to 'cancel', project_path(@project), :class => 'btn' unless @project.new_record? %>
-    <%= link_to 'cancel', root_path(), :class => 'btn' if @project.new_record? %>
-  </div>
-<% end %>
+	</ul>
+	<div class="tab-content">
+		
+		<div id="pane-basic-info" class="tab-pane <% if @current_tab == 'basic-info' %>active<%end%> ">
+			<p>
+				<%= render :partial => 'info_form' %>
+			</p>
+		</div>
+		<% unless @project.new_record? %>
+			<div id="pane-states" class="tab-pane <% if @current_tab == 'states' %>active<%end%>">
+				<p>
+					<%= render :partial => 'states_form' %>
+				</p>
+			</div>
+
+			<div id="pane-access-control" class="tab-pane <% if @current_tab == 'access-control' %>active<%end%>">
+				<p>
+					<%= render :partial => '/accesses/edit' %>
+				</p>
+			</div>
+			<div id="pane-api-keys" class="tab-pane <% if @current_tab == 'API-keys' %>active<%end%>">
+				<p>
+					<%= render :partial => '/projects/keys/edit' %>
+				</p>
+			</div>
+			<div id="pane-transfer-project" class="tab-pane <% if @current_tab == 'transfer-project' %>active<%end%> ">
+				<p>
+					<%= render :partial => 'transfer_form' %>
+				</p>
+			</div>
+			<div id="pane-delete-project" class="tab-pane <% if @current_tab == 'delete-project' %>active<%end%> ">
+				<p>
+					<%= render :partial => 'delete_form' %>
+				</p>
+			</div>
+		<% end %>
+	</div>
+</div>
+

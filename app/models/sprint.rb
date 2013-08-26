@@ -4,7 +4,6 @@ class Sprint < ActiveRecord::Base
 
   belongs_to :project #not optional
 
-
   attr_accessible :goal, :due_on
 
   validates :project_id, :presence => true
@@ -16,7 +15,7 @@ class Sprint < ActiveRecord::Base
   end
 
   def running?
-    Date.today <= due_on
+    Date.today <= due_on.to_date
   end
 
   def open?

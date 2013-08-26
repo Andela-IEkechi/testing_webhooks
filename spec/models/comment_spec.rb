@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: comments
+#
+#  id              :integer          not null, primary key
+#  ticket_id       :integer          not null
+#  feature_id      :integer
+#  sprint_id       :integer
+#  assignee_id     :integer
+#  status_id       :integer
+#  body            :text
+#  cost            :integer          default(0)
+#  user_id         :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  rendered_body   :text
+#  api_key_name    :string(255)
+#  commenter       :string(255)
+#  git_commit_uuid :string(255)
+#
+
 require 'spec_helper'
 
 describe Comment do
@@ -18,20 +39,20 @@ describe Comment do
 
     it "should create a comment with a feature only" do
       comment = create(:comment_with_feature)
-      comment.feature.id.should_not be_nil
-      comment.sprint.id.should be_nil
+      comment.feature_id.should_not be_nil
+      comment.sprint_id.should be_nil
     end
 
     it "should create a comment with a sprint only" do
       comment = create(:comment_with_sprint)
-      comment.sprint.id.should_not be_nil
-      comment.feature.id.should be_nil
+      comment.sprint_id.should_not be_nil
+      comment.feature_id.should be_nil
     end
 
     it "should create a comment with a feature and a sprint" do
       comment = create(:comment_with_feature_and_sprint)
-      comment.feature.id.should_not be_nil
-      comment.sprint.id.should_not be_nil
+      comment.feature_id.should_not be_nil
+      comment.sprint_id.should_not be_nil
     end
   end
 
@@ -87,7 +108,7 @@ describe Comment do
       @comment.should be_valid
     end
 
-    it 'stores the parsed parkdown' do
+    it 'stores the parsed markdown' do
       @comment.body = "#markdown text"
       @comment.rendered_body.should be_blank
       @comment.save
@@ -99,6 +120,12 @@ describe Comment do
       @comment.save
       @comment.rendered_body.should eq('<h1>markdown text</h1>')
     end
+  end
 
+  it "is deleted when it's parent ticket is destroyed" do
+    comment = create(:comment)
+    expect {
+      comment.ticket.destroy
+    }.to change(Comment, :count).by(-1)
   end
 end

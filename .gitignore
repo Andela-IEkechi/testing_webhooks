@@ -19,3 +19,12 @@
 .listen_test
 *.swp
 public/uploads
+*~
+.idea
+.ruby-version
+.ruby-gemset
+.rvmrc
+.rbenv-gemsets
+/.project
+.vagrant
+Vagrantfile

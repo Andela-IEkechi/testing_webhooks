@@ -3,13 +3,12 @@
 require 'carrierwave/processing/mime_types'
 
 class FileUploader < CarrierWave::Uploader::Base
+  include CarrierWave::RMagick
   include CarrierWave::MimeTypes
 
   process :set_content_type
 
-
   # Include RMagick or MiniMagick support:
-  # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
 
   # Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
@@ -17,8 +16,9 @@ class FileUploader < CarrierWave::Uploader::Base
   # include Sprockets::Helpers::IsolatedHelper
 
   # Choose what kind of storage to use for this uploader:
+  # NOTE (from Jean) : Dont set the storage here, it will clobber what was set in the initializers/carrierwave.rb, messing with tests
   #storage :file
-  storage :fog
+  #storage :fog
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
@@ -46,6 +46,10 @@ class FileUploader < CarrierWave::Uploader::Base
   #   process :scale => [50, 50]
   # end
 
+  version :thumb, :if => :image? do
+    process :resize_to_fill => [100, 100]
+  end
+
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   # def extension_white_list
@@ -57,5 +61,9 @@ class FileUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
+
+  def image?(thing)
+    (thing.content_type.include? 'image') rescue false
+  end
 
 end

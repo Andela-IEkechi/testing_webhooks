@@ -74,9 +74,10 @@ Conductor::Application.configure do
     :password  => "cb7fae88-04ef-44e9-9d33-b848e302e3a2"
   }
 
-  #set up the GH values on prod
+  #set up the GH values on prod for authentication
   config.before_configuration do
     ENV['GITHUB_CLIENT_ID'] = '1abb11e846fd47440d03'
     ENV['GITHUB_CLIENT_SECRET'] = '5f75803c2db451c7e69daf256dc8a6b24ed98d09'
   end
+
 end

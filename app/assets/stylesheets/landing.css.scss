@@ -1,6 +1,8 @@
 body.landing {
   padding-top: 20px;
   padding-bottom: 40px;
+  margin-top: 0px !important;
+
 
   /* Main marketing message and sign up button */
   .jumbotron {
@@ -48,6 +50,13 @@ body.landing {
     color: $top-nav-bg-color;
     font-family: 'logofont';
     text-transform: uppercase;
+  }
+
+  #flash-message {
+    margin-top: 20px;
+    p {
+      margin: 0;
+    }
   }
 }
 

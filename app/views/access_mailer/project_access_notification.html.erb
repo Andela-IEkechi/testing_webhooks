@@ -1,5 +1,10 @@
-<p>You have been invited to participate in the following project on Conductor:</p>
-<p><b><%= @project %></b></p>
+<p>
+  You have been invited to participate in the <strong><%= @project %></strong> project
+  on Conductor.
+</p>
 
-<p>The project will be included in your list of projects when you log in, or you can got to it directly from here:</p>
-<p><%= link_to @project, project_url(@project) %></p>
+<p>
+  <strong><%= @project %></strong> will be included in your list of projects
+  when you next log in, or you can access it directly from this link:
+  <%= link_to @project.title, project_url(@project) %>
+</p>

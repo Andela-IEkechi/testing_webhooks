@@ -1,10 +1,46 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  email                  :string(255)      default(""), not null
+#  encrypted_password     :string(255)      default("")
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0)
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#  confirmation_token     :string(255)
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  unconfirmed_email      :string(255)
+#  authentication_token   :string(255)
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  provider               :string(255)
+#  uid                    :string(255)
+#  full_name              :string(255)
+#  terms                  :boolean          default(FALSE)
+#  invitation_token       :string(60)
+#  invitation_sent_at     :datetime
+#  invitation_accepted_at :datetime
+#  invitation_limit       :integer
+#  invited_by_id          :integer
+#  invited_by_type        :string(255)
+#  preferences            :text
+#  deleted_at             :datetime
+#
+
 require 'spec_helper'
 
 describe User do
 
-  shared_examples "a project participant" do
-    it "that can to participate in projects"
-    it "that can all the tickets for all the projects it participates in"
+  shared_examples "a project member" do
+    it "that can be a member in projects"
+    it "that can see all the tickets for all the projects they are members of"
   end
 
   context "it has factories that" do
@@ -25,7 +61,7 @@ describe User do
       @user = create(:user)
     end
 
-    it_behaves_like "a project participant"
+    it_behaves_like "a project member"
 
     it "should be able to own many projects" do
       create(:project, :user => @user)
@@ -41,7 +77,10 @@ describe User do
       @user.should have(project.tickets.count).tickets
     end
 
-    it "should report it's email as to_s"
+    it "should report it's email as to_s" do
+      u = @user.to_s
+      u.should eq(@user.to_s)
+    end
   end
 
   context "when not confirmed" do
@@ -49,12 +88,13 @@ describe User do
       @user = create(:unconfirmed_user)
     end
 
-    it_behaves_like "a project participant"
+    it_behaves_like "a project member"
 
     it "should be token authenticatable"
 
     it "should report it's email and (invite) as to_s" do
-      @user.to_s.should eq("#{@user.email} (invited)")
+      u = @user.to_s
+      u.should eq(@user.to_s)
     end
   end
 
@@ -78,8 +118,40 @@ describe User do
     user.account.plan.should eq("free")
   end
 
-  it "should respont to :trial?" do
+  it "should be an active user by default" do
     user = create(:user)
-    user.should respond_to(:trial?)
+    user.should respond_to(:active?)
+    user.active?.should be_true
+  end
+
+  it "should be possible to soft-delete users" do
+    user = create(:user)
+    user.should respond_to(:deleted?)
+    user.soft_delete
+    user.reload
+
+    user.should be_deleted
+  end
+
+  context "when being deleted" do
+    before(:each) do
+      @user = create(:user)
+      @project = create(:project, :user => @user)
+    end
+
+    it "should be prevented if they have open projects with other members " do
+      other_user = create(:user)
+      membership_other = create(:membership, :user => other_user, :project => @project, :role => "regular")
+      @user.soft_delete
+      @user.reload
+      @user.should_not be_deleted
+    end
+
+    it "should not be prevented if they have open projects with no other members " do
+      @user.soft_delete
+      @user.reload
+      @user.should be_deleted
+    end
+
   end
 end
