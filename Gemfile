@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~>3.2.11'
+gem 'rails', '~> 3.2.12'
 gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
@@ -24,6 +24,7 @@ gem 'redcarpet'
 gem 'pygmentize'
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'bootstrap-sass'
 
 #file uploads
@@ -58,27 +59,21 @@ group :development,:test do
   gem 'capistrano'
   gem 'capistrano-ext'
   gem 'rspec-rails'
-  gem 'guard-rspec'
   gem 'rb-readline', '~> 0.4.2'
+  gem 'rb-readline'
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'pry'
-  # gem 'pry-rails' # for better console debugging
-  # gem 'pry-debugger'
-  # gem 'pry-remote'
+  gem 'pry-rails' # for better console debugging
+  gem 'pry-debugger'
+  gem 'pry-remote'
   gem 'puma'
 end
 
 group :test do
   gem 'rspec'
-  gem 'rb-fsevent'
-  gem 'spork-rails'
-  gem 'guard-spork'
-  gem 'capybara'
   gem 'database_cleaner'
-  gem 'rb-inotify', '~> 0.9'
 end
 
-# group :development do
-#   gem 'rails-footnotes', '>= 3.7.5.rc4'
-# end
+group :development do
+  gem 'rails-footnotes', '>= 3.7.5.rc4'
+end

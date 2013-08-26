@@ -26,4 +26,5 @@ public/uploads
 .rvmrc
 .rbenv-gemsets
 /.project
-
+.vagrant
+Vagrantfile
