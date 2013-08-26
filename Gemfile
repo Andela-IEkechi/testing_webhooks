@@ -25,7 +25,6 @@ gem 'pygmentize'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'bootstrap-sass'
-gem "font-awesome-rails"
 
 #file uploads
 gem 'carrierwave'
@@ -59,7 +58,6 @@ group :development,:test do
   gem 'capistrano'
   gem 'capistrano-ext'
   gem 'rspec-rails'
-  gem 'guard-rspec'
   gem 'rb-readline'
   gem 'factory_girl_rails'
   gem 'faker'
@@ -71,20 +69,10 @@ end
 
 group :test do
   gem 'rspec'
-  gem 'rb-fsevent'
-  gem 'spork-rails'
-  gem 'guard-spork'
-  gem 'capybara'
   gem 'database_cleaner'
-  gem 'rb-inotify', '~> 0.9'
 end
 
 group :development do
   gem 'rails-footnotes', '>= 3.7.5.rc4'
-  #annotate the models
-  gem 'annotate', ">=2.5.0" , :group => "development"
 end
-
-# for payment processing on paypal gateway
-gem "paypal-recurring"
 

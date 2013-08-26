@@ -52,6 +52,16 @@
     <%= comment_form.select :assignee_id, @ticket.project.memberships.all.map { |s| [s.email, s.user_id] }, :include_blank => '- unassigned -'  %>
   <% end %>
 
+  <!-- Existing assets -->
+  <% if @comment.assets %>
+  <%= comment_form.association :assets, collection: @comment.assets, as: :check_boxes, label_method: lambda{|asset|
+      if asset.image?
+        image_tag(asset.payload_url(:thumb), class: 'img-polaroid img-padded', title: "Uncheck to remove file")
+      else
+        asset.name
+      end } %>
+  <% end %>
+
   <div class="attach-asset">
     <%= comment_form.link_to_add "Attach a file", :assets %>
     <%= comment_form.simple_fields_for :assets, [] do |a_f| %>
