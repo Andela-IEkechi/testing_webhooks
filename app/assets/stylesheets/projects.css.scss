@@ -8,6 +8,9 @@ div.project-block {
 }
 
 
-#sortable-states .reorder-handle{
+#sortable-statuses .reorder-handle{
 	cursor:move;
+  i.icon-trash{
+    margin-top: 3px;
+  }
 }
