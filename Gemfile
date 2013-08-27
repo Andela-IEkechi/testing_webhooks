@@ -7,7 +7,7 @@ gem 'nested_form'
 gem 'devise'
 gem 'devise_invitable', '~> 1.1.0'
 
-gem 'cancan'
+gem 'cancan', '1.6.9'
 gem 'omniauth-github'
 gem 'paper_trail'
 gem 'thin'
