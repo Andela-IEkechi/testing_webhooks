@@ -12,7 +12,6 @@
   <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
 </div>
 
-
 <!-- render older comments if there are any -->
 <% if old_comments.any?  %>
   <%= render :partial => '/comments/comment', :collection => [@ticket.comments.first] %>
