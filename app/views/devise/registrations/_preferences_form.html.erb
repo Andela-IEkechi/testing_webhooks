@@ -7,7 +7,7 @@
                       :selected => current_user.preferences.page_size ||=5 %>
       <%= prefs.input :collapse_long_tickets, 
                       :as => :boolean, 
-                      :hint => "only show the #{current_user.preferences.page_size} most recent comments", 
+                      :hint => "only show the 5 most recent comments", 
                       :value => current_user.preferences.collapse_long_tickets ||= 0 %>
     <% end %>
   </div>
