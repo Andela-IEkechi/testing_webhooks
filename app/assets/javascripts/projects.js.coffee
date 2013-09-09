@@ -12,3 +12,12 @@ $ ->
       if (!confirm("You are about to revoke the membership of some users. Are you sure?"))
         return false
 
+  $("#sortable-statuses").sortable ->
+    { placeholder: "well well-small alert alert-info" }
+
+  $("#sortable-statuses").on "DOMSubtreeModified", (event) ->
+    adjustStatesSortableIndexes()  if $(event.target).is("div#sortable-statuses")
+
+  adjustStatesSortableIndexes = ->
+    $("#sortable-statuses .ui-state-default [data-sort-index]").each (index, element) ->
+      $(element).val index

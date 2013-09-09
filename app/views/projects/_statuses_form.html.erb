@@ -3,7 +3,7 @@
 		<div id='sortable-statuses'>
 		  <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
 		    <div class="well well-small ui-state-default">
-		      <%= ts_form.input_field :sort_index, :as => "hidden", 'data-sort-index'=> 1 %>		      	
+		      <%= ts_form.input_field :sort_index, :as => "hidden", 'data-sort-index'=> 1 %>
 		      <div class='row-fluid ' >
 		      	<div class='span1 reorder-handle' title='Reorder'><i class="icon-resize-vertical"></i>&nbsp;<i class='icon-reorder'></i>
 		      	</div>
@@ -18,19 +18,19 @@
 		      	  <div class="text-error" ><%= ts_form.object.errors.full_messages.join(", ") %>
 		      	  </div>
 		      	<% end %>
-		      </div>		 
+		      </div>
 		    </div>
 		  <% end %>
+			<%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-success offset2' %>
 	  </div>
 
-		<%= f.link_to_add "Add a ticket status", :ticket_statuses, :class => 'btn btn-success offset2' %>
-	  
+
 	  <div class="form-actions">
 	    <%= f.submit :class=>'btn' %>
 	    <%= hidden_field_tag :current_tab, 'statuses' %>
 	    <%= link_to 'cancel', project_path(@project), :class => 'btn' unless @project.new_record? %>
 	    <%= link_to 'cancel', root_path(), :class => 'btn' if @project.new_record? %>
 	  </div>
-	<% end %>		
+	<% end %>
 <% end %>
 
