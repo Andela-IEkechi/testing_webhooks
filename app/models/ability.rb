@@ -36,7 +36,8 @@ class Ability
     #users can manage tickets which belong to them
     can :create, Ticket
     can :manage, Ticket do |ticket|
-      (ticket.user_id == user.id) && ticket.project.memberships.for_user(user.id) && !ticket.project.memberships.for_user(user.id).first.restricted?
+      #if you won the ticket, or if you are an admin, then you can edit and remove it
+      (ticket.user_id == user.id) || (ticket.project.memberships.for_user(user.id).first.admin? rescue false)
     end
 
     #anyone can read a comments on a ticket which belongs to a project which they are a member of
