@@ -1,38 +1,91 @@
-<ul class="nav nav-stacked span3 fixed-sidebar">
-  <%= action_add(current_user.projects.new()) if !(@project || @overview) %>
-  <%= action_add(current_user.overviews.new()) if !(@project || @overview) %>
+<div>
+  <ul class="nav nav-stacked span3 fixed-sidebar">
+      <%= action_add(current_user.projects.new()) if !(@project || @overview) %>
+      <%= action_add(current_user.overviews.new()) if !(@project || @overview) %>
 
-  <% if @project %>
-    <%= action_back_to(@project) if (@feature || @sprint || @ticket) %>
-    <%= action_back_to(@feature) if @ticket %>
-    <%= action_back_to(@sprint) if @ticket %>
+      <% if @project %>
+        <%= action_back_to(@project) if (@feature || @sprint || @ticket) %>
+        <%= action_back_to(@feature) if @ticket %>
+        <%= action_back_to(@sprint) if @ticket %>
 
-    <%= action_edit(@project) if @project && !(@feature || @sprint || @ticket) %>
-    <%= action_edit(@feature) if @feature && !@ticket %>
-    <%= action_edit(@sprint)  if @sprint  && !@ticket %>
-    <%= action_edit(@ticket)  if @ticket %>
+        <%= action_edit(@project) if @project && !(@feature || @sprint || @ticket) %>
+        <%= action_edit(@feature) if @feature && !@ticket %>
+        <%= action_edit(@sprint)  if @sprint  && !@ticket %>
+        <%= action_edit(@ticket)  if @ticket %>
 
-    <%
-      #we explicitly dont render the remove project link in the quick action menus
-      #action_remove(@project) if @project && !(@feature || @sprint || @ticket)
-    %>
-    <%= action_remove(@feature) if @feature && !@ticket %>
-    <%= action_remove(@sprint)  if @sprint && !@ticket%>
-    <%= action_remove(@ticket)  if @ticket %>
+        <%
+          #we explicitly dont render the remove project link in the quick action menus
+          #action_remove(@project) if @project && !(@feature || @sprint || @ticket)
+        %>
+        <%= action_remove(@feature) if @feature && !@ticket %>
+        <%= action_remove(@sprint)  if @sprint && !@ticket%>
+        <%= action_remove(@ticket)  if @ticket %>
 
-    <% if !@project.new_record? && current_membership  %>
-      <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket) %>
-      <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket) %>
-      <%= action_add(@project.tickets.new())  if current_membership.admin? || current_membership.regular? %>
+        <% if !@project.new_record? && current_membership  %>
+          <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket) %>
+          <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket) %>
+          <%= action_add(@project.tickets.new())  if current_membership.admin? || current_membership.regular? %>
+        <% end %>
+      <% end %>
+
+      <% if @overview %>
+        <% if !@overview.new_record? %>
+          <%= action_edit(@overview) %>
+          <%= action_remove(@overview) %>
+          <%= action_add(current_user.overviews.new()) %>
+        <% end %>
+      <% end %>
+      <li <% if @current_tab == 'basic-info' %>class="active" <%end%> >
+        <a data-toggle="tab" href="#pane-basic-info">
+          <span class='navico'>
+            <i class='icon-info-sign'></i>
+          </span>
+          basic info
+        </a>
+      </li>
+      <li <% if @current_tab == 'statuses' %>class="active" <%end%> >
+        <a data-toggle="tab" href="#pane-statuses">
+          <span class='navico'>
+            <i class='icon-tag'></i>
+          </span>
+          ticket statuses
+        </a>
+      </li>
+      <li  <% if @current_tab == 'access-control' %>class="active" <%end%> >
+        <a data-toggle="tab" href="#pane-access-control">
+          <span class='navico'>
+            <i class='icon-user'></i>
+          </span>
+          access control
+        </a>
+      </li>
+      <li <% if @current_tab == 'API-keys' %>class="active" <%end%> >
+        <a data-toggle="tab" href="#pane-api-keys">
+          <span class='navico'>
+            <i class='icon-wrench'></i>
+          </span>
+          API keys
+        </a>
+      </li>
+      <% if can_transfer_project?(@project) %>
+      <li <% if @current_tab == 'transfer-project' %>class="active" <%end%> >
+        <a data-toggle="tab" href="#pane-transfer-project">
+          <span class='navico'>
+            <i class='icon-share'></i>
+          </span>
+          transfer project
+        </a>
+      </li>
+      <% end %>
+      <% if can_delete_project?(@project) %> 
+      <li <% if @current_tab == 'delete-project' %>class="active" <%end%> >
+        <a data-toggle="tab" href="#pane-delete-project">
+          <span class='navico'>
+            <i class='icon-trash'></i>
+          </span>
+          delete project
+        </a>
+      </li>
     <% end %>
-  <% end %>
-
-  <% if @overview %>
-    <% if !@overview.new_record? %>
-      <%= action_edit(@overview) %>
-      <%= action_remove(@overview) %>
-      <%= action_add(current_user.overviews.new()) %>
-    <% end %>
-  <% end %>
-</ul>
-
+  </ul>
+</div>

@@ -1,6 +1,6 @@
 
 <%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
-  <%= f.input :title, :input_html => {:class => 'input-xxlarge'} %>
+  <%= f.input :title, :input_html => {:class => 'input-xxlarge'}, :placeholder => 'New Project' %>
   <%= f.input :description, :as => :text, :input_html => {:class => 'input-xxlarge', :rows => 5},:hint => 'a brief project description' %>
   <%= f.input :private, :as=>:radio_buttons, :hint => 'You can create as many public projects as you want.' %> 
   <div class="form-actions">  	
