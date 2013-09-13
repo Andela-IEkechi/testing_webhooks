@@ -97,6 +97,35 @@ describe User do
     user.should be_deleted
   end
 
+  context 'has preferences', :focus => true do
+    before(:each) do
+      @user = create(:user)
+    end
+
+    it "should respond to 'preferences" do
+      @user.should respond_to :preferences
+    end
+
+    it "is an openstruct" do
+      @user.preferences.class.should eq(OpenStruct)
+    end
+
+    it "should preferences to be updated explicitly" do
+      @user.preferences.something.should eq(nil)
+      @user.preferences.something = "example"
+      @user.preferences.something.should eq("example")
+    end
+
+    it "should preferences to be updated with a hash" do
+      @user.preferences.something.should eq(nil)
+      @user.preferences = OpenStruct.new({'foo' => 'bar', 'bin' => 'baz'})
+      @user.preferences.foo.should eq("bar")
+      @user.preferences.bin.should eq("baz")
+
+    end
+
+  end
+
   context "when being deleted" do
     before(:each) do
       @user = create(:user)
