@@ -1,13 +1,12 @@
 <% unless @project.new_record? %>
 	<%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal'}) do |f| %>
 		<div id='sortable-statuses'>
-		  <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
-		    <div class="well well-small ui-state-default">
-		      <%= ts_form.input_field :sort_index, :as => "hidden", 'data-sort-index'=> 1 %>
-		      <div class='row-fluid ' >
-		      	<div class='span1 reorder-handle' title='Reorder'><i class="icon-resize-vertical"></i>&nbsp;<i class='icon-reorder'></i>
-		      	</div>
-		      	<div class='span8'>
+		    <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
+		      <div class="well well-small ui-state-default">
+		      	<%= ts_form.input_field :sort_index, :as => "hidden", 'data-sort-index'=> 1 %>		      	
+		      	<div class='row-fluid ' >
+		      	  <div class='span1 reorder-handle' title='Reorder'><i class="icon-move"></i>&nbsp;<i class='icon-reorder'></i></div>
+		      	  <div class='span8'>   	    		
 	    	    	<%= ts_form.input_field :name, :class => 'input-medium', :placeholder => "Name" %>
 			        <%= ts_form.input_field :open, :as => :select, :include_blank  => false, :collection => [['Open', true] ,['Closed', false]], :class => 'input-small' %>
 		      	</div>
