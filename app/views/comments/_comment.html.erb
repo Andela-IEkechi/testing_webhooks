@@ -47,7 +47,8 @@
       <% end %>
       <% if changeset[:assignee_id] %>
         <li>
-          assignee: <b><%= comment.assignee || 'none' %></b>
+          assignee: <b <%=raw comment.project.memberships.for_user(comment.assignee_id).any? ? "" : "class='non-member' title='not a member'" %>>
+          <%= comment.assignee || 'none' %></b>
         </li>
       <% end %>
       <% if changeset[:cost] %>

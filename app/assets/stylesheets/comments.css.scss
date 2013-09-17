@@ -51,6 +51,9 @@ div.comment-statusbar {
 
     li {
       border-right: 1px solid #A7A7A7;
+      b.non-member{
+        color: #aaa;
+      }
     }
     li:last-child {
       border-right: 0;
