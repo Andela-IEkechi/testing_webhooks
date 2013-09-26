@@ -1,4 +1,7 @@
 class Project < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :custom_slug, use: :slugged
+
   before_create :owner_membership
   after_create :default_statuses
 
@@ -23,6 +26,10 @@ class Project < ActiveRecord::Base
 
   scope :opensource, where(:private => false)
 
+  def to_param
+    self.slug
+  end
+
   def to_s
     title
   end
@@ -40,6 +47,10 @@ class Project < ActiveRecord::Base
 
   def owner_membership
     self.memberships.build(:user_id => self.user_id, :role => 'admin')
+  end
+
+  def custom_slug
+    [self.id, self.title].join('-')
   end
 
 end
