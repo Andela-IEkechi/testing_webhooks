@@ -1,8 +1,18 @@
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class=> 'form-horizontal', :method => :put }) do |f| %>
   <div class="form-inputs">
-    <%= f.simple_fields_for :preferences, OpenStruct.new(resource.preferences) do |prefs| %>
-      <%= prefs.input :page_size, :collection => [5,10,15,20].map{|x| [x.to_s,x.to_s]}, :include_blank => false %>
-      <%= prefs.input :collapse_long_tickets, :as => :boolean, :hint => 'only show the 5 most recent comments' %>
+    <%
+      values = (current_user.preferences.class == OpenStruct) ? current_user.preferences : OpenStruct.new(current_user.preferences)
+    %>
+    <%= f.simple_fields_for :preferences, values do |prefs| %>
+      <%= prefs.input :page_size,
+                      :collection => [5,10,15,20].map{|x| [x.to_s,x.to_s]},
+                      :include_blank => false,
+                      :selected => prefs.object.page_size || "5" %>
+      <%= prefs.input :collapse_long_tickets,
+                      :as => :boolean,
+                      :hint => "only show the 5 most recent comments",
+                      :value => 1,
+                      :input_html => {:checked => (prefs.object.collapse_long_tickets == "1")}  %>
     <% end %>
   </div>
 

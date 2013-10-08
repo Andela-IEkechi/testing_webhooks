@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: api_keys
-#
-#  name       :string(255)      not null, primary key
-#  token      :string(255)      not null
-#  project_id :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 require 'spec_helper'
 
 describe ApiKey do

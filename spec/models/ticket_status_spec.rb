@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: ticket_statuses
-#
-#  id         :integer          not null, primary key
-#  project_id :integer          not null
-#  name       :string(255)      not null
-#  open       :boolean          default(TRUE)
-#  sort_index :integer
-#
-
 require 'spec_helper'
 
 describe TicketStatus do

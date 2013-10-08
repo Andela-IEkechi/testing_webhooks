@@ -1,40 +1,44 @@
 <% @current_tab = params[:current_tab]||'basic-info'%> <h3>Manage Profile</h3>
-<div class="tabbable tabs-left">
-	<ul class="nav nav-tabs">
-		<li <% if @current_tab == 'basic-info' %>class="active" <%end%> >
-			<a data-toggle="tab" href="#pane-basic-info">basic info</a>
-		</li>
-		<li <% if @current_tab == 'preferences' %>class="active" <%end%> >
-			<a data-toggle="tab" href="#pane-preferences">preferences</a>
-		</li>
-		<li <% if @current_tab == 'projects-membership' %>class="active" <%end%> >
-			<a data-toggle="tab" href="#pane-projects-membership">projects membership</a>
-		</li>		
-		<li <% if @current_tab == 'cancel-account' %>class="active" <%end%> >
-			<a data-toggle="tab" href="#pane-cancel-account">cancel account</a>
-		</li>
-	</ul>
-
-	<div class="tab-content">
-		<div id="pane-basic-info" class="tab-pane <% if @current_tab == 'basic-info' %>active<%end%> ">
-			<p>
-				<%= render :partial => 'info_form' %>
-			</p>
-		</div>
-		<div id="pane-preferences" class="tab-pane <% if @current_tab == 'preferences' %>active<%end%> ">
-			<p>
-				<%= render :partial => 'preferences_form' %>
-			</p>
-		</div>
-		<div id="pane-projects-membership" class="tab-pane <% if @current_tab == 'projects-membership' %>active<%end%> ">
-			<p>
-				<%= render :partial => '/accesses/user_projects_accesses_form' %>
-			</p>
-		</div>
-		<div id="pane-cancel-account" class="tab-pane <% if @current_tab == 'cancel-account' %>active<%end%> ">
-			<p>
-				<%= render :partial => 'cancel_account_form' %>
-			</p>
+<div class='row-fluid'>
+	<div class='span2 well well-small'>
+		
+		<ul class="nav nav nav-list">
+			<li <% if @current_tab == 'basic-info' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-basic-info">basic info</a>
+			</li>
+			<li <% if @current_tab == 'preferences' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-preferences">preferences</a>
+			</li>
+			<li <% if @current_tab == 'projects-membership' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-projects-membership">projects membership</a>
+			</li>		
+			<li <% if @current_tab == 'cancel-account' %>class="active" <%end%> >
+				<a data-toggle="tab" href="#pane-cancel-account">cancel account</a>
+			</li>
+		</ul>
+	 </div>
+	 <div class='span10'>
+		<div class="tab-content">
+			<div id="pane-basic-info" class="tab-pane <% if @current_tab == 'basic-info' %>active<%end%> ">
+				<p>
+					<%= render :partial => 'info_form' %>
+				</p>
+			</div>
+			<div id="pane-preferences" class="tab-pane <% if @current_tab == 'preferences' %>active<%end%> ">
+				<p>
+					<%= render :partial => 'preferences_form' %>
+				</p>
+			</div>
+			<div id="pane-projects-membership" class="tab-pane <% if @current_tab == 'projects-membership' %>active<%end%> ">
+				<p>
+					<%= render :partial => '/accesses/user_projects_accesses_form' %>
+				</p>
+			</div>
+			<div id="pane-cancel-account" class="tab-pane <% if @current_tab == 'cancel-account' %>active<%end%> ">
+				<p>
+					<%= render :partial => 'cancel_account_form' %>
+				</p>
+			</div>
 		</div>
 	</div>
 </div>

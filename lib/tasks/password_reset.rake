@@ -1,8 +1,8 @@
 def reset_passwords
-    puts "Resetting all confirmed users passwords to 'secret' "
+    puts "Resetting all confirmed users passwords to '@1secret' "
     User.find_each do |u|
       if u.confirmed?
-        u.password = 'secret'
+        u.password = '@1secret'
         u.save
         puts u
       end
