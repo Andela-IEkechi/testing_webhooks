@@ -1,7 +1,5 @@
 class Ticket < ActiveRecord::Base
   include Scoped
-  extend FriendlyId
-  friendly_id :title, use: [:slugged, :history]
 
   belongs_to :project #always
   has_many :comments, :order => :created_at, :dependent => :destroy
@@ -28,10 +26,6 @@ class Ticket < ActiveRecord::Base
   scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.scoped_id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
 
   delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
-
-  def to_param
-    self.slug
-  end
 
   def to_s
     title

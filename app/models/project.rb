@@ -18,7 +18,7 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :ticket_statuses, :memberships
   accepts_nested_attributes_for :api_keys, :allow_destroy => true
 
-  validates :title, :presence => true, :uniqueness => {:scope => :user_id}
+  validates :title, :presence => true
 
   attr :remove_me
 
