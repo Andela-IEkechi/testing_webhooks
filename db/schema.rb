@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20131008083701) do
-=======
-ActiveRecord::Schema.define(:version => 20130731102424) do
->>>>>>> feature/sprint13
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -130,11 +126,11 @@ ActiveRecord::Schema.define(:version => 20130731102424) do
   add_index "sprints", ["project_id"], :name => "index_sprints_on_project_id"
 
   create_table "ticket_statuses", :force => true do |t|
-    t.integer "project_id",                       :null => false
-    t.string  "name",                             :null => false
+    t.integer "project_id",                        :null => false
+    t.string  "name",                              :null => false
     t.boolean "open",           :default => true
     t.integer "sort_index"
-    t.boolean "system_default"
+    t.boolean "system_default", :default => false
   end
 
   create_table "tickets", :force => true do |t|

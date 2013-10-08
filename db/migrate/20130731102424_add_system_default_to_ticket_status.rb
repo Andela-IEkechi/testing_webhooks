@@ -1,7 +1,7 @@
 class AddSystemDefaultToTicketStatus < ActiveRecord::Migration
 
 	def up
-		add_column :ticket_statuses, :system_default, :boolean, :false
+		add_column :ticket_statuses, :system_default, :boolean, :default => false
 
 		puts "Updating system_default for first two statuses"
 		Project.find_each do |project|

@@ -11,7 +11,7 @@
 			        <%= ts_form.input_field :open, :as => :select, :include_blank  => false, :collection => [['Open', true] ,['Closed', false]], :class => 'input-small' %>
 		      	</div>
 		      	<div class='span3'>
-		          <%= ts_form.link_to_remove raw("<i class='icon-trash' ></i>"), :class => 'pull-right', :title => 'Remove this status' unless ts_form.object.system_default?%>
+		          <%= ts_form.link_to_remove raw("<i class='icon-trash' ></i>"), :class => 'pull-right', :title => 'Remove this status' unless ts_form.object.system_default%>
 		        </div>
 		      	<% if ts_form.object.errors.any? %>
 		      	  <div class="text-error" ><%= ts_form.object.errors.full_messages.join(", ") %>
