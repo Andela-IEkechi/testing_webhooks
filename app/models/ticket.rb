@@ -1,7 +1,7 @@
 class Ticket < ActiveRecord::Base
   include Scoped
   extend FriendlyId
-  friendly_id :custom_slug, use: :slugged
+  friendly_id :title, use: [:slugged, :history]
 
   belongs_to :project #always
   has_many :comments, :order => :created_at, :dependent => :destroy
@@ -83,10 +83,4 @@ class Ticket < ActiveRecord::Base
     self.last_comment = self.comments.last
     self.save!
   end
-
-  private
-  def custom_slug
-    [self.scoped_id, self.title].join('-')
-  end
-
 end
