@@ -44,7 +44,7 @@ describe GithubController do
     }.to change{@ticket.comments.count}.from(1).to(2)
   end
 
-  it 'assigns a commit message to a multiple tickets', :focus => true do
+  it 'assigns a commit message to a multiple tickets' do
     ticket2 = create(:ticket, :project => @project)
     ticket2.comments << create(:comment, :user => @user, :ticket => ticket2)
 

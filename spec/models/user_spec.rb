@@ -97,7 +97,7 @@ describe User do
     user.should be_deleted
   end
 
-  context 'has preferences', :focus => true do
+  context 'has preferences' do
     before(:each) do
       @user = create(:user)
     end
@@ -121,7 +121,6 @@ describe User do
       @user.preferences = OpenStruct.new({'foo' => 'bar', 'bin' => 'baz'})
       @user.preferences.foo.should eq("bar")
       @user.preferences.bin.should eq("baz")
-
     end
 
   end
