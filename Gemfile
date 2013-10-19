@@ -7,12 +7,13 @@ gem 'nested_form'
 gem 'devise'
 gem 'devise_invitable', '~> 1.1.0'
 
-gem 'cancan', '1.6.9'
+gem 'cancan', '1.6.9' #DO NOT USE 1.6.10 https://github.com/ryanb/cancan/issues/865
 gem 'omniauth-github'
 gem 'paper_trail'
 gem 'thin'
 gem 'rake'
 gem 'ruby-uuid'
+gem "friendly_id", ">=4.0.9"
 
 #paging
 gem 'kaminari'
@@ -58,7 +59,7 @@ group :development,:test do
   gem 'capistrano'
   gem 'capistrano-ext'
   gem 'rspec-rails'
-  gem 'rb-readline'
+  gem 'rb-readline', '~> 0.4.2'
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'pry-rails' # for better console debugging
@@ -72,7 +73,6 @@ group :test do
   gem 'database_cleaner'
 end
 
-group :development do
-  gem 'rails-footnotes', '>= 3.7.5.rc4'
-end
-
+# group :development do
+#   gem 'rails-footnotes', '>= 3.7.5.rc4'
+# end

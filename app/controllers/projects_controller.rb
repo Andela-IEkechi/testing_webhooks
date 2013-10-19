@@ -7,6 +7,9 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    if request.path != project_path(@project)
+      redirect_to @project, status: :moved_permanently
+    end
   end
 
   def new

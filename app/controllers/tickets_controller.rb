@@ -67,6 +67,7 @@ class TicketsController < ApplicationController
         redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature, :sprint_id => @ticket.sprint)
       else
         flash.keep[:notice] = "Ticket was added"
+        @ticket.reload # refresh the ID from the DB
         redirect_to project_ticket_path(@ticket.project, @ticket)
       end
     else
