@@ -28,7 +28,7 @@ module ActionsHelper
   end
 
   def action_edit(target)
-    return unless target && can?(:edit, target)
+    return unless target && can?(:edit, target) && !target.new_record?
 
     link_content = content_tag :span, :class => 'navico' do
       content_tag(:i, :class => 'icon-edit') do
@@ -59,7 +59,7 @@ module ActionsHelper
   end
 
   def action_remove(target)
-    return unless target && can?(:delete, target)
+    return unless target && can?(:delete, target) && !target.new_record?
 
     link_content = content_tag :span, :class => 'navico' do
       content_tag(:i, :class => 'icon-trash') do

@@ -1,39 +1,3 @@
-# == Schema Information
-#
-# Table name: users
-#
-#  id                     :integer          not null, primary key
-#  email                  :string(255)      default(""), not null
-#  encrypted_password     :string(255)      default("")
-#  reset_password_token   :string(255)
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0)
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string(255)
-#  last_sign_in_ip        :string(255)
-#  confirmation_token     :string(255)
-#  confirmed_at           :datetime
-#  confirmation_sent_at   :datetime
-#  unconfirmed_email      :string(255)
-#  authentication_token   :string(255)
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  provider               :string(255)
-#  uid                    :string(255)
-#  full_name              :string(255)
-#  terms                  :boolean          default(FALSE)
-#  invitation_token       :string(60)
-#  invitation_sent_at     :datetime
-#  invitation_accepted_at :datetime
-#  invitation_limit       :integer
-#  invited_by_id          :integer
-#  invited_by_type        :string(255)
-#  preferences            :text
-#  deleted_at             :datetime
-#
-
 require 'spec_helper'
 
 describe User do
@@ -131,6 +95,35 @@ describe User do
     user.reload
 
     user.should be_deleted
+  end
+
+  context 'has preferences', :focus => true do
+    before(:each) do
+      @user = create(:user)
+    end
+
+    it "should respond to 'preferences" do
+      @user.should respond_to :preferences
+    end
+
+    it "is an openstruct" do
+      @user.preferences.class.should eq(OpenStruct)
+    end
+
+    it "should preferences to be updated explicitly" do
+      @user.preferences.something.should eq(nil)
+      @user.preferences.something = "example"
+      @user.preferences.something.should eq("example")
+    end
+
+    it "should preferences to be updated with a hash" do
+      @user.preferences.something.should eq(nil)
+      @user.preferences = OpenStruct.new({'foo' => 'bar', 'bin' => 'baz'})
+      @user.preferences.foo.should eq("bar")
+      @user.preferences.bin.should eq("baz")
+
+    end
+
   end
 
   context "when being deleted" do

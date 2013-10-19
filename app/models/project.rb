@@ -1,4 +1,7 @@
 class Project < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :title, use: [:slugged, :history]
+
   before_create :owner_membership
   after_create :default_statuses
 
@@ -15,13 +18,17 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :ticket_statuses, :memberships
   accepts_nested_attributes_for :api_keys, :allow_destroy => true
 
-  validates :title, :presence => true, :uniqueness => {:scope => :user_id}
+  validates :title, :presence => true
 
   attr :remove_me
 
   default_scope order('projects.title ASC')
 
   scope :opensource, where(:private => false)
+
+  def to_param
+    self.slug
+  end
 
   def to_s
     title
@@ -41,5 +48,4 @@ class Project < ActiveRecord::Base
   def owner_membership
     self.memberships.build(:user_id => self.user_id, :role => 'admin')
   end
-
 end

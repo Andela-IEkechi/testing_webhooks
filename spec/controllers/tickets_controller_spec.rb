@@ -169,7 +169,7 @@ describe TicketsController do
         it "redirects to show the ticket" do
           post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
           response.should be_redirect
-          response.should redirect_to(project_ticket_path(@project, @ticket.to_param))
+          response.should redirect_to(project_ticket_path(@project, assigns(:ticket).to_param))
         end
       end
       context "with invalid attributes" do
@@ -207,6 +207,14 @@ describe TicketsController do
         response.should redirect_to(project_feature_path(@project, @feature)) if @feature
       end
     end
+  end
+
+  it "should open URL slugs correctly" do
+    @ticket = create(:ticket, :project => @project, :title => 'alpha beta gamma')
+    @ticket.reload
+    get :show, :project_id => @project.id, :id => "#{@ticket.id}-alpha-beta-gamma"
+
+    response.should render_template(:show)
   end
 
   context "in the context of a project" do
