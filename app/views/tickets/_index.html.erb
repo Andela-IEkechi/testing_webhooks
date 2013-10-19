@@ -61,7 +61,11 @@
       </td>
       <td>
         <div class="overflow" title="<%= ticket.assignee %>">
+          <% if !ticket.assignee || ticket.project.memberships.for_user(ticket.assignee.id).any? %>
           <%= ticket.assignee %>
+          <% else %>
+          <span class='non-member' title='not a member'><%= ticket.assignee %></span>
+          <% end %>
         </div>
       </td>
       <td>
