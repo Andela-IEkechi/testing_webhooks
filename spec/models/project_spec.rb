@@ -100,10 +100,17 @@ describe Project do
   end
 
   it "should delete related ticket_statuses when it's destroyed" do
-    @project.should have_at_least(1).ticket_statuses
+    @project.should have_at_least(2).ticket_statuses
     expect {
       @project.destroy
     }.to change(TicketStatus,:count).by(-2) #two default statuses
+  end
+
+  it "should not be deleted when a related ticket_statuses is destroyed" do
+    @project.should have_at_least(1).ticket_statuses
+    expect {
+      @project.ticket_statuses.first.destroy
+    }.to change(Project,:count).by(0)
   end
 
   it "should have optional API keys to allow external parties to interface with it" do
