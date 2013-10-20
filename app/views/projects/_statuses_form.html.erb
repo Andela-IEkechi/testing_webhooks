@@ -3,12 +3,12 @@
 		<div id='sortable-statuses'>
 		    <%= f.simple_fields_for :ticket_statuses do |ts_form| %>
 		      <div class="well well-small ui-state-default">
-		      	<%= ts_form.input_field :sort_index, :as => "hidden", 'data-sort-index'=> 1 %>		      	
+		      	<%= ts_form.input_field :sort_index, :as => "hidden", 'data-sort-index'=> 1 %>
 		      	<div class='row-fluid ' >
 		      	  <div class='span1 reorder-handle' title='Reorder'><i class="icon-move"></i>&nbsp;<i class='icon-reorder'></i></div>
-		      	  <div class='span8'>   	    		
+		      	  <div class='span8'>
 	    	    	<%= ts_form.input_field :name, :class => 'input-medium', :placeholder => "Name" %>
-			        <%= ts_form.input_field :open, :as => :select, :include_blank  => false, :collection => [['Open', true] ,['Closed', false]], :class => 'input-small' %>
+			        <%= ts_form.input_field :open, :as => :select, :include_blank  => false, :collection => [['Open', true] ,['Closed', false]], :class => 'input-small', :disabled =>  ts_form.object.system_default %>
 		      	</div>
 		      	<div class='span3'>
 		          <%= ts_form.link_to_remove raw("<i class='icon-trash' ></i>"), :class => 'pull-right', :title => 'Remove this status' unless ts_form.object.system_default%>
