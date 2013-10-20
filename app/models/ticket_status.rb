@@ -1,15 +1,15 @@
 class TicketStatus < ActiveRecord::Base
-  default_scope :order => "sort_index asc"
   belongs_to :project
   has_many :comments, :foreign_key => 'status_id'
 
   before_destroy :check_for_comments
-  before_destroy :check_prevent_deleting_system_default
 
   attr_accessible :name, :open, :sort_index, :system_default #cant use "type"
 
   validates :name, :presence => true, :uniqueness => {:scope => :project_id}
   validates :project_id, :presence => true
+
+  default_scope :order => "sort_index ASC"
 
   def to_s
     name
@@ -26,14 +26,6 @@ class TicketStatus < ActiveRecord::Base
   end
 
   private
-
-  def check_prevent_deleting_system_default
-    if system_default?
-      errors.add(:base, "cannot delete a ticket status if it is project's default")
-      return false
-     end
-     return true
-  end
 
   def check_for_comments
     if comments && comments.count > 0
