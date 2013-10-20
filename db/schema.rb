@@ -126,11 +126,11 @@ ActiveRecord::Schema.define(:version => 20131008083701) do
   add_index "sprints", ["project_id"], :name => "index_sprints_on_project_id"
 
   create_table "ticket_statuses", :force => true do |t|
-    t.integer "project_id",                       :null => false
-    t.string  "name",                             :null => false
+    t.integer "project_id",                        :null => false
+    t.string  "name",                              :null => false
     t.boolean "open",           :default => true
     t.integer "sort_index"
-    t.boolean "system_default"
+    t.boolean "system_default", :default => false
   end
 
   create_table "tickets", :force => true do |t|
@@ -167,13 +167,13 @@ ActiveRecord::Schema.define(:version => 20131008083701) do
     t.string   "uid"
     t.string   "full_name"
     t.boolean  "terms",                                :default => false
-    t.text     "preferences"
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.text     "preferences"
     t.datetime "deleted_at"
   end
 
