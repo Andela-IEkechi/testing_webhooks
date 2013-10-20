@@ -1,4 +1,4 @@
-<% if  !(action_name == 'edit' && controller_name == 'projects') %>
+<% if  !(['edit', 'update'].include?(action_name) && controller_name == 'projects') %>
   <div>
     <ul class="nav nav-stacked span3 fixed-sidebar">
       <%= action_add(current_user.projects.new()) if !(@project || @overview) %>
