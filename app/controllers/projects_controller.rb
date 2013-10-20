@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
 
   def index
     #limit the projects to the ones we have memberships to
+    binding.pry
     @projects = current_user.memberships.collect(&:project)
   end
 
