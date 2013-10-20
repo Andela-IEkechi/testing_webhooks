@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   has_many :sprints, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy, :order => 'ticket_statuses.sort_index asc'
 
-  has_many :memberships, :dependent => :destroy, :include => :user
+  has_many :memberships, :dependent => :destroy, :include => :user, :order => 'users.email asc'
   has_many :api_keys, :dependent => :destroy
 
   attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids, :description
