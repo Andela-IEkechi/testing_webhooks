@@ -10,10 +10,9 @@ class AccessesController < ApplicationController
     #create new users based on membership attributes
     #the project owner has to be a member
     params[:project][:memberships_attributes].each do |token, membership_attr|
-
       if membership_attr[:id]
-        membership = Membership.find(membership_attr[:id])
-        if membership_attr[:role] && membership_attr[:role].empty?
+        membership = @project.memberships.find(membership_attr[:id])
+        if membership.user_id != membership.project.user_id && membership_attr[:role] && membership_attr[:role].empty?   
           membership.destroy  #clean house if the member is removed
         else
           user = membership.user
@@ -31,7 +30,7 @@ class AccessesController < ApplicationController
     end
 
     flash[:notice] = "Project access updated"
-    redirect_to edit_project_path(@project)
+    redirect_to edit_project_path(@project, :current_tab => 'access-control')
   end
 end
 

@@ -1,12 +1,15 @@
 class TicketStatus < ActiveRecord::Base
   belongs_to :project
   has_many :comments, :foreign_key => 'status_id'
+
   before_destroy :check_for_comments
 
-  attr_accessible :name, :open #cant use "type"
+  attr_accessible :name, :open, :sort_index, :system_default #cant use "type"
 
   validates :name, :presence => true, :uniqueness => {:scope => :project_id}
   validates :project_id, :presence => true
+
+  default_scope :order => "sort_index ASC"
 
   def to_s
     name
@@ -29,5 +32,6 @@ class TicketStatus < ActiveRecord::Base
       errors.add(:base, "cannot delete a ticket status while comments refer to it")
       return false
     end
+    return true
   end
 end

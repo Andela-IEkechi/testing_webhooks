@@ -39,9 +39,9 @@ describe GithubController do
   end
 
   it 'assigns a commit message to a ticket' do
-    expect do
+    expect {
       post :commit, :token => @key.token, :payload => JSON.generate(@payload)
-    end.to change{@ticket.comments.count}.from(1).to(2)
+    }.to change{@ticket.comments.count}.from(1).to(2)
   end
 
   it 'assigns a commit message to a multiple tickets' do
@@ -50,11 +50,11 @@ describe GithubController do
 
     @payload[:commits].first[:message] = "a commit message with more than one ticket [##{@ticket.scoped_id}] [##{ticket2.scoped_id}]"
 
-    expect do
+    expect {
       post :commit, :token => @key.token, :payload => JSON.generate(@payload)
       @ticket.reload
       ticket2.reload
-    end.to change{@ticket.comments.count + ticket2.comments.count}.by(2)
+    }.to change{@ticket.comments.count + ticket2.comments.count}.by(2)
 
     @ticket.comments.count.should eq(2)
     ticket2.comments.count.should eq(2)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130521184232) do
+ActiveRecord::Schema.define(:version => 20131020093953) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -69,6 +69,17 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
 
   add_index "features", ["project_id"], :name => "index_features_on_project_id"
 
+  create_table "friendly_id_slugs", :force => true do |t|
+    t.string   "slug",                         :null => false
+    t.integer  "sluggable_id",                 :null => false
+    t.string   "sluggable_type", :limit => 40
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], :name => "index_friendly_id_slugs_on_slug_and_sluggable_type", :unique => true
+  add_index "friendly_id_slugs", ["sluggable_id"], :name => "index_friendly_id_slugs_on_sluggable_id"
+  add_index "friendly_id_slugs", ["sluggable_type"], :name => "index_friendly_id_slugs_on_sluggable_type"
+
   create_table "memberships", :force => true do |t|
     t.integer "project_id"
     t.integer "user_id"
@@ -98,7 +109,10 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.integer  "sprints_sequence",  :default => 0
     t.boolean  "private",           :default => true
     t.string   "description"
+    t.string   "slug"
   end
+
+  add_index "projects", ["slug"], :name => "index_projects_on_slug", :unique => true
 
   create_table "sprints", :force => true do |t|
     t.date     "due_on",                    :null => false
@@ -112,9 +126,11 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
   add_index "sprints", ["project_id"], :name => "index_sprints_on_project_id"
 
   create_table "ticket_statuses", :force => true do |t|
-    t.integer "project_id",                   :null => false
-    t.string  "name",                         :null => false
-    t.boolean "open",       :default => true
+    t.integer "project_id",                        :null => false
+    t.string  "name",                              :null => false
+    t.boolean "open",           :default => true
+    t.integer "sort_index"
+    t.boolean "system_default", :default => false
   end
 
   create_table "tickets", :force => true do |t|
@@ -124,12 +140,10 @@ ActiveRecord::Schema.define(:version => 20130521184232) do
     t.datetime "updated_at",                     :null => false
     t.integer  "last_comment_id"
     t.integer  "scoped_id",       :default => 0
-    t.string   "slug"
   end
 
   add_index "tickets", ["project_id", "scoped_id"], :name => "index_tickets_on_project_id_and_scoped_id"
   add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
-  add_index "tickets", ["slug"], :name => "index_tickets_on_slug", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                                :default => "",    :null => false

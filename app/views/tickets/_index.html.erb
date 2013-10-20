@@ -8,7 +8,7 @@
   parent ||= "project-#{project_id}" if project_id
  %>
 
- <div id="tickets-list-container-<%= parent %>">
+ <div id="tickets-list-container-<%= parent %>" <%if params[:hide_empty_tickets] && @tickets.empty? %> data-hide-empty-tickets  style="display:none;" <% end %> >
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
       <div class="pull-right">
@@ -61,7 +61,11 @@
       </td>
       <td>
         <div class="overflow" title="<%= ticket.assignee %>">
+          <% if !ticket.assignee || ticket.project.memberships.for_user(ticket.assignee.id).any? %>
           <%= ticket.assignee %>
+          <% else %>
+          <span class='non-member' title='not a member'><%= ticket.assignee %></span>
+          <% end %>
         </div>
       </td>
       <td>

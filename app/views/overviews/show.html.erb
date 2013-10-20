@@ -1,11 +1,16 @@
 <div class="overview-title">
-  <h3><%= @overview.title %>&nbsp;<small><%= @overview.filter %></small></h3>
+   <div class='row-fluid'>
+   		<div class='span8'><h3><%= @overview.title %>&nbsp;<small><%= @overview.filter %></small></h3></div>
+   		<div class='span4'>
+   			<a  class='btn pull-right empty-project-toggle' href="#" data-shown='Hide empty projects' data-hidden='Show empty projects' data-toggle='[data-hide-empty-tickets]'>Show empty projects</a>
+   		</div>
+   </div>  
 </div>
 
 <% @projects.each do |project| %>
 <div>
   <div id="tickets-list-container-project-<%=project.id%>">
-    <%= ticket_load_link 'loading overview...', {:project_id => project.id}, {:class => "autoload"} %>
+    <%= ticket_load_link 'loading overview...', {:project_id => project.id, :hide_empty_tickets => true}, {:class => "autoload"} %>
   </div>
 </div>
 <% end %>

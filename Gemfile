@@ -1,17 +1,19 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails', '~>3.2.11'
+gem 'rails', '~> 3.2.12'
 gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
 gem 'devise'
 gem 'devise_invitable', '~> 1.1.0'
 
-gem 'cancan'
+gem 'cancan', '1.6.9' #DO NOT USE 1.6.10 https://github.com/ryanb/cancan/issues/865
 gem 'omniauth-github'
 gem 'paper_trail'
 gem 'thin'
 gem 'rake'
+gem 'ruby-uuid'
+gem "friendly_id", ">=4.0.9"
 
 #paging
 gem 'kaminari'
@@ -22,6 +24,7 @@ gem 'redcarpet'
 gem 'pygmentize'
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'bootstrap-sass'
 
 #file uploads
@@ -56,23 +59,20 @@ group :development,:test do
   gem 'capistrano'
   gem 'capistrano-ext'
   gem 'rspec-rails'
-  gem 'guard-rspec'
-  gem 'rb-readline'
+  gem 'rb-readline', '~> 0.4.2'
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'pry'
+  gem 'pry-rails' # for better console debugging
+  gem 'pry-debugger'
+  gem 'pry-remote'
+  gem 'puma'
 end
 
 group :test do
   gem 'rspec'
-  gem 'rb-fsevent'
-  gem 'spork-rails'
-  gem 'guard-spork'
-  gem 'capybara'
   gem 'database_cleaner'
-  gem 'rb-inotify', '~> 0.9'
 end
 
-group :development do
-  gem 'rails-footnotes', '>= 3.7.5.rc4'
-end
+# group :development do
+#   gem 'rails-footnotes', '>= 3.7.5.rc4'
+# end

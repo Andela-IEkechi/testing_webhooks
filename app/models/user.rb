@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
 
   after_initialize do |user|
     user.preferences ||= {}
-    user.preferences = OpenStruct.new(user.preferences)
+    user.preferences = OpenStruct.new(user.preferences) unless user.preferences.class == OpenStruct #dont do it twice
     user.preferences.page_size ||= 10 #default it to something sane
   end
 

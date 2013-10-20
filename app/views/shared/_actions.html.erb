@@ -1,39 +1,40 @@
-<ul class="nav nav-stacked">
-    <%= action_add(current_user.projects.new()) if !(@project || @overview) %>
-    <%= action_add(current_user.overviews.new()) if !(@project || @overview) %>
+<% if  !(['edit', 'update'].include?(action_name) && controller_name == 'projects') %>
+  <div>
+    <ul class="nav nav-stacked span3 fixed-sidebar">
+      <%= action_add(current_user.projects.new()) if !(@project || @overview) %>
+      <%= action_add(current_user.overviews.new()) if !(@project || @overview) %>
 
-    <% if @project %>
-      <%= action_back_to(@project) if (@feature || @sprint || @ticket) %>
-      <%= action_back_to(@feature) if @ticket %>
-      <%= action_back_to(@sprint) if @ticket %>
+      <% if @project %>
+        <%= action_back_to(@project) if (@feature || @sprint || @ticket) %>
+        <%= action_back_to(@feature) if @ticket %>
+        <%= action_back_to(@sprint) if @ticket %>
 
-      <%= action_edit(@project) if @project && !(@feature || @sprint || @ticket) %>
-      <%= action_edit(@feature) if @feature && !@ticket %>
-      <%= action_edit(@sprint)  if @sprint  && !@ticket %>
-      <%= action_edit(@ticket)  if @ticket %>
+        <%= action_edit(@project) if @project && !(@feature || @sprint || @ticket) %>
+        <%= action_edit(@feature) if @feature && !@ticket %>
+        <%= action_edit(@sprint)  if @sprint  && !@ticket %>
+        <%= action_edit(@ticket)  if @ticket %>
 
-      <%
-        #we explicitly dont render the remove project link in the quick action menus
-        #action_remove(@project) if @project && !(@feature || @sprint || @ticket)
-      %>
-      <%= action_remove(@feature) if @feature && !@ticket %>
-      <%= action_remove(@sprint)  if @sprint && !@ticket%>
-      <%= action_remove(@ticket)  if @ticket %>
+        <%= action_remove(@feature) if @feature && !@ticket %>
+        <%= action_remove(@sprint)  if @sprint && !@ticket%>
+        <%= action_remove(@ticket)  if @ticket %>
 
-      <% if !@project.new_record? && current_membership  %>
-        <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket) %>
-        <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket) %>
-        <%= action_add(@project.tickets.new())  if current_membership.admin? || current_membership.regular? %>
+        <% if !@project.new_record? && current_membership  %>
+          <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket|| (@feature && @feature.new_record?)) %>
+          <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket || (@sprint && @sprint.new_record?)) %>
+          <%= action_add(@project.tickets.new())  if (current_membership.admin? || current_membership.regular?) && !(@ticket && @ticket.new_record?) && !(@sprint && @sprint.new_record?) && !(@feature && @feature.new_record?) %>
+
+        <% end %>
       <% end %>
-    <% end %>
 
-    <% if @overview %>
-      <% if !@overview.new_record? %>
-        <%= action_edit(@overview) %>
-        <%= action_remove(@overview) %>
-        <%= action_add(current_user.overviews.new()) %>
+      <% if @overview %>
+        <% if !@overview.new_record? %>
+          <%= action_edit(@overview) %>
+          <%= action_remove(@overview) %>
+          <%= action_add(current_user.overviews.new()) %>
+        <% end %>
       <% end %>
-    <% end %>
-
-</ul>
-
+    </ul>
+  </div>
+<% else %>
+  <%= render :partial => '/projects/actions' %>
+<% end %>

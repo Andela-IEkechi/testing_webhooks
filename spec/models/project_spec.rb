@@ -24,7 +24,7 @@ describe Project do
     @project.to_s.should eq(@project.title)
   end
 
-  it "optionally has a description", focus: true do
+  it "optionally has a description" do
     @project.description = be_nil
     @project.should be_valid
     @project.description = Faker::Lorem.sentence
@@ -48,14 +48,13 @@ describe Project do
     @project.memberships.collect(&:user_id).include?(@project.user_id).should be_true
   end
 
-  it "should not allow duplicate titles for the same user" do
+  it "should allow duplicate titles for the same user" do
+    #we need this to be true, because a user may inherit a project with the same title as one they already own
     joe = create(:user)
     project_one = create(:project, :user => joe)
     project_one.should_not be_nil
     #now create the duplicate name
     duplicate = build(:project, :user => joe, :title => project_one.title)
-    duplicate.should_not be_valid
-    duplicate.title = 'something else entirely'
     duplicate.should be_valid
   end
 
@@ -100,10 +99,17 @@ describe Project do
   end
 
   it "should delete related ticket_statuses when it's destroyed" do
-    @project.should have_at_least(1).ticket_statuses
+    @project.should have_at_least(2).ticket_statuses
     expect {
       @project.destroy
     }.to change(TicketStatus,:count).by(-2) #two default statuses
+  end
+
+  it "should not be deleted when a related ticket_statuses is destroyed" do
+    @project.should have_at_least(1).ticket_statuses
+    expect {
+      @project.ticket_statuses.first.destroy
+    }.to change(Project,:count).by(0)
   end
 
   it "should have optional API keys to allow external parties to interface with it" do

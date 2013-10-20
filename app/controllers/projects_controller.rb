@@ -3,10 +3,14 @@ class ProjectsController < ApplicationController
 
   def index
     #limit the projects to the ones we have memberships to
+    binding.pry
     @projects = current_user.memberships.collect(&:project)
   end
 
   def show
+    if request.path != project_path(@project)
+      redirect_to @project, status: :moved_permanently
+    end
   end
 
   def new
@@ -46,7 +50,7 @@ class ProjectsController < ApplicationController
           redirect_to projects_path() and return
         end
       end
-      redirect_to edit_project_path(@project)
+      redirect_to edit_project_path(@project, :current_tab => params[:current_tab]|| 'basic-info')
     else
       flash[:alert] = "Project could not be updated"
       render 'edit'
@@ -60,12 +64,12 @@ class ProjectsController < ApplicationController
       redirect_to projects_path()
     else
       flash[:notice] = "#{title} could not be deleted"
-      redirect_to project_path(@project)
+      redirect_to project_path(@project, :current_tab => 'delete-project')
     end
   end
 
   def public
-    @projects = Project.public
+    @projects = Project.opensource
   end
 
   def invite
@@ -74,6 +78,5 @@ class ProjectsController < ApplicationController
     flash[:notice] = "Your request to join <b>#{@project.title}</b> was sent to the project administrator".html_safe
     redirect_to projects_public_path
   end
-
 end
 

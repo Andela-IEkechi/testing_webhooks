@@ -6,3 +6,11 @@ div.project-block {
   margin-bottom: 50px;
   border-bottom: 1px solid #EFEFEF;
 }
+
+
+#sortable-statuses .reorder-handle{
+	cursor:move;
+  i.icon-trash{
+    margin-top: 3px;
+  }
+}
