@@ -81,12 +81,13 @@ describe Overview do
       alt_overview.should be_valid
     end
 
-    it "should not be too short" do
+    it "should not be shorter than 3 characters" do
       @overview.title = 'ab' #2 is to short
       @overview.should_not be_valid
     end
-    it "should not be too long" do
-      @overview.title = 'abcdefghijk' #11 is too long
+
+    it "should not be longer than 20 characters" do
+      @overview.title = 'abcdefghij abcdefghij' #21 is too long
       @overview.should_not be_valid
     end
   end
