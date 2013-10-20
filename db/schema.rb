@@ -138,7 +138,6 @@ ActiveRecord::Schema.define(:version => 20131008083701) do
     t.string   "title",                          :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
-    t.string   "slug"
     t.integer  "last_comment_id"
     t.integer  "scoped_id",       :default => 0
   end
