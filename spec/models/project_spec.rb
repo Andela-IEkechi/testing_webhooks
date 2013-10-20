@@ -48,14 +48,13 @@ describe Project do
     @project.memberships.collect(&:user_id).include?(@project.user_id).should be_true
   end
 
-  it "should not allow duplicate titles for the same user" do
+  it "should allow duplicate titles for the same user" do
+    #we need this to be true, because a user may inherit a project with the same title as one they already own
     joe = create(:user)
     project_one = create(:project, :user => joe)
     project_one.should_not be_nil
     #now create the duplicate name
     duplicate = build(:project, :user => joe, :title => project_one.title)
-    duplicate.should_not be_valid
-    duplicate.title = 'something else entirely'
     duplicate.should be_valid
   end
 
