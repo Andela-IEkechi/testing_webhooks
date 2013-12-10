@@ -3,6 +3,7 @@ class Ticket < ActiveRecord::Base
 
   belongs_to :project #always
   has_many :comments, :order => :created_at, :dependent => :destroy
+  has_many :assets, :through => :comments, :class_name => 'Comment::Asset'
 
   belongs_to :last_comment, :class_name => 'Comment'
   has_one :assignee, :through => :last_comment
