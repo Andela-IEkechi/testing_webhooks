@@ -21,6 +21,7 @@ Conductor::Application.routes.draw do
   resources :projects do
     resources :tickets do
       resources :comments
+      get 'download_asset/:asset_id' => 'assets#download', :as => :download_asset
     end
     resource  :access
     resources :features

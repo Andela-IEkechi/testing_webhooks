@@ -42,6 +42,8 @@ class Ability
     can :manage, Ticket, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
     cannot :manage, Ticket, :project => {:memberships => {:user_id => user.id, :role => 'restricted'}}
     can :read, Ticket, :project => {:memberships => {:user_id => user.id}}
+    #download assets
+    can :download, Comment::Asset, :ticket => {:project => {:memberships => {:user_id => user.id}}}
 
     #anyone can read a comments on a ticket which belongs to a project which they are a member of
     can :read, Comment, :ticket => {:project => {:memberships => {:user_id => user.id}}}
