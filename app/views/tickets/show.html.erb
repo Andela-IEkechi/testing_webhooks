@@ -58,7 +58,8 @@
   </div>
 <% end %>
 
-<%= render :partial => '/comments/comment', :collection => comments %>
+<%= render :partial => '/comments/comment', :collection => comments[1..comments.count] %>
+
 <% if current_membership && !current_membership.restricted? %>
   <%= render :partial => '/comments/form' %>
 <% end %>
