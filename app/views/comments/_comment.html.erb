@@ -60,12 +60,11 @@
           cost: <b><%= cost_long(comment.cost) %></b>
         </li>
       <% end %>
-      <% if false && changeset.keys.count == 0 %>
+      <% if [changeset[:assets]].flatten.any? &&  %>
         <li>
-          no change
+          attachments: <b><%= comment.assets.count %> new</b>
         </li>
       <% end %>
     </ul>
   </div>
-
 </div>

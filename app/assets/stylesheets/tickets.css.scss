@@ -25,6 +25,16 @@
   }
 }
 
+.ticket-statusbar {
+  color: $status-text-color;
+  margin-top: -10px;
+  ul {
+    li {
+      padding-left: 0px;
+    }
+  }
+}
+
 .form-search {
   margin: 0 0 5px;
 }

@@ -9,7 +9,7 @@ module CommentsHelper
   end
 
   def change_set(comment)
-    changeset = {:user => comment.user.to_s}
+    changeset = {}
     previous = comment.previous
     #get what changed
     [:status_id, :feature_id, :sprint_id, :assignee_id, :cost, :assets].each do |attr|
