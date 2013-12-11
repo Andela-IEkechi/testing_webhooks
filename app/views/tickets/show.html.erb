@@ -12,9 +12,10 @@
   <h3><%= @ticket.title %>&nbsp;<small><%= @ticket.parent %></small></h3>
 </div>
 
+<%= render :partial => '/comments/comment', :collection => [@ticket.comments.first] %>
+
 <!-- render older comments if there are any -->
 <% if old_comments.any?  %>
-  <%= render :partial => '/comments/comment', :collection => [@ticket.comments.first] %>
   <div class="older_comments" style="display:none;">
     <%= render :partial => '/comments/comment', :collection => old_comments %>
   </div>
