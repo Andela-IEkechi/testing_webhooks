@@ -97,4 +97,11 @@ class User < ActiveRecord::Base
     super && self.active?
   end
 
+  def obfuscated
+    obfuscated_email = email.gsub(/(.+@).+/,'\1...')
+    if !confirmed?
+      return "#{obfuscated_email} (invited)"
+    end
+    obfuscated_email
+  end
 end

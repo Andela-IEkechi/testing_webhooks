@@ -88,6 +88,12 @@ describe User do
     user.active?.should be_true
   end
 
+  it "should be able to obfuscate user information(email)", :focus => true do
+    user = create(:user)
+    expected = user.email.gsub(/(.+@).+/,'\1...')
+    user.obfuscated.should eq(expected)
+  end
+
   it "should be possible to soft-delete users" do
     user = create(:user)
     user.should respond_to(:deleted?)
