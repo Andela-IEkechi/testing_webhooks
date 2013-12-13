@@ -21,7 +21,7 @@
       <td class="overflow" title="<%= sprint.goal %>">
         <%= link_to sprint.goal, project_sprint_path(sprint.project, sprint) %>
       </td>
-      <td title="due date"><%= sprint.due_on.to_s(:long) %></td>
+      <td title="due date"><%= sprint.due_on.strftime('%d %b %Y') %></td>
       <td>
         <div class="progress-count">
           <%= completion_str(sprint) %>
