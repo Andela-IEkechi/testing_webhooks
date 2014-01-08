@@ -8,7 +8,7 @@
     <div class="price-tag"><span class="price-value"><%= price_with_symbol %></span><span class="price-period">per month</span></div>
   </li>
   <li><strong><%= plan[:projects] %></strong>&nbsp;<%= 'Project'.pluralize(plan[:projects]) %></li>
-  <li><strong><%= (plan[:users].to_i != 999) ? plan[:users].to_s : 'Unlimited' %></strong>&nbsp;<%= 'User'.pluralize(plan[:users].to_i) %></li>
+  <li><strong><%= (plan[:members].to_i != 999) ? plan[:members].to_s : 'Unlimited' %></strong>&nbsp;<%= 'User'.pluralize(plan[:members].to_i) %></li>
   <li><strong><%= plan[:storage_gb] %>GB</strong>&nbsp;Storage</li>
   <li class="last">
   <% if current_user && @account %>
