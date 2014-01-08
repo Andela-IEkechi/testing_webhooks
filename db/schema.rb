@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131020093953) do
+ActiveRecord::Schema.define(:version => 20140107102953) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20131020093953) do
     t.string   "payload"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "filesize"
   end
 
   create_table "comments", :force => true do |t|
@@ -167,13 +168,13 @@ ActiveRecord::Schema.define(:version => 20131020093953) do
     t.string   "uid"
     t.string   "full_name"
     t.boolean  "terms",                                :default => false
+    t.text     "preferences"
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
-    t.text     "preferences"
     t.datetime "deleted_at"
   end
 
