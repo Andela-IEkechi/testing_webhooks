@@ -123,7 +123,7 @@ describe ProjectsController do
         response.should render_template(:new)
       end
     end
-    context "with no projects available", :focus=>true do
+    context "with no projects available" do
       it "should not create the project" do
         @user.account.upgrade
         p @user.account.current_plan[:projects]
