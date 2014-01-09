@@ -93,7 +93,7 @@ describe ProjectsController do
     end
   end
 
-  describe "POST #create", :focus =>true do
+  describe "POST #create" do
     context "with valid attributes" do
       it "saves a new project to the database" do
         expect {
