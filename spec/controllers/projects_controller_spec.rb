@@ -123,9 +123,11 @@ describe ProjectsController do
         response.should render_template(:new)
       end
     end
-    context "with no projects available" do
+    context "with no projects available", :focus=>true do
       it "should not create the project" do
-        (@user.account.current_plan[:members] - 2).times do 
+        @user.account.upgrade
+        p @user.account.current_plan[:projects]
+        (@user.account.current_plan[:projects] - 1).times do 
           create(:project, :user => @user)
         end
         expect {
