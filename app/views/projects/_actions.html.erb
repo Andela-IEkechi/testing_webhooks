@@ -47,8 +47,9 @@
     <%
       #we explicitly dont render the remove project link in the quick action menus
       #action_remove(@project) if @project && !(@feature || @sprint || @ticket)
+      #so instead we're adding it here
     %>
-    <% if false && can_delete_project?(@project) %>
+    <% if can_delete_project?(@project) %>
     <li <% if @current_tab == 'delete-project' %>class="active" <%end%> >
       <a data-toggle="tab" href="#pane-delete-project">
         <span class='navico'>
