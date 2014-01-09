@@ -195,7 +195,7 @@ describe Project do
     end
   end
 
-  context "scopes", :focus => true do
+  context "scopes" do
     it "should return opensource/closedsource projects" do
       10.times do |n|
         project = create(:project, :private => false)
