@@ -25,6 +25,7 @@ class Project < ActiveRecord::Base
   default_scope order('projects.title ASC')
 
   scope :opensource, where(:private => false)
+  scope :closedsource, where(:private => true)
 
   def to_param
     self.slug
