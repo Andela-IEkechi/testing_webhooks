@@ -8,8 +8,8 @@ class Plan
   }
 
   def initialize(name)
-    @name = name.to_sym
-    @name = :free if PLANS.keys.index(name.to_sym) == nil
+    @name = "#{name.to_s}".to_sym
+    @name = :free if PLANS.keys.index(@name) == nil
   end
 
   def to_s
