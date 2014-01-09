@@ -93,16 +93,16 @@ describe ProjectsController do
     end
   end
 
-  describe "POST #create" do
+  describe "POST #create", :focus =>true do
     context "with valid attributes" do
       it "saves a new project to the database" do
         expect {
-          post :create, :project => attributes_for(:project, :user_id => @user.id)
+          post :create, :project => attributes_for(:public_project, :user_id => @user.id)
         }.to change(Project, :count).by(1)
       end
 
       it "redirects to show the project" do
-        post :create, :project => attributes_for(:project)
+        post :create, :project => attributes_for(:public_project)
         response.should be_redirect
       end
 
@@ -123,7 +123,18 @@ describe ProjectsController do
         response.should render_template(:new)
       end
     end
+    context "with no projects available" do
+      it "should not create the project" do
+        (@user.account.current_plan[:members] - 2).times do 
+          create(:project, :user => @user)
+        end
+        expect {
+          post :create, :project => attributes_for(:invalid_project)
+        }.to change(Project, :count).by(0)
+      end
+    end
   end
+
 
   describe "POST #update" do
     context "with valid attributes" do
