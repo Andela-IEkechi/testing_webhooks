@@ -95,6 +95,11 @@
     <% end %>
     </tbody>
   </table>
+
+  <% if @tickets_count %>
+    <p class="tickets-count">Results: <%= @tickets_count %> tickets = cost: <%= @tickets_cost %></p>
+  <% end %>
+
   <% if @tickets && @tickets.respond_to?(:total_pages) && (@tickets.total_pages > 1) %>
     <%= paginate @tickets,
         :params => {
@@ -107,7 +112,5 @@
   <% if @tickets && !@tickets.respond_to?(:total_pages) && (@tickets.count > (current_user.preferences.page_size.to_i)) %>
     <%= ticket_load_link 'show paged' %>
   <% end %>
-
-
 
 </div>
