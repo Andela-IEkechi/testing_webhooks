@@ -36,8 +36,6 @@ gem 'fog'
 gem 'rmagick'
 
 #monitoring
-gem 'crashlog', '>= 1.0.4'
-#gem 'newrelic_rpm'
 
 #searching
 gem 'ransack'
