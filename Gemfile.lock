@@ -59,15 +59,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
-    crashlog (1.0.7)
-      crashlog-auth-hmac (>= 1.1.7)
-      faraday (~> 0.8.4)
-      hashr
-      json
-      multi_json (>= 1.1.0)
-      rabl (>= 0.6.13)
-      uuid
-    crashlog-auth-hmac (1.1.7)
     daemons (1.1.9)
     database_cleaner (1.1.1)
     devise (3.0.3)
@@ -107,7 +98,6 @@ GEM
     friendly_id (4.0.10.1)
       activerecord (>= 3.0, < 4.0)
     hashie (2.0.5)
-    hashr (0.0.22)
     heroku (2.40.0)
       heroku-api (~> 0.3.7)
       launchy (>= 0.3.2)
@@ -139,8 +129,6 @@ GEM
     launchy (2.3.0)
       addressable (~> 2.3)
     libv8 (3.16.14.3)
-    macaddr (1.6.1)
-      systemu (~> 2.5.0)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -195,8 +183,6 @@ GEM
     puma (2.5.1)
       rack (>= 1.1, < 2.0)
     pygmentize (0.0.3)
-    rabl (0.8.6)
-      activesupport (>= 2.3.14)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -264,7 +250,6 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    systemu (2.5.2)
     therubyracer (0.12.0)
       libv8 (~> 3.16.14.0)
       ref
@@ -281,8 +266,6 @@ GEM
     uglifier (2.2.0)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    uuid (2.3.7)
-      macaddr (~> 1.0)
     uuidtools (2.1.4)
     warden (1.2.3)
       rack (>= 1.0)
@@ -298,7 +281,6 @@ DEPENDENCIES
   carrierwave
   carrierwave_direct
   coffee-rails (~> 3.2.1)
-  crashlog (>= 1.0.4)
   database_cleaner
   devise
   devise_invitable (~> 1.1.0)
