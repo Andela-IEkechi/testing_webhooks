@@ -89,12 +89,34 @@
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="6"><%= ticket_load_link 'loading tickets...', {}, {:class => "autoload"} %>
+        <td colspan="7">
+            <%= ticket_load_link 'loading tickets...', {}, {:class => "autoload"} %>
+        </td>
+      </tr>
+    <% end %>
+    <% if @tickets_count %>
+      <tr>
+        <td colspan="7">
+          <span class="pull-right ticket-result-summary">
+          <% if @assignees_count > 0 %>
+            <%= @assignees_count %> assignees on
+          <% else %>
+            no assigned tickets
+          <% end %>
+          <% if @tickets_count %>
+            <%= @tickets_count %> tickets
+          <% end %>
+          <% if @tickets_cost > 0 %>
+            @ total cost <%= @tickets_cost %></span>
+          <% else %>
+            @ unknown cost
+          <% end %>
         </td>
       </tr>
     <% end %>
     </tbody>
   </table>
+
   <% if @tickets && @tickets.respond_to?(:total_pages) && (@tickets.total_pages > 1) %>
     <%= paginate @tickets,
         :params => {
@@ -107,7 +129,5 @@
   <% if @tickets && !@tickets.respond_to?(:total_pages) && (@tickets.count > (current_user.preferences.page_size.to_i)) %>
     <%= ticket_load_link 'show paged' %>
   <% end %>
-
-
 
 </div>
