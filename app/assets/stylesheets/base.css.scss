@@ -24,6 +24,11 @@ input[type=checkbox] {
     top: -3px;
 }
 
+label.input-small {
+  vertical-align: middle;
+  margin-bottom: -5px;
+}
+
 abbr[title] {
   display: none;
 }
