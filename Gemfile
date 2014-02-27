@@ -37,7 +37,7 @@ gem 'rmagick'
 
 #monitoring
 gem 'crashlog', '>= 1.0.4'
-gem 'newrelic_rpm'
+#gem 'newrelic_rpm'
 
 #searching
 gem 'ransack'
@@ -63,7 +63,7 @@ group :development,:test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'pry-rails' # for better console debugging
-  gem 'pry-debugger'
+  #gem 'pry-debugger'
   gem 'pry-remote'
   gem 'puma'
 end
