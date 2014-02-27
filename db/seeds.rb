@@ -7,6 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 #create a user
+p "creating users..."
 User.find_each(&:destroy)
 restricted = User.create(:email => 'restricted@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
 restricted.confirm!
@@ -16,6 +17,7 @@ admin = User.create(:email => 'admin@example.com', :password => 'secret', :passw
 admin.confirm!
 
 #create some projects
+p "creating projects..."
 Project.find_each(&:destroy)
 mhp = admin.projects.create(:title => "Manhattan Project")
 app = admin.projects.create(:title => "Allan Parsons Project")
@@ -23,6 +25,7 @@ app.memberships.create(:user_id => restricted.id, :role => 'restricted')
 app.memberships.create(:user_id => regular.id, :role => 'regular')
 
 #create a test sprint
+p "creating sprints..."
 Sprint.find_each(&:destroy)
 3.times do
   sprint = mhp.sprints.build(:goal => Faker::Lorem.sentence)
@@ -33,10 +36,11 @@ end
 sprint = mhp.sprints.last
 
 #create some dummy tickets
+p "creating tickets..."
 Ticket.find_each(&:destroy)
-25.times do |x|
+15.times do |x|
   ticket = mhp.tickets.create(title: Faker::Lorem.words(4).join(' '))
-  (1..15).to_a.each do |x|
+  (1..7).to_a.each do |x| #at least more than 6 comments, so we can enable folding
     comment = ticket.comments.build(:body => Faker::Lorem.paragraph, :status_id => mhp.ticket_statuses.first.id)
     comment.sprint = sprint if x == 1
     comment.user = admin
@@ -44,6 +48,7 @@ Ticket.find_each(&:destroy)
     comment.save
   end
 end
+
 
 
 
