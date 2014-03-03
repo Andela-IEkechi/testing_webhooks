@@ -40,6 +40,6 @@ Conductor::Application.configure do
   config.checkout = {
     :encryption_key => "secret",
     :url => "https://www.2checkout.com/2co/buyer/purchase",
-    :checkout_id => ""#need id here
+    :checkout_account => ""#need id here
   }
 end
