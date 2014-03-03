@@ -62,7 +62,7 @@
       end } %>
   <% end %>
 
-  <% if @ticket.project.user.account.available_storage? %>
+  <% if false && @ticket.project.user.account.available_storage? %>
     <div class="attach-asset">
       <%= comment_form.link_to_add "Attach a file", :assets %>
       <%= comment_form.simple_fields_for :assets, [] do |a_f| %>

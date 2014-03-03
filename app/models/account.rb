@@ -48,7 +48,7 @@ class Account < ActiveRecord::Base
 
   def available_projects?(plan = nil)
     plan ||= current_plan
-    @used_projects = Project.closedsource.find_all_by_user_id(user.id).count
+    @used_projects = user.projects.closedsource.count
     @plan_projects = plan[:projects]
     @plan_projects > @used_projects
   end
