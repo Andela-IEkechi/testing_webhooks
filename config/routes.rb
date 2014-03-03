@@ -9,8 +9,8 @@ Conductor::Application.routes.draw do
 
   resources :users do
     resource :account do
-      match 'payment/failure' => 'accounts#payment_failure'
-      match 'payment/success' => 'accounts#payment_success'
+      match 'payment/return' => 'accounts#payment_return'
+      match 'payment/update' => 'accounts#payment_update'
     end
     resources :overviews
   end
