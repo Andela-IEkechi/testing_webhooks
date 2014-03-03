@@ -126,8 +126,7 @@ describe ProjectsController do
     context "with no projects available" do
       it "should not create the project" do
         @user.account.upgrade
-        p @user.account.current_plan[:projects]
-        (@user.account.current_plan[:projects] - 1).times do 
+        (@user.account.current_plan[:projects] - 1).times do
           create(:project, :user => @user)
         end
         expect {
