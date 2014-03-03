@@ -22,13 +22,13 @@ class Account < ActiveRecord::Base
   end
 
   def can_downgrade?(new_plan)
-    return true if current_plan.worse_than?(new_plan) #upgrades dont count, please die in a fire
-    available_members?(new_plan) && available_storage?(new_plan) && available_projects?(new_plan)
+    current_plan.worse_than?(new_plan) && available_members?(new_plan) && available_storage?(new_plan) && available_projects?(new_plan)
   end
 
+  #check available resources
   def available_members?(plan = nil)
     plan ||= current_plan
-    @used_members = Project.closedsource.find_all_by_user_id(user.id).collect{|p| p.memberships.count}.sum
+    @used_members = user.projects.closedsource.collect{|p| p.memberships.count}.sum
     @plan_members = plan[:members]
     @plan_members > @used_members
   end
@@ -36,7 +36,13 @@ class Account < ActiveRecord::Base
   def available_storage?(plan = nil)
     plan ||= current_plan
     @plan_storage = plan[:storage_gb]*1024**3
-    @used_storage = Project.closedsource.find_all_by_user_id(user.id).collect{|p| p.tickets.includes(:comments).collect{ |t| t.comments.includes(:assets).collect{ |c| c.assets.collect(&:filesize)} }}.flatten.sum
+    @used_storage = user.projects.closedsource.collect do |p|
+      p.tickets.includes(:comments).collect do |t|
+        t.comments.includes(:assets).collect do |c|
+          c.assets.collect(&:filesize)
+        end
+      end
+    end.flatten.sum
     @plan_storage > @used_storage
   end
 
