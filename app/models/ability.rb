@@ -15,10 +15,11 @@ class Ability
     #can :manage, Project, :user_id => user.id
 
     #anyone can manage membership to a project if they are an admin
-    can :create, Membership do |membership|
-      (membership.project.user_id == user.id) && ([membership.project.memberships.for_user(user.id)].flatten.first.role == 'admin') && (membership.project.user.account.available_members?)
+    can [:manage], Membership, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
+    #dont allow users to add a memebership unless there are available slots
+    cannot :create, Membership, :project => {:memberships => {:user_id => user.id, :role => 'admin'}} do |membership|
+      !membership.project.user.account.available_members?
     end
-    can [:read,:update,:destroy], Membership, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
 
     #anyone can read features and sprints on projects where they are members
     can :read, Feature, :project => {:private => true, :memberships => {:user_id => user.id}}
