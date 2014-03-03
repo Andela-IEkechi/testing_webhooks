@@ -37,4 +37,9 @@ Conductor::Application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
+  config.checkout = {
+    :encryption_key => "secret",
+    :url => "https://www.2checkout.com/2co/buyer/purchase",
+    :checkout_id => ""#need id here
+  }
 end
