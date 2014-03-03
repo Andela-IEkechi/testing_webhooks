@@ -53,7 +53,7 @@ describe Ability do
       @ability.should be_able_to(:manage, sprint)
     end
 
-    it "should be able to create memberships", :focus => true do
+    it "should be able to create memberships" do
       project = create(:project, :user => @user)
       @user.account.upgrade
       @ability.should be_able_to(:create, Membership)

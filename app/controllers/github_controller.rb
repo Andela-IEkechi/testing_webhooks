@@ -7,8 +7,10 @@ class GithubController < ApplicationController
     if api_key = ApiKey.find_by_token(params["token"])
       @project = api_key.project
       payload = JSON.parse(params["payload"]) rescue {}
-      p payload #do not remove
+      p payload #do not remove, used for tracking problem on servers, too late to put it on afterward we have had a problem
       payload["commits"].each do |commit|
+        commit = commit.with_indifferent_access
+
         #first we check if we have processed this commit before
         if Comment.find_all_by_git_commit_uuid(commit["id" ]).count == 0 #we could have commented on multiple tickets for the same commit
           #find the ticket it relates to
@@ -29,9 +31,17 @@ class GithubController < ApplicationController
                 #set the creation date to be the commit date in the github payload, so that the comments
                 #will be in chronological order
                 :created_at => commit["timestamp"]
-              }
-              attributes.merge!(ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at user_id).include?(k) }) if ticket.last_comment
+              }.with_indifferent_access
+
+              #we need to append the attributes from this commit, to whatever was on the last comment. So we use reverse_merge
+              if ticket.last_comment
+                last_comment_attrs = ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at user_id).include?(k) }.with_indifferent_access
+                attributes.reverse_merge!(last_comment_attrs)
+              end
+
+              #add the settings we passed into the commit message, to the ticket
               attributes.merge!(comment_to_hash(others, ticket)) unless others.blank?
+
               ticket.comments.create(attributes)
             else
               p "Could not find ticket for reference: #{ticket_ref}"
