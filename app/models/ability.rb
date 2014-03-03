@@ -16,9 +16,10 @@ class Ability
 
     #anyone can manage membership to a project if they are an admin
     can [:manage], Membership, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
-    #dont allow users to add a memebership unless there are available slots
-    cannot :create, Membership, :project => {:memberships => {:user_id => user.id, :role => 'admin'}} do |membership|
-      !membership.project.user.account.available_members?
+    #prevent create unless there are slots available
+    #note: You are not able to supply a block with a hash of conditions in create Membership ability. Use either one.
+    cannot :create, Membership do |membership|
+      (membership.project.user_id == user.id) && ([membership.project.memberships.for_user(user.id)].flatten.first.role == 'admin') && (membership.project.user.account.available_members?)
     end
 
     #anyone can read features and sprints on projects where they are members
