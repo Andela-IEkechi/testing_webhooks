@@ -19,9 +19,6 @@ ActiveRecord::Schema.define(:version => 20140206065633) do
     t.boolean  "enabled",    :default => true
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
-    t.boolean  "blocked",    :default => true
-    t.date     "started_on"
-    t.date     "stopped_on"
   end
 
   add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
