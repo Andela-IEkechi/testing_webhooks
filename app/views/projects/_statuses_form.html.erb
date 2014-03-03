@@ -6,10 +6,17 @@
 		      	<%= ts_form.input_field :sort_index, :as => "hidden", 'data-sort-index'=> 1 %>
 		      	<div class='row-fluid ' >
 		      	  <div class='span1 reorder-handle' title='Reorder'><i class="icon-move"></i>&nbsp;<i class='icon-reorder'></i></div>
-		      	  <div class='span8'>
-	    	    	<%= ts_form.input_field :name, :class => 'input-medium', :placeholder => "Name" %>
-			        <%= ts_form.input_field :open, :as => :select, :include_blank  => false, :collection => [['Open', true] ,['Closed', false]], :class => 'input-small', :disabled =>  ts_form.object.system_default %>
-		      	</div>
+		      	  <div class='span3'>
+	    	    		<%= ts_form.input_field :name, :class => 'input-medium', :placeholder => "Name" %>
+	    	    	</div>
+		      	  <div class='span2 form-inline'>
+			        	<%= ts_form.radio_button :open, true, :class => 'input-small', :disabled => ts_form.object.system_default %>
+			        	<%= label_tag :open, "Open", :class => 'input-small' %>
+			        </div>
+		      	  <div class='span3 form-inline'>
+			        	<%= ts_form.radio_button :open, false, :class => 'input-small', :disabled => ts_form.object.system_default %>
+			        	<%= label_tag :open, "Closed", :class => 'input-small' %>
+		      		</div>
 		      	<div class='span3'>
 		          <%= ts_form.link_to_remove raw("<i class='icon-trash' ></i>"), :class => 'pull-right', :title => 'Remove this status' unless ts_form.object.system_default%>
 		        </div>
