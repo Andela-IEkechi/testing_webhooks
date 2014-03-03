@@ -31,7 +31,7 @@ describe GithubController do
           message: "a commit message with one ticket: [##{@ticket.scoped_id}]",
           modified: [ "app/views/comments/_form_fields.html.erb" ],
           removed: [],
-          timestamp: "2013-01-21T01:19:31-08:00",
+          timestamp: "#{Date.today + 5.days}T01:19:31-08:00",#we need a future timestamp here to preserve the insertion order, which is chronological
           url: "https://github.com/Shuntyard/Conductor/commit/bf73ba69c1f733fff5003527004b8806f899267d"
         }
       ]
@@ -162,6 +162,7 @@ describe GithubController do
   it "should assign the commenter to the comment" do
     post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.reload
+    #the GH commit is inserted into the history, it's not the last one, so we cant use @ticket.last_comment
     @ticket.last_comment.commenter.should eq(@user.email)
   end
 
@@ -176,17 +177,17 @@ describe GithubController do
     @ticket.comments.last.user.should_not be_nil
     post :commit, :token => @key.token, :payload => JSON.generate(@payload)
     @ticket.reload
-    @ticket.comments.last.user.should be_nil
+    @ticket.last_comment.user.should be_nil
   end
 
   it "should create a comment with the commit date as the create_at date" do
-    timestring = 5.days.ago.to_s
+    timestring = Date.today + 5.days
     @payload[:commits].first[:timestamp] = timestring
     expect do
       post :commit, :token => @key.token, :payload => JSON.generate(@payload)
       @ticket.reload
     end.to change{@ticket.comments.count}.by(1)
-    @ticket.comments.last.created_at.should eq(timestring)
+    @ticket.last_comment.created_at.should eq(timestring)
   end
 
 end

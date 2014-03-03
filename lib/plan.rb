@@ -2,14 +2,14 @@ class Plan
 
   PLANS = {
     :free   => {:title => 'Free',               :price_usd => 0,  :members => 3,   :projects => 1,   :storage_gb => 1},
-    :small  => {:title => 'Startups',           :price_usd => 10, :members => 10,  :projects => 5,   :storage_gb => 2},
-    :medium => {:title => 'Small Company',      :price_usd => 25, :members => 50,  :projects => 15,  :storage_gb => 10, :preferred => true},
-    :large  => {:title => 'Large Organization', :price_usd => 70, :members => 999, :projects => 100, :storage_gb => 50} #unlimited members = 999
+    :small  => {:title => 'Economy class',           :price_usd => 10, :members => 10,  :projects => 5,   :storage_gb => 2},
+    :medium => {:title => 'Delux class',      :price_usd => 25, :members => 50,  :projects => 15,  :storage_gb => 10, :preferred => true},
+    :large  => {:title => 'First class', :price_usd => 70, :members => 999, :projects => 100, :storage_gb => 50} #unlimited members = 999
   }
 
   def initialize(name)
-    @name = name.to_sym
-    @name = :free if PLANS.keys.index(name.to_sym) == nil
+    @name = "#{name.to_s}".to_sym #make sure it's a symbol
+    @name = :free if PLANS[@name] == nil
   end
 
   def to_s
@@ -55,7 +55,7 @@ class Plan
   end
 
   def better_than?(other)
-    PLANS.keys.index(@name.to_sym) > PLANS.keys.index(other.to_s.to_sym)
+    PLANS.keys.index(@name) > PLANS.keys.index("#{other.to_s}".to_sym)
   end
 
   def worse_than?(other)
