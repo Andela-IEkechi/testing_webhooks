@@ -1,10 +1,10 @@
 class Plan
 
   PLANS = {
-    :free   => {:title => 'Free',               :price_usd => 0,  :members => 3,   :projects => 1,   :storage_gb => 1},
-    :small  => {:title => 'Economy class',           :price_usd => 10, :members => 10,  :projects => 5,   :storage_gb => 2},
-    :medium => {:title => 'Delux class',      :price_usd => 25, :members => 50,  :projects => 15,  :storage_gb => 10, :preferred => true},
-    :large  => {:title => 'First class', :price_usd => 70, :members => 999, :projects => 100, :storage_gb => 50} #unlimited members = 999
+    :free   => {:title => 'Free',     :price_usd => 0.00,  :members => 3,   :projects => 1,   :storage_gb => 1},
+    :small  => {:title => 'Silver',   :price_usd => 10.00, :members => 10,  :projects => 5,   :storage_gb => 2},
+    :medium => {:title => 'Gold',     :price_usd => 25.00, :members => 50,  :projects => 15,  :storage_gb => 10, :preferred => true},
+    :large  => {:title => 'Platinum', :price_usd => 70.00, :members => 999, :projects => 100, :storage_gb => 50} #unlimited members = 999
   }
 
   def initialize(name)
