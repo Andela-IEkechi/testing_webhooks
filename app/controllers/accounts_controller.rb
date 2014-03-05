@@ -1,7 +1,8 @@
 class AccountsController < ApplicationController
-  load_and_authorize_resource :user, :except => [:ajax_startup_fee]
-  before_filter :load_account, :except => [:ajax_startup_fee]
   skip_before_filter :verify_authenticity_token, :only => [:payment_return]
+  load_and_authorize_resource :user, :except => [:ajax_startup_fee]
+  #load_and_authorize_resource :account, :find_by => :user_id, :except => [:ajax_startup_fee]
+  before_filter :load_account, :except => [:ajax_startup_fee]
 
   def edit
     current_user.ensure_authentication_token!
@@ -57,7 +58,7 @@ class AccountsController < ApplicationController
     @account = @user.account
   end
 
-  def pro_rata(account) 
+  def pro_rata(account)
   #this calculates the portion of the old_amount that has already been paid for the rest of the month
   #that is why the first month's payment must be the new amount - pro_rata amount
     @account = account

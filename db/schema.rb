@@ -15,13 +15,10 @@ ActiveRecord::Schema.define(:version => 20140304140058) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
-    t.string   "plan",           :default => "free"
-    t.boolean  "enabled",        :default => true
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
-    t.boolean  "blocked",        :default => true
-    t.date     "sub_start_date"
-    t.date     "sub_end_date"
+    t.string   "plan",       :default => "free"
+    t.boolean  "enabled",    :default => true
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.date     "started_on"
   end
 
@@ -172,13 +169,13 @@ ActiveRecord::Schema.define(:version => 20140304140058) do
     t.string   "uid"
     t.string   "full_name"
     t.boolean  "terms",                                :default => false
-    t.text     "preferences"
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.text     "preferences"
     t.datetime "deleted_at"
   end
 
