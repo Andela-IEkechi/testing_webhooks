@@ -8,7 +8,7 @@ Conductor::Application.routes.draw do
     }
 
   resources :users do
-    resource :accounts do
+    resource :account do
       match 'payment/return' => 'accounts#payment_return'
       match 'payment/update' => 'accounts#payment_update'
     end
