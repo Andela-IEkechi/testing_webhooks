@@ -23,7 +23,7 @@
 <div id="checkout_form">
   <%= form_tag Rails.configuration.checkout[:url], :name => 'Conductor Secure Payment', :id => "checkout_form", :method => :post do %>
 
-    <%= hidden_field_tag "sid", Rails.configuration.checkout[:checkout_id] %>
+    <%= hidden_field_tag "sid", Rails.configuration.checkout[:checkout_account] %>
     <%= hidden_field_tag "mode", '2CO' %>
     <%= hidden_field_tag "demo", 'Y' %>
     <%= hidden_field_tag "li_1_price", '' %>
@@ -37,6 +37,7 @@
     <%= hidden_field_tag "li_1_duration", 'Forever' %>
     <%= hidden_field_tag "currency_code", 'USD' %>
     <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "local.conductor.com",:auth_token => @user.authentication_token) %>
+    <%= hidden_field_tag "account", @account %>
 
     <div class="row-fluid pagination-centered">
       <br>
