@@ -37,7 +37,7 @@
     <%= hidden_field_tag "li_1_duration", 'Forever' %>
     <%= hidden_field_tag "currency_code", 'USD' %>
     <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "local.conductor.com",:auth_token => @user.authentication_token) %>
-    <%= hidden_field_tag "account", @account %>
+    <%= hidden_field_tag "account", @account.id %>
 
     <div class="row-fluid pagination-centered">
       <br>
@@ -49,6 +49,7 @@
 <div id="downgrade_form"><!--Downgrade or cancel, post back to conductor-->
   <%= form_tag payment_update_user_account_url, :name => 'Conductor Secure Payment', :id => "downgrade_form", :method => :post do %>
 
+    <%= hidden_field_tag "forfeit", '' %>
     <%= hidden_field_tag "li_1_price", '' %>
     <%= hidden_field_tag "account", "#{@account.id}" %>
     <%= hidden_field_tag "DATE", "#{Time.now.strftime('%Y-%m-%d')}" %>

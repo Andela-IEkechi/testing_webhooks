@@ -42,7 +42,14 @@ class AccountsController < ApplicationController
 
   def ajax_startup_fee
     @account = Account.find(params['account'].to_i)
-    params["li_1_startup_fee"] = ("free" == @account.current_plan && Date.today.day == @account.started_on.day) ? "0.00" : (- pro_rata(@account)).to_s
+    if "free" == @account.current_plan.to_s && (nil == @account.started_on ? true : (@account.started_on.day == Date.today.day) )
+      params["li_1_startup_fee"] = "0.00"
+    elsif params["li_1_price"].to_f > @account.current_plan[:price_usd]
+      params["li_1_startup_fee"] = (- pro_rata(@account)).to_s
+    else
+      params["li_1_startup_fee"] = "0.00"
+      params["forfeit"] = pro_rata(@account).to_s
+    end
     params.delete("account")
     respond_to do |format|
       format.json do

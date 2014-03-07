@@ -95,38 +95,65 @@ describe AccountsController do
   end
 
   context "ajax_startup_fee" do
-    it "should calculate the pro_rata amount" do
+    before(:each) do
       @account = @user.account
-      @account.plan = "medium"
       @account.started_on = (Time.now - 1.month - 12.days).strftime('%Y-%m-%d')
+      @account.plan = "medium"
       @account.save
+
+      @params = {
+        "mode" => '2CO',
+        "sid" => Rails.configuration.checkout[:checkout_account],
+        "demo" => 'Y',
+        "li_1_price" => '70.00',
+        "li_1_name" => 'Platinum',
+        "li_1_tangible" => 'N',
+        "li_1_quanity" => '1',
+        'fixed' => 'Y',
+        "li_1_startup_fee" => '',
+        "li_1_type" => 'product',
+        "li_1_recurrence" => '1 Month',
+        "li_1_duration" => 'Forever',
+        "currency_code" => 'USD',
+        "account" => @account.id
+      }
+    end
+    it "should calculate the pro_rata amount" do
       @user.ensure_authentication_token
       @user.save
+      post :ajax_startup_fee, @params.merge(:user_id => @user)
+      self.controller.params["li_1_startup_fee"].to_f.should eq(- my_pro_rata(@account))
+    end
 
-      params = {"mode" => '2CO',
-                "sid" => Rails.configuration.checkout[:checkout_account],
-                "demo" => 'Y',
-                "li_1_price" => '70.00',
-                "li_1_name" => 'Platinum',
-                "li_1_tangible" => 'N',
-                "li_1_quanity" => '1',
-                'fixed' => 'Y',
-                "li_1_startup_fee" => '',
-                "li_1_type" => 'product',
-                "li_1_recurrence" => '1 Month',
-                "li_1_duration" => 'Forever',
-                "currency_code" => 'USD',
-                "account" => @account.id }
-      post :ajax_startup_fee, :account => @account, :user => @user, :params => params
+    it "sets startup_fee to 0.00 if new subscription" do
+      @account.plan = "free"
+      @account.started_on = nil
+      @account.save
+      post :ajax_startup_fee, @params.merge(:user_id => @user)
+      self.controller.params["li_1_startup_fee"].should eq("0.00")
+    end
 
-      started_on = @account.started_on.day
-      old_amount = 25
-      days_of_month = Time.now.end_of_month.day
-      today = Time.now.day
-      rest_of_days = (started_on < today) ? (days_of_month - today - started_on) : (started_on - today)
-      my_pro_rata = (old_amount.to_f/days_of_month.to_f*rest_of_days).round(2)
-      self.controller.params["li_1_startup_fee"].to_f.should eq(- my_pro_rata)
+    it "sets startup_fee to neg pro_rata amount if upgrade" do
+      post :ajax_startup_fee, @params.merge(:user_id => @user)
+      self.controller.params["li_1_startup_fee"].should eq((- my_pro_rata(@account)).to_s)
+    end
+
+    it "sets forfeit to pos pro_rata, startup_fee to 0.00 if downgrade" do
+      @account.plan = "large"
+      @account.save
+      @params["li_1_price"] = "10.00"
+      post :ajax_startup_fee, @params.merge(:user_id => @user)
+      self.controller.params["li_1_startup_fee"].should eq("0.00")
+      self.controller.params["forfeit"].should eq(my_pro_rata(@account).to_s)
     end
   end
 end
 
+def  my_pro_rata(account)
+  started_on = @account.started_on.day
+  old_amount = account.current_plan[:price_usd]
+  days_of_month = Time.now.end_of_month.day
+  today = Time.now.day
+  rest_of_days = (started_on < today) ? (days_of_month - today - started_on) : (started_on - today)
+  my_pro_rata = (old_amount.to_f/days_of_month.to_f*rest_of_days).round(2)
+end
