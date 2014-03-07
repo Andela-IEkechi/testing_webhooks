@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe AccountsController do
-  # let(:user) {create(:user)}
-  # let(:account) {user.account}
   before(:each) do
     login_user
   end
+  #users can only act on their own accounts, so we need to make sure the account belongs to the logged in user
+  let(:account) {create(:account, :user => @user)}
 
   it "should load_account" do
     get :edit, :id => @user.account, :user_id => @user
@@ -59,7 +59,6 @@ describe AccountsController do
         post :payment_return, @params.merge(:user_id => @user)
         assigns(:account).current_plan.to_s.should_not eq(@first_plan.to_s)
       end
-
 
       it "should give the correct success notice" do
         get :payment_return, @params.merge(:user_id => @user)

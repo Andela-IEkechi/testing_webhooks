@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
     @current_membership
   end
 
+  #TODO: We can probablydeprecate  and remove this now that we only use .com ?
   def current_domain_is?(value="co.za")
     !(request.domain =~ /#{value}$/).nil?
   end
