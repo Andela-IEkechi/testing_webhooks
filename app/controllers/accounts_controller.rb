@@ -12,20 +12,18 @@ class AccountsController < ApplicationController
   end
 
   def payment_return
-    binding.pry
     #compare checksum to ensure valid payment
-    params["encryption_key"] = Rails.configuration.paygate[:encryption_key]
-    params["seller_id"] = Rails.configuration.paygate[:seller_id] #or 2Checkout account number
+    params["encryption_key"] = Rails.configuration.checkout[:encryption_key]
+    #params["seller_id"] = Rails.configuration.checkout[:checkout_account] #or 2Checkout account number
     checksum_fields = ["encryption_key","seller_id","order_number","total"]
     #UPPERCASE(MD5_ENCRYPTED(Secret Word + Seller ID + order_number + Sale Total))
     checksum = Digest::MD5.hexdigest(checksum_fields.collect{|c| params[c]}.join("").upcase)
 
     valid_payment = (checksum == params["key"])
     successful = (params["credit_card_processed"] == "Y")
-
     if valid_payment && successful
       #get the correct plan amount
-      plan_amount = params["total"].to_i - params["li_1_startup_fee"]
+      plan_amount = params["total"].to_i - params["li_1_startup_fee"].to_i
       #get the new plan, update the user account and notify
       plan = Plan::PLANS.keys.each.select{|p| Plan::PLANS[p][:price_usd] == plan_amount}.first.to_s
       @account.started_on = Date.today
