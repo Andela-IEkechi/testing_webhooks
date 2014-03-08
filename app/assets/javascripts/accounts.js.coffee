@@ -7,9 +7,11 @@ $ ->
   $('#downgrade_form').hide()
 
   $('input[name="Amount"][type="radio"]').change ->
+    $('#account_change').disabled = false
+    $('#account_change').disabled = (!$(this).data('upgrade') && !$(this).data('downgrade'))
     $("#checkout_form").before($(".notice_1").toggle($(this).data('upgrade')))
-    $("#checkout_form").before($(".alert_1").toggle(!$(this).data('upgrade') && !$(this).data('downgrade')))
     $("#checkout_form").before($(".notice_2").toggle(!$(this).data('upgrade') && $(this).data('downgrade')))
+    $("#checkout_form").before($(".alert_1").toggle(!$(this).data('upgrade') && !$(this).data('downgrade')))
 
     $('input[name="li_1_price"]').val($(this).val())
     $('#checkout_form').toggle($(this).data('upgrade'))
