@@ -14,6 +14,7 @@ Conductor::Application.routes.draw do
     end
     resources :overviews
   end
+  match 'startup_fee' => 'accounts#ajax_startup_fee'
 
   get 'projects/public' => 'projects#public'
   get 'projects/:id/invite' => 'projects#invite', :as => :invite

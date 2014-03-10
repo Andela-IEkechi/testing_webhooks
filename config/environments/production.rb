@@ -81,8 +81,8 @@ Conductor::Application.configure do
   end
 
   config.checkout = {
-    :encryption_key => "secret",
+    :encryption_key => "f9df3a1845",
     :url => "https://www.2checkout.com/2co/buyer/purchase",
-    :checkout_account => ""#need id here
+    :checkout_account => "202217675"
   }
 end

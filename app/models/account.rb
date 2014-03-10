@@ -1,6 +1,6 @@
 class Account < ActiveRecord::Base
   belongs_to :user, :dependent => :destroy #also destroy the user if we destroy the account.
-  attr_accessible :enabled, :plan
+  attr_accessible :enabled, :plan, :started_on
 
   validates :user_id, presence: true
   validates :plan, presence: true
