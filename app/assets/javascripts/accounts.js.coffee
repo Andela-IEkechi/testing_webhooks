@@ -23,7 +23,6 @@ $ ->
       data: $('form#checkout_form').serialize()
       success: (data) ->
         $.map data, (value, key) ->
-        # DON'T fuck with this!!! See note in accounts controller
           $('input[name="'+key+'"]').val(value)
 
   $('.price-column-featured input[name="Amount"][type="radio"]').attr('checked', true)
