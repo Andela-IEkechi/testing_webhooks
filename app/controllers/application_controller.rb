@@ -7,15 +7,10 @@ class ApplicationController < ActionController::Base
   load_resource :project, :if => @current_user
   before_filter :load_membership
 
-  helper_method :current_membership, :current_domain_is?
+  helper_method :current_membership
 
   def current_membership
     @current_membership
-  end
-
-  #TODO: We can probablydeprecate  and remove this now that we only use .com ?
-  def current_domain_is?(value="co.za")
-    !(request.domain =~ /#{value}$/).nil?
   end
 
   protected
