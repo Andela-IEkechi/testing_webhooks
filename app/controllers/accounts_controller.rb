@@ -16,7 +16,7 @@ class AccountsController < ApplicationController
     #compare checksum to ensure valid payment
     params["encryption_key"] = Rails.configuration.checkout[:encryption_key]
     #params["seller_id"] = Rails.configuration.checkout[:checkout_account] #or 2Checkout account number
-    checksum_fields = ["encryption_key","seller_id","order_number","total"]
+    checksum_fields = ["encryption_key","sid","order_number","total"]
     #UPPERCASE(MD5_ENCRYPTED(Secret Word + Seller ID + order_number + Sale Total))
     checksum = Digest::MD5.hexdigest(checksum_fields.collect{|c| params[c]}.join("").upcase)
 

@@ -44,11 +44,10 @@ describe AccountsController do
         "li_1_recurrence" => '1 Month',
         "li_1_duration" => 'Forever',
         "currency_code" => 'USD',
-        "seller_id" => "20154856",
         "order_number" => "564654",
         "total" => @x.to_s,
         "credit_card_processed" => "Y",
-        "key" => Digest::MD5.hexdigest((Rails.configuration.checkout[:encryption_key] + "20154856" + "564654" + @x.to_s).upcase)
+        "key" => Digest::MD5.hexdigest((Rails.configuration.checkout[:encryption_key] + Rails.configuration.checkout[:checkout_account] + "564654" + @x.to_s).upcase)
       }
     end
 
@@ -67,7 +66,7 @@ describe AccountsController do
 
       it "should give the correct alert when successful with save errors" do
         @params["total"] = "90.00"
-        @params["key"] = Digest::MD5.hexdigest((Rails.configuration.checkout[:encryption_key] + "20154856" + "564654" + "90.00").upcase)
+        @params["key"] = Digest::MD5.hexdigest((Rails.configuration.checkout[:encryption_key] + Rails.configuration.checkout[:checkout_account] + "564654" + "90.00").upcase)
         get :payment_return, @params.merge(:user_id => @user)
         flash[:alert].should =~ /Payment was successful. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you./i
       end
