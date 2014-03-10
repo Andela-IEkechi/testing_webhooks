@@ -7,9 +7,9 @@ $ ->
   $('#downgrade_form').hide()
 
   $('input[name="Amount"][type="radio"]').change ->
-    $("#checkout_form").before($(".notice_1").toggle($(this).data('upgrade')))
-    $("#checkout_form").before($(".alert_1").toggle(!$(this).data('upgrade') && !$(this).data('downgrade')))
-    $("#checkout_form").before($(".notice_2").toggle(!$(this).data('upgrade') && $(this).data('downgrade')))
+    $("#checkout_form").before($(".account_upgrade_notice").toggle($(this).data('upgrade')))
+    $("#checkout_form").before($(".account_downgrade_notice").toggle(!$(this).data('upgrade') && $(this).data('downgrade')))
+    $("#checkout_form").before($(".account_downgrade_alert").toggle(!$(this).data('upgrade') && !$(this).data('downgrade')))
 
     $('input[name="li_1_price"]').val($(this).val())
 
