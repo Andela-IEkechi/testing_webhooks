@@ -5,9 +5,9 @@ module ApplicationHelper
     when :success   then 'alert alert-success'
     when :error     then 'alert alert-error'
     when :alert     then 'alert alert-error'
-    when :notice_1  then 'alert alert-info notice_1'
-    when :notice_2  then 'alert alert-info notice_2'
-    when :alert_1   then 'alert alert-error alert_1'
+    when :account_upgrade_notice  then 'alert alert-info account_upgrade_notice'
+    when :account_downgrade_notice  then 'alert alert-info account_downgrade_notice'
+    when :account_downgrade_alert   then 'alert alert-error account_downgrade_alert'
     end
   end
 

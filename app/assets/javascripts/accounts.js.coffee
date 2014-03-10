@@ -9,16 +9,27 @@ $ ->
   $('input[name="Amount"][type="radio"]').change ->
     $('#account_change').disabled = false
     $('#account_change').disabled = (!$(this).data('upgrade') && !$(this).data('downgrade'))
-    $("#checkout_form").before($(".notice_1").toggle($(this).data('upgrade')))
-    $("#checkout_form").before($(".notice_2").toggle(!$(this).data('upgrade') && $(this).data('downgrade')))
-    $("#checkout_form").before($(".alert_1").toggle(!$(this).data('upgrade') && !$(this).data('downgrade')))
+    $("#checkout_form").before($(".account_upgrade_notice").toggle($(this).data('upgrade')))
+    $("#checkout_form").before($(".account_downgrade_notice").toggle(!$(this).data('upgrade') && $(this).data('downgrade')))
+    $("#checkout_form").before($(".account_downgrade_alert").toggle(!$(this).data('upgrade') && !$(this).data('downgrade')))
 
     $('input[name="li_1_price"]').val($(this).val())
+
     $('#checkout_form').toggle($(this).data('upgrade'))
     $('#downgrade_form').toggle(!$(this).data('upgrade'))
+
     $('input[name="Amount"]').parent().parent().parent().removeClass('price-column-featured')
     $(this).parent().parent().parent().addClass('price-column-featured')
+
     $('input[name="li_1_name"]').val($(this).data('plan'))
+    
+    $.ajax "/startup_fee",
+      datatype: "json"
+      method: "post"
+      data: $('form#checkout_form').serialize()
+      success: (data) ->
+        $.map data, (value, key) ->
+          $('input[name="'+key+'"]').val(value)
 
   $('.price-column-featured input[name="Amount"][type="radio"]').attr('checked', true)
 
