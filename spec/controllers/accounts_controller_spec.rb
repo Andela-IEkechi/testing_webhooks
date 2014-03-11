@@ -27,7 +27,7 @@ describe AccountsController do
     end
   end
 
-  describe "downgrade_free" do
+  describe "downgrade_to_free" do
     before(:each) do
       @account = @user.account
       @account.upgrade
@@ -41,23 +41,23 @@ describe AccountsController do
 
     it "should assign the new plan" do
       @first_plan = @account.current_plan
-      post :downgrade_free, @params.merge(:user_id => @user)
+      post :downgrade_to_free, @params.merge(:user_id => @user)
       assigns(:account).current_plan.to_s.should_not eq(@first_plan.to_s)
     end
 
     it "should give the correct success notice" do
-      get :downgrade_free, @params.merge(:user_id => @user)
+      get :downgrade_to_free, @params.merge(:user_id => @user)
       flash[:notice].should =~ /Downgrade request successful. You will receive an email as soon as your downgrade is completed./i
     end
 
     it "should give the correct alert when disallowed" do
       create(:private_project, :user_id => @user.id)
-      get :downgrade_free, @params.merge(:user_id => @user)
+      get :downgrade_to_free, @params.merge(:user_id => @user)
       flash[:alert].should =~ /Sorry, your account can not be downgraded at this time./i
     end
 
     it "should redirect" do
-      get :downgrade_free, @params.merge(:user_id => @user)
+      get :downgrade_to_free, @params.merge(:user_id => @user)
       response.should be_redirect
     end
   end
