@@ -27,7 +27,7 @@ describe AccountsController do
     end
   end
 
-  describe "downgrade_free", :focus => true do
+  describe "downgrade_free" do
     before(:each) do
       @account = @user.account
       @account.upgrade
