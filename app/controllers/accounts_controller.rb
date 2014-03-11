@@ -7,7 +7,7 @@ class AccountsController < ApplicationController
     current_user.ensure_authentication_token!
   end
 
-  def downgrade_free
+  def downgrade_to_free
     plan = "free"
     if @account.can_downgrade?(plan)
       if @account.change_to(plan.to_s) && @account.save

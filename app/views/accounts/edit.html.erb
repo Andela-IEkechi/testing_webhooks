@@ -80,7 +80,7 @@
 
 
 <div id="cancellation_form"><!--Cancel, post back to conductor-->
-  <%= form_tag downgrade_free_user_account_url, :name => 'Conductor Secure Payment', :id => "cancellation_form", :method => :post do %>
+  <%= form_tag downgrade_to_free_user_account_url, :name => 'Conductor Secure Payment', :id => "cancellation_form", :method => :post do %>
 
     <%= hidden_field_tag "account", @account.id %>
     <%= hidden_field_tag "li_1_name", '' %>
