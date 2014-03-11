@@ -128,7 +128,7 @@ describe AccountsController do
         it "should give the correct alert when successful with save errors" do
           @params["li_1_price"] = "5.00"
           get :payment_return, @params.merge(:user_id => @user)
-          flash[:alert].should =~ /Downgrade request sent. However, we encountered a problem while updating your account. Please contact accounts@conductor-app.co.za for assistance/i
+          flash[:alert].should =~ /Downgrade request sent. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you./i
         end
       end
     end
