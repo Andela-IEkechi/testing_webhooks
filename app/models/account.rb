@@ -22,13 +22,15 @@ class Account < ActiveRecord::Base
   end
 
   def can_downgrade?(new_plan)
-    current_plan.worse_than?(new_plan) && available_members?(new_plan) && available_storage?(new_plan) && available_projects?(new_plan)
+    plan = Plan.new(new_plan.to_s)
+    current_plan.better_than?(new_plan) && available_members?(plan) && available_storage?(plan) && available_projects?(plan)
   end
 
   #check available resources
   def available_members?(plan = nil)
     plan ||= current_plan
     @used_members = user.projects.closedsource.collect{|p| p.memberships.count}.sum
+    binding.pry
     @plan_members = plan[:members]
     @plan_members > @used_members
   end
