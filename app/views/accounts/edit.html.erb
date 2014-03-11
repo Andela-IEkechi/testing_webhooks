@@ -47,22 +47,48 @@
 
     <div class="row-fluid pagination-centered">
       <br>
-      <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change' %>
+      <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change_upgrade' %>
     </div>
   <% end %>
 </div>
 
-<div id="downgrade_form"><!--Downgrade or cancel, post back to conductor-->
-  <%= form_tag payment_update_user_account_url, :name => 'Conductor Secure Payment', :id => "downgrade_form", :method => :post do %>
+<div id="downgrade_form">
+  <%= form_tag Rails.configuration.checkout[:url], :name => 'Conductor Secure Payment', :id => "downgrade_form", :method => :post do %>
 
-    <%= hidden_field_tag "forfeit", '' %>
+    <%= hidden_field_tag "sid", Rails.configuration.checkout[:checkout_account] %>
+    <%= hidden_field_tag "mode", '2CO' %>
+    <%= hidden_field_tag "demo", 'Y' %>
     <%= hidden_field_tag "li_1_price", '' %>
-    <%= hidden_field_tag "account", "#{@account.id}" %>
-    <%= hidden_field_tag "DATE", "#{Time.now.strftime('%Y-%m-%d')}" %>
+    <%= hidden_field_tag "li_1_name", '' %>
+    <%= hidden_field_tag "li_1_tangible", 'N' %>
+    <%= hidden_field_tag "li_1_quanity", '1' %>
+    <%= hidden_field_tag 'fixed', 'Y' %>
+    <%= hidden_field_tag "li_1_type", 'product' %>
+    <%= hidden_field_tag "li_1_recurrence", '1 Month' %>
+    <%= hidden_field_tag "li_1_duration", 'Forever' %>
+    <%= hidden_field_tag "currency_code", 'USD' %>
+    <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "local.conductor.com",:auth_token => @user.authentication_token) %>
+    <%= hidden_field_tag "account", @account.id %>
+    <%= hidden_field_tag "forfeit", '' %>
 
     <div class="row-fluid pagination-centered">
       <br>
-      <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change' %>
+      <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change_downgrade' %>
+    </div>
+  <% end %>
+</div>
+
+
+<div id="cancellation_form"><!--Cancel, post back to conductor-->
+  <%= form_tag downgrade_free_user_account_url, :name => 'Conductor Secure Payment', :id => "cancellation_form", :method => :post do %>
+
+    <%= hidden_field_tag "account", @account.id %>
+    <%= hidden_field_tag "li_1_name", '' %>
+    <%= hidden_field_tag "forfeit", '' %>
+
+    <div class="row-fluid pagination-centered">
+      <br>
+      <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change_cancel' %>
     </div>
   <% end %>
 </div>

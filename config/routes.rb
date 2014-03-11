@@ -10,7 +10,7 @@ Conductor::Application.routes.draw do
   resources :users do
     resource :account do
       match 'payment/return' => 'accounts#payment_return'
-      match 'payment/update' => 'accounts#payment_update'
+      match 'downgrade/free' => 'accounts#downgrade_free'
     end
     resources :overviews
   end
