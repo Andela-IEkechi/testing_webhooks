@@ -30,7 +30,6 @@ class Account < ActiveRecord::Base
   def available_members?(plan = nil)
     plan ||= current_plan
     @used_members = user.projects.closedsource.collect{|p| p.memberships.count}.sum
-    binding.pry
     @plan_members = plan[:members]
     @plan_members > @used_members
   end
