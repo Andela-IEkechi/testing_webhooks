@@ -53,6 +53,21 @@ describe Ability do
       @ability.should be_able_to(:manage, sprint)
     end
 
+    it "should be able to create memberships" do
+      project = create(:project, :user => @user)
+      @user.account.upgrade
+      @ability.should be_able_to(:create, Membership)
+    end
+
+    it "should not be able to create membership if none available" do
+      project = create(:project, :user_id => @user.id)
+      @user.account.upgrade
+      @user.account.current_plan[:members].times do
+        create(:membership, :project_id => project.id, :user_id => @user.id)
+      end
+      @ability.should_not be_able_to(:create, Membership.new(:project_id => project.id))
+    end
+
     it 'should be able to view all tickets' do
       create(:ticket, :project => @project)
       @project.reload

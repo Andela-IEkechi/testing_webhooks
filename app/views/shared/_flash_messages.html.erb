@@ -1,5 +1,5 @@
 <div id="flash-message">
-  <% [:notice, :error, :alert].each do |level| %>
+  <% [:notice, :error, :alert, :account_upgrade_notice, :account_downgrade_notice, :account_downgrade_alert].each do |level| %>
      <% unless flash[level].blank? %>
        <div class="<%= flash_class(level) %> fade in">
         <a href="#" data-dismiss="alert" class="close">×</a>

@@ -194,4 +194,17 @@ describe Project do
       ids.should eq(ids.sort)
     end
   end
+
+  context "scopes" do
+    it "should return opensource/closedsource projects" do
+      10.times do |n|
+        project = create(:project, :private => false)
+      end
+      10.times do |n|
+        project = create(:project, :private => true)
+      end
+      Project.opensource.should have(10).entries
+      Project.closedsource.should have(11).entries
+    end
+  end
 end

@@ -17,11 +17,16 @@ class ProjectsController < ApplicationController
 
   def create
     @project.user = current_user
-    if @project.save
-      flash[:notice] = "Project was added"
-      redirect_to project_path(@project)
+    if @project.user.account.available_projects? || @project.public?
+      if @project.save
+        flash[:notice] = "Project was added"
+        redirect_to project_path(@project)
+      else
+        flash[:alert] = "Project could not be created"
+        render 'new'
+      end
     else
-      flash[:alert] = "Project could not be created"
+      flash[:alert] = "You have reached your project limit"
       render 'new'
     end
   end

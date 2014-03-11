@@ -80,4 +80,9 @@ Conductor::Application.configure do
     ENV['GITHUB_CLIENT_SECRET'] = '5f75803c2db451c7e69daf256dc8a6b24ed98d09'
   end
 
+  config.checkout = {
+    :encryption_key => "f9df3a1845",
+    :url => "https://www.2checkout.com/2co/buyer/purchase",
+    :checkout_account => "202217675"
+  }
 end

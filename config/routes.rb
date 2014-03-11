@@ -9,11 +9,12 @@ Conductor::Application.routes.draw do
 
   resources :users do
     resource :account do
-      match 'payment/failure' => 'accounts#payment_failure'
-      match 'payment/success' => 'accounts#payment_success'
+      match 'payment/return' => 'accounts#payment_return'
+      match 'downgrade/free' => 'accounts#downgrade_to_free', :as => 'downgrade_to_free_user_account'
     end
     resources :overviews
   end
+  match 'startup_fee' => 'accounts#ajax_startup_fee'
 
   get 'projects/public' => 'projects#public'
   get 'projects/:id/invite' => 'projects#invite', :as => :invite
