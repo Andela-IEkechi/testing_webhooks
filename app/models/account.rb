@@ -1,6 +1,6 @@
 class Account < ActiveRecord::Base
   belongs_to :user, :dependent => :destroy #also destroy the user if we destroy the account.
-  attr_accessible :enabled, :plan, :started_on
+  attr_accessible :enabled, :plan, :started_on, :blocked
 
   validates :user_id, presence: true
   validates :plan, presence: true
@@ -54,4 +54,13 @@ class Account < ActiveRecord::Base
     @plan_projects > @used_projects
   end
 
+  def block!
+    self.blocked = true
+    self.save!
+  end
+
+  def unblock!
+    self.blocked = false
+    self.save!
+  end
 end

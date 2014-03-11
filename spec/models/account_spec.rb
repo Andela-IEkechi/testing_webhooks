@@ -109,4 +109,18 @@ describe Account do
       @sml_acc.available_storage?.should eq(false)
     end
   end
+
+  context "block/unblock" do
+    it "should unblock the account" do
+      @account.unblock!
+      @account.save
+      @account.blocked.should eq(false)
+    end
+    
+    it "should block the account" do
+      @account.block!
+      @account.save
+      @account.blocked.should eq(true)
+    end
+  end
 end
