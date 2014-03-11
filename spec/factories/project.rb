@@ -13,6 +13,10 @@ FactoryGirl.define do
       private false
     end
 
+    factory :private_project do
+      private true
+    end
+
     factory :project_with_tickets do
       after(:create) do |project|
         project.tickets << create(:ticket, :project=>project)

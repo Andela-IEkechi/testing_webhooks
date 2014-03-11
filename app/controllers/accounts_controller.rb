@@ -7,13 +7,13 @@ class AccountsController < ApplicationController
     current_user.ensure_authentication_token!
   end
 
-  def payment_update
-    plan = Plan::PLANS.keys.each.select{|p| Plan::PLANS[p][:price_usd] == params["li_1_price"].to_i}.first.to_s
+  def downgrade_free
+    plan = "free"
     if @account.can_downgrade?(plan)
-      if !(plan.blank?) && @account.change_to(plan.to_s) && @account.save
+      if @account.change_to(plan.to_s) && @account.save
         flash[:notice] = "Downgrade request successful. You will receive an email as soon as your downgrade is completed."
       else
-        flash[:alert] = "Downgrade request sent. However, we encountered a problem while updating your account. Please contact accounts@conductor-app.co.za for assistance"
+        flash[:alert] = "Downgrade request sent. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you."
       end
     else
       flash[:alert] = "Sorry, your account can not be downgraded at this time."
@@ -29,16 +29,25 @@ class AccountsController < ApplicationController
 
     valid_payment = (checksum == params["key"])
     successful = (params["credit_card_processed"] == "Y")
+
     if valid_payment && successful
       #get the correct plan amount
-      plan_amount = params["li_1_price"]
+      plan_amount = params["li_1_price"].to_f
+
+      upgrade = @account.current_plan[:price_usd] < plan_amount
       #get the new plan, update the user account and notify
       plan = Plan::PLANS.keys.each.select{|p| Plan::PLANS[p][:price_usd] == plan_amount}.first.to_s
       @account.started_on = Date.today
-      if !(plan.blank?) && @account.change_to(plan.to_s) && @account.save
-        flash[:notice] = "Payment was successful. Your subscription has been updated to #{@account.current_plan[:title]}"
+      if upgrade
+        if !(plan.blank?) && @account.change_to(plan.to_s) && @account.save
+          flash[:notice] = "Payment was successful. Your subscription has been updated to #{@account.current_plan[:title]}"
+        else
+          flash[:alert] = "Payment was successful. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you."
+        end
+      elsif !(plan.blank?) && @account.can_downgrade?(plan.to_s) && @account.change_to(plan.to_s) && @account.save
+        flash[:notice] = "Downgrade request successful. You will receive an email as soon as your downgrade is completed."
       else
-        flash[:alert] = "Payment was successful. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you."
+        flash[:alert] = "Downgrade request sent. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you."
       end
     else
       flash[:alert] = "Payment could not be processed. Your subscription was not updated."

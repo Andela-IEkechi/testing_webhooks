@@ -27,6 +27,41 @@ describe AccountsController do
     end
   end
 
+  describe "downgrade_free", :focus => true do
+    before(:each) do
+      @account = @user.account
+      @account.upgrade
+      @account.save
+      @params = {
+        "account" => @account.id,
+        "li_1_name" => "free",
+        "forfeit" => "19.20"
+      }
+    end
+
+    it "should assign the new plan" do
+      @first_plan = @account.current_plan
+      post :downgrade_free, @params.merge(:user_id => @user)
+      assigns(:account).current_plan.to_s.should_not eq(@first_plan.to_s)
+    end
+
+    it "should give the correct success notice" do
+      get :downgrade_free, @params.merge(:user_id => @user)
+      flash[:notice].should =~ /Downgrade request successful. You will receive an email as soon as your downgrade is completed./i
+    end
+
+    it "should give the correct alert when disallowed" do
+      create(:private_project, :user_id => @user.id)
+      get :downgrade_free, @params.merge(:user_id => @user)
+      flash[:alert].should =~ /Sorry, your account can not be downgraded at this time./i
+    end
+
+    it "should redirect" do
+      get :downgrade_free, @params.merge(:user_id => @user)
+      response.should be_redirect
+    end
+  end
+
   describe "payment return" do
     before(:each) do
       @x = [10.00,25.00,70.00].sample
@@ -52,23 +87,49 @@ describe AccountsController do
     end
 
     context "successful payment" do
-      it "should assign the new plan" do
-        @account = @user.account
-        @first_plan = @account.current_plan
-        post :payment_return, @params.merge(:user_id => @user)
-        assigns(:account).current_plan.to_s.should_not eq(@first_plan.to_s)
+      context "upgrade" do
+        it "should assign the new plan" do
+          @account = @user.account
+          @first_plan = @account.current_plan
+          post :payment_return, @params.merge(:user_id => @user)
+          assigns(:account).current_plan.to_s.should_not eq(@first_plan.to_s)
+        end
+
+        it "should give the correct success notice" do
+          get :payment_return, @params.merge(:user_id => @user)
+          flash[:notice].should =~ /Payment was successful. Your subscription has been updated to #{assigns(:account).current_plan[:title]}/i
+        end
+
+        it "should give the correct alert when successful with save errors" do
+          @params["li_1_price"] = "90.00"
+          get :payment_return, @params.merge(:user_id => @user)
+          flash[:alert].should =~ /Payment was successful. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you./i
+        end
       end
 
-      it "should give the correct success notice" do
-        get :payment_return, @params.merge(:user_id => @user)
-        flash[:notice].should =~ /Payment was successful. Your subscription has been updated to #{assigns(:account).current_plan[:title]}/i
-      end
+      context "downgrade" do
+        before(:each) do
+          @account = @user.account
+          @account.change_to("large")
+          @account.save
+          @params["li_1_price"] = 25.00
+        end
+        it "should assign the new plan" do
+          @first_plan = @account.current_plan
+          post :payment_return, @params.merge(:user_id => @user)
+          assigns(:account).current_plan.to_s.should_not eq(@first_plan.to_s)
+        end
 
-      it "should give the correct alert when successful with save errors" do
-        @params["total"] = "90.00"
-        @params["key"] = Digest::MD5.hexdigest((Rails.configuration.checkout[:encryption_key] + Rails.configuration.checkout[:checkout_account] + "564654" + "90.00").upcase)
-        get :payment_return, @params.merge(:user_id => @user)
-        flash[:alert].should =~ /Payment was successful. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you./i
+        it "should give the correct success notice" do
+          get :payment_return, @params.merge(:user_id => @user)
+          flash[:notice].should =~ /Downgrade request successful. You will receive an email as soon as your downgrade is completed./i
+        end
+
+        it "should give the correct alert when successful with save errors" do
+          @params["li_1_price"] = "5.00"
+          get :payment_return, @params.merge(:user_id => @user)
+          flash[:alert].should =~ /Downgrade request sent. However, we encountered a problem while updating your account. Please contact accounts@conductor-app.co.za for assistance/i
+        end
       end
     end
 
