@@ -11,7 +11,7 @@
   <li><strong><%= plan[:storage_gb] %>GB</strong>&nbsp;Storage</li>
   <li class="last">
   <% if current_user && @account %>
-    <%= radio_button_tag 'Amount', plan[:price_usd], @account.current_plan.upgrade_to? == plan.to_s, :id => "amount_#{plan[:title]}", :data => {:upgrade => plan.better_than?(@account.current_plan), :downgrade => @account.can_downgrade?(plan), :plan => plan[:title]} %>
+    <%= radio_button_tag 'Amount', plan[:price_usd], @account.current_plan.upgrade_to? == plan.to_s, :id => "amount_#{plan[:title]}", :data => {:upgrade => plan.better_than?(@account.current_plan), :downgrade => @account.can_downgrade?(plan.to_s), :plan => plan[:title]} %>
     <%= label_tag "amount_#{plan}", plan.better_than?(@account.current_plan) ? 'Upgrade' : 'Downgrade', :class => "bigger" %>
   <% else %>
     <%= link_to 'Register a free account', new_registration_path(:user), class: "btn btn-large" %>
