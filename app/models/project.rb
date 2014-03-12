@@ -39,6 +39,10 @@ class Project < ActiveRecord::Base
     !private
   end
 
+  def blocked?
+    self.user.account.blocked
+  end
+
   private
   def default_statuses
     #when we create a new project, we make sure we create at least two statuses for the tickets in the project
