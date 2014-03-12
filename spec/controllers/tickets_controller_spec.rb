@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'shared/account_status'
 
 describe TicketsController do
   before (:each) do
@@ -278,7 +279,47 @@ describe TicketsController do
       result_ids = assigns(:tickets).collect(&:scoped_id)
       result_ids.should == result_ids.sort
     end
-
   end
 
+  describe "blocked account" do
+    context "@sprint" do
+      before(:each) do
+        @sprint = create(:sprint, :project => @project)
+        @ticket = create(:ticket, :project => @project)
+        create(:comment, :sprint => @sprint, :user => @user, :ticket => @ticket)
+        @ticket.reload
+        @another_ticket = create(:ticket, :project => @project)
+        create(:comment, :sprint => @sprint, :user => @user, :ticket => @another_ticket)
+        @another_ticket.reload
+        @params = {:project_id => @project, :sprint_id => @sprint, :id => @ticket}
+      end
+      it_behaves_like "account_status"
+    end
+    context "@feature" do
+      before(:each) do
+        @feature = create(:feature, :project => @project)
+        @ticket = create(:ticket, :project => @project)
+        create(:comment, :feature => @feature, :user => @user, :ticket => @ticket)
+        @ticket.reload
+        @another_ticket = create(:ticket, :project => @project)
+        create(:comment, :feature => @feature, :user => @user, :ticket => @another_ticket)
+        @another_ticket.reload
+        @params = {:project_id => @project, :feature_id => @feature, :id => @ticket}
+      end
+      it_behaves_like "account_status"
+    end
+    context "@ticket" do
+      before(:each) do
+        @ticket = create(:ticket, :project => @project)
+        create(:comment, :ticket => @ticket, :user => @user)
+        @ticket.reload
+        @ticket.user.should_not be_nil
+        @another_ticket = create(:ticket, :project => @project)
+        create(:comment, :user => @user, :ticket => @another_ticket)
+        @another_ticket.reload
+        @params = {:project_id => @project, :id => @ticket}
+      end
+      it_behaves_like "account_status"
+    end
+  end
 end
