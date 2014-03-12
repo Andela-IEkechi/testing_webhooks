@@ -1,6 +1,11 @@
 require 'spec_helper'
+require 'shared/account_status'
 
 describe SprintsController do
+  before (:each) do
+    login_user
+    @project = create(:project, :user => @user)
+  end
   shared_examples("a project sprint") do
     it "assigns the current project to @project"
   end
@@ -60,5 +65,15 @@ describe SprintsController do
     it_behaves_like "a project sprint"
     it "deletes a sprint from the database"
     it "redirects to the sprint index"
+  end
+
+  describe "blocked account" do
+    before(:each) do
+      @project.private = true
+      @project.save
+      @sprint = create(:sprint, :project => @project)
+      @params = {:project_id => @project, :id => @sprint}
+    end
+    it_behaves_like "account_status"
   end
 end
