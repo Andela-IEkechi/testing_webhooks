@@ -1,6 +1,11 @@
 require 'spec_helper'
+require 'shared/account_status'
 
 describe FeaturesController do
+  before (:each) do
+    login_user
+    @project = create(:project, :user => @user)
+  end
   shared_examples("a project feature") do
     it "assigns the current project to @project"
   end
@@ -61,5 +66,13 @@ describe FeaturesController do
     it "deletes a feature from the database"
     it "redirects to show the project"
     it "cannot be destroyed if it has tickets"
+  end
+
+  describe "blocked account" do
+    before(:each) do
+      @feature = create(:feature, :project => @project)
+      @params = {:project_id => @project, :id => @feature}
+    end
+    it_behaves_like "account_status"
   end
 end
