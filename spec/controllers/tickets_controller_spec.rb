@@ -313,7 +313,6 @@ describe TicketsController do
         @ticket = create(:ticket, :project => @project)
         create(:comment, :ticket => @ticket, :user => @user)
         @ticket.reload
-        @ticket.user.should_not be_nil
         @another_ticket = create(:ticket, :project => @project)
         create(:comment, :user => @user, :ticket => @another_ticket)
         @another_ticket.reload
