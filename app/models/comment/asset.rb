@@ -1,6 +1,7 @@
 class Comment::Asset < ActiveRecord::Base
   belongs_to      :comment
   has_one         :ticket, :through => :comment
+  has_one         :project, :through => :ticket
   mount_uploader  :payload, FileUploader
 
   attr_accessible :payload
