@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   load_and_authorize_resource :project, :except => [:index]
+  include AccountStatus
 
   def index
     #limit the projects to the ones we have memberships to

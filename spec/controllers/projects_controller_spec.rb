@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'shared/account_status'
 
 describe ProjectsController do
   before (:each) do
@@ -259,5 +260,14 @@ describe ProjectsController do
       delete :destroy, :id => @project
       response.should be_redirect
     end
+  end
+
+  describe "blocked account" do
+    before(:each) do
+      @project.private = true
+      @project.save
+      @params = {:id => @project}
+    end
+    it_behaves_like "account_status"
   end
 end
