@@ -6,6 +6,7 @@ class CommentsController < ApplicationController
   load_and_authorize_resource :comment, :through => :ticket, :except => :preview
 
   before_filter :set_feature_and_sprint, :only => [:create, :update]
+  include AccountStatus
 
   def new
   end
