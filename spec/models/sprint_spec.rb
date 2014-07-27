@@ -39,12 +39,12 @@ describe Sprint do
     @sprint.should_not be_valid
   end
 
-  it "orders by :title ASC" do
-    create(:sprint, :title => "zzzz this should be last")
+  it "orders by :goal ASC" do
+    create(:sprint, :goal => "zzzz this should be last")
     5.times {
       create(:sprint)
     }
-    Sprint.all.collect(&:title).should eq(Sprint.all.collect(&:title).sort)
+    Sprint.all.collect(&:goal).should eq(Sprint.all.collect(&:goal).sort)
   end
 
   context "without tickets" do

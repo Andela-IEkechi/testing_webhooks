@@ -10,7 +10,7 @@ class Sprint < ActiveRecord::Base
   validates :goal, :presence => true, :uniqueness => {:scope => :project_id}
   validates :due_on, :presence => true
 
-  default_scope :order => "title ASC"
+  default_scope :order => "goal ASC"
 
   def to_s
     goal
