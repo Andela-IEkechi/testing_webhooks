@@ -88,7 +88,7 @@ describe User do
     user.active?.should be_true
   end
 
-  it "should be able to obfuscate user information(email)", :focus => true do
+  it "should be able to obfuscate user information(email)" do
     user = create(:user)
     expected = user.email.gsub(/(.+@).+/,'\1...')
     user.obfuscated.should eq(expected)

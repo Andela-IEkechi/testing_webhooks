@@ -39,6 +39,14 @@ describe Sprint do
     @sprint.should_not be_valid
   end
 
+  it "orders by :goal ASC" do
+    create(:sprint, :goal => "zzzz this should be last")
+    5.times {
+      create(:sprint)
+    }
+    Sprint.all.collect(&:goal).should eq(Sprint.all.collect(&:goal).sort)
+  end
+
   context "without tickets" do
     it "should have a 0 cost" do
       @sprint.assigned_tickets.each(&:destroy)
