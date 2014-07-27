@@ -4,7 +4,7 @@ gem 'rails', '~> 3.2.12'
 gem 'pg'
 gem 'simple_form'
 gem 'nested_form'
-gem 'devise'
+gem 'devise', '~>3.0.3'
 gem 'devise_invitable', '~> 1.1.0'
 
 gem 'cancan', '1.6.9' #DO NOT USE 1.6.10 https://github.com/ryanb/cancan/issues/865
@@ -17,15 +17,15 @@ gem "friendly_id", ">=4.0.9"
 
 #paging
 gem 'kaminari'
-gem 'kaminari-bootstrap'
+gem 'kaminari-bootstrap', '~>0.1'
 
 #comment body markup
 gem 'redcarpet'
 gem 'pygmentize'
 
 gem 'jquery-rails'
-gem 'jquery-ui-rails'
-gem 'bootstrap-sass'
+gem 'jquery-ui-rails', '~>4.0.4'
+gem 'bootstrap-sass', '~>2.3.2.1'
 
 #file uploads
 gem 'carrierwave'
@@ -54,9 +54,9 @@ end
 
 group :development,:test do
   gem 'heroku'
-  gem 'capistrano'
+  gem 'capistrano', '~>2.15.5'
   gem 'capistrano-ext'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~>2.14.0'
   gem 'rb-readline', '~> 0.4.2'
   gem 'factory_girl_rails'
   gem 'faker'
@@ -67,7 +67,7 @@ group :development,:test do
 end
 
 group :test do
-  gem 'rspec'
+  gem 'rspec', '~>2.14.0'
   gem 'database_cleaner'
 end
 
