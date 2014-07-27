@@ -65,12 +65,19 @@ describe Feature do
     @feature.to_param.should eq(@feature.scoped_id)
   end
 
+  it "orders by :title ASC" do
+    create(:feature, :title => "zzzz this should be last")
+    5.times {
+      create(:feature)
+    }
+    Feature.all.collect(&:title).should eq(Feature.all.collect(&:title).sort)
+  end
+
   context "without tickets" do
     it "should have a 0 cost if there are no tickets" do
       @feature.should have(0).assigned_tickets
       @feature.cost.should eq(0)
     end
-
   end
 
   context "with tickets" do
