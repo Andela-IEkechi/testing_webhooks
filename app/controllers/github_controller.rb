@@ -7,7 +7,10 @@ class GithubController < ApplicationController
     if api_key = ApiKey.find_by_token(params["token"])
       @project = api_key.project
       payload = JSON.parse(params["payload"]) rescue {}
-      p payload #do not remove, used for tracking problem on servers, too late to put it on afterward we have had a problem
+
+#do not remove, used for tracking problem on servers, too late to put it on afterward we have had a problem
+Rails.logger.info "GitHub payload: #{payload}"
+
       payload["commits"].each do |commit|
         commit = commit.with_indifferent_access
 
@@ -44,7 +47,7 @@ class GithubController < ApplicationController
 
               ticket.comments.create(attributes)
             else
-              p "Could not find ticket for reference: #{ticket_ref}"
+Rails.logger.info "Could not find ticket for reference: #{ticket_ref}"
             end
           end
         end #else we already created a coment for this commit message
