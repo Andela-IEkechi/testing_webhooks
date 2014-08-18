@@ -64,6 +64,7 @@ group :development,:test do
   #gem 'pry-debugger'
   gem 'pry-remote'
   gem 'puma'
+  gem 'proxylocal'
 end
 
 group :test do
