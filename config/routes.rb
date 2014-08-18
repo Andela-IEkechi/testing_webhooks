@@ -1,6 +1,6 @@
 Conductor::Application.routes.draw do
   devise_for :users,
-    :token_authentication_key => 'authentication_key',
+    :token_authentication_key => 'authentication_token',
     :controllers => {
       :omniauth_callbacks => 'users/omniauth_callbacks',
       :invitations => 'users/invitations',
@@ -10,7 +10,7 @@ Conductor::Application.routes.draw do
   resources :users do
     resource :account do
       match 'payment/return' => 'accounts#payment_return'
-      match 'downgrade/free' => 'accounts#downgrade_to_free', :as => 'downgrade_to_free_user_account'
+      match 'downgrade/free' => 'accounts#downgrade_to_free', :as => 'downgrade_to_free'
     end
     resources :overviews
   end
