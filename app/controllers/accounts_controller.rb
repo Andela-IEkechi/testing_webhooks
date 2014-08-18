@@ -24,15 +24,18 @@ class AccountsController < ApplicationController
   def payment_return
     #compare checksum to ensure valid payment
     params["encryption_key"] = Rails.configuration.checkout[:encryption_key]
+    unless Rails.env.production?
+      params["order_number"] = "1"
+    end
     checksum_fields = ["encryption_key","sid","order_number","total"]
-    checksum = Digest::MD5.hexdigest(checksum_fields.collect{|c| params[c]}.join("").upcase)
+    checksum = Digest::MD5.hexdigest(checksum_fields.collect{|c| params[c]}.join("")).upcase
 
     valid_payment = (checksum == params["key"])
     successful = (params["credit_card_processed"] == "Y")
 
     if valid_payment && successful
       #get the correct plan amount
-      plan_amount = params["li_1_price"].to_f
+      plan_amount = params["li_0_price"].to_f
 
       upgrade = @account.current_plan[:price_usd] < plan_amount
       #get the new plan, update the user account and notify
@@ -53,18 +56,18 @@ class AccountsController < ApplicationController
       flash[:alert] = "Payment could not be processed. Your subscription was not updated."
     end
 
-    current_user.reset_authentication_token!
+    #current_user.reset_authentication_token!
     redirect_to edit_user_account_path(@account.user)
   end
 
   def ajax_startup_fee
     @account = Account.find(params['account'].to_i)
     if "free" == @account.current_plan.to_s && (nil == @account.started_on ? true : (@account.started_on.day == Date.today.day) )
-      params["li_1_startup_fee"] = "0.00"
-    elsif params["li_1_price"].to_f > @account.current_plan[:price_usd]
-      params["li_1_startup_fee"] = (- pro_rata(@account)).to_s
+      params["li_0_startup_fee"] = "0.00"
+    elsif params["li_0_price"].to_f > @account.current_plan[:price_usd]
+      params["li_0_startup_fee"] = (- pro_rata(@account)).to_s
     else
-      params["li_1_startup_fee"] = "0.00"
+      params["li_0_startup_fee"] = "0.00"
       params["forfeit"] = pro_rata(@account).to_s
     end
     params.delete("account")

@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
+  before_filter :payment_params
   before_filter :after_token_authentication
   before_filter :authenticate_user!
   protect_from_forgery
@@ -36,6 +37,14 @@ class ApplicationController < ActionController::Base
       @current_membership = @project.memberships.for_user(current_user.id).first
     else
       @current_membership = nil
+    end
+  end
+
+  def payment_params
+    payment_url = params.delete("x_receipt_link_url")
+
+    if payment_url
+      redirect_to payment_url + "&" + params.to_query
     end
   end
 
