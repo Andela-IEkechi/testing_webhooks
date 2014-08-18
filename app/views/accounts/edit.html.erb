@@ -2,7 +2,7 @@
   Update Your Account
   <small> currently <%= @account.current_plan[:title] %> </small>
 </h3>
-  
+
 <div class="row-fluid marketing">
   <div class="tab-pane">
     <div class="price-table price-table-three">
@@ -31,7 +31,6 @@
 
     <%= hidden_field_tag "sid", Rails.configuration.checkout[:checkout_account] %>
     <%= hidden_field_tag "mode", '2CO' %>
-    <%= hidden_field_tag "demo", 'Y' %>
     <%= hidden_field_tag "li_1_price", '' %>
     <%= hidden_field_tag "li_1_name", '' %>
     <%= hidden_field_tag "li_1_tangible", 'N' %>
@@ -42,7 +41,13 @@
     <%= hidden_field_tag "li_1_recurrence", '1 Month' %>
     <%= hidden_field_tag "li_1_duration", 'Forever' %>
     <%= hidden_field_tag "currency_code", 'USD' %>
-    <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "local.conductor.com",:auth_token => @user.authentication_token) %>
+    <% if Rails.env.development? || Rails.env.test? %>
+      <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "6rcu.t.proxylocal.com",:authentication_token => @user.authentication_token) %>
+      <%= hidden_field_tag "demo", 'Y' %>
+    <% else %>
+      <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:authentication_token => @user.authentication_token) %>
+      <%= hidden_field_tag "demo", 'Y' %>
+    <% end %>
     <%= hidden_field_tag "account", @account.id %>
 
     <div class="row-fluid pagination-centered">
@@ -57,7 +62,6 @@
 
     <%= hidden_field_tag "sid", Rails.configuration.checkout[:checkout_account] %>
     <%= hidden_field_tag "mode", '2CO' %>
-    <%= hidden_field_tag "demo", 'Y' %>
     <%= hidden_field_tag "li_1_price", '' %>
     <%= hidden_field_tag "li_1_name", '' %>
     <%= hidden_field_tag "li_1_tangible", 'N' %>
@@ -67,7 +71,13 @@
     <%= hidden_field_tag "li_1_recurrence", '1 Month' %>
     <%= hidden_field_tag "li_1_duration", 'Forever' %>
     <%= hidden_field_tag "currency_code", 'USD' %>
-    <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "local.conductor.com",:auth_token => @user.authentication_token) %>
+    <% if Rails.env.development? || Rails.env.test? %>
+      <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "6rcu.t.proxylocal.com",:authentication_token => @user.authentication_token) %>
+      <%= hidden_field_tag "demo", 'Y' %>
+    <% else %>
+      <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:authentication_token => @user.authentication_token) %>
+      <%= hidden_field_tag "demo", 'Y' %>
+    <% end %>
     <%= hidden_field_tag "account", @account.id %>
     <%= hidden_field_tag "forfeit", '' %>
 
@@ -77,7 +87,6 @@
     </div>
   <% end %>
 </div>
-
 
 <div id="cancellation_form"><!--Cancel, post back to conductor-->
   <%= form_tag downgrade_to_free_user_account_url, :name => 'Conductor Secure Payment', :id => "cancellation_form", :method => :post do %>

@@ -16,8 +16,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def after_token_authentication
-    if params[:authentication_key].present?
-      @user = User.find_by_authentication_token(params[:authentication_key])
+    if params[:authentication_token].present?
+      @user = User.find_by_authentication_token(params[:authentication_token])
       sign_in @user if @user
     end
   end

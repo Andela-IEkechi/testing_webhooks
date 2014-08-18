@@ -52,6 +52,7 @@ class AccountsController < ApplicationController
     else
       flash[:alert] = "Payment could not be processed. Your subscription was not updated."
     end
+
     current_user.reset_authentication_token!
     redirect_to edit_user_account_path(@account.user)
   end
