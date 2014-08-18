@@ -21,6 +21,6 @@ class Comment::Asset < ActiveRecord::Base
 
   private
   def store_size
-    self.filesize = self.payload.size
+    self.filesize = (self.payload.size rescue 0)
   end
 end
