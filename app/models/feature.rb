@@ -10,6 +10,8 @@ class Feature < ActiveRecord::Base
   validates :project_id, :presence => true
   validates :title, :presence => true, :uniqueness => {:scope => :project_id}
 
+  default_scope :order => "title ASC"
+
   def to_s
     title
   end
