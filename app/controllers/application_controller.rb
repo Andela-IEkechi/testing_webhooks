@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
-  before_filter :payment_params
+  before_filter :payment_params #only realy used on non-production envs
   before_filter :after_token_authentication
   before_filter :authenticate_user!
   protect_from_forgery
@@ -41,6 +41,10 @@ class ApplicationController < ActionController::Base
   end
 
   def payment_params
+    return true if Rails.env.production?
+
+    #NOTE: on staging etc, we wont get the correct redirect, we have to do it ourselves.
+    #2co wont redirect if the url we ask for does not match the registered url they have on their side.
     payment_url = params.delete("x_receipt_link_url")
 
     if payment_url
