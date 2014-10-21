@@ -1,17 +1,19 @@
 class CommentsController < ApplicationController
-  before_filter :strip_empty_assets, :except => ["edit","destroy", "preview"]
+  before_filter :process_empty_assets, :except => ["edit","destroy", "preview"]
 
   load_and_authorize_resource :project
   load_and_authorize_resource :ticket, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :comment, :through => :ticket, :except => :preview
 
   before_filter :set_feature_and_sprint, :only => [:create, :update]
+  before_filter :process_multiple_assets, :only => [:create, :update]
 
   def new
   end
 
   def create
     @comment.user = current_user
+
 
     if @comment.save
       flash.keep[:notice] = "Comment was added"
@@ -29,7 +31,12 @@ class CommentsController < ApplicationController
 
   def update
     # Delete unwanted asset payloads by looking at the updated asset_ids
+
     @comment.assets.select{|a| !(params[:comment][:asset_ids].include? a.id.to_s)}.each(&:remove_payload!)
+    #save the new assets
+    @comment.save
+    #add the IDS in so we dont just yank them out again during the update
+    params[:comment][:asset_ids] = @comment.assets.map{|a|a.id}
 
     if @comment.update_attributes(params[:comment])
       flash[:notice] = "Comment was updated"
@@ -67,7 +74,7 @@ class CommentsController < ApplicationController
   end
 
   private
-  def strip_empty_assets
+  def process_empty_assets
     params[:comment][:assets_attributes] ||= []
     params[:comment][:assets_attributes].each do |id, attrs|
       params[:comment][:assets_attributes].delete(id) unless attrs[:payload]
@@ -81,6 +88,12 @@ class CommentsController < ApplicationController
     if cannot? :manage, @project
       @comment.feature = @ticket.feature
       @comment.sprint = @ticket.sprint
+    end
+  end
+
+  def process_multiple_assets
+    params[:files].each do |f|
+      @comment.assets.new(:payload => f)
     end
   end
 end
