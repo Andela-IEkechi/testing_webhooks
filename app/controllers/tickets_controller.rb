@@ -16,10 +16,10 @@ class TicketsController < ApplicationController
     @search = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
 
     #figure out how to order the results
-    sort_order = SortHelper.new(params[:q] && params[:q][:title_cont]).sort_order
+    sort_order = SortHelper.new(params[:q] && params[:q][:title_cont], current_user.preferences.ticket_order).sort_order
     sort_order = 'tickets.id' if sort_order.blank?
 
-    results = @search.result.includes(:last_comment => [:sprint, :feature, :assignee, :status]).order(sort_order)
+    results = @search.result.joins(:last_comment => [:sprint, :feature, :assignee, :status]).order(sort_order)
 
     @tickets = Kaminari::paginate_array(results).page(params[:page]).per(current_user.preferences.page_size.to_i) unless "false" == params[:paginate]
     @tickets ||= results
