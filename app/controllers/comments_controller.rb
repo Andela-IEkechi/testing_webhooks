@@ -92,6 +92,7 @@ class CommentsController < ApplicationController
   end
 
   def process_multiple_assets
+    return unless params[:files]
     params[:files].each do |f|
       @comment.assets.new(:payload => f)
     end
