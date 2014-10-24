@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131020093953) do
+ActiveRecord::Schema.define(:version => 20141024111845) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(:version => 20131020093953) do
     t.boolean  "enabled",    :default => true
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+    t.date     "started_on"
+    t.boolean  "blocked",    :default => false
   end
 
   add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
@@ -32,10 +34,11 @@ ActiveRecord::Schema.define(:version => 20131020093953) do
   end
 
   create_table "comment_assets", :force => true do |t|
-    t.integer  "comment_id", :null => false
+    t.integer  "comment_id",                :null => false
     t.string   "payload"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "filesize",   :default => 0
   end
 
   create_table "comments", :force => true do |t|
@@ -110,6 +113,7 @@ ActiveRecord::Schema.define(:version => 20131020093953) do
     t.boolean  "private",           :default => true
     t.string   "description"
     t.string   "slug"
+    t.string   "logo"
   end
 
   add_index "projects", ["slug"], :name => "index_projects_on_slug", :unique => true

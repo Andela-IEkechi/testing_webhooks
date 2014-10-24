@@ -1,6 +1,11 @@
 <% if  !(['edit', 'update'].include?(action_name) && controller_name == 'projects') %>
   <div>
     <ul class="nav nav-stacked span3 fixed-sidebar">
+      <% if @project && @project.logo.present? %>
+        <li class="text-center">
+          <%= image_tag(@project.logo_url(:thumb), :class => 'img-padded') %>
+        </li>
+      <% end %>
       <%= action_add(current_user.projects.new()) if !(@project || @overview) %>
       <%= action_add(current_user.overviews.new()) if !(@project || @overview) %>
 

@@ -14,6 +14,9 @@ class Project < ActiveRecord::Base
   has_many :memberships, :dependent => :destroy, :include => :user, :order => 'users.email asc'
   has_many :api_keys, :dependent => :destroy
 
+  mount_uploader  :logo, LogoUploader
+  attr_accessible :logo
+
   attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids, :description
   accepts_nested_attributes_for :ticket_statuses, :memberships
   accepts_nested_attributes_for :api_keys, :allow_destroy => true
