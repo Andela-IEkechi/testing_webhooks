@@ -25,7 +25,7 @@ class SortHelper
     @sort_terms = []
     return unless term
     @sort_matches = term.downcase.scan(/[sort|order]:([\w@\-\.]+)/i).flatten unless term.blank?
-    @sort_terms = @sort_matches.collect{ |s| [SORT_KEYWORDS_MAP[s.to_sym], direction].join(' ') }.compact if @sort_matches
+    @sort_terms = @sort_matches.collect{ |s| SORT_KEYWORDS_MAP[s.to_sym] }.compact.map{|s| [s, direction].join(' ')}.compact if @sort_matches
   end
 
   def sort_terms
