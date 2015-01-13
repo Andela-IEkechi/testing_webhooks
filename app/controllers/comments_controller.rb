@@ -14,7 +14,6 @@ class CommentsController < ApplicationController
   def create
     @comment.user = current_user
 
-
     if @comment.save
       flash.keep[:notice] = "Comment was added"
     else
