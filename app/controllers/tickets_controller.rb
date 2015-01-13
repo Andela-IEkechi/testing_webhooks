@@ -67,11 +67,13 @@ class TicketsController < ApplicationController
     @ticket.comments.first.user = current_user
     if @ticket.save
 
-      comment = @ticket.comments.first
-      params[:files].each do |f|
-        comment.assets.new(:payload => f)
+      if params[:files]
+        comment = @ticket.comments.first
+        params[:files].each do |f|
+          comment.assets.new(:payload => f)
+        end
+        comment.save
       end
-      comment.save
 
       if params[:create_another]
         flash.keep[:notice] = "Ticket was added. ##{@ticket.scoped_id} #{@ticket.title}"
