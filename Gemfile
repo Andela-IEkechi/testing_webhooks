@@ -40,6 +40,9 @@ gem 'rmagick'
 #searching
 gem 'ransack'
 
+#production runs on this server
+gem 'unicorn'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -64,7 +67,6 @@ group :development,:test do
   gem 'pry-rails' # for better console debugging
   #gem 'pry-debugger'
   gem 'pry-remote'
-  gem 'puma'
 
   gem 'quiet_assets'
   gem 'binding_of_caller'
