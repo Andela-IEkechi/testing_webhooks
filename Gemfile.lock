@@ -194,7 +194,7 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
-    paper_trail (3.0.3)
+    paper_trail (3.0.6)
       activerecord (>= 3.0, < 5.0)
       activesupport (>= 3.0, < 5.0)
     pg (0.17.1)
@@ -333,7 +333,7 @@ DEPENDENCIES
   kaminari-bootstrap (~> 0.1)
   nested_form
   omniauth-github
-  paper_trail
+  paper_trail (~> 3.0.6)
   pg
   pry-rails
   pry-remote

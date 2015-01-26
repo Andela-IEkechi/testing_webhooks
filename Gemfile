@@ -9,7 +9,7 @@ gem 'devise_invitable', '~> 1.1.0'
 
 gem 'cancan', '1.6.9' #DO NOT USE 1.6.10 https://github.com/ryanb/cancan/issues/865
 gem 'omniauth-github'
-gem 'paper_trail'
+gem 'paper_trail', "~>3.0.6"
 gem 'thin'
 gem 'rake'
 gem 'ruby-uuid'
