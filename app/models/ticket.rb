@@ -68,6 +68,8 @@ class Ticket < ActiveRecord::Base
 
   def open?
     last_comment.status.open
+  rescue
+    true
   end
 
   def closed?
