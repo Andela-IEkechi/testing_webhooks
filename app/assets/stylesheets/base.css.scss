@@ -158,6 +158,14 @@ background-color: #fff;
   }
 }
 .empty-project-toggle{
-  margin-top:10px;  
+  margin-top:10px;
+}
+
+
+.badge-muted {
+  background-color: transparent;
+  color: $status-text-color;
+  text-shadow: none;
+  border: 1px solid #ccc;
 }
 
