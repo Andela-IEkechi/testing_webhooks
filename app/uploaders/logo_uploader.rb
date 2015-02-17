@@ -47,7 +47,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   # end
 
   version :thumb, :if => :image? do
-    process :resize_to_fit => [200, 100]
+    process :resize_to_fit => [150, 75]
   end
 
   # Add a white list of extensions which are allowed to be uploaded.

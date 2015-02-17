@@ -66,6 +66,15 @@ class TicketsController < ApplicationController
     @ticket.comments.build() unless @ticket.comments.first
     @ticket.comments.first.user = current_user
     if @ticket.save
+
+      if params[:files]
+        comment = @ticket.comments.first
+        params[:files].each do |f|
+          comment.assets.new(:payload => f)
+        end
+        comment.save
+      end
+
       if params[:create_another]
         flash.keep[:notice] = "Ticket was added. ##{@ticket.scoped_id} #{@ticket.title}"
         @ticket.reload #refresh the assoc to last_comment
@@ -139,4 +148,5 @@ class TicketsController < ApplicationController
     return @feature.assigned_tickets if @feature
     return @project.tickets if @project
   end
+
 end

@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 div.project-block {
-  margin-bottom: 50px;
+  height: 100px;
   border-bottom: 1px solid #EFEFEF;
 }
 
@@ -14,11 +14,3 @@ div.project-block {
     margin-top: 3px;
   }
 }
-
-.badge-muted {
-  background-color: transparent;
-  color: $status-text-color;
-  text-shadow: none;
-  border: 1px solid #ccc;
-}
-

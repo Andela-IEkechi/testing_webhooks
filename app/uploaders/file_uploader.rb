@@ -46,7 +46,15 @@ class FileUploader < CarrierWave::Uploader::Base
   #   process :scale => [50, 50]
   # end
 
+  def remove_animation
+    manipulate! do |img, index|
+      index == 0 ? img : nil
+    end
+  end
+
   version :thumb, :if => :image? do
+    process :remove_animation
+    process :convert => 'jpg'
     process :resize_to_fill => [100, 100]
   end
 

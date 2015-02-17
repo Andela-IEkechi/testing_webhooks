@@ -9,7 +9,7 @@ gem 'devise_invitable', '~> 1.1.0'
 
 gem 'cancan', '1.6.9' #DO NOT USE 1.6.10 https://github.com/ryanb/cancan/issues/865
 gem 'omniauth-github'
-gem 'paper_trail'
+gem 'paper_trail', "~>3.0.6"
 gem 'thin'
 gem 'rake'
 gem 'ruby-uuid'
@@ -40,6 +40,9 @@ gem 'rmagick'
 #searching
 gem 'ransack'
 
+#production runs on this server
+gem 'unicorn'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -56,6 +59,7 @@ group :development,:test do
   gem 'heroku'
   gem 'capistrano', '~>2.15.5'
   gem 'capistrano-ext'
+  gem 'capistrano-recipes', :git => 'https://github.com/Shuntyard/capistrano-recipes.git'
   gem 'rspec-rails', '~>2.14.0'
   gem 'rb-readline', '~> 0.4.2'
   gem 'factory_girl_rails'
@@ -63,7 +67,9 @@ group :development,:test do
   gem 'pry-rails' # for better console debugging
   #gem 'pry-debugger'
   gem 'pry-remote'
-  gem 'puma'
+
+  gem 'quiet_assets'
+  gem 'binding_of_caller'
 end
 
 group :test do
