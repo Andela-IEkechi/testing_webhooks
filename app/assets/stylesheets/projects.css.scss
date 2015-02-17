@@ -14,3 +14,11 @@ div.project-block {
     margin-top: 3px;
   }
 }
+
+.badge-muted {
+  background-color: transparent;
+  color: $status-text-color;
+  text-shadow: none;
+  border: 1px solid #ccc;
+}
+

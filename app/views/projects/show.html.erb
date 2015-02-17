@@ -1,11 +1,16 @@
-<div>
-  <%= render :partial => "/features/index", :locals => {:features => @project.features } %>
-</div>
-
-<div>
-  <%= render :partial => "/sprints/index", :locals => {:sprints => @project.sprints } %>
-</div>
-
-<div>
-  <%= render :partial => "/tickets/index" %>
+<ul class="nav nav-tabs" id="project-view">
+  <li class="active"><a href="#tab1" data-toggle="tab">Tickets <span class="badge badge-muted"><%= @project.tickets.select{|t|t.open?}.count %></span></a></li>
+  <li><a href="#tab2" data-toggle="tab">Sprints <span class="badge badge-muted"><%= @project.sprints.select{|s| s.open?}.count %></span></a></li>
+  <li><a href="#tab3" data-toggle="tab">Features <span class="badge badge-muted"><%= @project.features.count %></span></a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="tab1">
+    <%= render :partial => "/tickets/index" %>
+  </div>
+  <div class="tab-pane" id="tab2">
+    <%= render :partial => "/sprints/index", :locals => {:sprints => @project.sprints } %>
+  </div>
+  <div class="tab-pane" id="tab3">
+    <%= render :partial => "/features/index", :locals => {:features => @project.features } %>
+  </div>
 </div>
