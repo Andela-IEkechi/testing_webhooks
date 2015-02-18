@@ -2,6 +2,63 @@
 <html>
 <head>
   <title>Conductor</title>
+
+  <style type="text/css">
+    body {
+      font-family: "Verdana", Verdana, sans-serif;
+      width: 70%;
+      font-size: 0.8em;
+    }
+
+    h3 {
+      background-color: #ddd;
+      padding: 3px;
+    }
+
+    table {
+      margin-top: 30px;
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid black;
+    }
+
+    table caption {
+      background-color: #777;
+      color: #eee;
+      text-align: right;
+      padding: 4px;
+      text-transform: uppercase;
+      padding-right: 10px;
+    }
+
+    table thead tr {
+      background-color: #f0f0f0;
+    }
+
+    table th {
+      text-align: left;
+      text-transform: uppercase;
+      font-size: 0.75em;
+    }
+
+    table tbody tr {
+      border-top: 1px solid #bbb;
+    }
+
+    table tbody tr:nth-child(even) {
+      background-color: #f6f6f6;
+    }
+
+    table tbody tr.total {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    table th, table td {
+      padding:3px;
+    }
+  </style>
+
 </head>
 <body>
   <%= yield %>

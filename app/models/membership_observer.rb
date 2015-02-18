@@ -12,7 +12,7 @@ class MembershipObserver < ActiveRecord::Observer
     # unconfirmed users
     # project owners
     # people who are already members
-    AccessMailer.project_access_notification(record.user, record.project).deliver if record.user.confirmed? && record.user_id != record.project.user_id && !record.project.memberships.all.collect(&:user_id).include?(record.user_id)
+    AccessMailer.project_notification(record.user, record.project).deliver if record.user.confirmed? && record.user_id != record.project.user_id && !record.project.memberships.all.collect(&:user_id).include?(record.user_id)
   end
 end
 

@@ -9,7 +9,7 @@ class CommentObserver < ActiveRecord::Observer
     #send an email to ticket
     if (record.ticket.assignees.size > 0)
      recipients = record.ticket.assignees.collect(&:email).uniq
-     TicketMailer.ticket_comment_notification(recipients, record).deliver
+     TicketMailer.status_notification(recipients, record).deliver
     end
   end
 end
