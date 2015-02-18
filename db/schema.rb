@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141024111845) do
+ActiveRecord::Schema.define(:version => 20150217230436) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -119,12 +119,13 @@ ActiveRecord::Schema.define(:version => 20141024111845) do
   add_index "projects", ["slug"], :name => "index_projects_on_slug", :unique => true
 
   create_table "sprints", :force => true do |t|
-    t.date     "due_on",                    :null => false
-    t.string   "goal",                      :null => false
-    t.integer  "project_id",                :null => false
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.integer  "scoped_id",  :default => 0
+    t.date     "due_on",                               :null => false
+    t.string   "goal",                                 :null => false
+    t.integer  "project_id",                           :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.integer  "scoped_id",         :default => 0
+    t.boolean  "notify_while_open", :default => false
   end
 
   add_index "sprints", ["project_id"], :name => "index_sprints_on_project_id"

@@ -17,6 +17,11 @@
                       :collection => {'Ascending' => 'ASC', 'Decending' => 'DESC'},
                       :include_blank => false
                        %>
+      <%= prefs.input :sprint_notification,
+                      :as => :boolean,
+                      :value => true,
+                      :hint => "Receive sprint status updates"
+                       %>
     <% end %>
   </div>
 
