@@ -1,0 +1,27 @@
+<p><b><%= @sprint.project.title %></b></p>
+
+<p><%= link_to @sprint, project_sprint_url(@sprint.project, @sprint) %></p>
+
+<p>Due on: <%= @sprint.due_on.to_s(:long) %></p>
+
+<ul>
+  Sprint cost breakdown:
+  <li>Outstanding: <%= @sprint.open_tickets.collect{|t| t.cost}.compact.sum %></li>
+  <li>Completed: <%= @sprint.closed_tickets.collect{|t| t.cost}.compact.sum %></li>
+</ul>
+
+<ul>
+  Tickets per status:
+  <% tickets = @sprint.assigned_tickets %>
+  <% @sprint.project.ticket_statuses.each do |ts|%>
+    <% pool = [tickets.reject!{|t| t.status == ts}].flatten.compact %>
+    <li><%= ts %> : <%= pool.count %></li>
+  <% end %>
+</ul>
+
+<ul>
+  Current participants:
+  <% @sprint.participants.each do |part|%>
+    <li><%= part %></li>
+  <% end %>
+</ul>
