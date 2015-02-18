@@ -52,11 +52,11 @@ module TicketHolder
     end
 
     def open_tickets
-      assigned_tickets.collect(&:status).select{|s| s.open}
+      assigned_tickets.select{|s| s.status.open}
     end
 
     def closed_tickets
-      assigned_tickets.collect(&:status).select{|s| !s.open}
+      assigned_tickets.select{|s| !s.status.open}
     end
 
     def has_open_tickets?
