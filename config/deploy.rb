@@ -3,6 +3,11 @@ require 'capistrano/ext/multistage'
 
 load 'deploy/assets'
 
+#set up whenever
+set :whenever_command, "bundle exec whenever"
+set :whenever_environment, defer { stage }
+require "whenever/capistrano"
+
 set :stages, %w(production)
 set :default_stage, "production"
 

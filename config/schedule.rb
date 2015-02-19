@@ -19,7 +19,8 @@
 
 # Learn more: http://github.com/javan/whenever
 
+job_type :rake,    "cd :path && RAILS_ENV=:environment bundle exec rake :task --silent :output"
 
-every 1.day, :at => '06:00 am' do
+every 1.day, :at => '06:00 am', :environment => 'production' do
   rake "sprint:send_status_notifications"
 end
