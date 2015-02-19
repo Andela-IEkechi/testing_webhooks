@@ -53,7 +53,8 @@ describe ProjectsController do
 
   describe "GET #show" do
     before(:each) do
-      get :show, :id => @project
+      @requested_tab = ['tickets', 'sprints', 'features'].sample
+      get :show, :id => @project, :tab => @requested_tab
     end
 
     it "assigns the requested project to @project" do
@@ -62,6 +63,10 @@ describe ProjectsController do
 
     it "renders the :show template" do
       response.should render_template("show")
+    end
+
+    it "preserves the active tab" do
+      assigns(:active_tab).should == @requested_tab
     end
   end
 
