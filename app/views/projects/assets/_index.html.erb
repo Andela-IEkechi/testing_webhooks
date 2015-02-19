@@ -1,0 +1,24 @@
+<table class="table table-bordered table-striped">
+  <caption>
+    <h4>Assets</h4>
+  </caption>
+  <tr>
+    <th class="width-5">#</th>
+    <th>Filename</th>
+    <th class="width-15">Size</th>
+    <th class="width-15">Uploaded</th>
+  </tr>
+  <% assets.each do |asset| %>
+  <tr>
+    <td><%= asset.scoped_id %></td>
+    <td class="overflow" title="<%= asset.name %>"><%= link_to asset.name, project_asset_path(asset.project, asset) %></td>
+    <td><%= number_to_human_size(asset.payload.file.size) %></td>
+    <td ><%= asset.created_at.to_s(:short) %></td>
+  </tr>
+  <% end %>
+  <% if assets.count == 0 %>
+  <tr>
+    <td colspan="4">There are no assets</td>
+  </tr>
+  <% end %>
+</table>
