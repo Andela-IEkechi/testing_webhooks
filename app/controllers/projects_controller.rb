@@ -7,6 +7,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    @active_tab = params[:tab] || 'tickets'
     if request.path != project_path(@project)
       redirect_to @project, status: :moved_permanently
     end
