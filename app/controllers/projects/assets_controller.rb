@@ -1,4 +1,4 @@
-class Project::AssetsController < ApplicationController
+class Projects::AssetsController < ApplicationController
   load_and_authorize_resource :project
   load_and_authorize_resource :asset, :through => :project, :find_by => :scoped_id, :class => 'Project::Asset'
 

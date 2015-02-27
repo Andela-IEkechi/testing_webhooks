@@ -103,7 +103,7 @@ module ActionsHelper
         #block needs to be here to pass in the class !?
       end
     end
-    link_content += "add a new #{target.class.name.downcase}"
+    link_content += "add a new #{target.class.name.downcase.gsub(/(.+::)*(.+)/,'\2')}"
 
     link_path = case target.class.name
     when 'Project'
@@ -112,7 +112,7 @@ module ActionsHelper
       new_project_feature_path(target.project)
     when 'Sprint'
       new_project_sprint_path(target.project)
-    when 'Asset'
+    when 'Project::Asset'
       new_project_asset_path(target.project)
     when 'Ticket'
       new_project_ticket_path(target.project, :sprint_id => (@sprint rescue nil), :feature_id => (@feature rescue nil))

@@ -1,4 +1,4 @@
-class Comment::AssetsController < ApplicationController
+class Comments::AssetsController < ApplicationController
   load_and_authorize_resource :project
   load_and_authorize_resource :ticket, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :asset, :through => :ticket, :class => 'Comment::Asset'
