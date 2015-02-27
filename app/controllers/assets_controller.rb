@@ -1,6 +1,7 @@
-class Projects::AssetsController < ApplicationController
+class AssetsController < ApplicationController
   load_and_authorize_resource :project
-  load_and_authorize_resource :asset, :through => :project, :find_by => :scoped_id, :class => 'Project::Asset'
+  load_and_authorize_resource :asset, :through => :project, :find_by => :scoped_id
+
 
   def index
     redirect_to project_path(@project)
@@ -50,4 +51,5 @@ class Projects::AssetsController < ApplicationController
     #use send_file once the hosting is local
     #send_file(@asset.payload, :disposition => 'attachment', :url_based_filename => false)
   end
+
 end

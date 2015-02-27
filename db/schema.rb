@@ -33,13 +33,19 @@ ActiveRecord::Schema.define(:version => 20150219223110) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "comment_assets", :force => true do |t|
+  create_table "assets", :force => true do |t|
     t.integer  "comment_id",                :null => false
     t.string   "payload"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
     t.integer  "filesize",   :default => 0
+    t.integer  "project_id",                :null => false
+    t.integer  "sprint_id"
+    t.integer  "feature_id"
+    t.integer  "scoped_id",  :default => 0
   end
+
+  add_index "assets", ["project_id"], :name => "index_comment_assets_on_project_id"
 
   create_table "comments", :force => true do |t|
     t.integer  "ticket_id",                      :null => false
@@ -102,19 +108,6 @@ ActiveRecord::Schema.define(:version => 20150219223110) do
     t.integer "project_id"
   end
 
-  create_table "project_assets", :force => true do |t|
-    t.integer  "project_id",                :null => false
-    t.integer  "sprint_id"
-    t.integer  "feature_id"
-    t.string   "payload"
-    t.integer  "filesize",   :default => 0
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.integer  "scoped_id",  :default => 0
-  end
-
-  add_index "project_assets", ["project_id"], :name => "index_project_assets_on_project_id"
-
   create_table "projects", :force => true do |t|
     t.string   "title",                               :null => false
     t.datetime "created_at",                          :null => false
@@ -127,7 +120,7 @@ ActiveRecord::Schema.define(:version => 20150219223110) do
     t.string   "description"
     t.string   "slug"
     t.string   "logo"
-    t.integer  "asset_sequence",    :default => 0
+    t.integer  "assets_sequence",   :default => 0
   end
 
   add_index "projects", ["slug"], :name => "index_projects_on_slug", :unique => true

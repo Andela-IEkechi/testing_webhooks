@@ -1,8 +1,12 @@
-class Comment::Asset < ActiveRecord::Base
-  belongs_to      :comment
-  has_one         :ticket, :through => :comment
-  mount_uploader  :payload, FileUploader
+class Asset < ActiveRecord::Base
+  include Scoped
 
+  belongs_to      :project
+  belongs_to      :sprint
+  belongs_to      :feature
+  belongs_to      :comment
+
+  mount_uploader  :payload, FileUploader
   attr_accessible :payload
 
   #NOTE: DO NOT validate this, it prevents us from saving new assest on new comments (on new tickets implicitly)

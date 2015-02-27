@@ -3,7 +3,7 @@ class Feature < ActiveRecord::Base
   include Scoped
 
   belongs_to :project #not optional
-
+  has_many   :assets, :dependent => :destroy
 
   attr_accessible :title, :description, :due_on
 

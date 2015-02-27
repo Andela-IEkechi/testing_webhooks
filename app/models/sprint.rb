@@ -3,6 +3,7 @@ class Sprint < ActiveRecord::Base
   include Scoped
 
   belongs_to :project #not optional
+  has_many   :assets, :dependent => :destroy
 
   attr_accessible :goal, :due_on, :notify_while_open
 
