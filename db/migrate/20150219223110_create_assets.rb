@@ -1,6 +1,6 @@
-class CreateAssets < ActiveRecord::Migration
+class CreateProjectAssets < ActiveRecord::Migration
   def change
-    create_table :assets do |t|
+    create_table :project_assets do |t|
       t.belongs_to :project,                :null => false
       t.belongs_to :sprint,                :null => true
       t.belongs_to :feature,                :null => true
@@ -11,6 +11,6 @@ class CreateAssets < ActiveRecord::Migration
     end
 
     add_column :projects, :asset_sequence, :integer, :default => 0
-    add_index :assets, :project_id
+    add_index :project_assets, :project_id
   end
 end

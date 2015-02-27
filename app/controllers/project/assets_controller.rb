@@ -1,6 +1,6 @@
 class Project::AssetsController < ApplicationController
   load_and_authorize_resource :project
-  load_and_authorize_resource :asset, :through => :project, :find_by => :scoped_id, :class => 'Comment::Asset'
+  load_and_authorize_resource :asset, :through => :project, :find_by => :scoped_id, :class => 'Project::Asset'
 
   def index
     redirect_to project_path(@project)

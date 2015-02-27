@@ -27,7 +27,7 @@ Conductor::Application.routes.draw do
     resources :features
     resources :sprints
     resources :assets
-    get 'download_asset/:asset_id' => 'assets#download', :as => :download_asset
+    get 'download_asset/:asset_id' => 'project::assets#download', :as => :download_asset
   end
 
   post 'comments/preview', :as => :comment_preview

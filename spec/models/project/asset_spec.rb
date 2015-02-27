@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Comment::Asset do
+describe Project::Asset do
 
   before(:each) do
     @asset = create(:comment_asset)
@@ -8,7 +8,6 @@ describe Comment::Asset do
 
   it "must have a working factory" do
     @asset.should_not be_nil
-
   end
 
   #we cant test this, because we explicitly allow new assets to have no comments, refer to the asset model class for detials

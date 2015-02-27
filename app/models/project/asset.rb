@@ -1,4 +1,4 @@
-class Asset < ActiveRecord::Base
+class Project::Asset < ActiveRecord::Base
   belongs_to      :project
   has_one         :sprint
   has_one         :feature
