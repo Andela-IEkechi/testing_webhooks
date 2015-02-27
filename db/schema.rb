@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 20150219223110) do
   end
 
   create_table "assets", :force => true do |t|
-    t.integer  "comment_id",                :null => false
+    t.integer  "comment_id"
     t.string   "payload"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(:version => 20150219223110) do
     t.integer  "scoped_id",  :default => 0
   end
 
-  add_index "assets", ["project_id"], :name => "index_comment_assets_on_project_id"
+  add_index "assets", ["project_id"], :name => "index_assets_on_project_id"
 
   create_table "comments", :force => true do |t|
     t.integer  "ticket_id",                      :null => false

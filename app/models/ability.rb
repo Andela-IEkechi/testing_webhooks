@@ -17,15 +17,16 @@ class Ability
     #anyone can manage membership to a project if they are an admin
     can :manage, Membership, :project => {:user_id => user.id, :role => 'admin'}
 
-    #anyone can read features and sprints on projects where they are members
+    #anyone can read features and sprints and assets on projects where they are members
     can :read, Feature, :project => {:private => true, :memberships => {:user_id => user.id}}
     can :read, Feature, :project => {:private => false }
 
     can :read, Sprint, :project => {:private => true, :memberships => {:user_id => user.id}}
     can :read, Sprint, :project => {:private => false }
 
-    can :read, Project::Asset, :project => {:private => true, :memberships => {:user_id => user.id}}
-    can :read, Project::Asset, :project => {:private => false }
+    can :read, Asset, :project => {:private => true, :memberships => {:user_id => user.id}}
+    can :read, Asset, :project => {:private => false }
+
     #anyone can read tickets on projects where they are a member
     can :read, Ticket, :project => {:private => true, :memberships => {:user_id => user.id}}
     can :read, Ticket, :project => {:private => false }
@@ -34,11 +35,7 @@ class Ability
     #we explicitly dont care who owns the project, no admin = no access
     can :manage, Feature, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
     can :manage, Sprint, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
-    can :manage, Project::Asset, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
-
-    #download project assets
-    can :download, Project::Asset, :project => {:private => true, :memberships => {:user_id => user.id}}
-    can :download, Project::Asset, :project => {:private => false}
+    can :manage, Asset, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
 
     #users can manage tickets which belong to them
     can :create, Ticket
@@ -49,10 +46,6 @@ class Ability
     can :manage, Ticket, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
     cannot :manage, Ticket, :project => {:memberships => {:user_id => user.id, :role => 'restricted'}}
     can :read, Ticket, :project => {:memberships => {:user_id => user.id}}
-
-    #download comment/ticket assets
-    can :download, Comment::Asset, :ticket => {:project => {:private => true, :memberships => {:user_id => user.id}}}
-    can :download, Comment::Asset, :ticket => {:project => {:private => false}}
 
     #anyone can read a comments on a ticket which belongs to a project which they are a member of
     can :read, Comment, :ticket => {:project => {:memberships => {:user_id => user.id}}}

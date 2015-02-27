@@ -20,7 +20,7 @@ class Project < ActiveRecord::Base
 
   attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids, :description
   accepts_nested_attributes_for :ticket_statuses, :memberships
-  accepts_nested_attributes_for :api_keys, :allow_destroy => true
+  accepts_nested_attributes_for :api_keys
 
   validates :title, :presence => true
 

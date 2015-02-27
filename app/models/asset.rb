@@ -12,6 +12,11 @@ class Asset < ActiveRecord::Base
   #NOTE: DO NOT validate this, it prevents us from saving new assest on new comments (on new tickets implicitly)
   #validates :comment_id, :presence => true
 
+  scope :for_feature, lambda{|feature_id| {:conditions => {:feature_id => feature_id}}}
+  scope :for_sprint, lambda{|sprint_id| {:conditions => {:sprint_id => sprint_id}}}
+  scope :for_comment, lambda{|comment_id| {:conditions => {:comment_id => comment_id}}}
+  scope :general, lambda{{:conditions => {:comment_id => nil, :sprint_id => nil, :feature_id => nil}}}
+
   def name
     payload.file.filename rescue payload
   end
