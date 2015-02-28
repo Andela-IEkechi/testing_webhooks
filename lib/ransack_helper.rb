@@ -17,15 +17,33 @@ class RansackHelper
     feature:  :feature_title_cont,
     sprint:   :sprint_goal_cont
   }.freeze
-
   TICKET_KEYWORDS = TICKET_KEYWORDS_MAP.keys.map(&:to_s).freeze
 
-  def initialize(term)
+  ASSET_KEYWORDS_MAP = {
+    id:       :scoped_id_eq,
+    payload:  :payload_cont,
+    feature:  :feature_title_cont,
+    sprint:   :sprint_goal_cont
+  }.freeze
+
+  ASSET_KEYWORDS = ASSET_KEYWORDS_MAP.keys.map(&:to_s).freeze
+
+  def initialize(term, scope=:tickets)
     return unless term
+
+    case scope
+    when :tickets
+      @keywords = TICKET_KEYWORDS
+      @keywords_map = TICKET_KEYWORDS_MAP
+    when :assets
+      @keywords = ASSET_KEYWORDS
+      @keywords_map = ASSET_KEYWORDS_MAP
+    end
 
     @search_term  = term.blank? ? nil : term
     @search_terms = @search_term.scan(/([\w@\-\.]+):([\w@\-\.]+)/i) if @search_term
-    @mapped_terms = @search_terms.map{ |k,v| {TICKET_KEYWORDS_MAP[k.to_sym] => v} } if @search_terms
+    @mapped_terms = @search_terms.map{ |k,v| {@keywords_map[k.to_sym] => v} } if @search_terms
+
     #reject {nil => 'somevalue'} keys we cant use (did not recognise)
     @mapped_terms.reject!{|t| t.keys.first.nil?} if @mapped_terms
   end
@@ -79,7 +97,7 @@ class RansackHelper
   # has a valid keyword too.
   def valid_search
     return false unless @search_term
-    return false if @search_term.match(":") && (@search_terms.map(&:first) & TICKET_KEYWORDS).empty?
+    return false if @search_term.match(":") && (@search_terms.map(&:first) & @keywords).empty?
     true
   end
 
@@ -91,7 +109,7 @@ class RansackHelper
     return unless @search_term
 
     terms_hash = {}
-    TICKET_KEYWORDS_MAP.each { |k,v| terms_hash[v] = @search_term }
+    @keywords_map.each { |k,v| terms_hash[v] = @search_term }
     terms_hash.delete(:last_comment_cost_eq) unless @search_term.integer?
     terms_hash.delete(:scoped_id_eq) unless @search_term.integer?
     terms_hash.collect {|k, v| {k => v}}

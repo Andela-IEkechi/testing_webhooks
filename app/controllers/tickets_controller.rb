@@ -29,7 +29,6 @@ class TicketsController < ApplicationController
     @title = params[:title] if params[:title]
     @show_search = true unless params[:show_search] == 'false'
 
-
     @tickets_count = @tickets.count
     @tickets_cost = @tickets.map {|t| t.cost}.reduce(0, :+)
     @assignees_count = @tickets.collect(&:assignee).uniq.compact.count

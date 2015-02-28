@@ -1,10 +1,10 @@
 class Asset < ActiveRecord::Base
   include Scoped
 
-  belongs_to      :project
-  belongs_to      :sprint
-  belongs_to      :feature
-  belongs_to      :comment
+  belongs_to :project
+  belongs_to :sprint
+  belongs_to :feature
+  belongs_to :comment
 
   mount_uploader  :payload, FileUploader
   attr_accessible :payload
@@ -17,6 +17,7 @@ class Asset < ActiveRecord::Base
   scope :for_sprint, lambda{|sprint_id| {:conditions => {:sprint_id => sprint_id}}}
   scope :for_comment, lambda{|comment_id| {:conditions => {:comment_id => comment_id}}}
   scope :general, lambda{{:conditions => {:comment_id => nil}}}
+  scope :unassigned, lambda{{:conditions => {:comment_id => nil, :sprint_id => nil, :feature_id => nil}}}
 
   attr_accessible :project_id, :sprint_id, :feature_id, :comment_id
 

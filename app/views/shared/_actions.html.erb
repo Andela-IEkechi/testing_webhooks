@@ -46,15 +46,18 @@
 <% end %>
 
 <div class="clearfix">
-  <h3><small>Assets</small></h3>
-  <%
-    assets = @sprint.assets if @sprint
-    assets ||= @feature.assets if @feature
-    assets ||= @ticket.assets if @ticket
-    assets ||= @project.assets.general
-  %>
-  <% assets.each do |asset| %>
-    <%= link_to asset, project_download_asset_path(asset.project, asset), :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
+  <% [@ticket, @sprint, @feature, @project].reject{|s| s.nil? || !s.assets.any?}.each do |scope| %>
+    <%
+      assets = scope.assets
+      assets = assets.unassigned if 'Project' == scope.class.name
+      next unless assets.any?
+    %>
+    <h3><small><%= scope.class.name %> assets</small></h3>
+    <% assets.reject{|a| a.payload.file.nil?}.each do |asset| %>
+      <%= link_to asset.name, project_download_asset_path(@project, asset), :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
+      <span class="pull-right"><%= link_to project_asset_path(@project, asset), :method => :delete, :data => {:confirm => "Are you sure you want to delete #{asset}?"} do %><i class="icon-trash"></i><% end %></span>
+      <br>
+    <% end %>
   <% end %>
 
 </div>
