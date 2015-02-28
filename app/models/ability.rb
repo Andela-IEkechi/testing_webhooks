@@ -24,8 +24,8 @@ class Ability
     can :read, Sprint, :project => {:private => true, :memberships => {:user_id => user.id}}
     can :read, Sprint, :project => {:private => false }
 
-    can :read, Asset, :project => {:private => true, :memberships => {:user_id => user.id}}
-    can :read, Asset, :project => {:private => false }
+    can [:read, :download], Asset, :project => {:private => true, :memberships => {:user_id => user.id}}
+    can [:read, :download], Asset, :project => {:private => false }
 
     #anyone can read tickets on projects where they are a member
     can :read, Ticket, :project => {:private => true, :memberships => {:user_id => user.id}}

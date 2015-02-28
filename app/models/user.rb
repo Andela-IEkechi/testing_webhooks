@@ -20,8 +20,8 @@ class User < ActiveRecord::Base
 
   validates :terms, acceptance: {accept: true}
 
-  scope :active, where("deleted_at IS NULL")
-  scope :deleted, where("deleted_at IS NOT NULL")
+  # scope :active, where("deleted_at IS NULL")
+  # scope :deleted, where("deleted_at IS NOT NULL")
 
   serialize :preferences
 

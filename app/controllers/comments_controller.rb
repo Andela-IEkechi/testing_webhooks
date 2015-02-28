@@ -92,7 +92,7 @@ class CommentsController < ApplicationController
   def process_multiple_assets
     return unless params[:files]
     params[:files].each do |f|
-      @comment.assets.new(:payload => f)
+      @comment.assets.new(:payload => f, :project_id => @project.id)
     end
   end
 end

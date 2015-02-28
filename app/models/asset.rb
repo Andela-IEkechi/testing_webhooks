@@ -9,6 +9,7 @@ class Asset < ActiveRecord::Base
   mount_uploader  :payload, FileUploader
   attr_accessible :payload
 
+  validates :project_id, :presence => true
   #NOTE: DO NOT validate this, it prevents us from saving new assest on new comments (on new tickets implicitly)
   #validates :comment_id, :presence => true
 
@@ -16,6 +17,8 @@ class Asset < ActiveRecord::Base
   scope :for_sprint, lambda{|sprint_id| {:conditions => {:sprint_id => sprint_id}}}
   scope :for_comment, lambda{|comment_id| {:conditions => {:comment_id => comment_id}}}
   scope :general, lambda{{:conditions => {:comment_id => nil, :sprint_id => nil, :feature_id => nil}}}
+
+  attr_accessible :project_id, :sprint_id, :feature_id, :comment_id
 
   def name
     payload.file.filename rescue payload

@@ -15,16 +15,15 @@ class AssetsController < ApplicationController
   end
 
   def create
-    new_asset_count = (params[:files].count rescue 0)
-
-    if @project.save #implicitly save all the assets
-      if (params[:files].count rescue 0) <= 1
+    if ((params[:files].count rescue 0) > 0) && @project.save #implicitly save all the assets
+      if (params[:files].count rescue 0) == 1
         flash[:notice] = "Asset was added"
       else
         flash[:notice] = "#{params[:files].count} assets were added"
       end
-      redirect_to project_path(@project)
+      redirect_to project_path(@project, :tab => 'assets')
     else
+      @asset = @project.assets.general.new()
       flash[:alert] = "Asset(s) could not be added"
       render :action => 'new'
     end
@@ -53,7 +52,10 @@ class AssetsController < ApplicationController
   end
 
   def download
-    binding.pry
+    #for some inexplicable reason, cancan refuses to load the @asset instance on this action. I just can't tell why
+    @asset = @project.assets.find_by_scoped_id(params[:asset_id])
+    authorize! :download, @asset
+
     #user send_data while we host on s3
     send_data(@asset.payload.file.read, :filename => @asset.name, :type => @asset.payload.file.content_type)
     #use send_file once the hosting is local
