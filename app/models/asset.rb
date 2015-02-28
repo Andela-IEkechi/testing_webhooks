@@ -16,7 +16,7 @@ class Asset < ActiveRecord::Base
   scope :for_feature, lambda{|feature_id| {:conditions => {:feature_id => feature_id}}}
   scope :for_sprint, lambda{|sprint_id| {:conditions => {:sprint_id => sprint_id}}}
   scope :for_comment, lambda{|comment_id| {:conditions => {:comment_id => comment_id}}}
-  scope :general, lambda{{:conditions => {:comment_id => nil, :sprint_id => nil, :feature_id => nil}}}
+  scope :general, lambda{{:conditions => {:comment_id => nil}}}
 
   attr_accessible :project_id, :sprint_id, :feature_id, :comment_id
 
@@ -28,4 +28,7 @@ class Asset < ActiveRecord::Base
     payload.file.content_type.include? 'image' rescue false
   end
 
+  def to_s
+    name
+  end
 end

@@ -8,8 +8,8 @@ class AssetsController < ApplicationController
     redirect_to project_path(@project)
   end
 
-  def show
-  end
+  # def show
+  # end
 
   def new
   end
@@ -35,7 +35,7 @@ class AssetsController < ApplicationController
   def update
     if @asset.update_attributes(params[:asset])
       flash[:notice] = "Asset was updated"
-      redirect_to project_asset_path(@asset.project,@asset)
+      redirect_to project_path(@asset.project, :tab => 'assets')
     else
       flash[:alert] = "Asset could not be updated"
       render :action => 'edit'

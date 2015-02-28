@@ -5,14 +5,18 @@
   <tr>
     <th class="width-5">#</th>
     <th>Filename</th>
-    <th class="width-15">Size</th>
+    <th class="width-15">Sprint</th>
+    <th class="width-15">Feature</th>
+    <th class="width-10">Size</th>
     <th class="width-15">Uploaded</th>
-    <th class="width-15">Download</th>
+    <th class="width-10">Download</th>
   </tr>
   <% assets.each do |asset| %>
   <tr>
     <td><%= asset.scoped_id %></td>
-    <td class="overflow" title="<%= asset.name %>"><%= link_to asset.name, project_asset_path(asset.project, asset) %></td>
+    <td class="overflow" title="<%= asset.name %>"><%= link_to asset.name, edit_project_asset_path(asset.project, asset) %></td>
+    <td><%= link_to(asset.sprint, project_sprint_path(asset.sprint)) if asset.sprint %></td>
+    <td><%= link_to(asset.feature, project_feature_path(asset.feature)) if asset.feature %></td>
     <td><%= number_to_human_size(asset.payload.file.size) rescue 'unknown' %></td>
     <td ><%= asset.created_at.to_s(:short) %></td>
     <td><%= link_to("download", project_download_asset_path(@project, asset)) if can?(:download, asset) %> </td>

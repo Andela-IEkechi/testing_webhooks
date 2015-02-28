@@ -21,6 +21,7 @@
 
         <%= action_remove(@feature) if @feature && !@ticket %>
         <%= action_remove(@sprint)  if @sprint && !@ticket%>
+        <%= action_remove(@asset)   if @asset %>
         <%= action_remove(@ticket)  if @ticket %>
 
         <% if !@project.new_record? && current_membership  %>
