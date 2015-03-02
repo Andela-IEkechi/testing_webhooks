@@ -44,7 +44,13 @@
     <% @assets.each do |asset| %>
     <tr>
       <td><%= asset.scoped_id %></td>
-      <td class="overflow" title="<%= asset.name %>"><%= link_to asset.name, edit_project_asset_path(asset.project, asset) %></td>
+      <td class="overflow" title="<%= asset.name %>">
+        <% if can?(:manage, asset) %>
+        <%= link_to asset.name, edit_project_asset_path(asset.project, asset) %>
+        <% else %>
+          <%= asset.name %>
+        <% end %>
+      </td>
       <td><%= link_to(asset.sprint, project_sprint_path(@project, asset.sprint)) if asset.sprint %></td>
       <td><%= link_to(asset.feature, project_feature_path(@project, asset.feature)) if asset.feature %></td>
       <td><%= number_to_human_size(asset.payload.file.size) rescue 'unknown' %></td>
@@ -54,7 +60,7 @@
     <% end if @assets%>
     <% if @assets && @assets.count == 0 %>
     <tr>
-      <td colspan="4">There are no assets</td>
+      <td colspan="7">There are no assets</td>
     </tr>
     <% end %>
     <% unless @assets %>

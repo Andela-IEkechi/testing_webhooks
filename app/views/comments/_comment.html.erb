@@ -6,12 +6,14 @@
   <p class="muted"><%= author(comment) %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
   <div class="comment-body"><%= comment.html.html_safe %></div>
 
+  <div class="assets">
   <% comment.assets && comment.assets.each do |asset| %>
   <%
     link_name = asset.image? ? image_tag(asset.payload_url(:thumb), class: 'img-polaroid img-padded') : raw("<br> #{asset.name}")
   %>
     <%= link_to link_name, project_download_asset_path(comment.project, asset), :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
   <% end %>
+  </div>
 
   <div class="comment-statusbar">
     <% if can?(:manage, comment) %>
