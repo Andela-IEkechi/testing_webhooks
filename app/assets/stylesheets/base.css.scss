@@ -114,13 +114,13 @@ background-color: #fff;
   font-size: 13px;
 }
 
-.table {
-  .overflow {
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    overflow:hidden;
-  }
+.overflow {
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  overflow:hidden;
+}
 
+.table {
   .width-50px {
     width: 50px;
   }

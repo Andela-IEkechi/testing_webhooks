@@ -4,12 +4,9 @@
 
 
 div.assets {
-  font-size: 12px;
-
-  .overflow-hidden {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 13px;
+  .overflow {
     width: 90%;
+    margin-bottom: 5px;
   }
 }
