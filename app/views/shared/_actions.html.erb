@@ -54,13 +54,9 @@
     %>
     <h3><small><%= scope.class.name %> assets</small></h3>
     <% assets.reject{|a| a.payload.file.nil?}.each do |asset| %>
-      <% if can?(:delete, asset) %>
-        <span class="pull-right"><%= link_to project_asset_path(@project, asset), :method => :delete, :data => {:confirm => "Are you sure you want to delete #{asset}?"} do %><i class="icon-trash"></i><% end %></span>
-      <% end %>
-      <div class="overflow-hidden">
+      <div class="overflow">
         <%= link_to asset.name, project_download_asset_path(@project, asset), :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
       </div>
-      <br>
     <% end %>
   <% end %>
 
