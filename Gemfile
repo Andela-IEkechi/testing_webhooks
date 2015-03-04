@@ -79,7 +79,7 @@ group :development,:test do
 
   gem "quiet_assets"
   gem "binding_of_caller"
-  gem "shoulda-matchers"
+  gem "shoulda-matchers", require: false
   gem "thin"
 end
 

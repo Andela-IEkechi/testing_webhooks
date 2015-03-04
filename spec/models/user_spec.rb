@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe User do
-
+describe User, :focus do
   shared_examples "a project member" do
     it "that can be a member in projects"
     it "that can see all the tickets for all the projects they are members of"

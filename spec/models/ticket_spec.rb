@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared/examples_for_scoped'
 
-describe Ticket do
+describe Ticket, :focus do
   it_behaves_like 'scoped' do
     let(:scoped_class) { Ticket }
   end

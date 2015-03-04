@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TicketsController do
+describe TicketsController, :focus do
   before (:each) do
     login_user
     #create a project we can assign tickets to

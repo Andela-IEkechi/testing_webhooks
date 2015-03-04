@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'cancan/matchers'
 
-describe Ability do
+describe Ability, :focus do
   before(:each) do
     @user = create(:user)
     @ability = Ability.new(@user)

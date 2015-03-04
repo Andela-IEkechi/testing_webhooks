@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RansackHelper do
+describe RansackHelper, :focus do
   before(:each) do
     @user    = create(:user)
     @project = create(:project, user: @user)

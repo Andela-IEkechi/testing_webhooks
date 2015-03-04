@@ -9,7 +9,7 @@ class Asset < ActiveRecord::Base
   mount_uploader  :payload, FileUploader
   attr_accessible :payload
 
-  validates :project_id, :presence => true
+  validates :project, :presence => true
   #NOTE: DO NOT validate this, it prevents us from saving new assest on new comments (on new tickets implicitly)
   #validates :comment_id, :presence => true
 

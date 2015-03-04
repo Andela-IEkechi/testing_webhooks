@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FeaturesController do
+describe FeaturesController, :focus do
   shared_examples("a project feature") do
     it "assigns the current project to @project"
   end

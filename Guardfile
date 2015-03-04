@@ -34,7 +34,7 @@ notification :off
 #  * zeus: 'zeus rspec' (requires the server to be started separetly)
 #  * 'just' rspec: 'rspec'
 
-guard :rspec, cmd: "spring rspec -f doc" do
+guard :rspec, cmd: "spring rspec -f doc --fail-fast" do
   require 'active_support/inflector'
 
   watch(%r{^spec/.+_spec\.rb$})

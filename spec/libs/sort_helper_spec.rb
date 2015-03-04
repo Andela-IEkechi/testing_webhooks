@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SortHelper do
+describe SortHelper, :focus do
   it "should contruct from a search string" do
     sort = SortHelper.new("sort:#{SortHelper::SORT_KEYWORDS.first}")
     sort.should_not be_nil

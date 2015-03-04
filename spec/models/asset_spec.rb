@@ -1,30 +1,26 @@
 require 'spec_helper'
 
-describe Project::Asset do
+describe Asset do
+  let(:subject) {create(:asset)}
 
-  before(:each) do
-    @asset = create(:comment_asset)
-  end
+  it {expect(subject).to respond_to(:created_at)}
+  it {expect(subject).to respond_to(:updated_at)}
+  it {expect(subject).to respond_to(:feature)}
+  it {expect(subject).to respond_to(:sprint)}
+  it {expect(subject).to respond_to(:comment)}
+  it {expect(subject).to belong_to(:project)}
+  it {expect(subject).to validate_presence_of(:project)}
 
-  it "must have a working factory" do
-    @asset.should_not be_nil
-  end
-
-  #we cant test this, because we explicitly allow new assets to have no comments, refer to the asset model class for detials
-  # it "should belong to a comment" do
-  #   asset_with_no_comment = build(:comment_asset_with_no_comment)
-  #   asset_with_no_comment.should_not be_valid
-  #   comment = create(:comment)
-  #   asset_with_no_comment.comment = comment
-  #   asset_with_no_comment.should be_valid
-  # end
-
-  it "should have timestamps" do
-    @asset.should respond_to(:created_at)
-    @asset.should respond_to(:updated_at)
+  it "has a working factory" do
+    expect(subject).to_not be_nil
   end
 
   context "with uploaded files" do
-    it "should allow us to attach one file"
+    it "can attach a file" do
+      filename = "#{Rails.root}/spec/data/dummy.file"
+      subject.payload = FileUploader.new(subject, :file)
+      subject.payload.store!(File.open(filename))
+      expect(subject.payload.file).to_not be_nil
+    end
   end
 end
