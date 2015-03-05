@@ -20,8 +20,8 @@ class SortHelper
 
   SORT_KEYWORDS = SORT_KEYWORDS_MAP.keys.map(&:to_s).freeze
 
-  def initialize(term, direction)
-    @direction = direction || 'ASC'
+  def initialize(term, direction="ASC")
+    @direction = direction
     @sort_terms = []
     return unless term
     @sort_matches = term.downcase.scan(/[sort|order]:([\w@\-\.]+)/i).flatten unless term.blank?
@@ -35,5 +35,9 @@ class SortHelper
   def sort_order
     @sort_terms << "tickets.id #{@direction}"
     return @sort_terms.join(',')
+  end
+
+  def direction
+    @direction
   end
 end
