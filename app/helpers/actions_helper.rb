@@ -17,6 +17,8 @@ module ActionsHelper
       project_feature_path(target.project, target)
     when 'Sprint'
       project_sprint_path(target.project, target)
+    when 'Asset'
+      project_asset_path(target.project, target)
     else '#'
     end
 
@@ -44,6 +46,8 @@ module ActionsHelper
       edit_project_feature_path(target.project, target)
     when 'Sprint'
       edit_project_sprint_path(target.project, target)
+    when 'Asset'
+      edit_project_asset_path(target.project, target)
     when 'Ticket'
       edit_project_ticket_path(target.project, target)
     when 'Overview'
@@ -75,6 +79,8 @@ module ActionsHelper
       project_feature_path(target.project, target)
     when 'Sprint'
       project_sprint_path(target.project, target)
+    when 'Asset'
+      project_asset_path(target.project, target)
     when 'Ticket'
       project_ticket_path(target.project, target)
     when 'Overview'
@@ -106,6 +112,8 @@ module ActionsHelper
       new_project_feature_path(target.project)
     when 'Sprint'
       new_project_sprint_path(target.project)
+    when 'Asset'
+      new_project_asset_path(target.project)
     when 'Ticket'
       new_project_ticket_path(target.project, :sprint_id => (@sprint rescue nil), :feature_id => (@feature rescue nil))
     when 'Overview'

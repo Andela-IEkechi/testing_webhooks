@@ -30,7 +30,6 @@ class CommentsController < ApplicationController
 
   def update
     # Delete unwanted asset payloads by looking at the updated asset_ids
-
     @comment.assets.select{|a| !(params[:comment][:asset_ids].include? a.id.to_s)}.each(&:remove_payload!)
     #save the new assets
     @comment.save
@@ -93,7 +92,7 @@ class CommentsController < ApplicationController
   def process_multiple_assets
     return unless params[:files]
     params[:files].each do |f|
-      @comment.assets.new(:payload => f)
+      @comment.assets.new(:payload => f, :project_id => @project.id)
     end
   end
 end

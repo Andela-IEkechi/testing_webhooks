@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150217230436) do
+ActiveRecord::Schema.define(:version => 20150306113647) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -19,8 +19,6 @@ ActiveRecord::Schema.define(:version => 20150217230436) do
     t.boolean  "enabled",    :default => true
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
-    t.date     "started_on"
-    t.boolean  "blocked",    :default => false
   end
 
   add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
@@ -33,13 +31,18 @@ ActiveRecord::Schema.define(:version => 20150217230436) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "comment_assets", :force => true do |t|
-    t.integer  "comment_id",                :null => false
+  create_table "assets", :force => true do |t|
+    t.integer  "comment_id"
     t.string   "payload"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
-    t.integer  "filesize",   :default => 0
+    t.integer  "project_id",                :null => false
+    t.integer  "sprint_id"
+    t.integer  "feature_id"
+    t.integer  "scoped_id",  :default => 0
   end
+
+  add_index "assets", ["project_id"], :name => "index_assets_on_project_id"
 
   create_table "comments", :force => true do |t|
     t.integer  "ticket_id",                      :null => false
@@ -114,6 +117,7 @@ ActiveRecord::Schema.define(:version => 20150217230436) do
     t.string   "description"
     t.string   "slug"
     t.string   "logo"
+    t.integer  "assets_sequence",   :default => 0
   end
 
   add_index "projects", ["slug"], :name => "index_projects_on_slug", :unique => true

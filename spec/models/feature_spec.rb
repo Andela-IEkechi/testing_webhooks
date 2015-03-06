@@ -2,67 +2,71 @@ require 'spec_helper'
 require 'shared/examples_for_scoped'
 
 describe Feature do
+  let(:subject) {create(:feature)}
+
+  it{expect(subject).to belong_to(:project)}
+  it{expect(subject).to validate_presence_of(:project)}
+  it{expect(subject).to have_many(:assets)}
+  it{expect(subject).to validate_presence_of(:title)}
+  it{expect(subject).to validate_uniqueness_of(:title).scoped_to(:project_id)}
+
   it_behaves_like 'scoped' do
     let(:scoped_class) { Feature }
   end
 
-  before(:each) do
-    @feature = create(:feature)
-  end
-
   it "must have a working factory" do
-    @feature.should_not be_nil
+    expect(subject).to_not be_nil
   end
 
   it "should have a valid factory" do
-    @feature.should be_valid
+    expect(subject).to be_valid
   end
 
   it "must have a title" do
-    @feature.title = nil
-    @feature.should_not be_valid
+    subject.title = nil
+    expect(subject).to_not be_valid
   end
 
   it "gives it's title on to_s" do
-    @feature.to_s.should eq(@feature.title)
+    expect(subject.to_s).to eq(subject.title)
   end
 
   it "has an optional due date" do
-    @feature.due_on = nil
-    @feature.should be_valid
-    @feature.due_on = Date.today + 5.days
-    @feature.should be_valid
+    subject.due_on = nil
+    expect(subject).to be_valid
+    subject.due_on = Date.today + 5.days
+    expect(subject).to be_valid
   end
 
   it "has an optional description" do
-    @feature.description = nil
-    @feature.should be_valid
+    subject.description = nil
+    expect(subject).to be_valid
 
-    @feature.description = 'a nice description'
-    @feature.should be_valid
+    subject.description = 'a nice description'
+    expect(subject).to be_valid
   end
 
   it "must have unique title in the project" do
-    dup_feature = build(:feature, :title => @feature.title, :project => @feature.project)
-    dup_feature.should_not be_valid
+    dup_feature = build(:feature, :title => subject.title, :project => subject.project)
+    expect(dup_feature).to_not be_valid
   end
 
   it "can have a duplicate title across projects" do
     other_project = create(:project)
-    dup_feature = create(:feature, :title => @feature.title, :project => other_project)
-    @feature.title.should eq(dup_feature.title)
-    dup_feature.should be_valid
+    dup_feature = create(:feature, :title => subject.title, :project => other_project)
+    expect(subject.title).to eq(dup_feature.title)
+    expect(dup_feature).to be_valid
   end
 
   it "must have a valid project" do
-    @feature.project = nil
-    @feature.should_not be_valid
+    subject.project = nil
+    expect(subject).to_not be_valid
   end
 
   it "should return the scoped_id when an id is implied" do
-    @feature.scoped_id = @feature.project.features_sequence + 1
-    @feature.id.should_not eq(@feature.scoped_id)
-    @feature.to_param.should eq(@feature.scoped_id)
+    subject.scoped_id = subject.project.features_sequence + 1
+    expect(subject.id).to_not eq(subject.scoped_id)
+    expect(subject.to_param).to eq(subject.scoped_id)
   end
 
   it "orders by :title ASC" do
@@ -70,55 +74,55 @@ describe Feature do
     5.times {
       create(:feature)
     }
-    Feature.all.collect(&:title).should eq(Feature.all.collect(&:title).sort)
+    expect(Feature.all.collect(&:title)).to eq(Feature.all.collect(&:title).sort)
   end
 
   context "without tickets" do
     it "should have a 0 cost if there are no tickets" do
-      @feature.should have(0).assigned_tickets
-      @feature.cost.should eq(0)
+      expect(subject).to have(0).assigned_tickets
+      expect(subject.cost).to eq(0)
     end
   end
 
   context "with tickets" do
     before(:each) do
-      create(:ticket, :project => @feature.project)
-      create(:ticket, :project => @feature.project)
+      create(:ticket, :project => subject.project)
+      create(:ticket, :project => subject.project)
     end
 
     it "should report on the assigned tickets" do
-      @feature.project.tickets.each do |ticket|
-        create(:comment, :feature => @feature)
+      subject.project.tickets.each do |ticket|
+        create(:comment, :feature => subject)
       end
-      @feature.reload
-      @feature.assigned_tickets.count.should eq(@feature.project.tickets.count)
+      subject.reload
+      expect(subject.assigned_tickets.count).to eq(subject.project.tickets.count)
     end
 
     it "must be able to contain tickets" do
-      @feature.should respond_to(:assigned_tickets)
+      expect(subject).to respond_to(:assigned_tickets)
     end
 
     it "must sum the costs of all the tickets in it" do
-      @feature.assigned_tickets.each do |ticket|
-        ticket.comments.create(:feature => @feature, :cost => 2)
+      subject.assigned_tickets.each do |ticket|
+        ticket.comments.create(:feature => subject, :cost => 2)
       end
-      @feature.cost.should eq(@feature.assigned_tickets.count * 2)
+      expect(subject.cost).to eq(subject.assigned_tickets.count * 2)
     end
 
     it "should not report the same ticket as assigned multiple times" do
-      @feature.assigned_tickets.count.should eq(0)
+      expect(subject.assigned_tickets.count).to eq(0)
       commentor = create(:user)
-      bad_ticket = create(:ticket, :project => @feature.project)
+      bad_ticket = create(:ticket, :project => subject.project)
 
-      create(:comment, :ticket => bad_ticket, :feature => @feature)
-      bad_ticket.should be_valid
-      @feature.reload
-      @feature.assigned_tickets.count.should eq(1)
+      create(:comment, :ticket => bad_ticket, :feature => subject)
+      expect(bad_ticket).to be_valid
+      subject.reload
+      expect(subject.assigned_tickets.count).to eq(1)
 
-      create(:comment, :ticket => bad_ticket, :feature => @feature)
-      bad_ticket.should be_valid
-      @feature.reload
-      @feature.assigned_tickets.count.should eq(1)
+      create(:comment, :ticket => bad_ticket, :feature => subject)
+      expect(bad_ticket).to be_valid
+      subject.reload
+      expect(subject.assigned_tickets.count).to eq(1)
     end
   end
 

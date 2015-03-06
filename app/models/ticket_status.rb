@@ -7,7 +7,7 @@ class TicketStatus < ActiveRecord::Base
   attr_accessible :name, :open, :sort_index, :system_default #cant use "type"
 
   validates :name, :presence => true, :uniqueness => {:scope => :project_id}
-  validates :project_id, :presence => true
+  validates :project, :presence => true
 
   default_scope :order => "sort_index ASC"
 

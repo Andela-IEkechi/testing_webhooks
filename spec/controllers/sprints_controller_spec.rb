@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SprintsController do
+describe SprintsController, :type => :controller do
   shared_examples("a project sprint") do
     it "assigns the current project to @project"
   end

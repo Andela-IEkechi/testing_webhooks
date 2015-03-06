@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ProjectsController do
+describe ProjectsController, :type => :controller do
   before (:each) do
     login_user
     #create a project we can assign tickets to
@@ -152,10 +152,10 @@ describe ProjectsController do
         assigns(:project).should == @project
       end
     end
+
     context "with invalid attributes" do
       before(:each) do
-        create(:project, :title => 'duplicate', :user => @user)
-        @attrs = attributes_for(:invalid_project, :title => 'duplicate')
+        @attrs = attributes_for(:invalid_project)
       end
 
       it "does not update the project in the database" do

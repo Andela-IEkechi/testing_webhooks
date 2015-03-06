@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-require 'carrierwave/processing/mime_types'
+# require 'carrierwave/processing/mime_types'
 
 class FileUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
-  include CarrierWave::MimeTypes
+  # include CarrierWave::MimeTypes
 
-  process :set_content_type
+  # process :set_content_type
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::MiniMagick

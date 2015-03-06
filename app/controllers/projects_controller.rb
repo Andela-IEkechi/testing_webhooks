@@ -50,7 +50,8 @@ class ProjectsController < ApplicationController
           redirect_to projects_path() and return
         end
       end
-      redirect_to edit_project_path(@project, :current_tab => params[:current_tab]|| 'basic-info')
+
+      redirect_to edit_project_path(@project, :current_tab => params[:current_tab] || 'basic-info')
     else
       flash[:alert] = "Project could not be updated"
       render 'edit'

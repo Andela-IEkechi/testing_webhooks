@@ -34,7 +34,7 @@ This line is preceeded by a double newline
   context "by itself" do
 
     it "should respond to to_html" do
-      Markdownable.should respond_to(:to_html)
+      expect(Markdownable).to respond_to(:to_html)
     end
 
     context "when converting to html" do
@@ -43,19 +43,19 @@ This line is preceeded by a double newline
       end
 
       it "should convert markdown syntax into html" do
-        @html.include?('<h1>').should be_true
+        expect(@html.include?('<h1>')).to eq(true)
       end
 
       it "should convert single newlines into <br>" do
-        @html.include?('This line...<br>is above this one').should be_true
+        expect(@html.include?('This line...<br>is above this one')).to eq(true)
       end
 
       it "should not allow intra-emphasis" do
-        @html.include?('intra_emphasis').should be_true
+        expect(@html.include?('intra_emphasis')).to eq(true)
       end
 
       it "should allow normal emphasis" do
-        @html.include?('<em>this uses emphasis</em>').should be_true
+        expect(@html.include?('<em>this uses emphasis</em>')).to eq(true)
       end
     end
   end
