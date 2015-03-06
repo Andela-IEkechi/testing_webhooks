@@ -50,7 +50,6 @@ class RansackHelper
 
   def predicates
     return unless valid_search
-
     label_search_with_and_or ||
     label_search_with_or     ||
     label_search_with_and    ||
