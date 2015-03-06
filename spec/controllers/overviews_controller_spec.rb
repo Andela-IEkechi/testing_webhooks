@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe OverviewsController do
+describe OverviewsController, :type => :controller do
   before (:each) do
     login_user
     @overview = create(:overview, :user => @user)
@@ -16,8 +16,7 @@ describe OverviewsController do
     it "does not delete the user account" do
         expect {
           delete :destroy, :id => @overview.to_param, :user_id => @user.to_param
-        }.to_not change(User, :count).by(-1)
-
+        }.to_not change(User, :count)
     end
   end
 end

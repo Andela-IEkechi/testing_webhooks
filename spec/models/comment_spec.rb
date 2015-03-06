@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Comment, :focus do
+describe Comment do
   let(:subject) { create(:comment) }
 
   it {expect(subject).to respond_to(:created_at)}

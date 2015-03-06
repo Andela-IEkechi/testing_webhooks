@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe AssetsController do
+describe AssetsController, :type => :controller do
 
 end

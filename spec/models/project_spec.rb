@@ -185,11 +185,5 @@ describe Project do
         subject.tickets.create(:title => title)
       end
     end
-
-    it "should return tickets ordered by id DESC" do
-      ids = subject.tickets.collect(&:id)
-      expect(ids).to eq(ids.sort.reverse)
-    end
-
   end
 end

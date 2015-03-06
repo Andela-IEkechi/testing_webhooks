@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'carrierwave/test/matchers'
 
-describe FileUploader, :focus do
+describe FileUploader do
   include CarrierWave::Test::Matchers
 
   before(:each) do
