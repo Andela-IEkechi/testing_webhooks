@@ -12,16 +12,29 @@ class CreateAssets < ActiveRecord::Migration
 
     Asset.reset_column_information
 
-    #associate all current comment_assets with their projects
+    #associate all current assets with their projects
+    p "Associating existing assets with projects... "
     Asset.find_each do |asset|
-      if asset.comment
+      #if there is no project, we are forced to remove the asset and the orphaned comment
+
+      if asset.comment && asset.comment.project
+        # p "setting project for asset #{asset.id}, project #{asset.comment.project}"
         asset.project_id = asset.comment.project.id
         asset.save
+      elsif asset.comment && asset.comment.project.nil?
+        p "destroying comment #{asset.comment.id} for asset #{asset.id}"
+        asset.comment.destroy
+        asset.destroy
+      elsif asset.comment.nil?
+        p "destroying asset #{asset.id}"
+        asset.destroy
       end
     end
 
     #reset scoped ids
+    p "Setting scoped asset ids for"
     Project.find_each do |project|
+      p "... #{project}"
       last_asset_id = (project.assets.order('id ASC').last.id rescue 0)
       project.assets_sequence = last_asset_id
       project.save!
