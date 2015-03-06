@@ -65,6 +65,7 @@ group :development do
   gem "capistrano-recipes", :git => "https://github.com/Shuntyard/capistrano-recipes.git"
   gem "spring" #background server reloads for faster specs and dev
   gem "spring-commands-rspec"
+  gem "guard", '2.2.5'
   gem "guard-rspec", :require => false
 end
 

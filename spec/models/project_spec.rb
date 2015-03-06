@@ -45,7 +45,7 @@ describe Project do
   end
 
   it "should create default statuses of new and closed" do
-    expect(subject.ticket_statuses.collect(&:name).sort).to eq(['new', 'closed'])
+    expect(subject.ticket_statuses.collect(&:name).sort).to eq(['new', 'closed'].sort)
   end
 
   it "should have an owner membership" do
@@ -142,7 +142,8 @@ describe Project do
     5.times do
       create(:project, :title => [*('A'..'Z')].sample(6).join)
     end
-    expect(Project.all.collect(&:title)).to eq(Project.all.collect(&:title).sort)
+    titles = Project.all.collect(&:title)
+    expect(titles).to eq(titles.sort{|a,b| a.downcase <=> b.downcase})
   end
 
   it "should be sorted alphabetically for a user" do
@@ -150,24 +151,26 @@ describe Project do
     5.times do
       create(:project, :title => [*('A'..'Z')].sample(6).join, :user => subject.user)
     end
-    subject.user.projects.count.to eq(6)
-    subject.user.projects.all.collect(&:title) == subject.user.projects.all.collect(&:title).sort
+    titles = subject.user.projects.all.collect(&:title)
+    expect(titles).to eq(titles.sort{|a,b| a.downcase <=> b.downcase})
   end
 
-  context "with memberships" do
-    it "should have the project owner in a membership" do
-      subject.memberships.to have(1).membership
-      subject.memberships.first.user_id.to eq(subject.user.id)
+  context "with memberships", :focus do
+    it "has the project owner in a membership" do
+      expect(subject.memberships).to have(1).membership
+      expect(subject.memberships.first.user_id).to eq(subject.user.id)
     end
 
-    it "should allow multiple memberships" do
+    it "allows multiple memberships" do
+      binding.pry
       expect {
-        subject.memberships << create(:membership)
-        subject.memberships << create(:membership)
+        create(:membership, :project => subject)
+        create(:membership, :project => subject)
+        subject.reload
       }.to change{subject.memberships}.by(2)
     end
 
-    it "should sort memberships by email ASC" do
+    it "sorts memberships by email ASC" do
       4.times do
         subject.memberships << create(:membership)
       end
@@ -185,18 +188,10 @@ describe Project do
       end
     end
 
-    it "should return tickets ordered by id" do
+    it "should return tickets ordered by id DESC" do
       ids = subject.tickets.collect(&:id)
-      ids.to eq(ids.sort)
+      expect(ids).to eq(ids.sort.reverse)
     end
 
-    it "should not return tickets by creation date" do
-      first = subject.tickets.first
-      first.created_at = Time.now
-      first.save
-
-      ids = subject.tickets.collect(&:id)
-      ids.to eq(ids.sort)
-    end
   end
 end
