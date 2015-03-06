@@ -155,19 +155,17 @@ describe Project do
     expect(titles).to eq(titles.sort{|a,b| a.downcase <=> b.downcase})
   end
 
-  context "with memberships", :focus do
+  context "with memberships" do
     it "has the project owner in a membership" do
       expect(subject.memberships).to have(1).membership
       expect(subject.memberships.first.user_id).to eq(subject.user.id)
     end
 
     it "allows multiple memberships" do
-      binding.pry
       expect {
-        create(:membership, :project => subject)
-        create(:membership, :project => subject)
-        subject.reload
-      }.to change{subject.memberships}.by(2)
+        subject.memberships << create(:membership)
+        subject.memberships << create(:membership)
+      }.to change{subject.memberships.count}.from(1).to(3)
     end
 
     it "sorts memberships by email ASC" do

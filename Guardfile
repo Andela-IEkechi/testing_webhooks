@@ -68,3 +68,4 @@ guard :rspec, cmd: "spring rspec -f doc --fail-fast" do
   # watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
 end
 
+
