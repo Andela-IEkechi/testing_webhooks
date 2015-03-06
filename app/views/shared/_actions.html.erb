@@ -1,6 +1,6 @@
 <% if  !(['edit', 'update'].include?(action_name) && controller_name == 'projects') %>
   <div>
-    <ul class="nav nav-stacked span3 fixed-sidebar">
+    <ul class="nav nav-stacked">
       <% if @project && @project.logo.present? %>
         <li class="text-center">
           <%= image_tag(@project.logo_url(:thumb), :class => 'img-padded') %>
@@ -21,13 +21,14 @@
 
         <%= action_remove(@feature) if @feature && !@ticket %>
         <%= action_remove(@sprint)  if @sprint && !@ticket%>
+        <%= action_remove(@asset)   if @asset %>
         <%= action_remove(@ticket)  if @ticket %>
 
         <% if !@project.new_record? && current_membership  %>
           <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket|| (@feature && @feature.new_record?)) %>
           <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket || (@sprint && @sprint.new_record?)) %>
           <%= action_add(@project.tickets.new())  if (current_membership.admin? || current_membership.regular?) && !(@ticket && @ticket.new_record?) && !(@sprint && @sprint.new_record?) && !(@feature && @feature.new_record?) %>
-
+          <%= action_add(@project.assets.new())  if current_membership.admin? && @project && !((@feature && @feature.new_record?) || (@ticket && @ticket.new_record?) || (@sprint && @sprint.new_record?)) %>
         <% end %>
       <% end %>
 
@@ -43,3 +44,20 @@
 <% else %>
   <%= render :partial => '/projects/actions' %>
 <% end %>
+
+<div class="clearfix assets">
+  <% [@ticket, @sprint, @feature, @project].reject{|s| s.nil? || !s.assets.any?}.each do |scope| %>
+    <%
+      assets = scope.assets
+      assets = assets.unassigned if 'Project' == scope.class.name
+      next unless assets.any?
+    %>
+    <h3><small><%= scope.class.name %> assets</small></h3>
+    <% assets.reject{|a| a.payload.file.nil?}.each do |asset| %>
+      <div class="overflow">
+        <%= link_to asset.name, project_download_asset_path(@project, asset), :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
+      </div>
+    <% end %>
+  <% end %>
+
+</div>

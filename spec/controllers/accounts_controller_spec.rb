@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe AccountsController do
+describe AccountsController, :type => :controller do
 
 end

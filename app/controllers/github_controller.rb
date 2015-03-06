@@ -7,7 +7,7 @@ class GithubController < ApplicationController
     if api_key = ApiKey.find_by_token(params["token"])
       @project = api_key.project
       payload = JSON.parse(params["payload"]) rescue {}
-      p payload #do not remove
+      # p payload #do not remove, used for debugging
       payload["commits"].each do |commit|
         #first we check if we have processed this commit before
         if Comment.find_all_by_git_commit_uuid(commit["id" ]).count == 0 #we could have commented on multiple tickets for the same commit

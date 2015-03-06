@@ -1,64 +1,46 @@
 require 'spec_helper'
 
 describe TicketStatus do
-  before(:each) do
-    @status = create(:ticket_status)
-  end
+  let(:subject) {create(:ticket_status)}
 
-  it "should have a working factory" do
-    @status.should_not be_nil
-  end
+  it {expect(subject).to belong_to(:project)}
+  it {expect(subject).to validate_presence_of(:project)}
+  it {expect(subject).to validate_presence_of(:name)}
+  it {expect(subject).to validate_uniqueness_of(:name).scoped_to(:project_id)}
+  it {expect(subject).to respond_to(:open!)}
+  it {expect(subject).to respond_to(:close!)}
+  it {expect(subject).to respond_to(:sort_index)}
+  it {expect(subject).to respond_to(:system_default)}
 
-  it "belongs to a project" do
-    @status.project = nil
-    @status.should_not be_valid
-  end
-
-  it "should have a name" do
-    @status.name = nil
-    @status.should_not be_valid
-    @status.name = "something"
-    @status.should be_valid
-  end
-
-  it "should have a unique name in it's project" do
-    duplicate = build(:ticket_status, :project =>@status.project, :name => @status.name)
-    duplicate.should_not be_valid
-    duplicate.name = "something else"
-    duplicate.should be_valid
+  it "has a working factory" do
+    expect(subject).to_not be_nil
   end
 
   it "responds with it's name for to_s" do
-    @status.to_s.should eq(@status.name)
+    expect(subject.to_s).to eq(subject.name)
   end
 
-  it "should respond to :open" do
-    @status.should respond_to :open
+  it "can be closed" do
+    subject.open.should eq(true)
+    subject.close!
+    subject.open.should eq(false)
   end
 
-  it "should be closable" do
-    @status.open.should eq(true)
-    @status.close!
-    @status.open.should eq(false)
+  it "can be opened" do
+    subject.open = false
+    subject.open.should eq(false)
+    subject.open!
+    subject.open.should eq(true)
   end
 
-  it "should be openable" do
-    @status.open = false
-    @status.open.should eq(false)
-    @status.open!
-    @status.open.should eq(true)
-  end
-
-  it "should know about comments that use it" do
-    comment = create(:comment, :status => @status)
-    status = comment.status
-    status.should have(1).comments
+  it "knows about comments that use it" do
+    comment = create(:comment, :status => subject)
+    expect(comment.status.comments.count).to eq(1)
   end
 
   it "should not be deleted if it is in use" do
-    comment = create(:comment, :status => @status)
+    comment = create(:comment, :status => subject)
     status = comment.status
-    status.should have(1).comments
     expect {
       status.destroy
     }.to change(TicketStatus, :count).by(0)

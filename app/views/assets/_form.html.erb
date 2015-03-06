@@ -1,0 +1,13 @@
+<%= yield :form_heading %>
+
+<%= simple_form_for([@asset.project, @asset], :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
+
+  <div class="attach-asset">
+    <%= f.file_field :payload, :multiple => true, :name => "files[]" %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit :class=>'btn' %>
+    <%= link_to 'cancel', project_path(@project), :class => 'btn' %>
+  </div>
+<% end %>

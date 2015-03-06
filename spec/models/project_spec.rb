@@ -1,136 +1,140 @@
 require 'spec_helper'
 
 describe Project do
-  before(:each) do
-    @project = create(:project)
-  end
+  let(:subject) {create(:project)}
+
+  it {expect(subject).to belong_to(:user)}
+  it {expect(subject).to validate_presence_of(:user)}
+  it {expect(subject).to have_many(:features)}
+  it {expect(subject).to have_many(:tickets)}
+  it {expect(subject).to have_many(:sprints)}
+  it {expect(subject).to have_many(:assets)}
+  it {expect(subject).to have_many(:ticket_statuses)}
+  it {expect(subject).to have_many(:memberships)}
+  it {expect(subject).to have_many(:api_keys)}
+  it {expect(subject).to respond_to(:logo)}
+  it {expect(subject).to respond_to(:title)}
+  it {expect(subject).to validate_presence_of(:title)}
+  it {expect(subject).to respond_to(:private)}
+  it {expect(subject).to respond_to(:description)}
 
   it "should have a working factory" do
-    create(:project).should_not be_nil
+    expect(subject).to_not be_nil
   end
 
   it "should make a private project by default" do
-    create(:project).should be_private
+    expect(subject).to be_private
   end
 
   it "should have a working factory that adds tickets" do
     project_with_tickets = create(:project_with_tickets)
-    project_with_tickets.should_not be_nil
-    project_with_tickets.should have_at_least(1).tickets
+    expect(project_with_tickets).to_not be_nil
+    expect(project_with_tickets.tickets.count).to eq(1)
   end
 
-  it "gives it's title on to_s" do
-    @project.title = "A testing project"
-    @project.to_s.should eq(@project.title)
+  it "gives it's title on .to_s" do
+    subject.title = "A testing project"
+    expect(subject.to_s).to eq(subject.title)
   end
 
   it "optionally has a description" do
-    @project.description = be_nil
-    @project.should be_valid
-    @project.description = Faker::Lorem.sentence
-    @project.should be_valid
+    subject.description = nil
+    expect(subject).to be_valid
+    subject.description = Faker::Lorem.sentence
+    expect(subject).to be_valid
   end
 
   it "should create default statuses of new and closed" do
-    project = create(:project, :title => "with statuses")
-    project.should have(2).ticket_statuses
-
-    project.ticket_statuses.collect(&:name).include?('new').should be_true
-    project.ticket_statuses.collect(&:name).include?('closed').should be_true
-  end
-
-  it "should have an owner" do
-    project = create(:project)
-    project.user.should_not be_nil
+    expect(subject.ticket_statuses.collect(&:name).sort).to eq(['new', 'closed'].sort)
   end
 
   it "should have an owner membership" do
-    @project.memberships.collect(&:user_id).include?(@project.user_id).should be_true
+    expect(subject.memberships.collect(&:user_id).include?(subject.user_id)).to eq(true)
   end
 
   it "should allow duplicate titles for the same user" do
     #we need this to be true, because a user may inherit a project with the same title as one they already own
     joe = create(:user)
     project_one = create(:project, :user => joe)
-    project_one.should_not be_nil
+    expect(project_one).to be_valid
     #now create the duplicate name
     duplicate = build(:project, :user => joe, :title => project_one.title)
-    duplicate.should be_valid
+    expect(duplicate).to be_valid
   end
 
   it "should allow duplicate titles for different users" do
     joe = create(:user)
     sue = create(:user)
     project_one = create(:project, :user => joe)
-    project_one.should_not be_nil
+    expect(project_one).to be_valid
     #now create the duplicate name but for the other user
     duplicate = build(:project, :user => sue, :title => project_one.title)
-    duplicate.should be_valid
+    expect(duplicate).to be_valid
   end
 
   it "should delete related features when it's destroyed" do
     expect {
-      create(:feature, :project => @project)
-      create(:feature, :project => @project)
+      create(:feature, :project => subject)
+      create(:feature, :project => subject)
     }.to change(Feature, :count).by(2)
     expect {
-      @project.destroy
+      subject.destroy
     }.to change(Feature,:count).by(-2)
   end
 
   it "should delete related tickets when it's destroyed" do
     expect {
-      create(:ticket, :project => @project)
-      create(:ticket, :project => @project)
+      create(:ticket, :project => subject)
+      create(:ticket, :project => subject)
     }.to change(Ticket, :count).by(2)
     expect {
-      @project.destroy
+      subject.destroy
     }.to change(Ticket,:count).by(-2)
   end
 
   it "should delete related sprints when it's destroyed" do
     expect {
-      create(:sprint, :project => @project)
-      create(:sprint, :project => @project)
+      create(:sprint, :project => subject)
+      create(:sprint, :project => subject)
     }.to change(Sprint, :count).by(2)
     expect {
-      @project.destroy
+      subject.destroy
     }.to change(Sprint,:count).by(-2)
   end
 
   it "should delete related ticket_statuses when it's destroyed" do
-    @project.should have_at_least(2).ticket_statuses
+    expect(subject).to have_at_least(2).ticket_statuses
     expect {
-      @project.destroy
+      subject.destroy
     }.to change(TicketStatus,:count).by(-2) #two default statuses
   end
 
   it "should not be deleted when a related ticket_statuses is destroyed" do
-    @project.should have_at_least(1).ticket_statuses
+    expect(subject.ticket_statuses.count).to eq(2)
     expect {
-      @project.ticket_statuses.first.destroy
+      subject.ticket_statuses.first.destroy
     }.to change(Project,:count).by(0)
   end
 
   it "should have optional API keys to allow external parties to interface with it" do
-    @project.api_keys.should have(0).entries
+    expect(subject.api_keys.count).to eq(0)
     expect {
-      @project.api_keys << create(:api_key, :project => @project, :name => "key one")
-      @project.api_keys << create(:api_key, :project => @project, :name => "key two")
-    }.to change{@project.api_keys.count}.from(0).to(2)
+      subject.api_keys << create(:api_key, :project => subject, :name => "key one")
+      subject.api_keys << create(:api_key, :project => subject, :name => "key two")
+    }.to change{subject.api_keys.count}.from(0).to(2)
   end
 
   it "should be a private project by default" do
-    @project.should be_private
+    expect(Project.new().private?).to eq(true)
   end
 
   it "should be able to be a public project" do
-    @project.private = false
-    @project.should_not be_private
+    subject.private = false
+    expect(subject.public?).to eq(true)
   end
 
   it "should not have an API key by default" do
-    @project.should have(0).api_keys
+    expect(subject.api_keys.count).to eq(0)
   end
 
   it "should be sorted alphabetically by default" do
@@ -138,37 +142,39 @@ describe Project do
     5.times do
       create(:project, :title => [*('A'..'Z')].sample(6).join)
     end
-    Project.all.collect(&:title) == Project.all.collect(&:title).sort
+    titles = Project.all.collect(&:title)
+    expect(titles).to eq(titles.sort{|a,b| a.downcase <=> b.downcase})
   end
 
   it "should be sorted alphabetically for a user" do
     #create a few projects for a single user
     5.times do
-      create(:project, :title => [*('A'..'Z')].sample(6).join, :user => @project.user)
+      create(:project, :title => [*('A'..'Z')].sample(6).join, :user => subject.user)
     end
-    @project.user.projects.count.should eq(6)
-    @project.user.projects.all.collect(&:title) == @project.user.projects.all.collect(&:title).sort
+    titles = subject.user.projects.all.collect(&:title)
+    expect(titles).to eq(titles.sort{|a,b| a.downcase <=> b.downcase})
   end
 
   context "with memberships" do
-    it "should have the project owner in a membership" do
-      @project.memberships.should have(1).membership
-      @project.memberships.first.user_id.should eq(@project.user.id)
+    it "has the project owner in a membership" do
+      expect(subject.memberships).to have(1).membership
+      expect(subject.memberships.first.user_id).to eq(subject.user.id)
     end
 
-    it "should allow multiple memberships" do
-      @project.memberships << create(:membership)
-      @project.memberships << create(:membership)
-      @project.memberships.should have(3).memberships
+    it "allows multiple memberships" do
+      expect {
+        subject.memberships << create(:membership)
+        subject.memberships << create(:membership)
+      }.to change{subject.memberships.count}.from(1).to(3)
     end
 
-    it "should sort memberships by email ASC" do
+    it "sorts memberships by email ASC" do
       4.times do
-        @project.memberships << create(:membership)
+        subject.memberships << create(:membership)
       end
-      membership_emails = @project.memberships.all.collect{|m| m.user.email}
-      ordered_emails = @project.memberships.all.sort{|a,b| a.user.email <=> b.user.email}.collect{ |m| m.user.email}
-      membership_emails.should == ordered_emails
+      membership_emails = subject.memberships.all.collect{|m| m.user.email}
+      ordered_emails = subject.memberships.all.sort{|a,b| a.user.email <=> b.user.email}.collect{ |m| m.user.email}
+      expect(membership_emails).to eq(ordered_emails)
     end
   end
 
@@ -176,22 +182,8 @@ describe Project do
     before(:each) do
       10.times do
         title = [*('A'..'Z')].sample(8).join
-        @project.tickets.create(:title => title)
+        subject.tickets.create(:title => title)
       end
-    end
-
-    it "should return tickets ordered by id" do
-      ids = @project.tickets.collect(&:id)
-      ids.should eq(ids.sort)
-    end
-
-    it "should not return tickets by creation date" do
-      first = @project.tickets.first
-      first.created_at = Time.now
-      first.save
-
-      ids = @project.tickets.collect(&:id)
-      ids.should eq(ids.sort)
     end
   end
 end

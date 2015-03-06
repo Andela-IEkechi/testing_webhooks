@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe AccessesController do
+describe AccessesController, :type => :controller do
 
 end
