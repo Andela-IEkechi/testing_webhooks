@@ -23,6 +23,7 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :api_keys
 
   validates :title, :presence => true
+  validates :user, :presence => true
 
   attr :remove_me
 

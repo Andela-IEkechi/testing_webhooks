@@ -71,7 +71,9 @@ end
 group :development,:test do
   # gem "rspec", "~>2.14.0"
   gem "rspec-rails"#, "~>2.14.0"
-  gem "rb-readline", "~> 0.4.2"
+  gem "shoulda-matchers", require: false
+  gem "rspec-collection_matchers", require: false
+  gem "rb-readline"
   gem "factory_girl_rails"
   gem "pry-rails" # for better console debugging
   #gem "pry-debugger"
@@ -79,9 +81,7 @@ group :development,:test do
 
   gem "quiet_assets"
   gem "binding_of_caller"
-  gem "shoulda-matchers", require: false
   gem "thin"
-  gem "test-unit", "~> 3.0" #requried after Ruby 2.2
 end
 
 group :test do
