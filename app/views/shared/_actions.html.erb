@@ -55,7 +55,11 @@
     <h3><small><%= scope.class.name %> assets</small></h3>
     <% assets.reject{|a| a.payload.file.nil?}.each do |asset| %>
       <div class="overflow">
-        <%= link_to asset.name, project_download_asset_path(@project, asset), :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
+        <% if (asset.payload.file.size rescue false)  %>
+          <%= link_to asset.name, project_download_asset_path(@project, asset), :title => (number_to_human_size(asset.payload.file.size) rescue 'unknown') %>
+        <% else %>
+          <span title="unrecoverable"><%= asset.name %></span>
+        <% end %>
       </div>
     <% end %>
   <% end %>
