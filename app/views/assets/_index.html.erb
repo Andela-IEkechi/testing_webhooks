@@ -56,7 +56,7 @@
       <td><%= number_to_human_size(asset.payload.file.size) rescue 'unknown' %></td>
       <td ><%= asset.created_at.to_s(:short) %></td>
       <td>
-        <% if (asset.payload.file.present? rescue false)  %>
+        <% if (asset.payload.file.exists? rescue false)  %>
           <%= link_to("download", project_download_asset_path(@project, asset)) if can?(:download, asset) %>
         <% else %>
           <span title="unrecoverable"><%= asset.name %></span>

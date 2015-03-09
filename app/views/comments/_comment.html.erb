@@ -8,7 +8,7 @@
 
   <div class="assets">
   <% comment.assets && comment.assets.each do |asset| %>
-    <% if (asset.payload.file.present?)  %>
+    <% if (asset.payload.file.exists?)  %>
       <%
         link_name = asset.image? ? image_tag(asset.payload_url(:thumb), class: 'img-polaroid img-padded') : raw("<br> #{asset.name}")
       %>
