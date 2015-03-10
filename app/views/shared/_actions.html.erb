@@ -27,8 +27,8 @@
         <% if !@project.new_record? && current_membership  %>
           <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket|| (@feature && @feature.new_record?)) %>
           <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket || (@sprint && @sprint.new_record?)) %>
-          <%= action_add(@project.tickets.new())  if (current_membership.admin? || current_membership.regular?) && !(@ticket && @ticket.new_record?) && !(@sprint && @sprint.new_record?) && !(@feature && @feature.new_record?) %>
           <%= action_add(@project.assets.new())  if current_membership.admin? && @project && !((@feature && @feature.new_record?) || (@ticket && @ticket.new_record?) || (@sprint && @sprint.new_record?)) %>
+          <%= action_add(@project.tickets.new())  if (current_membership.admin? || current_membership.regular?) && !(@ticket && @ticket.new_record?) && !(@sprint && @sprint.new_record?) && !(@feature && @feature.new_record?) %>
         <% end %>
       <% end %>
 
