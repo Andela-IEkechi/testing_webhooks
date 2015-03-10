@@ -64,12 +64,16 @@ class TicketsController < ApplicationController
   def create
     @ticket.comments.build() unless @ticket.comments.first
     @ticket.comments.first.user = current_user
-    if @ticket.save
 
+    @ticket.comments.first.assets.each do |asset|
+      asset.project = @ticket.project
+    end
+
+    if @ticket.save
       if params[:files]
         comment = @ticket.comments.first
         params[:files].each do |f|
-          comment.assets.new(:payload => f)
+          comment.assets.new(:payload => f, :project_id => @ticket.project_id)
         end
         comment.save
       end
@@ -147,5 +151,4 @@ class TicketsController < ApplicationController
     return @feature.assigned_tickets if @feature
     return @project.tickets if @project
   end
-
 end
