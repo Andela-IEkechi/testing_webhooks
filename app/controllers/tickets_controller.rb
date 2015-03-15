@@ -2,6 +2,7 @@ class TicketsController < ApplicationController
   include TicketsHelper
 
   before_filter :load_search_resources, :only => :index
+  before_filter :clear_assets_attributes, :only => [:create, :update]
 
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
@@ -65,18 +66,10 @@ class TicketsController < ApplicationController
     @ticket.comments.build() unless @ticket.comments.first
     @ticket.comments.first.user = current_user
 
-    @ticket.comments.first.assets.each do |asset|
-      asset.project = @ticket.project
-    end
-
     if @ticket.save
-      if params[:files]
-        comment = @ticket.comments.first
-        params[:files].each do |f|
-          comment.assets.new(:payload => f, :project_id => @ticket.project_id)
-        end
-        comment.save
-      end
+      params[:files].each do |f|
+        @ticket.comments.first.assets.create(:payload => f, :project_id => @ticket.project_id)
+      end if params[:files]
 
       if params[:create_another]
         flash.keep[:notice] = "Ticket was added. ##{@ticket.scoped_id} #{@ticket.title}"
@@ -96,11 +89,15 @@ class TicketsController < ApplicationController
   end
 
   def edit
-    @comment = @ticket.comments.first
   end
 
   def update
     if @ticket.update_attributes(params[:ticket])
+
+      params[:files].each do |f|
+        @ticket.comments.first.assets.create(:payload => f, :project_id => @ticket.project_id)
+      end if params[:files]
+
       flash[:notice] = "Ticket was updated"
       redirect_to project_ticket_path(@ticket.project, @ticket)
     else
@@ -150,5 +147,9 @@ class TicketsController < ApplicationController
     return @sprint.assigned_tickets if @sprint
     return @feature.assigned_tickets if @feature
     return @project.tickets if @project
+  end
+
+  def clear_assets_attributes
+    params[:ticket][:comments_attributes][:'0'].delete(:assets_attributes) if (params[:ticket][:comments_attributes][:'0'] rescue false)
   end
 end
