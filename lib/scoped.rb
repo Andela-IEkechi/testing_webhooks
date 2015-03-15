@@ -11,7 +11,7 @@ module Scoped
     private
     def populate_scoped_id
       sequence = "#{self.class.name.downcase.pluralize}_sequence".to_sym #eg. tickets_sequence or sprints_sequence etc
-      self.project.increment!(sequence)
+      self.project.reload.increment!(sequence) #reload forces us to correctly increment the id
       self.scoped_id = project.send(sequence)
     end
 
