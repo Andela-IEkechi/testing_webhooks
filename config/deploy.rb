@@ -1,5 +1,6 @@
 require 'bundler/capistrano'
 require 'capistrano/ext/multistage'
+require "rvm/capistrano"
 
 load 'deploy/assets'
 

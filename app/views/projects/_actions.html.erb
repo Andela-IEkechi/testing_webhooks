@@ -1,6 +1,6 @@
 <% unless @project.new_record? %>
 <div>
-  <ul class="nav nav-stacked span3 fixed-sidebar">
+  <ul class="nav nav-stacked">
     <% if @project.logo.present? %>
     <li class="text-center">
       <%= image_tag(@project.logo_url(:thumb), :class => 'img-padded') %>
