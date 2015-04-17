@@ -5,7 +5,7 @@ namespace "sprint" do
       participants = sprint.participants.select{|u| u.preferences.sprint_notification.to_i == 1 } #pref stored as "0"/"1"
 
       #dont sent emails to people who have left the project!
-      recipients = participants.select{|r| r.memberships.to_project(record.project.id).any?}.collect(&:email)
+      recipients = participants.select{|r| r.memberships.to_project(sprint.project_id).any?}.collect(&:email)
 
       SprintMailer.status_notification(recipients, sprint).deliver if recipients.any?
     end
