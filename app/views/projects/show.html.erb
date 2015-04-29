@@ -13,7 +13,7 @@
 
 <ul class="nav nav-tabs" id="project-view">
   <li class="<%= tickets_active %>"><a href="?tab=tickets#tab1" data-toggle="tab">Tickets <span class="badge badge-muted"><%= @project.tickets.select{|t| t.open?}.count %></span></a></li>
-  <li class="<%= sprints_active %>"><a href="?tab=sprints#tab2" data-toggle="tab">Sprints <span class="badge badge-muted"><%= @project.sprints.select{|s| s.open?}.count %></span></a></li>
+  <li class="<%= sprints_active %>" id="sprintsTab"><a href="?tab=sprints#tab2" data-toggle="tab">Sprints <span class="badge badge-muted"><%= @project.sprints.select{|s| s.open?}.count %></span></a></li>
   <li class="<%= features_active %>"><a href="?tab=features#tab3" data-toggle="tab">Features <span class="badge badge-muted"><%= @project.features.count %></span></a></li>
   <li class="<%= assets_active %>"><a href="?tab=assets#tab4" data-toggle="tab">Assets <span class="badge badge-muted"><%= @project.assets.general.count %></span></a></li>
 </ul>
