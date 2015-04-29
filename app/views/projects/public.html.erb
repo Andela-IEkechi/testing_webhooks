@@ -10,6 +10,8 @@
       <th>Title</th>
       <th>Description</th>
       <th class="width-20">Participate</th>
+      <th>Contributors</th>
+      <th>Last Update</th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +24,17 @@
           <span class="text-success">Already collaborating!</span>
         <% else %>
           <%= link_to 'Request an invite', invite_path(project), :class => 'btn btn-small btn' %>
+        <% end %>
+      </td>
+      <td>
+        <%= project.memberships.count %>
+      </td>
+      <td>
+        <% projectTickets = project.tickets.count %>
+        <% if projectTickets != 0 %>
+          <%= project.tickets.last.updated_at.strftime('%FT') %>
+        <% else %>
+          Not Updated Yet
         <% end %>
       </td>
     </tr>
