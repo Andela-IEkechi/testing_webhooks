@@ -45,7 +45,7 @@
     <tr>
       <td><%= asset.scoped_id %></td>
       <td class="overflow" title="<%= asset.name %>">
-        <% if asset.payload_exists  %>
+        <% if !asset.payload_size.zero?  %>
           <%= link_to(asset.name, project_download_asset_path(@project, asset)) if can?(:download, asset) %>
         <% else %>
           <span title="unrecoverable"><%= asset.name %></span>
@@ -53,7 +53,7 @@
       </td>
       <td><%= link_to(asset.sprint, project_sprint_path(@project, asset.sprint)) if asset.sprint %></td>
       <td><%= link_to(asset.feature, project_feature_path(@project, asset.feature)) if asset.feature %></td>
-      <td><%= number_to_human_size(asset.payload.file.size) rescue 'unknown' %></td>
+      <td><%= number_to_human_size(asset.payload_size) rescue 'unknown' %></td>
       <td ><%= asset.created_at.to_s(:short) %></td>
       <td>
         <% if can?(:manage, asset) %>

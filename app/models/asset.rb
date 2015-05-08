@@ -34,7 +34,7 @@ class Asset < ActiveRecord::Base
   end
 
   def verify_payload!
-    self.payload_exists = (payload.file.exists? rescue false)
+    self.payload_size = (payload.file.size rescue 0)
     self.save!
   end
 end

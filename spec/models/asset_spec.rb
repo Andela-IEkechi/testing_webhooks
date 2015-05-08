@@ -10,7 +10,7 @@ describe Asset, :focus do
   it {expect(subject).to respond_to(:comment)}
   it {expect(subject).to belong_to(:project)}
   it {expect(subject).to validate_presence_of(:project)}
-  it {expect(subject).to respond_to(:payload_exists)}
+  it {expect(subject).to respond_to(:payload_size)}
   it {expect(subject).to respond_to(:verify_payload!)}
 
   it "has a working factory" do
@@ -26,16 +26,18 @@ describe Asset, :focus do
     end
   end
 
-  describe '.payload_exsits' do
-    it "is true by default" do
+  describe '.payload_size' do
+    it "is zero by default" do
       tmp = Asset.new
-      expect(tmp.payload_exists).to eq(true)
+      expect(tmp.payload_size).to be_zero
     end
   end
 
   describe '.verify_payload!' do
     it "sets payload_exists" do
-      expect(subject.payload_exists).to eq(true)
+      subject.payload_size = 99
+      subject.save!
+
       expect {
         subject.verify_payload!
       }.to change{subject.updated_at}
