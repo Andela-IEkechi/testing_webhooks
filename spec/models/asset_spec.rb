@@ -11,7 +11,7 @@ describe Asset, :focus do
   it {expect(subject).to belong_to(:project)}
   it {expect(subject).to validate_presence_of(:project)}
   it {expect(subject).to respond_to(:payload_size)}
-  it {expect(subject).to respond_to(:verify_payload!)}
+  it {expect(subject).to respond_to(:verify_payload)}
 
   it "has a working factory" do
     expect(subject).to_not be_nil
@@ -33,14 +33,18 @@ describe Asset, :focus do
     end
   end
 
-  describe '.verify_payload!' do
-    it "sets payload_exists" do
-      subject.payload_size = 99
-      subject.save!
+  describe '.verify_payload' do
+    it "sets payload_size" do
+      filename = "#{Rails.root}/spec/data/dummy.file"
+      subject.payload = FileUploader.new(subject, :file)
+      subject.payload.store!(File.open(filename))
+      subject.save
+      expect(subject.payload_size).to eq(File.open(filename).size)
+    end
 
-      expect {
-        subject.verify_payload!
-      }.to change{subject.updated_at}
+    it "defaults to 0 if no payload can be found" do
+      subject.save
+      expect(subject.payload_size).to eq(0)
     end
   end
 
