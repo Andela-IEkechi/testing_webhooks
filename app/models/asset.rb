@@ -21,6 +21,9 @@ class Asset < ActiveRecord::Base
 
   attr_accessible :project_id, :sprint_id, :feature_id, :comment_id
 
+  after_save :verify_payload!
+  after_create :verify_payload!
+
   def name
     payload.file.filename rescue payload
   end
