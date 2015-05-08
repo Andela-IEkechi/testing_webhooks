@@ -24,3 +24,7 @@ job_type :rake, "cd :path && RAILS_ENV=:environment bundle exec rake :task --sil
 every 1.day, :at => '06:00 am', :environment => 'production' do
   rake "sprint:send_status_notifications"
 end
+
+every 1.day, :at => '05:00 am', :environment => 'production' do
+  rake "asset:file_check"
+end

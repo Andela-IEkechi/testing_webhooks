@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150315191015) do
+ActiveRecord::Schema.define(:version => 20150508091021) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -34,12 +34,13 @@ ActiveRecord::Schema.define(:version => 20150315191015) do
   create_table "assets", :force => true do |t|
     t.integer  "comment_id"
     t.string   "payload"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.integer  "project_id",                :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.integer  "project_id",                       :null => false
     t.integer  "sprint_id"
     t.integer  "feature_id"
-    t.integer  "scoped_id",  :default => 0
+    t.integer  "scoped_id",      :default => 0
+    t.boolean  "payload_exists", :default => true
   end
 
   add_index "assets", ["project_id"], :name => "index_assets_on_project_id"

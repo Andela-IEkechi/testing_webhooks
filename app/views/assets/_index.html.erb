@@ -45,7 +45,7 @@
     <tr>
       <td><%= asset.scoped_id %></td>
       <td class="overflow" title="<%= asset.name %>">
-        <% if (asset.payload.file.exists? rescue false)  %>
+        <% if asset.payload_exists  %>
           <%= link_to(asset.name, project_download_asset_path(@project, asset)) if can?(:download, asset) %>
         <% else %>
           <span title="unrecoverable"><%= asset.name %></span>

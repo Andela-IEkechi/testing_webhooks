@@ -32,4 +32,9 @@ class Asset < ActiveRecord::Base
   def to_s
     name
   end
+
+  def verify_payload!
+    self.payload_exists = (payload.file.exists? rescue false)
+    self.save!
+  end
 end
