@@ -59,4 +59,8 @@ class Comment < ActiveRecord::Base
   def revert_ticket
     self.ticket.update_last_comment! if self.ticket
   end
+
+  def open?
+    status.open?
+  end
 end
