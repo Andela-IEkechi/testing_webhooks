@@ -67,7 +67,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def open?
-    @open ||= last_comment.includes(:status).status.open
+    @open ||= last_comment.status.open
   rescue
     true
   end
