@@ -21,6 +21,8 @@ class Asset < ActiveRecord::Base
 
   attr_accessible :project_id, :sprint_id, :feature_id, :comment_id
 
+  before_save :verify_payload
+
   def name
     payload.file.filename rescue payload
   end
@@ -31,5 +33,9 @@ class Asset < ActiveRecord::Base
 
   def to_s
     name
+  end
+
+  def verify_payload
+    self.payload_size = (payload.file.size rescue 0)
   end
 end

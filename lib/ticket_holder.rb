@@ -15,11 +15,11 @@ module TicketHolder
     end
 
     def cost
-      assigned_tickets.sum(&:cost)
+      @cost ||= assigned_tickets.sum(&:cost)
     end
 
     def assigned_tickets
-      eval("Ticket.for_#{self.class.name.downcase}_id(#{self.id})")
+      @assigned_tickets ||= eval("Ticket.for_#{self.class.name.downcase}_id(#{self.id})")
     end
 
     # returns ticket counts per status
@@ -52,11 +52,11 @@ module TicketHolder
     end
 
     def open_tickets
-      assigned_tickets.select{|s| s.status.open}
+      @open_tickets ||= assigned_tickets.select{|t| t.open?}
     end
 
     def closed_tickets
-      assigned_tickets.select{|s| !s.status.open}
+      @closed_tickets ||= assigned_tickets.select{|t| t.closed?}
     end
 
     def has_open_tickets?

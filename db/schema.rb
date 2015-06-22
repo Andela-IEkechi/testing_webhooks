@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150315191015) do
+ActiveRecord::Schema.define(:version => 20150602152543) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -34,12 +34,13 @@ ActiveRecord::Schema.define(:version => 20150315191015) do
   create_table "assets", :force => true do |t|
     t.integer  "comment_id"
     t.string   "payload"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.integer  "project_id",                :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+    t.integer  "project_id",                  :null => false
     t.integer  "sprint_id"
     t.integer  "feature_id"
-    t.integer  "scoped_id",  :default => 0
+    t.integer  "scoped_id",    :default => 0
+    t.integer  "payload_size", :default => 0
   end
 
   add_index "assets", ["project_id"], :name => "index_assets_on_project_id"
@@ -61,7 +62,12 @@ ActiveRecord::Schema.define(:version => 20150315191015) do
     t.string   "git_commit_uuid"
   end
 
+  add_index "comments", ["assignee_id"], :name => "index_comments_on_assignee_id"
+  add_index "comments", ["feature_id"], :name => "index_comments_on_feature_id"
   add_index "comments", ["git_commit_uuid"], :name => "index_comments_on_git_commit_uuid"
+  add_index "comments", ["sprint_id"], :name => "index_comments_on_sprint_id"
+  add_index "comments", ["status_id"], :name => "index_comments_on_status_id"
+  add_index "comments", ["ticket_id"], :name => "index_comments_on_ticket_id"
 
   create_table "features", :force => true do |t|
     t.string   "title",                      :null => false

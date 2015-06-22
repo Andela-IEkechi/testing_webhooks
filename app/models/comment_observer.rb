@@ -8,7 +8,11 @@ class CommentObserver < ActiveRecord::Observer
 
     #send an email to ticket
     if (record.ticket.assignees.size > 0)
-     recipients = record.ticket.assignees.collect(&:email).uniq
+     participants = record.ticket.assignees.uniq
+
+     #dont sent emails to people who have left the project!
+     recipients = participants.select{|r| r.memberships.to_project(record.project.id).any?}.collect(&:email)
+
      TicketMailer.status_notification(recipients, record).deliver
     end
   end

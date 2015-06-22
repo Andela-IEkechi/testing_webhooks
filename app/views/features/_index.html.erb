@@ -8,7 +8,7 @@
     <th class="width-25">Progress</th>
     <th class="width-50px">Tickets</th>
   </tr>
-  <% features.each do |feature| %>
+  <% features.includes(:project).each do |feature| %>
   <tr>
     <td><%= feature.scoped_id %></td>
     <td class="overflow" title="<%= feature.title %>"><%= link_to feature.title, project_feature_path(feature.project, feature) %></td>

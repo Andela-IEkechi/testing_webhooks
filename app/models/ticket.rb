@@ -59,7 +59,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def assignees
-    comments.collect(&:assignee).compact.uniq
+    @assignees ||= comments.collect(&:assignee).compact.uniq
   end
 
   def filter_summary
@@ -67,7 +67,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def open?
-    last_comment.status.open
+    @open ||= last_comment.status.open
   rescue
     true
   end
