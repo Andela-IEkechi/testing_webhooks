@@ -9,14 +9,27 @@
     <tr>
       <th>Title</th>
       <th>Description</th>
+      <th class="width-10">Contributors</th>
+      <th class="width-10">Last Update</th>
       <th class="width-20">Participate</th>
     </tr>
   </thead>
   <tbody>
     <% @projects.each do |project| %>
     <tr>
-      <td><%= link_to project.title, project_path(project) %></td>
-      <td><%= project.description %></td>
+      <td class="overflow"><%= link_to project.title, project_path(project) %></td>
+      <td class="overflow"><%= project.description %></td>
+      <td>
+        <%= project.memberships.count %>
+      </td>
+      <td>
+        <% projectTickets = project.tickets.count %>
+        <% if projectTickets != 0 %>
+          <%= project.tickets.last.updated_at.to_date.to_s %>
+        <% else %>
+          Never
+        <% end %>
+      </td>
       <td>
         <% if can? :manage, project %>
           <span class="text-success">Already collaborating!</span>
