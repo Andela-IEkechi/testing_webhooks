@@ -2,36 +2,26 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+# Function to change row colors
+refresh_row_stripes = (table) ->
+  $(table).find('tbody tr:visible').each (idx, tr) ->
+    if idx % 2 == 0
+      $(tr).addClass('even').removeClass('odd')
+    else
+      $(tr).addClass('odd').removeClass('even')
 
 $ ->
   $('.datepicker').datepicker({format: 'yyyy-mm-dd'})
 
-  $('#sprint-list tr[data-state="closed"]').hide();
+  $('#sprint-list tr[data-state="closed"]').hide()
+  refresh_row_stripes($('#sprint-list'))
 
-  # Function to chnge row colors
-  stripeOne = (myarray) ->
-    myarray.each (yo, ho) =>
-      if yo % 2 == 0 
-        $(ho).find('td').css "background-color", "#f4f4f4"
-      else
-        $(ho).find('td').css "background-color", "#ffffff"
 
-  # Change the row colors when the page loads
-  tableLines = $('.sprint-table tbody tr[data-state="open"]')
-  stripeOne(tableLines)
-
-  # On
   $("#show_closed_sprints").change ->
     if this.checked
       $('#sprint-list tr[data-state="closed"]').show()
-      tableLines = $('.sprint-table tbody tr')
-      stripeOne(tableLines)
-
-    if !this.checked
+    else
       $('#sprint-list tr[data-state="closed"]').hide()
-      tableLines = $('.sprint-table tbody tr[data-state="open"]')
-      stripeOne(tableLines)
 
-    #removed as its in the top lines
-    #$('#sprint-list tr[data-state="closed"]').show() if this.checked
-    #$('#sprint-list tr[data-state="closed"]').hide() unless this.checked
+    refresh_row_stripes($('#sprint-list'))
+
