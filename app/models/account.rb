@@ -37,12 +37,8 @@ class Account < ActiveRecord::Base
   def available_storage?(plan = nil)
     plan ||= current_plan
     @plan_storage = plan[:storage_gb]*1024**3
-    @used_storage = user.projects.closedsource.collect do |p|
-      p.tickets.includes(:comments).collect do |t|
-        t.comments.includes(:assets).collect do |c|
-          c.assets.collect(&:filesize)
-        end
-      end
+    @used_storage = user.projects.closedsource.includes(:assets).collect do |p|
+      p.assets.collect(&:payload_size)
     end.flatten.sum
     @plan_storage > @used_storage
   end

@@ -90,6 +90,7 @@ class TicketsController < ApplicationController
   end
 
   def edit
+    @comment = @ticket.comments.first
   end
 
   def update

@@ -53,7 +53,7 @@
   <% end %>
 
   <!-- Existing assets -->
-  <% if @comment && @comment.assets %>
+  <% if @comment && @comment.assets.any? %>
   <%= comment_form.association :assets, collection: @comment.assets, as: :check_boxes, label_method: lambda{|asset|
       if asset.image?
         image_tag(asset.payload_url(:thumb), class: 'img-polaroid img-padded', title: "Uncheck to remove file")
@@ -77,9 +77,5 @@
       </div>
     </div>
   <% end%>
-  <div class="attach-asset">
-    <%= comment_form.link_to_add "Attach a file", :assets %>
-  </div>
-
 </div>
 
