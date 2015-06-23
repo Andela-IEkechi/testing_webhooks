@@ -19,7 +19,7 @@
     </div>
   </div>
 </div>
-
+<hr>
 <div id="flash_notice">
   <% flash[:account_upgrade_notice] = "You are about to upgrade your account. Please note that the once-off pro rated payment will apply. Your payment date will be on this day every month from now on." %>
   <% flash[:account_downgrade_notice] = "You are about to downgrade your account. Please note that in doing so, you may forfeit a part of your current subscription for this month." %>
@@ -52,7 +52,7 @@
 
     <div class="row-fluid pagination-centered">
       <br>
-      <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change_upgrade' %>
+      <%= submit_tag "Update Subscription", :class => "btn btn-success btn-large", :id => 'account_change_upgrade' %>
     </div>
   <% end %>
 </div>
@@ -83,7 +83,7 @@
 
     <div class="row-fluid pagination-centered">
       <br>
-      <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change_downgrade' %>
+      <%= submit_tag "Update Subscription", :class => "btn btn-warning btn-large", :id => 'account_change_downgrade' %>
     </div>
   <% end %>
 </div>
@@ -97,7 +97,7 @@
 
     <div class="row-fluid pagination-centered">
       <br>
-      <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change_cancel' %>
+      <%= submit_tag "Update Subscription", :class => "btn btn-warning btn-large", :id => 'account_change_cancel' %>
     </div>
   <% end %>
 </div>

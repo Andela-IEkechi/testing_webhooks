@@ -1,10 +1,11 @@
-<%
-  price_with_symbol = "$#{plan[:price_usd]}"
-%>
 <h4><%= plan[:title] %></h4>
 <ul>
   <li class="first">
-    <div class="price-tag"><span class="price-value"><%= price_with_symbol %></span><span class="price-period">per month</span></div>
+    <% if 0 == plan[:price_usd]  %>
+      <div class="price-tag"><span class="price-value">Free</span><span class="price-period">forever</span></div>
+    <% else %>
+      <div class="price-tag"><span class="price-value"><%= number_to_currency(plan[:price_usd], :precision => 0) %></span><span class="price-period">per month</span></div>
+    <% end %>
   </li>
   <li><strong><%= plan[:projects] %></strong>&nbsp;<%= 'Project'.pluralize(plan[:projects]) %></li>
   <li><strong><%= (plan[:members].to_i != 999) ? plan[:members].to_s : 'Unlimited' %></strong>&nbsp;<%= 'User'.pluralize(plan[:members].to_i) %></li>
