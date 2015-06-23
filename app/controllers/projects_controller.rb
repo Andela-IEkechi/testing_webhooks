@@ -15,6 +15,8 @@ class ProjectsController < ApplicationController
   end
 
   def new
+    @project.user = current_user
+    @project.private = current_user.account.available_projects?
   end
 
   def create

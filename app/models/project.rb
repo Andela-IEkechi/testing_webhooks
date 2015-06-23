@@ -45,7 +45,7 @@ class Project < ActiveRecord::Base
   end
 
   def blocked?
-    self.user.account.blocked
+    self.user.present? && self.user.account.blocked
   end
 
   private

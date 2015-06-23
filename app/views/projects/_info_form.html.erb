@@ -2,7 +2,13 @@
 <%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'input-xxlarge'}, :placeholder => 'What should your project be called?' %>
   <%= f.input :description, :as => :text, :input_html => {:class => 'input-xxlarge', :rows => 5} ,:placeholder => 'What is your project about?' %>
-  <%= f.input :private, :as=>:radio_buttons, :hint => 'You can create as many public projects as you want.' %>
+  <% if current_user.account.available_projects? %>
+    <%= f.input :private, :as=>:radio_buttons,
+      :hint => raw("<span class='text-info'>You can create as many <strong>public</strong> projects as you want.</span>") %>
+  <% else %>
+    <%= f.input :private, :as=>:radio_buttons, :disabled => true,
+      :hint => raw("<span class='text-info'>You can create as many <strong>public</strong> projects as you want.</span><br><span class='text-error'>You have reached the <strong>private</strong> project limit on your current plan.</span>") %>
+  <% end %>
 
   <%= f.input :logo do %>
     <% if @project.logo.present? %>
