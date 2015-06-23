@@ -7,7 +7,7 @@ class Overview < ActiveRecord::Base
 
   validates :title, :length => {:minimum => 3, :maximum => 20}, :uniqueness => {:scope => :user_id}
   validates :filter, :presence => true
-  validates :user_id, :presence => true
+  validates :user, :presence => true
 
   def any_project?
     !projects.any? #true if we dont have any specific projects

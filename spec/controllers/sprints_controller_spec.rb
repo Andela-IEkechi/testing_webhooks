@@ -1,11 +1,12 @@
 require 'spec_helper'
 require 'shared/account_status'
 
-describe SprintsController do
+describe SprintsController, :type => :controller do
   before (:each) do
     login_user
     @project = create(:project, :user => @user)
   end
+
   shared_examples("a project sprint") do
     it "assigns the current project to @project"
   end

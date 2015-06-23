@@ -42,4 +42,8 @@ Conductor::Application.configure do
     :url => "https://www.2checkout.com/2co/buyer/purchase",
     :checkout_account => "202217675"
   }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+
 end

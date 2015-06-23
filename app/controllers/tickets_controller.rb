@@ -2,6 +2,7 @@ class TicketsController < ApplicationController
   include TicketsHelper
 
   before_filter :load_search_resources, :only => :index
+  before_filter :clear_assets_attributes, :only => [:create, :update]
 
   load_and_authorize_resource :project
   load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
@@ -17,10 +18,10 @@ class TicketsController < ApplicationController
     @search = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
 
     #figure out how to order the results
-    sort_order = SortHelper.new(params[:q] && params[:q][:title_cont]).sort_order
+    sort_order = SortHelper.new(params[:q] && params[:q][:title_cont], current_user.preferences.ticket_order).sort_order
     sort_order = 'tickets.id' if sort_order.blank?
 
-    results = @search.result.includes(:last_comment => [:sprint, :feature, :assignee, :status]).order(sort_order)
+    results = @search.result.includes(:sprint, :feature, :status, :assignee, :project).order(sort_order)
 
     @tickets = Kaminari::paginate_array(results).page(params[:page]).per(current_user.preferences.page_size.to_i) unless "false" == params[:paginate]
     @tickets ||= results
@@ -29,7 +30,6 @@ class TicketsController < ApplicationController
 
     @title = params[:title] if params[:title]
     @show_search = true unless params[:show_search] == 'false'
-
 
     @tickets_count = @tickets.count
     @tickets_cost = @tickets.map {|t| t.cost}.reduce(0, :+)
@@ -66,7 +66,12 @@ class TicketsController < ApplicationController
   def create
     @ticket.comments.build() unless @ticket.comments.first
     @ticket.comments.first.user = current_user
+
     if @ticket.save
+      params[:files].each do |f|
+        @ticket.comments.first.assets.create(:payload => f, :project_id => @ticket.project_id)
+      end if params[:files]
+
       if params[:create_another]
         flash.keep[:notice] = "Ticket was added. ##{@ticket.scoped_id} #{@ticket.title}"
         @ticket.reload #refresh the assoc to last_comment
@@ -85,11 +90,15 @@ class TicketsController < ApplicationController
   end
 
   def edit
-    @comment = @ticket.comments.first
   end
 
   def update
     if @ticket.update_attributes(params[:ticket])
+
+      params[:files].each do |f|
+        @ticket.comments.first.assets.create(:payload => f, :project_id => @ticket.project_id)
+      end if params[:files]
+
       flash[:notice] = "Ticket was updated"
       redirect_to project_ticket_path(@ticket.project, @ticket)
     else
@@ -139,5 +148,9 @@ class TicketsController < ApplicationController
     return @sprint.assigned_tickets if @sprint
     return @feature.assigned_tickets if @feature
     return @project.tickets if @project
+  end
+
+  def clear_assets_attributes
+    params[:ticket][:comments_attributes][:'0'].delete(:assets_attributes) if (params[:ticket][:comments_attributes][:'0'] rescue false)
   end
 end

@@ -1,8 +1,14 @@
 require 'bundler/capistrano'
 require 'capistrano/ext/multistage'
+require "rvm/capistrano"
+
 load 'deploy/assets'
 
-##STAGING DEPLOYMENT IS TO HEROKU!!
+#set up whenever
+set :whenever_command, "bundle exec whenever"
+set :whenever_environment, defer { stage }
+require "whenever/capistrano"
+
 set :stages, %w(production)
 set :default_stage, "production"
 
@@ -17,18 +23,19 @@ set :repository, "git@github.com:Shuntyard/Conductor.git"
 set :branch, "master"
 set :deploy_to, "/home/deploy/rails/#{application}"
 set :deploy_via, :remote_cache
-set :rails_env, 'production'
-#ssh_options[:forward_agent] = true
-
+ssh_options[:forward_agent] = true
 
 namespace :deploy do
   desc "Restarting mod_rails with restart.txt"
-  task :restart, :roles => :app, :except => { :no_release => true } do
+  task :restart, :roles => :app do
     run "touch #{current_path}/tmp/restart.txt"
   end
-
   [:start, :stop].each do |t|
     desc "#{t} task is a no-op with mod_rails"
     task t, :roles => :app do ; end
   end
 end
+
+before "deploy:restart", "deploy:migrate"
+
+require 'capistrano_recipes'

@@ -2,7 +2,7 @@
 
 <%= simple_nested_form_for([@ticket.project,@ticket], :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'span6'}%>
-  <%= f.simple_fields_for :comments, @comment do |c_f| %>
+  <%= f.simple_fields_for :comments, @ticket.comments.first do |c_f| %>
     <%= render :partial => '/comments/form_fields', :locals => {:comment_form => c_f} %>
   <% end %>
 

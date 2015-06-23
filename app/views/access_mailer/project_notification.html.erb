@@ -1,0 +1,10 @@
+<h3>Hi <%= @user.full_name || @user.email %></h3>
+
+<h4>
+  You have been invited to participate in <strong><%= @project %></strong>.
+</h4>
+
+<p>
+  <strong><%= @project %></strong> will be included in your list of projects when you next log in. You can also access it directly from <%= link_to "here", project_url(@project) %>
+</p>
+

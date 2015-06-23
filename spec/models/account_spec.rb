@@ -1,62 +1,69 @@
 require 'spec_helper'
 
 describe Account do
-  before(:each) do
-    @account = create(:account)
+  let(:subject) {create(:account)}
+
+  it{expect(subject).to belong_to(:user)}
+  it{expect(subject).to validate_presence_of(:user)}
+  it{expect(subject).to validate_presence_of(:plan)}
+  it{expect(subject).to respond_to(:current_plan)}
+  it{expect(subject).to respond_to(:upgrade)}
+  it{expect(subject).to respond_to(:downgrade)}
+  it{expect(subject).to respond_to(:change_to)}
+  it{expect(subject).to respond_to(:can_downgrade?)}
+
+  it "should create a free plan of no params provided" do
+    expect(subject.plan).to eq("free")
   end
 
-  it "should create a free plan if no params provided" do
-    @account.plan.should eq "free"
-  end
-
-  it "should be enabled by default" do
-    @account.enabled.should be_true
+  it "should be enbaled by default" do
+    expect(subject.enabled).to eq(true)
   end
 
   context "when specifying a plan" do
     it "must return the free plan" do
       account = create(:account, plan: "free")
-      account.plan.should eq "free"
+      expect(account.plan).to eq("free")
     end
 
     it "must return the startup plan" do
-      account = create(:account, plan: "startups")
-      account.plan.should eq "startups"
+      account = create(:account, plan: "startup")
+      expect(account.plan).to eq("startup")
     end
 
     it "must return the company plan" do
-      account = create(:account, plan: "small company")
-      account.plan.should eq "small company"
+      account = create(:account, plan: "company")
+      expect(account.plan).to eq("company")
     end
 
     it "must return the organization plan" do
-      account = create(:account, plan: "large organization")
-      account.plan.should eq "large organization"
+      account = create(:account, plan: "organization")
+      expect(account.plan).to eq("organization")
     end
   end
 
   context "when changing plans" do
     it "should respond to :upgrade" do
-      @account.should respond_to :upgrade
+      expect(subject).to respond_to :upgrade
     end
 
     it "should respond to :downgrade" do
-      @account.should respond_to :downgrade
+      expect(subject).to respond_to :downgrade
     end
 
     it "should be able to upgrade" do
-      if !(@account.plan == 'large')
+      if !(subject.plan == 'large')
         expect {
-          @account.upgrade
-        }.to change(@account, :plan)
+          subject.upgrade
+        }.to change(subject, :plan)
       end
     end
 
     it "should be able to downgrade" do
-      if !(@account.plan == 'free')
+      if !(subject.plan == 'free')
         expect {
-          @account.downgrade
-        }.to change(@account, :plan)
+          subject.downgrade
+        }.to change(subject, :plan)
       end
     end
   end
@@ -116,7 +123,7 @@ describe Account do
       @account.save
       @account.blocked.should eq(false)
     end
-    
+
     it "should block the account" do
       @account.block!
       @account.save

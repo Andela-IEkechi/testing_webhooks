@@ -1,11 +1,12 @@
 require 'spec_helper'
 require 'shared/account_status'
 
-describe CommentsController do
+describe CommentsController, :type => :controller do
   before (:each) do
     login_user
     @project = create(:project, :user => @user)
   end
+
   describe "GET #index" do
     it "does nothing"
   end
@@ -105,7 +106,7 @@ describe CommentsController do
         @project.memberships<< @member
         @project.save
       end
-      it "should return a flash message if the project is blocked" do      
+      it "should return a flash message if the project is blocked" do
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
         flash[:notice].should =~ /Project is currently unavailable./i
       end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared/account_status'
 
-describe TicketsController do
+describe TicketsController, :type => :controller do
   before (:each) do
     login_user
     #create a project we can assign tickets to
@@ -21,13 +21,13 @@ describe TicketsController do
       end
 
       it "populates an array of tickets" do
-        assigns(:tickets).should_not be_empty
+        expect(assigns(:tickets)).to_not be_empty
       end
 
       it "uses only tickets for the current @project if it's assigned" do
         if @project
           assigns(:tickets).each do |ticket|
-            ticket.project.should == @project
+            expect(ticket.project).to eq(@project)
           end
         end
       end
@@ -35,18 +35,18 @@ describe TicketsController do
       it "uses only tickets for the current @feature or @sprint if it's assigned" do
         if @feature
           assigns(:tickets).each do |ticket|
-            ticket.feature.should == @feature
+            expect(ticket.feature).to eq(@feature)
           end
         end
         if @sprint
           assigns(:tickets).each do |ticket|
-            ticket.sprint.should == @sprint
+            expect(ticket.sprint).to eq(@sprint)
           end
         end
       end
 
       it "redirects to the project path on an HTML call" do
-        response.should redirect_to("/projects/#{@project.to_param}")
+        expect(response).to redirect_to("/projects/#{@project.to_param}")
       end
     end
 
@@ -62,7 +62,7 @@ describe TicketsController do
       end
 
       it "renders the :show template" do
-        response.should render_template(:show)
+        expect(response).to render_template(:show)
       end
     end
 
@@ -78,21 +78,20 @@ describe TicketsController do
       end
 
       it "assigns a new ticket to @ticket" do
-        assigns(:ticket).should_not be_nil
-        assigns(:ticket).should be_new_record
+        expect(assigns(:ticket)).to be_new_record
       end
 
       it "@ticket is scoped to the correct @project" do
-        @ticket.project.id.should == @project.id
+        expect(@ticket.project.id).to eq(@project.id)
       end
 
       it "@ticket is scoped to the correct @feature or @feature" do
-        @ticket.feature.id.should == @feature.id if @feature
-        @ticket.sprint.id.should == @sprint.id if @sprint
+        expect(@ticket.feature.id).to eq(@feature.id) if @feature
+        expect(@ticket.sprint.id).to eq(@sprint.id) if @sprint
       end
 
       it "renders the :new template" do
-        response.should render_template(:new)
+        expect(response).to render_template(:new)
       end
     end
 
@@ -108,11 +107,11 @@ describe TicketsController do
       end
 
       it "assigns the requested ticket to @ticket" do
-        assigns(:ticket).should == @ticket
+        expect(assigns(:ticket)).to eq(@ticket)
       end
 
       it "renders the :edit template" do
-        response.should render_template(:edit)
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -134,20 +133,20 @@ describe TicketsController do
 
         it "redirects to show the ticket" do
           post :create, :project_id => @project.to_param, :ticket => @attrs
-          response.should be_redirect
-          response.should redirect_to(project_ticket_path(@project, assigns(:ticket).to_param))
+          expect(response).to be_redirect
+          expect(response).to redirect_to(project_ticket_path(@project, assigns(:ticket).to_param))
         end
       end
       context "with invalid attributes" do
         it "does not save a new ticket in the database" do
           expect {
             post :create, :project_id => @project.to_param, :ticket => attributes_for(:invalid_ticket, :project_id => @project.to_param)
-          }.to_not change(Ticket, :count).by(1)
+          }.to_not change(Ticket, :count)
         end
 
         it "re-renders the :new template" do
           post :create, :project_id => @project.to_param, :ticket => attributes_for(:invalid_ticket, :project_id => @project.to_param)
-          response.should render_template(:new)
+          expect(response).to render_template(:new)
         end
       end
     end
@@ -169,8 +168,8 @@ describe TicketsController do
 
         it "redirects to show the ticket" do
           post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
-          response.should be_redirect
-          response.should redirect_to(project_ticket_path(@project, assigns(:ticket).to_param))
+          expect(response).to be_redirect
+          expect(response).to redirect_to(project_ticket_path(@project, assigns(:ticket).to_param))
         end
       end
       context "with invalid attributes" do
@@ -184,12 +183,12 @@ describe TicketsController do
           updated_before = @ticket.updated_at
           post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
           @ticket.reload
-          @ticket.updated_at.to_s.should == updated_before.to_s
+          expect(@ticket.updated_at.to_s).to eq(updated_before.to_s)
         end
 
         it "re-renders the :edit template" do
           post :update, :project_id => @project.to_param, :id => @ticket.to_param, :ticket => @attrs
-          response.should render_template(:edit)
+          expect(response).to render_template(:edit)
         end
       end
     end
@@ -203,19 +202,11 @@ describe TicketsController do
 
       it "redirects to the ticket index" do
         delete :destroy, :id => @ticket.to_param, :project_id => @project.to_param
-        response.should redirect_to(project_path(@project)) unless (@sprint || @feature)
-        response.should redirect_to(project_sprint_path(@project, @sprint)) if @sprint
-        response.should redirect_to(project_feature_path(@project, @feature)) if @feature
+        expect(response).to redirect_to(project_path(@project)) unless (@sprint || @feature)
+        expect(response).to redirect_to(project_sprint_path(@project, @sprint)) if @sprint
+        expect(response).to redirect_to(project_feature_path(@project, @feature)) if @feature
       end
     end
-  end
-
-  it "should open URL slugs correctly" do
-    @ticket = create(:ticket, :project => @project, :title => 'alpha beta gamma')
-    @ticket.reload
-    get :show, :project_id => @project.id, :id => "#{@ticket.id}-alpha-beta-gamma"
-
-    response.should render_template(:show)
   end
 
   context "in the context of a project" do
@@ -223,7 +214,7 @@ describe TicketsController do
       @ticket = create(:ticket, :project => @project)
       create(:comment, :ticket => @ticket, :user => @user)
       @ticket.reload
-      @ticket.user.should_not be_nil
+      expect(@ticket.user).to_not be_nil
       @another_ticket = create(:ticket, :project => @project)
       create(:comment, :user => @user, :ticket => @another_ticket)
       @another_ticket.reload
@@ -269,15 +260,15 @@ describe TicketsController do
 
     it "finds only tickets that match the search" do
       get :index, :project_id => @project.to_param, :q => {:title_cont => @ticket.title}
-      assigns(:tickets).size.should eq(1)
-      assigns(:tickets).first.title.should eq(@ticket.title)
+      expect(assigns(:tickets).size).to eq(1)
+      expect(assigns(:tickets).first.title).to eq(@ticket.title)
     end
 
     it "orders tickets by id" do
       get :index, :project_id => @project.to_param, :q => {:title_cont => @user.email}
-      assigns(:tickets).size.should eq(2)
+      expect(assigns(:tickets).size).to eq(2)
       result_ids = assigns(:tickets).collect(&:scoped_id)
-      result_ids.should == result_ids.sort
+      expect(result_ids).to eq(result_ids.sort)
     end
   end
 

@@ -7,18 +7,23 @@ class Project < ActiveRecord::Base
 
   belongs_to :user
   has_many :features, :dependent => :destroy, :order => :scoped_id
-  has_many :tickets, :dependent => :destroy, :include => :comments, :order => "tickets.id"
+  has_many :tickets, :dependent => :destroy, :include => :comments
   has_many :sprints, :dependent => :destroy, :order => :scoped_id
+  has_many :assets, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy, :order => 'ticket_statuses.sort_index asc'
 
   has_many :memberships, :dependent => :destroy, :include => :user, :order => 'users.email asc'
   has_many :api_keys, :dependent => :destroy
 
+  mount_uploader  :logo, LogoUploader
+  attr_accessible :logo
+
   attr_accessible :title, :private, :user_id, :ticket_statuses_attributes, :api_keys_attributes, :memberships_attributes, :membership_ids, :description
   accepts_nested_attributes_for :ticket_statuses, :memberships
-  accepts_nested_attributes_for :api_keys, :allow_destroy => true
+  accepts_nested_attributes_for :api_keys
 
-  validates :title, :presence => true, :uniqueness => {:scope => :user_id}
+  validates :title, :presence => true
+  validates :user, :presence => true
 
   attr :remove_me
 

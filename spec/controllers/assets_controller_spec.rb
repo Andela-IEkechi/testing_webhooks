@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared/account_status'
 
-describe AssetsController do
+describe AssetsController, :type => :controller do
   before (:each) do
     login_user
     @project = create(:project, :user => @user)
@@ -58,7 +58,7 @@ describe AssetsController do
         @project.memberships<< @member
         @project.save
       end
-      it "should return a flash message if the project is blocked" do      
+      it "should return a flash message if the project is blocked" do
         get :download, :project_id => @project, :ticket_id => @ticket, :asset_id => @asset
         flash[:notice].should =~ /Project is currently unavailable./i
       end

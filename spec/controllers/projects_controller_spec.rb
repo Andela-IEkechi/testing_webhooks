@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared/account_status'
 
-describe ProjectsController do
+describe ProjectsController, :type => :controller do
   before (:each) do
     login_user
     #create a project we can assign tickets to
@@ -54,7 +54,8 @@ describe ProjectsController do
 
   describe "GET #show" do
     before(:each) do
-      get :show, :id => @project
+      @requested_tab = ['tickets', 'sprints', 'features'].sample
+      get :show, :id => @project, :tab => @requested_tab
     end
 
     it "assigns the requested project to @project" do
@@ -63,6 +64,10 @@ describe ProjectsController do
 
     it "renders the :show template" do
       response.should render_template("show")
+    end
+
+    it "preserves the active tab" do
+      assigns(:active_tab).should == @requested_tab
     end
   end
 
@@ -160,10 +165,10 @@ describe ProjectsController do
         assigns(:project).should == @project
       end
     end
+
     context "with invalid attributes" do
       before(:each) do
-        create(:project, :title => 'duplicate', :user => @user)
-        @attrs = attributes_for(:invalid_project, :title => 'duplicate')
+        @attrs = attributes_for(:invalid_project)
       end
 
       it "does not update the project in the database" do

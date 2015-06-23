@@ -66,17 +66,20 @@
     <div class="attach-asset">
       <%= comment_form.link_to_add "Attach a file", :assets %>
       <%= comment_form.simple_fields_for :assets, [] do |a_f| %>
-        <%= a_f.file_field :payload %> <%= a_f.link_to_remove do %><i class="icon-trash"></i><% end %>
+        <%= a_f.file_field :payload, :multiple => true, :name => "files[]" %> <%= a_f.link_to_remove do %><i class="icon-trash"></i><% end %>
       <% end %>
     </div>
   <% else %>
     <div class="plan-limit controls" >
       <div class="alert alert-error fade in">
         <a href="#" data-dismiss="alert" class="close">×</a>
-        Sorry, your have reached the storage limit on this project's current plan.
+        You have reached the storage limit on this project's current plan.
       </div>
     </div>
   <% end%>
+  <div class="attach-asset">
+    <%= comment_form.link_to_add "Attach a file", :assets %>
+  </div>
 
 </div>
 

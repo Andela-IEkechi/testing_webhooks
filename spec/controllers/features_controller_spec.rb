@@ -1,11 +1,12 @@
 require 'spec_helper'
 require 'shared/account_status'
 
-describe FeaturesController do
+describe FeaturesController, :type => :controller do
   before (:each) do
     login_user
     @project = create(:project, :user => @user)
   end
+
   shared_examples("a project feature") do
     it "assigns the current project to @project"
   end

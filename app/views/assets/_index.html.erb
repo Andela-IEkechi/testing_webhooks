@@ -1,0 +1,91 @@
+<%
+  project_id ||= @project && @project.id
+  sprint_id ||= @sprint && @sprint.to_param
+  feature_id ||= @feature && @feature.to_param
+
+  parent = "sprint-#{sprint_id}" if sprint_id
+  parent ||= "feature-#{feature_id}" if feature_id
+  parent ||= "project-#{project_id}" if project_id
+%>
+
+<div id="assets-list-container-<%= parent %>">
+  <table class="table table-bordered table-striped">
+    <caption>
+      <div class="pull-right">
+        <% if @search && @show_search %>
+          <%= search_form_for @search,
+                url:     project_assets_path(@project),
+                html:    {:method => :get, :class => 'form-search'},
+                remote:  true,
+                builder: SimpleForm::FormBuilder do |f| %>
+
+            <% # this field can be any valid ransack term as it gets  %>
+            <% # overwritten in the backend based on seach type       %>
+            <%= f.input_field :payload_cont, label: false, placeholder: 'search', value: @term %>
+
+            <%= f.hidden_field :sprint_id, :value => sprint_id %>
+            <%= f.hidden_field :feature_id, :value => feature_id %>
+            <%= f.hidden_field :project_id, :value => project_id %>
+            <%= f.submit 'Search' %>
+          <% end %>
+        <% end %>
+      </div>
+      <h4>Assets</h4>
+    </caption>
+    <tr>
+      <th class="width-5">#</th>
+      <th>Filename</th>
+      <th class="width-15">Sprint</th>
+      <th class="width-15">Feature</th>
+      <th class="width-10">Size</th>
+      <th class="width-15">Uploaded</th>
+      <th class="width-10">Manage</th>
+    </tr>
+    <% @assets.each do |asset| %>
+    <tr>
+      <td><%= asset.scoped_id %></td>
+      <td class="overflow" title="<%= asset.name %>">
+        <% if !asset.payload_size.zero?  %>
+          <%= link_to(asset.name, project_download_asset_path(@project, asset)) if can?(:download, asset) %>
+        <% else %>
+          <span title="unrecoverable"><%= asset.name %></span>
+        <% end %>
+      </td>
+      <td><%= link_to(asset.sprint, project_sprint_path(@project, asset.sprint)) if asset.sprint %></td>
+      <td><%= link_to(asset.feature, project_feature_path(@project, asset.feature)) if asset.feature %></td>
+      <td><%= number_to_human_size(asset.payload_size) rescue 'unknown' %></td>
+      <td ><%= asset.created_at.to_s(:short) %></td>
+      <td>
+        <% if can?(:manage, asset) %>
+        <%= link_to "edit", edit_project_asset_path(asset.project, asset) %>
+        <% end %>
+      </td>
+    </tr>
+    <% end if @assets%>
+    <% if @assets && @assets.count == 0 %>
+    <tr>
+      <td colspan="7">There are no assets</td>
+    </tr>
+    <% end %>
+    <% unless @assets %>
+      <tr>
+        <td colspan="7">
+            <%= asset_load_link 'loading assets...', {}, {:class => "autoload"} %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <% if @assets && @assets.respond_to?(:total_pages) && (@assets.total_pages > 1) %>
+    <%= paginate @assets,
+        :params => {
+          :controller => 'assets',
+          :action => 'index',
+        }.merge(asset_url_params),
+        :remote => true if @assets %>
+    <%= asset_load_link 'show all', {:paginate => false} %>
+  <% end %>
+  <% if @assets && !@assets.respond_to?(:total_pages) && (@assets.count > (current_user.preferences.page_size.to_i)) %>
+    <%= asset_load_link 'show paged' %>
+  <% end %>
+</div>

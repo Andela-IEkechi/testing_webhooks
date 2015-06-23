@@ -114,13 +114,13 @@ background-color: #fff;
   font-size: 13px;
 }
 
-.table {
-  .overflow {
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    overflow:hidden;
-  }
+.overflow {
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  overflow:hidden;
+}
 
+.table {
   .width-50px {
     width: 50px;
   }
@@ -158,6 +158,20 @@ background-color: #fff;
   }
 }
 .empty-project-toggle{
-  margin-top:10px;  
+  margin-top:10px;
 }
 
+
+.badge-muted {
+  background-color: transparent;
+  color: $status-text-color;
+  text-shadow: none;
+  border: 1px solid #ccc;
+}
+
+/*some tables (notably sprint list) change their rows, */
+.table-striped-dynamic tr {
+  &.odd {
+    background-color: $alt-table-row-bg-color;
+  }
+}

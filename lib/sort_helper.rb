@@ -7,24 +7,25 @@
 #    * performs a ransack search on only the matching attribute(s) using "or" condtion
 class SortHelper
   SORT_KEYWORDS_MAP = {
-    id:       'tickets.id ASC',
-    cost:     'comments.cost ASC',
-    title:    'tickets.title ASC',
-    assignee: 'users.email ASC',
-    assigned: 'users.email ASC',
-    state:    'ticket_statuses.name ASC',
-    status:   'ticket_statuses.name ASC',
-    feature:  'features.title ASC',
-    sprint:   'sprints.goal ASC'
+    id:       'tickets.id',
+    cost:     'comments.cost',
+    title:    'tickets.title',
+    assignee: 'users.email',
+    assigned: 'users.email',
+    state:    'ticket_statuses.name',
+    status:   'ticket_statuses.name',
+    feature:  'features.title',
+    sprint:   'sprints.goal'
   }.freeze
 
   SORT_KEYWORDS = SORT_KEYWORDS_MAP.keys.map(&:to_s).freeze
 
-  def initialize(term)
+  def initialize(term, direction="ASC")
+    @direction = direction
     @sort_terms = []
     return unless term
     @sort_matches = term.downcase.scan(/[sort|order]:([\w@\-\.]+)/i).flatten unless term.blank?
-    @sort_terms = @sort_matches.collect{ |s| SORT_KEYWORDS_MAP[s.to_sym] }.compact if @sort_matches
+    @sort_terms = @sort_matches.collect{ |s| SORT_KEYWORDS_MAP[s.to_sym] }.compact.map{|s| [s, direction].join(' ')}.compact if @sort_matches
   end
 
   def sort_terms
@@ -32,6 +33,11 @@ class SortHelper
   end
 
   def sort_order
+    @sort_terms << "tickets.id #{@direction}"
     return @sort_terms.join(',')
+  end
+
+  def direction
+    @direction
   end
 end

@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-require 'carrierwave/processing/mime_types'
+# require 'carrierwave/processing/mime_types'
 
 class FileUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
-  include CarrierWave::MimeTypes
+  # include CarrierWave::MimeTypes
 
-  process :set_content_type
+  # process :set_content_type
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::MiniMagick
@@ -46,7 +46,15 @@ class FileUploader < CarrierWave::Uploader::Base
   #   process :scale => [50, 50]
   # end
 
+  def remove_animation
+    manipulate! do |img, index|
+      index == 0 ? img : nil
+    end
+  end
+
   version :thumb, :if => :image? do
+    process :remove_animation
+    process :convert => 'jpg'
     process :resize_to_fill => [100, 100]
   end
 

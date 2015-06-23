@@ -1,11 +1,33 @@
-<div>
-  <%= render :partial => "/features/index", :locals => {:features => @project.features } %>
-</div>
+<%
+  case @active_tab
+  when 'sprints'
+    sprints_active = 'active'
+  when 'features'
+    features_active = 'active'
+  when 'assets'
+    assets_active = 'active'
+  else #default to tickets
+    tickets_active = 'active'
+  end
+%>
 
-<div>
-  <%= render :partial => "/sprints/index", :locals => {:sprints => @project.sprints } %>
-</div>
-
-<div>
-  <%= render :partial => "/tickets/index" %>
+<ul class="nav nav-tabs" id="project-view">
+  <li class="<%= tickets_active %>"><a href="?tab=tickets#tab1" data-toggle="tab">Tickets <span class="badge badge-muted"><%= @project.tickets.includes(:last_comment => :status).select{|t| t.open?}.count %></span></a></li>
+  <li class="<%= sprints_active %>"><a href="?tab=sprints#tab2" data-toggle="tab">Sprints <span class="badge badge-muted"><%= @project.sprints.select{|s| s.open?}.count %></span></a></li>
+  <li class="<%= features_active %>"><a href="?tab=features#tab3" data-toggle="tab">Features <span class="badge badge-muted"><%= @project.features.count %></span></a></li>
+  <li class="<%= assets_active %>"><a href="?tab=assets#tab4" data-toggle="tab">Assets <span class="badge badge-muted"><%= @project.assets.general.count %></span></a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane <%= tickets_active %>" id="tab1">
+    <%= render :partial => "/tickets/index" %>
+  </div>
+  <div class="tab-pane <%= sprints_active %>" id="tab2">
+    <%= render :partial => "/sprints/index", :locals => {:sprints => @project.sprints } %>
+  </div>
+  <div class="tab-pane <%= features_active %>" id="tab3">
+    <%= render :partial => "/features/index", :locals => {:features => @project.features } %>
+  </div>
+  <div class="tab-pane <%= assets_active %>" id="tab4">
+    <%= render :partial => "/assets/index" %>
+  </div>
 </div>

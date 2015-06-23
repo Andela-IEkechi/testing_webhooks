@@ -3,7 +3,7 @@ class Ticket < ActiveRecord::Base
 
   belongs_to :project #always
   has_many :comments, :order => :created_at, :dependent => :destroy
-  has_many :assets, :through => :comments, :class_name => 'Comment::Asset'
+  has_many :assets, :through => :comments
 
   belongs_to :last_comment, :class_name => 'Comment'
   has_one :assignee, :through => :last_comment
@@ -59,7 +59,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def assignees
-    comments.collect(&:assignee).compact.uniq
+    @assignees ||= comments.collect(&:assignee).compact.uniq
   end
 
   def filter_summary
@@ -67,7 +67,9 @@ class Ticket < ActiveRecord::Base
   end
 
   def open?
-    last_comment.status.open
+    @open ||= last_comment.status.open
+  rescue
+    true
   end
 
   def closed?
