@@ -39,6 +39,16 @@
           <%= action_add(current_user.overviews.new()) %>
         <% end %>
       <% end %>
+
+      <% if @account %>
+      <li>
+        <%= link_to cancel_user_account_path(current_user) do %>
+          <span class="navico"><i class="icon-trash"></i></span>
+          remove this account
+        <% end %>
+      </li>
+      <% end %>
+
     </ul>
   </div>
 <% else %>

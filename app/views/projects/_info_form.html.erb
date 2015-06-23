@@ -2,7 +2,7 @@
 <%= simple_nested_form_for(@project, :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
   <%= f.input :title, :input_html => {:class => 'input-xxlarge'}, :placeholder => 'What should your project be called?' %>
   <%= f.input :description, :as => :text, :input_html => {:class => 'input-xxlarge', :rows => 5} ,:placeholder => 'What is your project about?' %>
-  <% if current_user.account.available_projects? %>
+  <% if current_user.account.available_projects? || (!@project.new_record? && @project.private) %>
     <%= f.input :private, :as=>:radio_buttons,
       :hint => raw("<span class='text-info'>You can create as many <strong>public</strong> projects as you want.</span>") %>
   <% else %>

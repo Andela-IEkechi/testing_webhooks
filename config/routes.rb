@@ -11,6 +11,7 @@ Conductor::Application.routes.draw do
     resource :account do
       match 'payment/return' => 'accounts#payment_return'
       match 'downgrade/free' => 'accounts#downgrade_to_free', :as => 'downgrade_to_free'
+      get 'cancel' => 'accounts#cancel'
     end
     resources :overviews
   end

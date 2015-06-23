@@ -78,6 +78,9 @@ class AccountsController < ApplicationController
     end
   end
 
+  def cancel
+  end
+
   private
   def load_account
     @account = @user.account

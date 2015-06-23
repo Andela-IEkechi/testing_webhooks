@@ -6,6 +6,7 @@ module AccountStatus
 
     private
     def account_status
+      return unless @project
       if ( @project.private && @project.blocked? )
         if (@project.user_id == current_user.id)
           flash[:alert] = "#{@project.to_s} can not be accessed due to outstanding payment."

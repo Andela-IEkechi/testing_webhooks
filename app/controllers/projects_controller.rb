@@ -21,6 +21,10 @@ class ProjectsController < ApplicationController
 
   def create
     @project.user = current_user
+
+    #set the provate/public nature of the project. Since we disable the form radio button, this might not be sent through
+    @project.private = false if params[:project][:private].nil?
+
     if @project.user.account.available_projects? || @project.public?
       if @project.save
         flash[:notice] = "Project was added"
