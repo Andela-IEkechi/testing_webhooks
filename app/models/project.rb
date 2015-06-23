@@ -30,6 +30,7 @@ class Project < ActiveRecord::Base
   default_scope order('projects.title ASC')
 
   scope :opensource, where(:private => false)
+  scope :closedsource, where(:private => true)
 
   def to_param
     self.slug
@@ -41,6 +42,10 @@ class Project < ActiveRecord::Base
 
   def public?
     !private
+  end
+
+  def blocked?
+    self.user.present? && self.user.account.blocked
   end
 
   private

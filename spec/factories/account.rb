@@ -5,5 +5,10 @@ FactoryGirl.define do
     association(:user)
     plan "free"
     enabled true
+
+    factory :account_sml_plan do
+      plan "small"
+    end
+
   end
 end

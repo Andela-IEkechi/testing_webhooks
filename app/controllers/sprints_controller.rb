@@ -1,6 +1,7 @@
 class SprintsController < ApplicationController
   load_and_authorize_resource :project
   load_and_authorize_resource :sprint, :through => :project, :find_by => :scoped_id
+  include AccountStatus
 
   def index
     redirect_to project_path(@project)
