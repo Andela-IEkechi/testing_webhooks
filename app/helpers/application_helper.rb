@@ -1,10 +1,13 @@
 module ApplicationHelper
   def flash_class(level)
     case level
-    when :notice  then 'alert alert-info'
-    when :success then 'alert alert-success'
-    when :error   then 'alert alert-error'
-    when :alert   then 'alert alert-error'
+    when :notice    then 'alert alert-info'
+    when :success   then 'alert alert-success'
+    when :error     then 'alert alert-error'
+    when :alert     then 'alert alert-error'
+    when :account_upgrade_notice  then 'alert alert-info account_upgrade_notice'
+    when :account_downgrade_notice  then 'alert alert-info account_downgrade_notice'
+    when :account_downgrade_alert   then 'alert alert-error account_downgrade_alert'
     end
   end
 

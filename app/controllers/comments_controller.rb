@@ -1,10 +1,11 @@
 class CommentsController < ApplicationController
-  before_filter :process_empty_assets, :except => ["edit","destroy", "preview"]
-
   load_and_authorize_resource :project
   load_and_authorize_resource :ticket, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :comment, :through => :ticket, :except => :preview
 
+  include AccountStatus
+
+  before_filter :process_empty_assets, :except => ["edit","destroy", "preview"]
   before_filter :set_feature_and_sprint, :only => [:create, :update]
   before_filter :process_multiple_assets, :only => [:create, :update]
 
@@ -25,7 +26,6 @@ class CommentsController < ApplicationController
   end
 
   def edit
-
   end
 
   def update

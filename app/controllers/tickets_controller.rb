@@ -11,6 +11,7 @@ class TicketsController < ApplicationController
   load_and_authorize_resource :overview
 
   before_filter :load_ticket_parents
+  include AccountStatus
 
   def index
     #get the search warmed up
@@ -89,6 +90,7 @@ class TicketsController < ApplicationController
   end
 
   def edit
+    @comment = @ticket.comments.first
   end
 
   def update

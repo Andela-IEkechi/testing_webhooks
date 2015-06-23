@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   has_many :memberships, :include => :project, :dependent => :destroy
   has_many :overviews, :dependent => :destroy
 
-  after_create :create_account
+  after_create :create_account, :unless => lambda{|u| u.account}
 
   # Include default devise modules. Others available are:
   #  :lockable, :timeoutable

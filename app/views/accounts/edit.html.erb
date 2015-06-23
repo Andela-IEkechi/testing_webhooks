@@ -3,42 +3,101 @@
   <small> currently <%= @account.current_plan[:title] %> </small>
 </h3>
 
-<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :name => 'Conductor Secure Payment', :method => :post do %>
-  <%= hidden_field_tag "cmd", "_s-xclick" %>
-  <%= hidden_field_tag "hosted_button_id", "STE5347YGNW2W" %>
-  <%= hidden_field_tag "currency_code", "USD" %>
-  <%= hidden_field_tag "on0", "Plans" %>
-  <%= hidden_field_tag "os0", @account.current_plan[:paypal] %>
-
-  <div class="row-fluid marketing">
-    <div class="tab-pane">
-      <div class="price-table price-table-three">
-        <% plans = Plan::PLANS.reject{|k,v| k.to_s == @account.plan} %>
-        <div class="price-column  price-column-first">
-          <%= render partial: '/shared/plan', object: Plan.new(plans.keys[0]) %>
-        </div>
-        <div class="price-column  price-column-last">
-          <%= render partial: '/shared/plan', object: Plan.new(plans.keys[1]) %>
-        </div>
-        <div class="price-column  price-column-last">
-          <%= render partial: '/shared/plan', object: Plan.new(plans.keys[2]) %>
-        </div>
+<div class="row-fluid marketing">
+  <div class="tab-pane">
+    <div class="price-table price-table-three">
+      <% plans = Plan::PLANS.reject{|k,v| k.to_s == @account.plan} %>
+      <div class="price-column  price-column-first">
+        <%= render partial: '/shared/plan', object: Plan.new(plans.keys[0]) %>
+      </div>
+      <div class="price-column  price-column-last <%= 'price-column-featured' unless @account.current_plan.better_than?(plans.keys[1]) %>">
+        <%= render partial: '/shared/plan', object: Plan.new(plans.keys[1]) %>
+      </div>
+      <div class="price-column  price-column-last <%= 'price-column-featured' if @account.current_plan.better_than?(plans.keys[1])%>">
+        <%= render partial: '/shared/plan', object: Plan.new(plans.keys[2]) %>
       </div>
     </div>
   </div>
+</div>
+<hr>
+<div id="flash_notice">
+  <% flash[:account_upgrade_notice] = "You are about to upgrade your account. Please note that the once-off pro rated payment will apply. Your payment date will be on this day every month from now on." %>
+  <% flash[:account_downgrade_notice] = "You are about to downgrade your account. Please note that in doing so, you may forfeit a part of your current subscription for this month." %>
+  <% flash[:account_downgrade_alert] = "Unfortunately you will not be able to downgrade to a smaller plan. You are currently exceeding the maximum amount of projects in the plan you selected." %>
+</div>
 
-  <% if false %>
-  <!-- keep this around, we might want to change the look to be more obviously paypal -->
-  <div class="row-fluid pagination-centered">
-    <br>
-    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-  </div>
-  <% else %>
-  <div class="row-fluid pagination-centered">
-    <br>
-    <%= submit_tag "Update Subscription", :class => "btn btn-info btn-large", :id => 'account_change' %>
-  </div>
+<div id="checkout_form">
+  <%= form_tag Rails.configuration.checkout[:url], :name => 'Conductor Secure Payment', :id => "checkout_form", :method => :post do %>
+
+    <%= hidden_field_tag "sid", Rails.configuration.checkout[:checkout_account] %>
+    <%= hidden_field_tag "mode", '2CO' %>
+    <%= hidden_field_tag "li_1_price", '' %>
+    <%= hidden_field_tag "li_1_name", '' %>
+    <%= hidden_field_tag "li_1_tangible", 'N' %>
+    <%= hidden_field_tag "li_1_quanity", '1' %>
+    <%= hidden_field_tag 'fixed', 'Y' %>
+    <%= hidden_field_tag "li_1_startup_fee", '' %>
+    <%= hidden_field_tag "li_1_type", 'product' %>
+    <%= hidden_field_tag "li_1_recurrence", '1 Month' %>
+    <%= hidden_field_tag "li_1_duration", 'Forever' %>
+    <%= hidden_field_tag "currency_code", 'USD' %>
+    <% if Rails.env.development? || Rails.env.test? %>
+      <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "6rcu.t.proxylocal.com", :authentication_token => @user.authentication_token) %>
+      <%= hidden_field_tag "demo", 'Y' %>
+    <% else %>
+      <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:authentication_token => @user.authentication_token) %>
+      <%= hidden_field_tag "demo", 'Y' %>
+    <% end %>
+    <%= hidden_field_tag "account", @account.id %>
+
+    <div class="row-fluid pagination-centered">
+      <br>
+      <%= submit_tag "Update Subscription", :class => "btn btn-success btn-large", :id => 'account_change_upgrade' %>
+    </div>
   <% end %>
-<% end %>
+</div>
 
+<div id="downgrade_form">
+  <%= form_tag Rails.configuration.checkout[:url], :name => 'Conductor Secure Payment', :id => "downgrade_form", :method => :post do %>
+
+    <%= hidden_field_tag "sid", Rails.configuration.checkout[:checkout_account] %>
+    <%= hidden_field_tag "mode", '2CO' %>
+    <%= hidden_field_tag "li_1_price", '' %>
+    <%= hidden_field_tag "li_1_name", '' %>
+    <%= hidden_field_tag "li_1_tangible", 'N' %>
+    <%= hidden_field_tag "li_1_quanity", '1' %>
+    <%= hidden_field_tag 'fixed', 'Y' %>
+    <%= hidden_field_tag "li_1_type", 'product' %>
+    <%= hidden_field_tag "li_1_recurrence", '1 Month' %>
+    <%= hidden_field_tag "li_1_duration", 'Forever' %>
+    <%= hidden_field_tag "currency_code", 'USD' %>
+    <% if Rails.env.development? || Rails.env.test? %>
+      <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:host => "6rcu.t.proxylocal.com",:authentication_token => @user.authentication_token) %>
+      <%= hidden_field_tag "demo", 'Y' %>
+    <% else %>
+      <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:authentication_token => @user.authentication_token) %>
+      <%= hidden_field_tag "demo", 'Y' %>
+    <% end %>
+    <%= hidden_field_tag "account", @account.id %>
+    <%= hidden_field_tag "forfeit", '' %>
+
+    <div class="row-fluid pagination-centered">
+      <br>
+      <%= submit_tag "Update Subscription", :class => "btn btn-warning btn-large", :id => 'account_change_downgrade' %>
+    </div>
+  <% end %>
+</div>
+
+<div id="cancellation_form"><!--Cancel, post back to conductor-->
+  <%= form_tag downgrade_to_free_user_account_url, :name => 'Conductor Secure Payment', :id => "cancellation_form", :method => :post do %>
+
+    <%= hidden_field_tag "account", @account.id %>
+    <%= hidden_field_tag "li_1_name", '' %>
+    <%= hidden_field_tag "forfeit", '' %>
+
+    <div class="row-fluid pagination-centered">
+      <br>
+      <%= submit_tag "Update Subscription", :class => "btn btn-warning btn-large", :id => 'account_change_cancel' %>
+    </div>
+  <% end %>
+</div>

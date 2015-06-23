@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   load_and_authorize_resource :project, :except => [:index]
+  include AccountStatus
 
   def index
     #limit the projects to the ones we have memberships to
@@ -14,15 +15,26 @@ class ProjectsController < ApplicationController
   end
 
   def new
+    @project.user = current_user
+    @project.private = current_user.account.available_projects?
   end
 
   def create
     @project.user = current_user
-    if @project.save
-      flash[:notice] = "Project was added"
-      redirect_to project_path(@project)
+
+    #set the provate/public nature of the project. Since we disable the form radio button, this might not be sent through
+    @project.private = false if params[:project][:private].nil?
+
+    if @project.user.account.available_projects? || @project.public?
+      if @project.save
+        flash[:notice] = "Project was added"
+        redirect_to project_path(@project)
+      else
+        flash[:alert] = "Project could not be created"
+        render 'new'
+      end
     else
-      flash[:alert] = "Project could not be created"
+      flash[:alert] = "You have reached your project limit"
       render 'new'
     end
   end
