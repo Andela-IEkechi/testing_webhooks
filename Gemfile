@@ -4,8 +4,10 @@ gem "rails", "~> 3.2.22" #only works with ruby 2.1.x
 gem "pg"
 gem "simple_form"
 gem "nested_form"
-gem "devise"#, "~>3.0.3"
+
+gem "devise", "~>3.4.1" #3.5 breaks token auth for now, need to figure out why
 gem "devise_invitable"#, "~> 1.1.0"
+gem 'simple_token_authentication'
 
 gem "cancan", "1.6.9" #DO NOT USE 1.6.10 https://github.com/ryanb/cancan/issues/865
 gem "omniauth-github"
