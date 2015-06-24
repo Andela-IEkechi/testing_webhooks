@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 GIT
   remote: https://github.com/Shuntyard/capistrano-recipes.git
   revision: a0e955d0676037ccb269a8bdd7e80344e68f6b6f
@@ -479,3 +480,5 @@ DEPENDENCIES
 
 BUNDLED WITH
    1.10.4
+=======
+>>>>>>> gem clash
