@@ -10,11 +10,11 @@
 p "creating users..."
 User.find_each(&:destroy)
 restricted = User.create(:email => 'restricted@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
-restricted.confirm!
+restricted.confirm
 regular = User.create(:email => 'regular@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
-regular.confirm!
+regular.confirm
 admin = User.create(:email => 'admin@example.com', :password => 'secret', :password_confirmation => 'secret', :terms => true)
-admin.confirm!
+admin.confirm
 
 #create some projects
 p "creating projects..."

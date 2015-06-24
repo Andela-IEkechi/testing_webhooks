@@ -13,7 +13,7 @@ FactoryGirl.define do
     end
 
     after(:create) do |user|
-      user.confirm!
+      user.confirm
     end
 
     factory :unconfirmed_user do
