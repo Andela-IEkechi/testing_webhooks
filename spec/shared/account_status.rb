@@ -11,45 +11,47 @@ shared_examples("account_status") do
       @project.user_id = @user.id
       @project.save
     end
-    it "should return a flash message if the project is blocked" do
+    it "sets a flash message if the project is blocked" do
       get :show, @params
-      flash[:alert].should =~ /Project can not be accessed due to outstanding payment./i
+      expect(flash[:alert]).to eq("#{@project.to_s} can not be accessed due to outstanding payment.")
     end
 
-    it "should redirect if the project is blocked" do
-      @project.user_id = @user.id
+    it "redirects if the project is blocked" do
       get :show, @params
-      response.should be_redirect
+      expect(response).to redirect_to projects_path
     end
 
-    it "should allow access if the project is not blocked" do
+    it "allows access if the project is not blocked" do
       @user.account.unblock!
-      @project.user_id = @user.id
       get :show, @params
-      response.should render_template("show")
+      expect(response).to render_template("show")
     end
   end
 
   context "member" do
     before(:each) do
       @project.user_id = other_user.id
-      @project.memberships<< member
+      @project.memberships << member
       @project.save
     end
-    it "should return a flash message if the project is blocked" do      
+
+    it "sets a flash message if the project is blocked" do
+      @project.user.account.block!
       get :show, @params
-      flash[:notice].should =~ /Project is currently unavailable./i
+      expect(flash[:notice]).to eq("#{@project.to_s} is currently unavailable.")
     end
 
-    it "should redirect if the project is blocked" do
+    it "redirects if the project is blocked" do
+      @project.user.account.block!
       get :show, @params
-      response.should be_redirect
+      expect(response).to redirect_to projects_path
     end
 
-    it "should allow access if the project is not blocked" do
+    it "allows access if the project is not blocked" do
       @project.user.account.unblock!
       get :show, @params
-      response.should render_template("show")
+      expect(response).to render_template("show")
     end
   end
 end
+

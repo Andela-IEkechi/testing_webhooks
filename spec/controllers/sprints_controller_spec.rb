@@ -73,7 +73,7 @@ describe SprintsController, :type => :controller do
       @project.private = true
       @project.save
       @sprint = create(:sprint, :project => @project)
-      @params = {:project_id => @project, :id => @sprint}
+      @params = {:project_id => @project.to_param, :id => @sprint.to_param}
     end
     it_behaves_like "account_status"
   end
