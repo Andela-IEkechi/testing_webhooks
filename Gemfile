@@ -60,7 +60,7 @@ group :assets do
 end
 
 group :development do
-  gem "capistrano"#, "~>2.15.5"
+  gem "capistrano", "~>2.15"
   gem "capistrano-ext"
   gem "capistrano-recipes", :git => "https://github.com/Shuntyard/capistrano-recipes.git"
   gem "rvm-capistrano"
