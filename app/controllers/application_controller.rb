@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
   protect_from_forgery
 
+  extend SimpleTokenAuthentication::ActsAsTokenAuthenticationHandler
+  acts_as_token_authentication_handler_for User, :fallback_to_devise => true
+
   load_resource :project, :if => @current_user
   before_filter :load_membership
 

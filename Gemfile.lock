@@ -75,7 +75,7 @@ GEM
     daemons (1.2.2)
     database_cleaner (1.4.1)
     debug_inspector (0.0.2)
-    devise (3.5.1)
+    devise (3.4.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -380,6 +380,10 @@ GEM
     simple_form (2.1.2)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
+    simple_token_authentication (1.10.0)
+      actionmailer (>= 3.2.6, < 5)
+      actionpack (>= 3.2.6, < 5)
+      devise (~> 3.2)
     simplecov (0.10.0)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -437,7 +441,7 @@ DEPENDENCIES
   carrierwave_direct
   coffee-rails
   database_cleaner
-  devise
+  devise (~> 3.4.1)
   devise_invitable
   factory_girl_rails
   faker
@@ -470,6 +474,7 @@ DEPENDENCIES
   sass-rails
   shoulda-matchers
   simple_form
+  simple_token_authentication
   simplecov
   spring
   spring-commands-rspec

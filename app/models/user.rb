@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  acts_as_token_authenticatable
+
   has_one :account, :dependent => :destroy
   has_many :projects, :dependent => :destroy #projects we own
   has_many :tickets, :through => :projects #tickets we are assigned to
@@ -11,7 +13,7 @@ class User < ActiveRecord::Base
   #  :lockable, :timeoutable
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, :confirmable,:token_authenticatable
+         :omniauthable, :confirmable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
