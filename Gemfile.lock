@@ -130,7 +130,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (0.5.0)
+    fog-aws (0.6.0)
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
@@ -146,10 +146,10 @@ GEM
       mime-types
       net-scp (~> 1.1)
       net-ssh (>= 2.1.3)
-    fog-ecloud (0.1.3)
+    fog-ecloud (0.2.0)
       fog-core
       fog-xml
-    fog-google (0.0.5)
+    fog-google (0.0.6)
       fog-core
       fog-json
       fog-xml
@@ -180,7 +180,7 @@ GEM
     fog-serverlove (0.1.2)
       fog-core
       fog-json
-    fog-softlayer (0.4.6)
+    fog-softlayer (0.4.7)
       fog-core
       fog-json
     fog-storm_on_demand (0.1.1)
@@ -231,7 +231,7 @@ GEM
     jquery-ui-rails (4.0.5)
       railties (>= 3.1.0)
     json (1.8.3)
-    jwt (1.5.0)
+    jwt (1.5.1)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -280,7 +280,7 @@ GEM
     omniauth-github (1.1.2)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.1)
-    omniauth-oauth2 (1.3.0)
+    omniauth-oauth2 (1.3.1)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
@@ -368,7 +368,7 @@ GEM
     ruby-uuid (0.0.1)
     rvm-capistrano (1.5.6)
       capistrano (~> 2.15.4)
-    sass (3.4.14)
+    sass (3.4.15)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -455,7 +455,7 @@ DEPENDENCIES
   pry-remote
   pygmentize
   quiet_assets
-  rails (~> 3.2.12)
+  rails (~> 3.2.22)
   rake
   ransack
   rb-readline
