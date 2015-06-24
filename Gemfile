@@ -5,8 +5,8 @@ gem "pg"
 gem "simple_form"
 gem "nested_form"
 
-gem "devise", "~>3.4.1" #3.5 breaks token auth for now, need to figure out why
-gem "devise_invitable"#, "~> 1.1.0"
+gem "devise"
+gem "devise_invitable"
 gem 'simple_token_authentication'
 
 gem "cancan", "1.6.9" #DO NOT USE 1.6.10 https://github.com/ryanb/cancan/issues/865
