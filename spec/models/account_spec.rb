@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Account do
+describe Account, :focus do
   let(:subject) {create(:account)}
 
   it{expect(subject).to belong_to(:user)}
@@ -12,59 +12,38 @@ describe Account do
   it{expect(subject).to respond_to(:change_to)}
   it{expect(subject).to respond_to(:can_downgrade?)}
 
-  it "should create a free plan of no params provided" do
+  it "creates a free plan of no params provided" do
     expect(subject.plan).to eq("free")
   end
 
-  it "should be enbaled by default" do
+  it "is enabled by default" do
     expect(subject.enabled).to eq(true)
   end
 
   context "when specifying a plan" do
-    it "must return the free plan" do
-      account = create(:account, plan: "free")
-      expect(account.plan).to eq("free")
-    end
-
-    it "must return the startup plan" do
-      account = create(:account, plan: "startup")
-      expect(account.plan).to eq("startup")
-    end
-
-    it "must return the company plan" do
-      account = create(:account, plan: "company")
-      expect(account.plan).to eq("company")
-    end
-
-    it "must return the organization plan" do
-      account = create(:account, plan: "organization")
-      expect(account.plan).to eq("organization")
+    ["free", "small", "medium", "large"].each do |p|
+      it "returns the #{p} plan" do
+        account = create(:account, plan: p)
+        expect(account.plan.to_s).to eq(p)
+      end
     end
   end
 
   context "when changing plans" do
-    it "should respond to :upgrade" do
-      expect(subject).to respond_to :upgrade
-    end
-
-    it "should respond to :downgrade" do
-      expect(subject).to respond_to :downgrade
-    end
-
     it "should be able to upgrade" do
-      if !(subject.plan == 'large')
-        expect {
-          subject.upgrade
-        }.to change(subject, :plan)
-      end
+      subject.downgrade
+      subject.save
+      expect {
+        subject.upgrade
+      }.to change(subject, :plan)
     end
 
     it "should be able to downgrade" do
-      if !(subject.plan == 'free')
-        expect {
-          subject.downgrade
-        }.to change(subject, :plan)
-      end
+      subject.upgrade
+      subject.save
+      expect {
+        subject.downgrade
+      }.to change(subject, :plan)
     end
   end
 
@@ -76,26 +55,26 @@ describe Account do
       @usr.account.reload
       @sml_acc = @usr.account
     end
-    it "should check if members available" do
-      project = create(:project, :user => @usr)
-      @sml_acc.available_members?.should eq(true)
 
-      (@sml_acc.current_plan[:members] - 1).times do
+    it "checks if memberships are available" do
+      project = create(:project, :user => @usr)
+      expect(@sml_acc.available_members?).to eq(true)
+
+      (@sml_acc.current_plan[:members]).times do
         create(:membership, :project => project)
       end
-      project.memberships.count.should be(@usr.account.current_plan[:members])
-      @sml_acc.available_members?.should eq(false)
+      expect(@sml_acc.available_members?).to eq(false)
     end
 
-    it "should check if projects available" do
+    it "checks if projects are available" do
       @sml_acc.available_projects?.should eq(true)
       @sml_acc.current_plan[:projects].times do
         create(:project, :user => @usr)
       end
-      @sml_acc.available_projects?.should eq(false)
+      expect(@sml_acc.available_projects?).to eq(false)
     end
 
-    it "should check if storage available" do
+    it "checks if storage is available" do
       @sml_acc.available_storage?.should eq(true)
 
       project = create(:project, :user => @usr)
@@ -106,28 +85,28 @@ describe Account do
       project.tickets<<ticket
       ticket.comments<<comment
 
-      100.times do
-        asset = create(:comment_asset)
-        comment.assets<<asset
-        asset.save
-        asset.update_column(:filesize, (2*1025**3)/100 )
+      #attach a few single large assets
+      #we cant just attach one massive one, it overruns the DB integer field
+      8.times do #must be a bianry power, or we get rounding problems
+        asset = create(:asset, :project => project, :comment => comment)
+        #use update column below to avoid callbacks which reset the size
+        asset.update_column(:payload_size, @sml_acc.current_plan[:storage_gb]*(1024**3)/8)
       end
-
-      @sml_acc.available_storage?.should eq(false)
+      expect(@sml_acc.available_storage?).to eq(false)
     end
   end
 
-  context "block/unblock" do
-    it "should unblock the account" do
-      @account.unblock!
-      @account.save
-      @account.blocked.should eq(false)
+  describe ".block" do
+    it "blocks the account" do
+      subject.block!
+      expect(subject.blocked).to eq(true)
     end
+  end
 
-    it "should block the account" do
-      @account.block!
-      @account.save
-      @account.blocked.should eq(true)
+  describe ".unblock!" do
+    it "unblocks the account" do
+      subject.unblock!
+      expect(subject.blocked).to eq(false)
     end
   end
 end

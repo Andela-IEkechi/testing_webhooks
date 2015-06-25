@@ -34,7 +34,7 @@ notification :off
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
-guard :rspec, cmd: "spring rspec -f doc --fail-fast --tag ~quarantine" do
+guard :rspec, cmd: "spring rspec -f doc --tag ~quarantine" do
   require 'active_support/inflector'
   require "guard/rspec/dsl"
   dsl = Guard::RSpec::Dsl.new(self)
