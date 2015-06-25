@@ -124,7 +124,6 @@ describe User do
       expect(subject.preferences.foo).to eq("bar")
       expect(subject.preferences.bin).to eq("baz")
     end
-
   end
 
   context "when being deleted" do
@@ -145,6 +144,28 @@ describe User do
       subject.reload
       expect(subject).to be_deleted
     end
+  end
 
+  describe ".regenerate_authentication_token!" do
+    it "sets an authentication token if none exists" do
+      subject.authentication_token = nil
+      #dont save the model here, it will make a new token
+      expect{
+        subject.regenerate_authentication_token!
+      }.to change{subject.authentication_token}
+    end
+
+    it "saves the instance" do
+      expect{
+        subject.regenerate_authentication_token!
+      }.to change{subject.updated_at}
+    end
+
+    it "changes an existing authentication token" do
+      expect(subject.authentication_token).to_not be_nil
+      expect{
+        subject.regenerate_authentication_token!
+      }.to change{subject.authentication_token}
+    end
   end
 end

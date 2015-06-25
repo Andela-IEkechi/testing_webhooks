@@ -106,4 +106,11 @@ class User < ActiveRecord::Base
     end
     obfuscated_email
   end
+
+  #NOTE: this needs to move to a concern when we upgrade to rails 4
+  #previous version of devise had this built in. We now use the simple_token_authentication gem, which does not provide it.
+  #AR also publishes reset_* methods per attribute, so we rather use "regenerate" here
+  def regenerate_authentication_token!
+    self.update_attribute(:authentication_token, generate_authentication_token(token_generator))
+  end
 end
