@@ -83,7 +83,7 @@ describe CommentsController, :type => :controller do
       end
       it "should return a flash message if the project is blocked" do
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
-        flash[:alert].should =~ /Project can not be accessed due to outstanding payment./i
+        expect(flash[:alert]).to eq("Project can not be accessed due to outstanding payment.")
       end
 
       it "should redirect if the project is blocked" do
@@ -96,7 +96,7 @@ describe CommentsController, :type => :controller do
         @user.account.unblock!
         @project.user_id = @user.id
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
-        flash[:alert] =~ /Cannot remove the only comment/i
+        expect(flash[:alert]).to eq("Cannot remove the only comment")
       end
     end
 
@@ -106,20 +106,20 @@ describe CommentsController, :type => :controller do
         @project.memberships<< @member
         @project.save
       end
-      it "should return a flash message if the project is blocked" do
+      it "returns a flash message if the project is blocked" do
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
-        flash[:notice].should =~ /Project is currently unavailable./i
+        expect(flash[:notice]).to eq("Project is currently unavailable.")
       end
 
-      it "should redirect if the project is blocked" do
+      it "redirects if the project is blocked" do
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
         response.should be_redirect
       end
 
-      it "should allow access if the project is not blocked" do
+      it "allows access if the project is not blocked" do
         @project.user.account.unblock!
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
-        flash[:alert] =~ /Cannot remove the only comment/i
+        expect(flash[:alert]).to eq("Cannot remove the only comment.")
       end
     end
   end
