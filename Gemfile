@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 3.2.12"
+gem "rails", "~> 3.2.22"
 gem "pg"
 gem "simple_form"
 gem "nested_form"
@@ -60,10 +60,10 @@ group :assets do
 end
 
 group :development do
-  gem "capistrano", "~>2.15.5"
-  gem "capistrano-ext"
-  gem "capistrano-recipes", :git => "https://github.com/Shuntyard/capistrano-recipes.git"
-  gem "rvm-capistrano"
+  gem "capistrano", "~>2.15"
+  gem "capistrano-ext", :require => false
+  gem "capistrano-recipes", :git => "https://github.com/Shuntyard/capistrano-recipes.git", :require => false
+  gem "rvm-capistrano", :require => false
 
   gem "spring" #background server reloads for faster specs and dev
   gem "spring-commands-rspec"

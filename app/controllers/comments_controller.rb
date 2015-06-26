@@ -1,11 +1,13 @@
 class CommentsController < ApplicationController
+  #this has to be first! It strips out unwanted params
+  before_filter :process_empty_assets, :except => ["edit","destroy", "preview"]
+
   load_and_authorize_resource :project
   load_and_authorize_resource :ticket, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :comment, :through => :ticket, :except => :preview
 
   include AccountStatus
 
-  before_filter :process_empty_assets, :except => ["edit","destroy", "preview"]
   before_filter :set_feature_and_sprint, :only => [:create, :update]
   before_filter :process_multiple_assets, :only => [:create, :update]
 
@@ -14,7 +16,6 @@ class CommentsController < ApplicationController
 
   def create
     @comment.user = current_user
-
     if @comment.save
       flash.keep[:notice] = "Comment was added"
     else
