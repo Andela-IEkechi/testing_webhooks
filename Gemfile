@@ -61,9 +61,9 @@ end
 
 group :development do
   gem "capistrano", "~>2.15"
-  gem "capistrano-ext"
-  gem "capistrano-recipes", :git => "https://github.com/Shuntyard/capistrano-recipes.git"
-  gem "rvm-capistrano"
+  gem "capistrano-ext", :require => false
+  gem "capistrano-recipes", :git => "https://github.com/Shuntyard/capistrano-recipes.git", :require => false
+  gem "rvm-capistrano", :require => false
 
   gem "spring" #background server reloads for faster specs and dev
   gem "spring-commands-rspec"
