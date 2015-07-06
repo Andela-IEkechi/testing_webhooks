@@ -11,6 +11,7 @@ class CommentObserver < ActiveRecord::Observer
      participants = [record.ticket.assignees, record.user].flatten.uniq
 
      #dont sent emails to people who have left the project!
+Rails.logger.info "participants: #{participants}"
      recipients = participants.select{|r| r.memberships.to_project(record.project.id).any?}.collect(&:email)
 
      TicketMailer.status_notification(recipients, record).deliver if recipients.any?
