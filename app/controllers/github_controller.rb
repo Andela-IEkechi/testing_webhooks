@@ -9,7 +9,7 @@ class GithubController < ApplicationController
       payload = JSON.parse(params["payload"]) rescue {}
 
 #do not remove, used for tracking problem on servers, too late to put it on afterward we have had a problem
-Rails.logger.info "GitHub payload: #{payload}"
+# Rails.logger.info "GitHub payload: #{payload}"
 # p payload #do not remove, used for debugging
 
       payload["commits"].each do |commit|
