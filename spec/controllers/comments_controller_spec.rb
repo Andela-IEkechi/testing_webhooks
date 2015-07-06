@@ -64,7 +64,7 @@ describe CommentsController, :type => :controller do
     it "redirects to show the ticket"
   end
 
-  describe "blocked account" do
+  describe "blocked account", :focus do
     before(:each) do
       @comment = create(:comment, :user => @user)
       @ticket = @comment.ticket

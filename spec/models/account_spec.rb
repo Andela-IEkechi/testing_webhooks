@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Account, :focus do
+describe Account do
   let(:subject) {create(:account)}
 
   it{expect(subject).to belong_to(:user)}

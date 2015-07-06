@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   extend SimpleTokenAuthentication::ActsAsTokenAuthenticationHandler
-  acts_as_token_authentication_handler_for User, :fallback_to_devise => true
+  acts_as_token_authentication_handler_for User, :fallback_to_devise => false #needs to be false to allow access to landing page links
 
   load_resource :project, :if => @current_user
   before_filter :load_membership

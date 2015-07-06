@@ -7,7 +7,7 @@ class Sprint < ActiveRecord::Base
 
   attr_accessible :goal, :due_on, :notify_while_open
 
-  validates :project_id, :presence => true
+  validates :project, :presence => true
   validates :goal, :presence => true, :uniqueness => {:scope => :project_id}
   validates :due_on, :presence => true
 
