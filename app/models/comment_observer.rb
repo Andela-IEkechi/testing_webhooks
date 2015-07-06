@@ -8,7 +8,7 @@ class CommentObserver < ActiveRecord::Observer
 
     #send an email to ticket
     if (record.ticket.assignees.size > 0)
-     participants = [record.ticket.assignees, record.user].flatten.uniq
+     participants = [record.ticket.assignees, record.user].flatten.compact.uniq
 
      #dont sent emails to people who have left the project!
 Rails.logger.info "participants: #{participants}"
