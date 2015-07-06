@@ -8,7 +8,7 @@ class CommentObserver < ActiveRecord::Observer
 
     #send an email to ticket
     if (record.ticket.assignees.size > 0)
-     participants = [record.ticket.assignees, record.user].flatten.uniq
+     participants = [record.ticket.assignees, record.user].flatten.compact.uniq #compact will weed out nils, like when a comment is made by the system from github.
 
      #dont sent emails to people who have left the project!
      recipients = participants.select{|r| r.memberships.to_project(record.project.id).any?}.collect(&:email)
