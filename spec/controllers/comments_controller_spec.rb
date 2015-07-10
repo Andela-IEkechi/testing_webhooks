@@ -64,15 +64,14 @@ describe CommentsController, :type => :controller do
     it "redirects to show the ticket"
   end
 
-  describe "blocked account", :focus do
+  describe "blocked account" do
     before(:each) do
       @comment = create(:comment, :user => @user)
       @ticket = @comment.ticket
       @comment.project = @project
       @comment.save
       @params = {:project_id => @project, :ticket_id => @ticket, :id => @comment}
-      @other_user = create(:user)
-      @member = create(:membership, :user_id => @user.id)
+
       @user.account.block!
     end
 
@@ -81,9 +80,9 @@ describe CommentsController, :type => :controller do
         @project.user_id = @user.id
         @project.save
       end
-      it "should return a flash message if the project is blocked" do
+      it "returns a flash message if the project is blocked" do
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
-        expect(flash[:alert]).to eq("Project can not be accessed due to outstanding payment.")
+        expect(flash[:alert]).to eq("#{@project.to_s} can not be accessed due to outstanding payment.")
       end
 
       it "should redirect if the project is blocked" do
@@ -96,24 +95,31 @@ describe CommentsController, :type => :controller do
         @user.account.unblock!
         @project.user_id = @user.id
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
-        expect(flash[:alert]).to eq("Cannot remove the only comment")
+        expect(flash[:alert]).to eq("Cannot remove the only comment.")
       end
     end
 
     context "member" do
       before(:each) do
+        #unblock our logged in user
+        @user.account.unblock!
+        #set us as a member on the project
+        @member = create(:membership, :user_id => @user.id)
+        @project.memberships << @member
+
+        #assign the project to a different, blocked user
+        @other_user = create(:user)
+        @other_user.account.block!
         @project.user_id = @other_user.id
-        @project.memberships<< @member
         @project.save
       end
       it "returns a flash message if the project is blocked" do
         get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
-        expect(flash[:notice]).to eq("Project is currently unavailable.")
+        expect(flash[:notice]).to eq("#{@project.to_s} is currently unavailable.")
       end
 
       it "redirects if the project is blocked" do
-        get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment
-        response.should be_redirect
+        expect(get :destroy, :project_id => @project, :ticket_id => @ticket, :id => @comment).to redirect_to(projects_path)
       end
 
       it "allows access if the project is not blocked" do

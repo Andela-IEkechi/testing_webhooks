@@ -69,7 +69,7 @@ describe GithubController, :type => :controller do
     expect(ticket.feature.id).to eq(feature.id)
   end
 
-  context "with a commit message that provides extra attributes", :focus do
+  context "with a commit message that provides extra attributes" do
     it "changes the assigned user" do
       user = create(:user)
       project.memberships.create(:user_id => user.id)
