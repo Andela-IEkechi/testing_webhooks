@@ -42,8 +42,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # check if we need password to update user data
   # ie if password or email was changed
   # extend this as needed
+  # added github_email.
   def needs_password?(user, params)
     params[:user][:email].present?  && user.email != params[:user][:email] ||
+    params[:user][:github_email].present?  && user.github_email != params[:user][:github_email] ||
       !params[:user][:password].blank?
   end
 
