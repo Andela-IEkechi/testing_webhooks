@@ -18,13 +18,13 @@ gem "friendly_id"#, ">=4.0.9"
 
 #paging
 gem "kaminari"
-gem "kaminari-bootstrap"#, "~>0.1"
+gem "kaminari-bootstrap", '~> 0.1.3' # > 0.1.3 requires bootstrap 3
 
 #comment body markup
 gem "redcarpet"
 gem "pygmentize"
 
-gem "jquery-rails" #installs 3.1 currently whicih uses jQuery 1.11.1
+gem "jquery-rails" #installs 3.1 currently which uses jQuery 1.11.1
 gem "jquery-ui-rails", "5.0.1" #requires jQuery 1.11.1
 gem "bootstrap-sass", "~>2.3.0"
 
