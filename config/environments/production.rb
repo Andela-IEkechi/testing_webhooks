@@ -76,8 +76,8 @@ Conductor::Application.configure do
 
   #set up the GH values on prod for authentication
   config.before_configuration do
-    ENV['GITHUB_CLIENT_ID'] = '1abb11e846fd47440d03'
-    ENV['GITHUB_CLIENT_SECRET'] = '5f75803c2db451c7e69daf256dc8a6b24ed98d09'
+    ENV['GITHUB_CLIENT_ID'] = '26f02576c0c2cca553cc'
+    ENV['GITHUB_CLIENT_SECRET'] = '9c360d2b2b4e0145cc9d8a17a45474a629a7a975'
   end
 
   config.checkout = {
