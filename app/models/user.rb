@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  acts_as_token_authenticatable
+
   has_one :account, :dependent => :destroy
   has_many :projects, :dependent => :destroy #projects we own
   has_many :tickets, :through => :projects #tickets we are assigned to
@@ -11,7 +13,7 @@ class User < ActiveRecord::Base
   #  :lockable, :timeoutable
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, :confirmable,:token_authenticatable
+         :omniauthable, :confirmable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
@@ -103,5 +105,12 @@ class User < ActiveRecord::Base
       return "#{obfuscated_email} (invited)"
     end
     obfuscated_email
+  end
+
+  #NOTE: this needs to move to a concern when we upgrade to rails 4
+  #previous version of devise had this built in. We now use the simple_token_authentication gem, which does not provide it.
+  #AR also publishes reset_* methods per attribute, so we rather use "regenerate" here
+  def regenerate_authentication_token!
+    self.update_attribute(:authentication_token, generate_authentication_token(token_generator))
   end
 end

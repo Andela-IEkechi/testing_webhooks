@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
   protect_from_forgery
 
+  extend SimpleTokenAuthentication::ActsAsTokenAuthenticationHandler
+  acts_as_token_authentication_handler_for User, :fallback_to_devise => false #needs to be false to allow access to landing page links
+
   load_resource :project, :if => @current_user
   before_filter :load_membership
 
@@ -12,6 +15,11 @@ class ApplicationController < ActionController::Base
 
   def current_membership
     @current_membership
+  end
+
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:error] = "Access denied."
+    redirect_to root_url
   end
 
   protected

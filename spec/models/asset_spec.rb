@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Asset, :focus do
+describe Asset do
   let(:subject) {create(:asset)}
 
   it {expect(subject).to respond_to(:created_at)}

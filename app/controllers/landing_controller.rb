@@ -17,14 +17,11 @@ class LandingController < ApplicationController
   end
 
   def support
-
   end
 
   def privacy
-
   end
 
   def terms
-
   end
 end

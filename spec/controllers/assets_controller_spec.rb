@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared/account_status'
 
-describe AssetsController, :type => :controller do
+describe AssetsController, :type => :controller, :focus => true do
   before (:each) do
     login_user
     @project = create(:project, :user => @user)

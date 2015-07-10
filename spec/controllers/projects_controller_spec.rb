@@ -240,7 +240,7 @@ describe ProjectsController, :type => :controller do
     end
   end
 
-  describe "DELETE #destroy" do
+  describe "DELETE #destroy", :focus do
     it "deletes a project from the database" do
       expect {
         delete :destroy, :id => @project
