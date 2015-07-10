@@ -16,7 +16,8 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
-                  :terms, :chosen_plan, :preferences
+                  :terms, :chosen_plan, :preferences,
+                  :github_email
 
   validates :terms, acceptance: {accept: true}
 
@@ -49,18 +50,26 @@ class User < ActiveRecord::Base
 
   def self.find_or_create_for_github_oauth(auth, signed_in_resource=nil)
     unless user = User.where(:provider => auth.provider, :uid => auth.uid).first
+      # user not found with provider and uid, try to find by email passed from provider.
       if user = User.find_by_email(auth.info.email)
         #user.name ||= auth.extra.raw_info.name
         user.provider ||= auth.provider
         user.uid ||= auth.uid
+        user.github_email ||= auth.info.email if auth.provider == 'github' # only set when provider is github. 
+        user.save
+      elsif auth.provider == 'github' && user = User.find_by_github_email(auth.info.email)
+        # user not found by email, try to find with github_email if provider is github.
+        #user.name ||= auth.extra.raw_info.name
+        user.provider ||= auth.provider
+        user.uid ||= auth.uid
+        user.email ||= auth.info.email # set conductor email if not set already . 
         user.save
       else
-        user = User.create(#name:auth.extra.raw_info.name,
-                           provider:auth.provider,
-                           uid:auth.uid,
-                           email:auth.info.email,
-                           password:Devise.friendly_token[0,20]
-                           )
+        # this looks like a first time login with github or other provider. create a new user with information from passed information.
+        # note... name:auth.extra.raw_info.name commented earlier. 
+        user_hash = { provider:auth.provider, uid:auth.uid, email:auth.info.email, password:Devise.friendly_token[0,20] }
+        user_hash.merge!(github_email:auth.info.email) if auth.provider == 'github' 
+        user = User.create(user_hash)
       end
     end
     user
