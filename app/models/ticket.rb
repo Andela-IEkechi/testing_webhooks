@@ -80,4 +80,18 @@ class Ticket < ActiveRecord::Base
     self.last_comment = self.comments.last
     self.save!
   end
+  
+  def assigned_to
+    # return nil if ticket not assigned and obfuscate email if public project.
+    return nil unless assignee
+    return assignee.obfuscated if project.public?
+    assignee
+  end
+
+  def assigned_to_tooltip
+    return nil unless assignee
+    return assignee.github_email ? "Conductor: #{assignee.obfuscated}, GitHub: #{assignee.obfuscated_github_email}" : "Conductor: #{assignee.obfuscated}" if project.public? 
+    assignee.github_email ? "Conductor: #{assignee}, GitHub: #{assignee.github_email}" : "Conductor: #{assignee}" 
+  end
+
 end
