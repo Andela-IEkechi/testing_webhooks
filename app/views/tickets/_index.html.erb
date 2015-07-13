@@ -60,19 +60,15 @@
         </div>
       </td>
       <td>
-        <% if ticket.assignee
-          assigned_to = ticket.project.public? ? ticket.assignee.obfuscated : ticket.assignee
-        %>
-        <div class="overflow" title="<%= assigned_to %>">
-          <% if ticket.assignee.memberships.to_project(ticket.project.id).any? %>
-            <%= assigned_to %>
+        <div class="overflow" title="<%= ticket.assigned_to_tooltip %>">
+          <% if ticket.assignee && ticket.assignee.memberships.to_project(ticket.project.id).any? %>
+            <%= ticket.assigned_to %>
           <% else %>
-            <span class='non-member' title='not a member'>
-              <%= assigned_to %>
+            <span class='non-member' title="<%= ticket.assigned_to_tooltip %> (not a member)">
+              <%= ticket.assigned_to %>
             </span>
           <% end %>
         </div>
-        <% end %>
       </td>
       <td>
         <div class="overflow" title="<%= ticket.status %>">
