@@ -14,6 +14,11 @@ class ApplicationController < ActionController::Base
     @current_membership
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:error] = "Access denied."
+    redirect_to root_url
+  end
+
   protected
 
   def after_token_authentication
