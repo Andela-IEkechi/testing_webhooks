@@ -85,4 +85,13 @@ Conductor::Application.configure do
     :url => "https://www.2checkout.com/2co/buyer/purchase",
     :checkout_account => "202217675"
   }
+
+  #Exception notification
+  config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :email_prefix => "[Conductor Exception] ",
+    :sender_address => %{"Conductor Notifier" <notifier@conductor-app.com>},
+    :exception_recipients => %w{support@conductor-app.com}
+  }
+
 end
