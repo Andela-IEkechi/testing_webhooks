@@ -91,7 +91,7 @@ Conductor::Application.configure do
   :email => {
     :email_prefix => "[Conductor Exception] ",
     :sender_address => %{"Conductor Notifier" <notifier@conductor-app.com>},
-    :exception_recipients => %w{support@conductor-app.com}
+    :exception_recipients => %w{support@shuntyard.co.za}
   }
 
 end
