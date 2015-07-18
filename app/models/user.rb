@@ -50,6 +50,18 @@ class User < ActiveRecord::Base
     end
   end
 
+
+  # info do
+  #   {
+  #     'nickname' => raw_info['login'],
+  #     'email' => primary_email,
+  #     'name' => raw_info['name'],
+  #     'image' => raw_info['avatar_url'],
+  #     'urls' => {
+  #       'GitHub' => raw_info['html_url'],
+  #       'Blog' => raw_info['blog'],
+  #     },
+  #   }
   def self.find_or_create_for_github_oauth(auth, signed_in_resource=nil)
 Rails.logger.info auth
     unless user = User.where(:provider => auth.provider, :uid => auth.uid).first
@@ -57,9 +69,9 @@ Rails.logger.info auth
       if user = User.find_by_email(auth.info.email)
         user.provider ||= auth.provider
         user.uid ||= auth.uid
-        user.github_login ||= auth.info.login if auth.provider == 'github'
+        user.github_login ||= auth.info.nickname if auth.provider == 'github'
         user.save
-      elsif (auth.provider == 'github') && (user = User.find_by_github_login(auth.info.login))
+      elsif (auth.provider == 'github') && (user = User.find_by_github_login(auth.info.nickname))
         # user not found by email, try to find with github_login if provider is github.
         user.provider ||= auth.provider
         user.uid ||= auth.uid
@@ -68,7 +80,7 @@ Rails.logger.info auth
       else
         # this looks like a first time login with github or other provider. create a new user with information from passed information.
         user_params = { provider:auth.provider, uid:auth.uid, email:auth.info.email, password:Devise.friendly_token[0,20] }
-        user_params.merge!(github_login:auth.info.login) if auth.provider == 'github'
+        user_params.merge!(github_login:auth.info.nickname) if auth.provider == 'github'
         user = User.create(user_params)
       end
     end
