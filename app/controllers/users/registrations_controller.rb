@@ -45,7 +45,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # added github_user.
   def needs_password?(user, params)
     (params[:user][:email].present? && user.email != params[:user][:email]) ||
-    (params[:user][:github_user].present? && user.github_user != params[:user][:github_user]) ||
+    (params[:user][:github_login].present? && user.github_login != params[:user][:github_login]) ||
     !params[:user][:password].blank?
   end
 

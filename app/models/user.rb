@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
                   :terms, :chosen_plan, :preferences,
-                  :github_user
+                  :github_login
 
   validates :terms, acceptance: {accept: true}
 
@@ -65,7 +65,6 @@ Rails.logger.info auth
         user.save
       else
         # this looks like a first time login with github or other provider. create a new user with information from passed information.
-        # note... name:auth.extra.raw_info.name commented earlier.
         user_params = { provider:auth.provider, uid:auth.uid, email:auth.info.email, password:Devise.friendly_token[0,20] }
         user_params.merge!(github_login:auth.info.login) if auth.provider == 'github'
         user = User.create(user_params)
@@ -112,9 +111,5 @@ Rails.logger.info auth
     end
     obfuscated_email
   end
-
-  # def obfuscated_github_email
-  #   github_email.gsub(/(.+@).+/,'\1...')
-  # end
 
 end
