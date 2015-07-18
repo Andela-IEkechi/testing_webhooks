@@ -17,9 +17,9 @@ class CommentsController < ApplicationController
   def create
     @comment.user = current_user
     if @comment.save
-      flash.keep[:notice] = "Comment was added"
+      flash.keep[:notice] = "Comment was added."
     else
-      flash[:alert] = "Comment could not be created"
+      flash[:alert] = "Comment could not be created."
       @ticket = @comment.ticket
     end
 
@@ -39,10 +39,10 @@ class CommentsController < ApplicationController
     params[:comment][:asset_ids] = @comment.assets.map{|a|a.id}
 
     if @comment.update_attributes(params[:comment])
-      flash[:notice] = "Comment was updated"
+      flash[:notice] = "Comment was updated."
       redirect_to project_ticket_path(@comment.project, @comment.ticket)
     else
-      flash[:alert] = "Comment could not be updated"
+      flash[:alert] = "Comment could not be updated."
       render 'edit'
     end
   end
@@ -50,12 +50,12 @@ class CommentsController < ApplicationController
   def destroy
     delete_path = project_ticket_path(@comment.project, @comment.ticket)
     if @comment.only?
-      flash[:alert] = "Cannot remove the only comment"
+      flash[:alert] = "Cannot remove the only comment."
     elsif @comment.destroy
       @removed_comment_id = params[:id]
       flash[:notice] = "Comment was removed"
     else
-      flash[:alert] = "Comment could not be deleted"
+      flash[:alert] = "Comment could not be deleted."
     end
     respond_to do |format|
       format.html do

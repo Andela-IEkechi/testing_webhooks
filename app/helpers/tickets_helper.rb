@@ -29,4 +29,12 @@ module TicketsHelper
     }.merge(link_options)
     link_to name, project_tickets_path(url_options), link_options
   end
+
+  def assignee(ticket, include_github_login=false)
+    if ticket.project.public?
+      [ticket.assignee.obfuscated, ticket.github_login, 'anonymous'].compact.join(' - ')
+    else
+      [ticket.assignee.to_s, ticket.github_login, 'anonymous'].compact.join(' - ')
+    end
+  end
 end

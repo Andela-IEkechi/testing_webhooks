@@ -188,15 +188,20 @@ describe Project do
   end
 
   context "scopes" do
-    it "should return opensource/closedsource projects" do
-      10.times do |n|
-        project = create(:project, :private => false)
-      end
-      10.times do |n|
+    it ".closedsource" do
+      3.times do |n|
         project = create(:project, :private => true)
       end
-      Project.opensource.should have(10).entries
-      Project.closedsource.should have(11).entries
+      project = create(:project, :private => false)
+      expect(Project.closedsource.count).to eq(3)
+    end
+
+    it ".opensource" do
+      3.times do |n|
+        project = create(:project, :private => false)
+      end
+      project = create(:project, :private => true)
+      expect(Project.opensource.count).to eq(3)
     end
   end
 end

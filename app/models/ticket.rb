@@ -80,4 +80,5 @@ class Ticket < ActiveRecord::Base
     self.last_comment = self.comments.last
     self.save!
   end
+
 end

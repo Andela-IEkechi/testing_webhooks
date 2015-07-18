@@ -248,22 +248,19 @@ describe ProjectsController, :type => :controller do
     end
 
     it "does not delete a project if the owner is not the current user" do
-      new_owner = create(:user)
-      some_project = create(:project, :user => new_owner)
-      expect {
-        delete :destroy, :id => some_project
-      }.to raise_error(CanCan::AccessDenied)
+      some_project = create(:project)
+      expect(delete :destroy, :id => some_project).to redirect_to(root_url)
     end
 
     it "redirects to the project index" do
-      delete :destroy, :id => @project
-      response.should be_redirect
+      expect(delete :destroy, :id => @project).to redirect_to(projects_url)
     end
 
-    it "should redirect to show the project if delete fails" do
-      create(:sprint, :project => @project)
-      delete :destroy, :id => @project
-      response.should be_redirect
+    it "redirects to the project show if delete fails" do
+      @project.user = create(:user)
+      @project.save
+      @project.memberships.create(user_id: @project.user)
+      expect(delete :destroy, :id => @project).to redirect_to(project_path(@project, :current_tab => 'delete-project'))
     end
   end
 

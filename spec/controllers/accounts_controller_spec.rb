@@ -7,9 +7,9 @@ describe AccountsController, :type => :controller do
   #users can only act on their own accounts, so we need to make sure the account belongs to the logged in user
   let(:account) {create(:account, :user => @user)}
 
-  it "should load_account" do
+  it ".load_account" do
     get :edit, :id => @user.account, :user_id => @user
-    assigns(:account).should eq(@user.account)
+    expect(assigns(:account)).to eq(@user.account)
   end
 
   describe "GET #edit" do
@@ -18,6 +18,7 @@ describe AccountsController, :type => :controller do
       get :edit, :id => @user.account, :user_id => @user
       @user.reload
     end
+
     it "ensures that the user has an auth token" do
       @user.authentication_token.should_not eq(nil)
     end
@@ -82,7 +83,7 @@ describe AccountsController, :type => :controller do
         "order_number" => "564654",
         "total" => @x.to_s,
         "credit_card_processed" => "Y",
-        "key" => Digest::MD5.hexdigest((Rails.configuration.checkout[:encryption_key] + Rails.configuration.checkout[:checkout_account] + "564654" + @x.to_s).upcase)
+        "key" => Digest::MD5.hexdigest((Rails.configuration.checkout[:encryption_key] + Rails.configuration.checkout[:checkout_account] + "1" + @x.to_s)).upcase
       }
     end
 
@@ -114,21 +115,22 @@ describe AccountsController, :type => :controller do
           @account.save
           @params["li_1_price"] = 25.00
         end
-        it "should assign the new plan" do
-          @first_plan = @account.current_plan
-          post :payment_return, @params.merge(:user_id => @user)
-          assigns(:account).current_plan.to_s.should_not eq(@first_plan.to_s)
+
+        it "assigns the new plan" do
+          expect {
+            post :payment_return, @params.merge(:user_id => @user)
+          }.not_to change{@user.account.current_plan.to_s}
         end
 
-        it "should give the correct success notice" do
+        it "gives the correct success notice" do
           get :payment_return, @params.merge(:user_id => @user)
-          flash[:notice].should =~ /Downgrade request successful. You will receive an email as soon as your downgrade is completed./i
+          expect(flash[:notice]).to eq("Downgrade request successful. You will receive an email as soon as your downgrade is completed.")
         end
 
-        it "should give the correct alert when successful with save errors" do
+        it "gives the correct alert when successful with save errors" do
           @params["li_1_price"] = "5.00"
           get :payment_return, @params.merge(:user_id => @user)
-          flash[:alert].should =~ /Downgrade request sent. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you./i
+          expect(flash[:alert]).to eq("Downgrade request sent. However, we encountered a problem while updating your account. Our support staff have been notified and will be in contact shortly to assist you.")
         end
       end
     end
@@ -141,11 +143,11 @@ describe AccountsController, :type => :controller do
       end
     end
 
-    it "should reset the authentication_token" do
-      auth = @user.authentication_token
-      get :payment_return, @params.merge(:user_id => @user)
-      @user.reload
-      @user.authentication_token.should_not eq(auth)
+    it "resets the authentication_token" do
+      expect {
+        get :payment_return, @params.merge(:user_id => @user)
+        @user.reload
+      }.to change{@user.authentication_token}
     end
 
     it "should redirect" do
@@ -160,6 +162,10 @@ describe AccountsController, :type => :controller do
       @account.started_on = (Time.now - 1.month - 12.days).strftime('%Y-%m-%d')
       @account.plan = "medium"
       @account.save
+
+      #make sure the request is json
+      request.env['CONTENT_TYPE'] = 'application/json'
+      request.accept = "application/json"
 
       @params = {
         "mode" => '2CO',
@@ -179,10 +185,9 @@ describe AccountsController, :type => :controller do
       }
     end
     it "should calculate the pro_rata amount" do
-      @user.ensure_authentication_token
-      @user.save
       post :ajax_startup_fee, @params.merge(:user_id => @user)
-      self.controller.params["li_1_startup_fee"].to_f.should eq(- my_pro_rata(@account))
+      tmp = JSON.parse(response.body)
+      expect(tmp["li_1_startup_fee"].to_f).to eq(-1*subject.send(:pro_rata, @account))
     end
 
     it "sets startup_fee to 0.00 if new subscription" do
@@ -190,12 +195,14 @@ describe AccountsController, :type => :controller do
       @account.started_on = nil
       @account.save
       post :ajax_startup_fee, @params.merge(:user_id => @user)
-      self.controller.params["li_1_startup_fee"].should eq("0.00")
+      tmp = JSON.parse(response.body)
+      expect(tmp["li_1_startup_fee"]).to eq(0.0)
     end
 
-    it "sets startup_fee to neg pro_rata amount if upgrade" do
+    it "sets startup_fee to negative pro_rata amount if upgrade" do
       post :ajax_startup_fee, @params.merge(:user_id => @user)
-      self.controller.params["li_1_startup_fee"].should eq((- my_pro_rata(@account)).to_s)
+      tmp = JSON.parse(response.body)
+      expect(tmp["li_1_startup_fee"]).to eq(-1*subject.send(:pro_rata, @account))
     end
 
     it "sets forfeit to pos pro_rata, startup_fee to 0.00 if downgrade" do
@@ -203,17 +210,9 @@ describe AccountsController, :type => :controller do
       @account.save
       @params["li_1_price"] = "10.00"
       post :ajax_startup_fee, @params.merge(:user_id => @user)
-      self.controller.params["li_1_startup_fee"].should eq("0.00")
-      self.controller.params["forfeit"].should eq(my_pro_rata(@account).to_s)
+      tmp = JSON.parse(response.body)
+      expect(tmp["forfeit"]).to eq(subject.send(:pro_rata, @account))
     end
   end
 end
 
-def  my_pro_rata(account)
-  started_on = @account.started_on.day
-  old_amount = account.current_plan[:price_usd]
-  days_of_month = Time.now.end_of_month.day
-  today = Time.now.day
-  rest_of_days = (started_on < today) ? (days_of_month - today - started_on) : (started_on - today)
-  my_pro_rata = (old_amount.to_f/days_of_month.to_f*rest_of_days).round(2)
-end

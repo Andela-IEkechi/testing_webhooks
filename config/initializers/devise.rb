@@ -195,10 +195,6 @@ Devise.setup do |config|
   # REST_AUTH_SITE_KEY to pepper)
   # config.encryptor = :sha512
 
-  # ==> Configuration for :token_authenticatable
-  # Defines name of the authentication token params key
-  config.token_authentication_key = :authentication_token
-
   # ==> Scopes configuration
   # Turn scoped views on. Before rendering "sessions/new", it will first check for
   # "users/sessions/new". It's turned off by default because it's slower if you
@@ -263,4 +259,8 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = "/my_engine/users/auth"
+
+  #added this with the move to devise 3.4
+  config.secret_key = '45d5349a0c0567457598b32ecdb00a747ebd6ac17644fa6f1807149ffbc059eabe2a5fdb8c7b5617d1c542db300af7af7b44b3ffd082e3822db306e2c485cdc2'
+
 end
