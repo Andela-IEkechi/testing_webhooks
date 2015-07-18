@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(:version => 20150710153625) do
     t.string   "invited_by_type"
     t.text     "preferences"
     t.datetime "deleted_at"
-    t.string   "github_email"
+    t.string   "github_login"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true

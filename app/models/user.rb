@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
                   :terms, :chosen_plan, :preferences,
-                  :github_email
+                  :github_user
 
   validates :terms, acceptance: {accept: true}
 
@@ -49,26 +49,25 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_for_github_oauth(auth, signed_in_resource=nil)
+Rails.logger.info auth
     unless user = User.where(:provider => auth.provider, :uid => auth.uid).first
       # user not found with provider and uid, try to find by email from provider.
       if user = User.find_by_email(auth.info.email)
-        #user.name ||= auth.extra.raw_info.name
         user.provider ||= auth.provider
         user.uid ||= auth.uid
-        user.github_email ||= auth.info.email if auth.provider == 'github' # only set when provider is github. 
+        user.github_login ||= auth.info.login if auth.provider == 'github'
         user.save
-      elsif auth.provider == 'github' && user = User.find_by_github_email(auth.info.email)
-        # user not found by email, try to find with github_email if provider is github.
-        #user.name ||= auth.extra.raw_info.name
+      elsif (auth.provider == 'github') && (user = User.find_by_github_login(auth.info.login))
+        # user not found by email, try to find with github_login if provider is github.
         user.provider ||= auth.provider
         user.uid ||= auth.uid
-        user.email ||= auth.info.email # set conductor email same as github_email if not set already . 
+        user.email ||= auth.info.email # set conductor email same as github_email if not set already .
         user.save
       else
         # this looks like a first time login with github or other provider. create a new user with information from passed information.
-        # note... name:auth.extra.raw_info.name commented earlier. 
+        # note... name:auth.extra.raw_info.name commented earlier.
         user_params = { provider:auth.provider, uid:auth.uid, email:auth.info.email, password:Devise.friendly_token[0,20] }
-        user_params.merge!(github_email:auth.info.email) if auth.provider == 'github' 
+        user_params.merge!(github_login:auth.info.login) if auth.provider == 'github'
         user = User.create(user_params)
       end
     end
@@ -114,8 +113,8 @@ class User < ActiveRecord::Base
     obfuscated_email
   end
 
-  def obfuscated_github_email
-    github_email.gsub(/(.+@).+/,'\1...')
-  end
+  # def obfuscated_github_email
+  #   github_email.gsub(/(.+@).+/,'\1...')
+  # end
 
 end

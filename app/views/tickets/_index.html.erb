@@ -60,12 +60,12 @@
         </div>
       </td>
       <td>
-        <div class="overflow" title="<%= ticket.assigned_to_tooltip %>">
+        <div class="overflow" title="<%= assignee(ticket, true) %>">
           <% if ticket.assignee && ticket.assignee.memberships.to_project(ticket.project.id).any? %>
-            <%= ticket.assigned_to %>
+            <%= ticket.assignee(ticket) %>
           <% else %>
-            <span class='non-member' title="<%= ticket.assigned_to_tooltip %> (not a member)">
-              <%= ticket.assigned_to %>
+            <span class='non-member' title="<%= assignee(ticket, true) %> (not a member)">
+              <%= ticket.assignee(ticket) %>
             </span>
           <% end %>
         </div>
