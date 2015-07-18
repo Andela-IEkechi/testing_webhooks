@@ -63,7 +63,6 @@ class User < ActiveRecord::Base
   #     },
   #   }
   def self.find_or_create_for_github_oauth(auth, signed_in_resource=nil)
-Rails.logger.info auth
     unless user = User.where(:provider => auth.provider, :uid => auth.uid).first
       # user not found with provider and uid, try to find by email from provider.
       if user = User.find_by_email(auth.info.email)
@@ -84,6 +83,8 @@ Rails.logger.info auth
         user = User.create(user_params)
       end
     end
+    user.github_login ||= auth.info.nickname if auth.provider == 'github'
+    user.save
     user
   end
 
