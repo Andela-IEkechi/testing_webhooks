@@ -18,7 +18,8 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :provider, :uid, :full_name,
-                  :terms, :chosen_plan, :preferences
+                  :terms, :chosen_plan, :preferences,
+                  :github_login
 
   validates :terms, acceptance: {accept: true}
 
@@ -50,19 +51,25 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_for_github_oauth(auth, signed_in_resource=nil)
+Rails.logger.info auth
     unless user = User.where(:provider => auth.provider, :uid => auth.uid).first
+      # user not found with provider and uid, try to find by email from provider.
       if user = User.find_by_email(auth.info.email)
-        #user.name ||= auth.extra.raw_info.name
         user.provider ||= auth.provider
         user.uid ||= auth.uid
+        user.github_login ||= auth.info.login if auth.provider == 'github'
+        user.save
+      elsif (auth.provider == 'github') && (user = User.find_by_github_login(auth.info.login))
+        # user not found by email, try to find with github_login if provider is github.
+        user.provider ||= auth.provider
+        user.uid ||= auth.uid
+        user.email ||= auth.info.email # set conductor email same as github_email if not set already .
         user.save
       else
-        user = User.create(#name:auth.extra.raw_info.name,
-                           provider:auth.provider,
-                           uid:auth.uid,
-                           email:auth.info.email,
-                           password:Devise.friendly_token[0,20]
-                           )
+        # this looks like a first time login with github or other provider. create a new user with information from passed information.
+        user_params = { provider:auth.provider, uid:auth.uid, email:auth.info.email, password:Devise.friendly_token[0,20] }
+        user_params.merge!(github_login:auth.info.login) if auth.provider == 'github'
+        user = User.create(user_params)
       end
     end
     user

@@ -49,6 +49,9 @@ gem "font-awesome-rails"
 #crontab
 gem "whenever"
 
+#Send exceptions mails to support team
+gem 'exception_notification'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
