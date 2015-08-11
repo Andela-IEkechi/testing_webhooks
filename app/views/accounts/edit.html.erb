@@ -1,7 +1,16 @@
 <h3>
   Update Your Account
-  <small> currently <%= @account.current_plan[:title] %> </small>
 </h3>
+
+
+<h2> <small>
+  You are currently on the  <strong><%= @account.current_plan[:title] %></strong> plan, which includes:
+  <strong><%= @account.current_plan[:projects] %></strong>&nbsp;<%= 'Project'.pluralize(@account.current_plan[:projects]) %>,
+  <strong><%= (@account.current_plan[:members].to_i != 999) ? @account.current_plan[:members].to_s : 'Unlimited' %></strong>&nbsp;<%= 'User'.pluralize(@account.current_plan[:members].to_i) %>,
+  <strong><%= @account.current_plan[:storage_gb] %>GB</strong>&nbsp;Storage.
+</small>
+</h2>
+
 
 <div class="row-fluid marketing">
   <div class="tab-pane">
@@ -28,7 +37,6 @@
 
 <div id="checkout_form">
   <%= form_tag Rails.configuration.checkout[:url], :name => 'Conductor Secure Payment', :id => "checkout_form", :method => :post do %>
-
     <%= hidden_field_tag "sid", Rails.configuration.checkout[:checkout_account] %>
     <%= hidden_field_tag "mode", '2CO' %>
     <%= hidden_field_tag "li_1_price", '' %>
@@ -52,7 +60,7 @@
 
     <div class="row-fluid pagination-centered">
       <br>
-      <%= submit_tag "Update Subscription", :class => "btn btn-success btn-large", :id => 'account_change_upgrade' %>
+      <%= submit_tag "Update my subscription", :class => "btn btn-success btn-large", :id => 'account_change_upgrade' %>
     </div>
   <% end %>
 </div>
@@ -83,7 +91,7 @@
 
     <div class="row-fluid pagination-centered">
       <br>
-      <%= submit_tag "Update Subscription", :class => "btn btn-warning btn-large", :id => 'account_change_downgrade' %>
+      <%= submit_tag "Update my subscription", :class => "btn btn-warning btn-large", :id => 'account_change_downgrade' %>
     </div>
   <% end %>
 </div>
@@ -97,7 +105,7 @@
 
     <div class="row-fluid pagination-centered">
       <br>
-      <%= submit_tag "Update Subscription", :class => "btn btn-warning btn-large", :id => 'account_change_cancel' %>
+      <%= submit_tag "Update my subscription", :class => "btn btn-warning btn-large", :id => 'account_change_cancel' %>
     </div>
   <% end %>
 </div>

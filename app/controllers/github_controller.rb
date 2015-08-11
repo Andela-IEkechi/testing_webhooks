@@ -26,6 +26,11 @@ Rails.logger.info "GitHub payload: #{payload}"
             #find the ticket the matches
             ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
             if ticket
+              #the committer might be a user we know about, so we try and find them
+              commit_user = User.find_by_email(commit['author']['email']) rescue nil
+              commit_user ||= User.find_by_github_login(commit['author']['username']) rescue nil
+Rails.logger.info "Attributing commit to user: #{commit_user || 'unknown'}"
+
               #set up the attrs we want to persist
               attributes = {
                 :body => commit_message(commit),
@@ -34,7 +39,8 @@ Rails.logger.info "GitHub payload: #{payload}"
                 :git_commit_uuid => commit['id'],
                 #set the creation date to be the commit date in the github payload, so that the comments
                 #will be in chronological order
-                :created_at => commit["timestamp"]
+                :created_at => commit["timestamp"],
+                :user_id => (commit_user.id rescue nil)
               }.with_indifferent_access
 
               #we need to append the attributes from this commit, to whatever was on the last comment. So we use reverse_merge

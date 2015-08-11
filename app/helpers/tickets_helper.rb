@@ -31,10 +31,15 @@ module TicketsHelper
   end
 
   def assignee(ticket, include_github_login=false)
+    return 'anonymous' unless ticket.assignee
+
+    parts = []
     if ticket.project.public?
-      [ticket.assignee.obfuscated, ticket.github_login, 'anonymous'].compact.join(' - ')
+      parts << ticket.assignee.obfuscated
     else
-      [ticket.assignee.to_s, ticket.github_login, 'anonymous'].compact.join(' - ')
+      parts << ticket.assignee.to_s
     end
+    parts << ticket.assignee.github_login
+    parts.compact.join(' - ')
   end
 end
