@@ -37,15 +37,14 @@ describe Ticket do
     @ticket.should respond_to(:comments)
   end
 
-  it "should return it's comments ordered by created_at" do
+  it "returns it's comments ordered by id" do
     timestamp = Time.now.utc
     @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 3.days).to_s)
     @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 2.days).to_s)
     @ticket.comments << create(:comment, :ticket => @ticket, :created_at => (timestamp - 4.days).to_s)
     @ticket.reload
-    @ticket.comments.first.created_at.to_s.should eq((timestamp - 4.days).to_s)
-    @ticket.comments.last.created_at.to_s.should eq((timestamp - 2.days).to_s)
-    @ticket.last_comment.created_at.to_s.should eq((timestamp - 2.days).to_s)
+    expect(@ticket.comments.collect(&:id)).to eq(@ticket.comments.collect(&:id).sort)
+    expect(@ticket.last_comment.id).to eq(@ticket.comments.last.id)
   end
 
   context "last_comment" do
