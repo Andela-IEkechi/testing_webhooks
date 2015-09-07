@@ -83,9 +83,9 @@ Conductor::Application.configure do
   end
 
   config.checkout = {
-    :encryption_key => "f9df3a1845",
+    :encryption_key => "MjM1YWE5ZDYtNjBhNy00NDUwLWFiN2MtNmFkOGZmZjM5ZGVl",
     :url => "https://www.2checkout.com/2co/buyer/purchase",
-    :checkout_account => "202217675"
+    :checkout_account => "102629581"
   }
 
   #Exception notification

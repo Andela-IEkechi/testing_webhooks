@@ -54,7 +54,7 @@
       <%= hidden_field_tag "demo", 'Y' %>
     <% else %>
       <%= hidden_field_tag "x_receipt_link_url", payment_return_user_account_url(:authentication_token => @user.authentication_token) %>
-      <%= hidden_field_tag "demo", 'Y' %>
+      <%= hidden_field_tag "demo", 'N' %>
     <% end %>
     <%= hidden_field_tag "account", @account.id %>
 

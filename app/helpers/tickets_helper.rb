@@ -31,7 +31,7 @@ module TicketsHelper
   end
 
   def assignee(ticket, include_github_login=false)
-    return 'anonymous' unless ticket.assignee
+    return '' unless ticket.assignee
 
     parts = []
     if ticket.project.public?
