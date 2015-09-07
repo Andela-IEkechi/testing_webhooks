@@ -172,21 +172,24 @@ describe GithubController, :type => :controller do
     end.to change{ticket.comments.count}.by(1)
   end
 
-  it "should not assign a user to the new comment" do
+  it "assigns a user to the new comment" do
     expect(ticket.comments.last.user).to_not be_nil
     post :commit, :token => key.token, :payload => JSON.generate(@payload)
     ticket.reload
-    expect(ticket.comments.last.user).to be_nil
+    expect(ticket.comments.last.user.id).to eq(user.id)
   end
 
-  it "should create a comment with the commit date as the create_at date" do
-    timestring = 1.days.from_now.to_s #we need to future date it, otherwise it goes first in the comments and the spec fails
+  it "creates a comment in the right cronological order" do
+    #create a GH comment which precedes first comment (out of order)
+    timestring = ticket.last_comment.created_at - 5.seconds
+    first_comment_id = ticket.last_comment.id
     @payload[:commits].first[:timestamp] = timestring
     expect do
       post :commit, :token => key.token, :payload => JSON.generate(@payload)
       ticket.reload
     end.to change{ticket.comments.count}.by(1)
-    expect(ticket.comments.last.created_at.to_s).to eq(timestring)
+    #the new "older" comment should still be treated as the most recent comment on the ticket.
+    expect(ticket.last_comment.id).not_to eq(first_comment_id)
   end
 
 end

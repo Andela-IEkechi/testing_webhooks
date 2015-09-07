@@ -37,10 +37,9 @@ Rails.logger.info "Attributing commit to user: #{commit_user || 'unknown'}"
                 :api_key_name => api_key.name,
                 :commenter => commit['author']['email'],
                 :git_commit_uuid => commit['id'],
-                #set the creation date to be the commit date in the github payload, so that the comments
-                #will be in chronological order
-                :created_at => commit["timestamp"],
                 :user_id => (commit_user.id rescue nil)
+                #we specifically use the regular created_at timestamp, so that new comments don't precede the normal ticket flow.
+                #users with skewed timestamps can realy mess with tickets's chronological flow
               }.with_indifferent_access
 
               #we need to append the attributes from this commit, to whatever was on the last comment. So we use reverse_merge

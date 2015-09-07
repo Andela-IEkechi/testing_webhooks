@@ -2,7 +2,7 @@ class Ticket < ActiveRecord::Base
   include Scoped
 
   belongs_to :project #always
-  has_many :comments, :order => :created_at, :dependent => :destroy
+  has_many :comments, :order => :id, :dependent => :destroy
   has_many :assets, :through => :comments
 
   belongs_to :last_comment, :class_name => 'Comment'
@@ -77,8 +77,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_last_comment!
-    self.last_comment = self.comments.last
-    self.save!
+    self.update_column(:last_comment_id, (Comment.where(:ticket_id => self.id).last.id rescue nil))
   end
 
 end
