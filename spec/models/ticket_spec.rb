@@ -79,6 +79,12 @@ describe Ticket do
       @ticket.last_comment_id.should eq(@ticket.comments.last.id)
       @ticket.last_comment_id.should eq(@comment.id)
     end
+
+    it "should update the ticket updated_at timestamp when last_comment changes" do
+      expect {
+        new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      }.to change{@ticket.updated_at}
+    end
   end
 
   it "should respond to :sprint_id" do
