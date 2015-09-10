@@ -46,37 +46,39 @@
     </thead>
     <tbody>
     <% @tickets.each do |ticket| %>
-    <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
-      <td><%= ticket.scoped_id %></td>
-      <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
-      <td>
-        <div class="overflow" title="<%= ticket.feature %>">
-          <%= link_to ticket.feature, project_feature_path(ticket.project, ticket.feature) if ticket.feature %>
-        </div>
-      </td>
-      <td>
-        <div class="overflow" title="<%= ticket.sprint %>">
-          <%= link_to ticket.sprint, project_sprint_path(ticket.project, ticket.sprint) if ticket.sprint %>
-        </div>
-      </td>
-      <td>
-        <div class="overflow" title="<%= assignee(ticket, true) %>">
-          <% if ticket.assignee && ticket.assignee.memberships.to_project(ticket.project.id).any? %>
-            <%= assignee(ticket) %>
-          <% else %>
-            <span class='non-member' title="<%= assignee(ticket, true) %> (not a member)">
-              <%= assignee(ticket) %>
-            </span>
-          <% end %>
-        </div>
-      </td>
-      <td>
-        <div class="overflow" title="<%= ticket.status %>">
-          <%= ticket.status %>
-        </div>
-      </td>
-      <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
-    </tr>
+      <%= cache(ticket) do %>
+        <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
+          <td><%= ticket.scoped_id %></td>
+          <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
+          <td>
+            <div class="overflow" title="<%= ticket.feature %>">
+              <%= link_to ticket.feature, project_feature_path(ticket.project, ticket.feature) if ticket.feature %>
+            </div>
+          </td>
+          <td>
+            <div class="overflow" title="<%= ticket.sprint %>">
+              <%= link_to ticket.sprint, project_sprint_path(ticket.project, ticket.sprint) if ticket.sprint %>
+            </div>
+          </td>
+          <td>
+            <div class="overflow" title="<%= assignee(ticket, true) %>">
+              <% if ticket.assignee && ticket.assignee.memberships.to_project(ticket.project.id).any? %>
+                <%= assignee(ticket) %>
+              <% else %>
+                <span class='non-member' title="<%= assignee(ticket, true) %> (not a member)">
+                  <%= assignee(ticket) %>
+                </span>
+              <% end %>
+            </div>
+          </td>
+          <td>
+            <div class="overflow" title="<%= ticket.status %>">
+              <%= ticket.status %>
+            </div>
+          </td>
+          <td class="count" title="cost of this ticket"><span class="badge badge-warning"><%= cost_short(ticket.cost) %></span></td>
+        </tr>
+      <% end %>
     <% end if @tickets %>
     <% if @tickets && @tickets.count == 0 %>
       <tr>

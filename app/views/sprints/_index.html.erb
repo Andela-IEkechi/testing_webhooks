@@ -16,23 +16,25 @@
   </thead>
   <tbody>
   <% sprints.each do |sprint| %>
-    <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
-      <td title="sprint number"><%= sprint.scoped_id %></td>
-      <td class="overflow" title="<%= sprint.goal %>">
-        <%= fa_icon "envelope-o", :class => "pull-right", :title => "participants receive updates" if sprint.notify_while_open%>
-        <%= link_to sprint.goal, project_sprint_path(sprint.project, sprint) %>
-      </td>
-      <td title="due date"><%= sprint.due_on.strftime('%d %b %Y') %></td>
-      <td>
-        <div class="progress-count">
-          <%= completion_str(sprint) %>
-        </div>
-        <div class="progress"  title="<%= completion_message(sprint) %>">
-          <div class="bar bar-<%= completion_state(sprint) %> " style="width: <%= sprint.progess_count %>%;" ></div>
-        </div>
-      </td>
-      <td  class="count" title="tickets in this sprint"><span class="badge badge-important"><%= sprint.ticket_count %></span></td>
-    </tr>
+    <%= cache(sprint) do %>
+      <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
+        <td title="sprint number"><%= sprint.scoped_id %></td>
+        <td class="overflow" title="<%= sprint.goal %>">
+          <%= fa_icon "envelope-o", :class => "pull-right", :title => "participants receive updates" if sprint.notify_while_open%>
+          <%= link_to sprint.goal, project_sprint_path(sprint.project, sprint) %>
+        </td>
+        <td title="due date"><%= sprint.due_on.strftime('%d %b %Y') %></td>
+        <td>
+          <div class="progress-count">
+            <%= completion_str(sprint) %>
+          </div>
+          <div class="progress"  title="<%= completion_message(sprint) %>">
+            <div class="bar bar-<%= completion_state(sprint) %> " style="width: <%= sprint.progess_count %>%;" ></div>
+          </div>
+        </td>
+        <td  class="count" title="tickets in this sprint"><span class="badge badge-important"><%= sprint.ticket_count %></span></td>
+      </tr>
+    <% end %>
   <% end %>
   <% if sprints.count == 0 %>
   <tr>
