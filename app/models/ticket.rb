@@ -77,7 +77,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def update_last_comment!
-    self.update_column(:last_comment_id, (Comment.where(:ticket_id => self.id).last.id rescue nil))
+    self.update_attribute(:last_comment_id, (Comment.where(:ticket_id => self.id).last.id rescue nil))
   end
 
 end
