@@ -1,5 +1,7 @@
 class Comment < ActiveRecord::Base
   include Markdownable
+  acts_as_taggable
+
   after_create :update_ticket
   after_destroy :revert_ticket
 

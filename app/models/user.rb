@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   acts_as_token_authenticatable
+  acts_as_tagger
 
   has_one :account, :dependent => :destroy
   has_many :projects, :dependent => :destroy #projects we own
