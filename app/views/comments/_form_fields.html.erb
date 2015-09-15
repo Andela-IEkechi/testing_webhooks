@@ -51,6 +51,7 @@
   <%= comment_form.input :assigned_to do %>
     <%= comment_form.select :assignee_id, @ticket.project.memberships.all.map { |s| [s.email, s.user_id] }, :include_blank => '- unassigned -'  %>
   <% end %>
+  <%= comment_form.input :tag_list, :input_html => {:value => @ticket.tag_list.sort.join(',')}%>
 
   <!-- Existing assets -->
   <% if @comment && @comment.assets.any? %>

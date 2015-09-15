@@ -21,6 +21,13 @@ module CommentsHelper
         changeset[attr] = [now]
       end
     end
+
+    #add tags to the change set
+    if comment.tag_list.sort != (previous.tag_list.sort rescue [])
+      changeset[:tags_added] = (comment.tag_list - previous.tag_list rescue comment.tag_list)
+      changeset[:tags_removed] = (previous.tag_list - comment.tag_list rescue [])
+    end
+
     changeset
   end
 

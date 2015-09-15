@@ -27,6 +27,7 @@ class Ticket < ActiveRecord::Base
   scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.scoped_id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
 
   delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
+  delegate :tag_list, :to => :last_comment, :prefix => false, :allow_nil => true
 
   def to_s
     title
