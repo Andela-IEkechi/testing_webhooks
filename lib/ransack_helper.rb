@@ -15,7 +15,8 @@ class RansackHelper
     state:    :status_name_cont,
     status:   :status_name_cont,
     feature:  :feature_title_cont,
-    sprint:   :sprint_goal_cont
+    sprint:   :sprint_goal_cont,
+    tag:      :tag_list_cont
   }.freeze
   TICKET_KEYWORDS = TICKET_KEYWORDS_MAP.keys.map(&:to_s).freeze
 
@@ -79,10 +80,10 @@ class RansackHelper
 
   # for no we only support multiple or'd conditions. later on we will allow
   # brackets for more flexibility.
-  # e.g this turns "assignee:angus AND status:new OR status:open"
-  # into ((assignee like '%angus%') AND (status like '%new%' OR status like '%open%'))
-  # e.g this turns "assignee:jean AND assignee:angus AND status:new OR status:open"
-  # into ((assignee like '%angus%' OR assignee like '%jean%') AND (status like '%new%' OR status like '%open%'))
+  # e.g this turns "assignee:bob AND status:new OR status:open"
+  # into ((assignee like '%bob%') AND (status like '%new%' OR status like '%open%'))
+  # e.g this turns "assignee:jean AND assignee:bob AND status:new OR status:open"
+  # into ((assignee like '%bob%' OR assignee like '%sue%') AND (status like '%new%' OR status like '%open%'))
   def label_search_with_and_or
     return unless @search_term.match(":") && @search_term.match(" or ") && @search_term.match(" and ")
 

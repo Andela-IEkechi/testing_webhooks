@@ -15,7 +15,8 @@ class SortHelper
     state:    'ticket_statuses.name',
     status:   'ticket_statuses.name',
     feature:  'features.title',
-    sprint:   'sprints.goal'
+    sprint:   'sprints.goal',
+    tag:      'tag_list'
   }.freeze
 
   SORT_KEYWORDS = SORT_KEYWORDS_MAP.keys.map(&:to_s).freeze
