@@ -1,12 +1,17 @@
-<%= cache([comment.cache_key, 'show']) do %>
-  <%
-    changeset = change_set(comment)
-  %>
+<%
+  changeset = change_set(comment)
+%>
 
-  <div class="comment-container" id="comment-<%= comment.id %>">
-    <p class="muted"><%= author(comment) %> <em title="<%= comment.updated_at %>"><%= distance_of_time_in_words_to_now comment.updated_at %> ago</em></p>
-    <div class="comment-body"><%= comment.html.html_safe %></div>
+<div class="comment-container" id="comment-<%= comment.id %>">
+  <p class="muted"><%= author(comment) %> <em title="<%= comment.created_at %>"><%= distance_of_time_in_words_to_now comment.created_at %> ago</em>
+    <% if comment.created_at != comment.updated_at %>
+      <small title="<%= comment.updated_at %>">[last updated <%= distance_of_time_in_words_to_now comment.updated_at %> ago]</small>
+    <% end %>
+  </p>
 
+  <div class="comment-body"><%= comment.html.html_safe %></div>
+
+  <%= cache(['comment', 'assets', (comment.assets.order("updated_at DESC").first.updated_at.utc.to_s(:nsec) rescue 'none')]) do %>
     <div class="assets">
     <% comment.assets && comment.assets.each do |asset| %>
       <% if !asset.payload_size.zero? %>
@@ -19,22 +24,24 @@
       <% end %>
     <% end %>
     </div>
+  <% end %>
 
-    <div class="comment-statusbar">
-      <% if can?(:manage, comment) %>
-      <div class="pull-right comment-actions">
-        <% unless comment.first? %>
-            <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
-              <span><i class='icon-edit'></i>edit</span>
-            <% end %>
-            &nbsp;
-            <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :remote => true, :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
-              <span><i class='icon-trash'></i>remove</span>
-            <% end %>
-        <% end %>
-      </div>
+  <div class="comment-statusbar">
+    <% if can?(:manage, comment) %>
+    <div class="pull-right comment-actions">
+      <% unless comment.first? %>
+          <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
+            <span><i class='icon-edit'></i>edit</span>
+          <% end %>
+          &nbsp;
+          <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :remote => true, :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
+            <span><i class='icon-trash'></i>remove</span>
+          <% end %>
       <% end %>
+    </div>
+    <% end %>
 
+    <%= cache([comment.cache_key, 'status']) do %>
       <ul class="inline">
         <% if changeset[:status_id] %>
           <li>
@@ -74,5 +81,5 @@
         <% end %>
       </ul>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
