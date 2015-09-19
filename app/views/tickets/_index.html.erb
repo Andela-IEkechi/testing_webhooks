@@ -12,16 +12,11 @@
   <table class="table table-bordered table-striped" id="ticket-list">
     <caption>
       <div class="pull-right">
-        <% if @search && @show_search %>
-          <%= search_form_for @search,
-                url:     project_tickets_path(@project),
-                html:    {:method => :get, :class => 'form-search'},
-                remote:  true,
-                builder: SimpleForm::FormBuilder do |f| %>
-
+        <% if @show_search %>
+          <%= simple_form_for('search', :url => project_tickets_path(@project), :html => {:method => :get, :class => 'form-search'}, :remote => true) do |f| %>
             <% # this field can be any valid ransack term as it gets  %>
             <% # overwritten in the backend based on seach type       %>
-            <%= f.input_field :title_cont, label: false, placeholder: 'search', value: @term %>
+            <%= f.input_field :query, :label => false, :placeholder => 'search', value: @term %>
 
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
             <%= f.hidden_field :feature_id, :value => feature_id %>
@@ -80,7 +75,7 @@
         </tr>
       <% end %>
     <% end if @tickets %>
-    <% if @tickets && @tickets.count == 0 %>
+    <% if @tickets && @tickets_count == 0 %>
       <tr>
         <td colspan="7">There are no tickets</td>
       </tr>
@@ -122,10 +117,5 @@
           :action => 'index',
         }.merge(ticket_url_params),
         :remote => true if @tickets %>
-    <%= ticket_load_link 'show all', {:paginate => false} %>
   <% end %>
-  <% if @tickets && !@tickets.respond_to?(:total_pages) && (@tickets.count > (current_user.preferences.page_size.to_i)) %>
-    <%= ticket_load_link 'show paged' %>
-  <% end %>
-
 </div>

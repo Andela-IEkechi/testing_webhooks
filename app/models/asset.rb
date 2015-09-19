@@ -19,6 +19,15 @@ class Asset < ActiveRecord::Base
   scope :general, lambda{{:conditions => {:comment_id => nil}}}
   scope :unassigned, lambda{{:conditions => {:comment_id => nil, :sprint_id => nil, :feature_id => nil}}}
 
+  scope :search, lambda{ |s|
+    {
+      :conditions => [
+        "LOWER(assets.payload) LIKE :search",
+        {:search => "%#{s.to_s.downcase}%"}
+      ]
+    }
+  }
+
   attr_accessible :project_id, :sprint_id, :feature_id, :comment_id
 
   before_save :verify_payload

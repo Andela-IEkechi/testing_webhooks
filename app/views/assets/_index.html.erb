@@ -84,10 +84,7 @@
           :controller => 'assets',
           :action => 'index',
         }.merge(asset_url_params),
+        :per_page => current_user.preferences.page_size.to_i,
         :remote => true if @assets %>
-    <%= asset_load_link 'show all', {:paginate => false} %>
-  <% end %>
-  <% if @assets && !@assets.respond_to?(:total_pages) && (@assets.count > (current_user.preferences.page_size.to_i)) %>
-    <%= asset_load_link 'show paged' %>
   <% end %>
 </div>

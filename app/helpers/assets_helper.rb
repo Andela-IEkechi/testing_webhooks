@@ -6,7 +6,7 @@ module AssetsHelper
       :project_id => @project && @project.id,
       :sprint_id => @sprint && @sprint.to_param,
       :feature_id => @feature && @feature.to_param,
-      :q => {:payload_cont => @term}
+      :query => {:payload_cont => @term}
     }.merge(options)
   end
 

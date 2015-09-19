@@ -36,10 +36,6 @@ gem "fog"
 #image manimpulation
 gem "rmagick"
 
-#monitoring
-
-#searching
-gem "ransack"
 
 #production runs on this server
 gem "unicorn"

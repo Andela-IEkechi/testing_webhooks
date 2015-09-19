@@ -1,7 +1,6 @@
 class TicketsController < ApplicationController
   include TicketsHelper
 
-  before_filter :load_search_resources, :only => :index
   before_filter :clear_assets_attributes, :only => [:create, :update]
 
   load_and_authorize_resource :project
@@ -14,26 +13,17 @@ class TicketsController < ApplicationController
   include AccountStatus
 
   def index
-    #get the search warmed up
-    @search = scoped_tickets.search(RansackHelper.new(params[:q] && params[:q][:title_cont]).predicates)
+    @tickets = filtered_tickets.includes(:last_comment => [:sprint, :feature, :status]).page(params[:page]).per(current_user.preferences.page_size.to_i)
 
-    #figure out how to order the results
-    sort_order = SortHelper.new(params[:q] && params[:q][:title_cont], current_user.preferences.ticket_order).sort_order
-    sort_order = 'tickets.id' if sort_order.blank?
-
-    results = @search.result.includes(:sprint, :feature, :status, :assignee, :project).order(sort_order)
-
-    @tickets = Kaminari::paginate_array(results).page(params[:page]).per(current_user.preferences.page_size.to_i) unless "false" == params[:paginate]
-    @tickets ||= results
-
-    @term = (params[:q] && params[:q][:title_cont] || '')
+    @term = (params[:search][:query] rescue '')
 
     @title = params[:title] if params[:title]
     @show_search = true unless params[:show_search] == 'false'
 
-    @tickets_count = @tickets.count
-    @tickets_cost = @tickets.map {|t| t.cost}.reduce(0, :+)
-    @assignees_count = @tickets.collect(&:assignee).uniq.compact.count
+    last_comments = Comment.select([:id, :cost, :assignee_id]).where(:id => @tickets.select(:last_comment_id).collect(&:last_comment_id))
+    @tickets_count = last_comments.count
+    @tickets_cost = last_comments.sum(:cost)
+    @assignees_count = last_comments.collect(&:assignee_id).uniq.compact.count
 
     respond_to do |format|
       format.js do
@@ -127,15 +117,6 @@ class TicketsController < ApplicationController
     project_path(@ticket.project)
   end
 
-  def load_search_resources
-    if params[:q]
-      [:project_id, :feature_id, :sprint_id, :assignee_id].each do |val|
-        params[val] ||= params[:q][val] if params[:q][val] && !params[:q][val].empty?
-        params[:q].delete(val)
-      end
-    end
-  end
-
   def load_ticket_parents
     #if we dont pass the feature_id/sprint_id in on the url, we grab the ones from the ticket, if any
     if @ticket
@@ -153,5 +134,104 @@ class TicketsController < ApplicationController
 
   def clear_assets_attributes
     params[:ticket][:comments_attributes][:'0'].delete(:assets_attributes) if (params[:ticket][:comments_attributes][:'0'] rescue false)
+  end
+
+  def process_search_params(term)
+    #split it on spaces
+    result = {
+      :ticket => [],
+      :feature => [],
+      :sprint => [],
+      :status => [],
+      :cost => [],
+      :assigned => [],
+      :tag => []
+    }
+    return result unless term.present?
+
+    parts = term.downcase.split(' ')
+    parts.each do |part|
+      #see if we have a known key like foo:bar
+      k,v = part.split(':')
+      if k.present? && v.present?
+        if ('feature' =~ /^#{k}/).present?
+          result[:feature] << v
+        elsif ('sprint' =~ /^#{k}/).present?
+          result[:sprint] << v
+        elsif ('status' =~ /^#{k}/).present?
+          result[:status] << v
+        elsif ('cost' =~ /^#{k}/).present?
+          result[:cost] << v
+        elsif ('assign' =~ /^#{k}/).present?
+          result[:assigned] << v
+        elsif ('tag' =~ /^#{k}/).present?
+          result[:tag] << v
+        end
+      elsif k.present?
+        result[:ticket] << k
+      end
+    end
+    return result
+  end
+
+  def filtered_tickets
+    search_params = process_search_params((params[:search][:query] rescue ''))
+    #filter tickets
+    tickets = @project.tickets
+    if search_params[:ticket].any?
+      #get all the tickets we are interested in
+      search_params[:ticket].each { |s|
+        tickets = tickets.search(s)
+      }
+    end
+    #filter tickets by feature
+    if search_params[:feature].any? && @feature.blank? #no point in double filtering
+      #get all the features we are limited to
+      features = @project.features
+      search_params[:feature].each { |s|
+        features = features.search(s)
+      }
+    end
+    #filter tickets by sprint
+    if search_params[:sprint].any? && @sprint.blank? #no point in double filtering
+      #get all the sprints we are limited to
+      sprints = @project.sprints
+      search_params[:sprint].each { |s|
+        features = features.search(s)
+      }
+    end
+    #filter tickets by status
+    if search_params[:status].any?
+      #get all the statuses we are limited to
+      statuses = @project.ticket_statuses
+      search_params[:status].each { |s|
+        statuses = statuses.search(s)
+      }
+    end
+    #filter tickets by comments
+    comments = @project.comments.where(:id => tickets.select(:last_comment_id).collect(&:last_comment_id)) #limit them to the tickets that al least match
+    if search_params[:cost].any? || search_params[:tag].any?
+      #get all the assignees we are limited to
+      combined = [search_params[:cost]] + [search_params[:tag]]
+      combined.flatten!.compact!
+      combined.each { |s|
+        comments = comments.search(s)
+      }
+    end
+    #filter tickets by assignee
+    if search_params[:assigned].any?
+      assignee_ids = comments.collect(&:assignee_id)
+      #get all the assignees we are limited to
+      assignees = User.where(:id => assignee_ids)
+      search_params[:assigned].each { |s|
+        assignees = assignees.search(s)
+      }
+    end
+    #now we limit the comments to those who have the required values set
+    comments = comments.where(:feature_id => features.collect(&:id)) if features.present?
+    comments = comments.where(:sprint_id => sprints.collect(&:id)) if sprints.present?
+    comments = comments.where(:status_id => statuses.collect(&:id)) if statuses.present?
+    comments = comments.where(:assignee_id => assignees.collect(&:id)) if assignees.present?
+    @project.tickets.where(:id => comments.collect(&:ticket_id))
   end
 end

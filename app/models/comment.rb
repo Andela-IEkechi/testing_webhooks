@@ -29,6 +29,17 @@ class Comment < ActiveRecord::Base
   validates :user_id, :presence => true, :unless => lambda{|record| record.api_key_name }
   validates :status_id, :presence => true
 
+  scope :search, lambda{ |s|
+    {
+      :conditions => [
+        "comments.cost = #{s.to_i} OR
+        LOWER(tags.name) LIKE :search",
+        {:search => "%#{s.to_s.downcase}%"}
+      ],
+      :joins => :tags
+    }
+  }
+
   def to_s
     body
   end

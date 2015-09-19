@@ -18,7 +18,7 @@ module TicketsHelper
       :sprint_id => @sprint && @sprint.to_param,
       :feature_id => @feature && @feature.to_param,
       :overview_id => @overview && @overview.id,
-      :q => {:title_cont => @term || (@overview && @overview.filter)}
+      :query => ( @term || (@overview && @overview.filter))
     }.merge(options)
   end
 
