@@ -24,9 +24,19 @@ class Ticket < ActiveRecord::Base
   scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment, :include => :status}}
   scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment, :include => :status}}
   scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment, :include => :status}}
-  scope :search_by_partial_id, lambda{|s| {:conditions => ["CAST(tickets.scoped_id as text) LIKE :search", {:search => "%#{s.to_s.downcase}%"} ]}}
+
+  scope :search, lambda{ |s|
+    {
+      :conditions => [
+        "CAST(tickets.scoped_id AS TEXT) LIKE :search OR
+        LOWER(tickets.title) LIKE :search",
+        {:search => "%#{s.to_s.downcase}%"}
+      ]
+    }
+  }
 
   delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
+  delegate :tag_list, :to => :last_comment, :prefix => false, :allow_nil => true
 
   def to_s
     title

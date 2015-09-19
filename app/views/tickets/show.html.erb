@@ -35,8 +35,12 @@
     <% if @ticket.assets.any? %>
     <li><small>attachments: <b><%= @ticket.assets.count %> files</b></small></li>
     <% end %>
+    <% if @ticket.tag_list.any? %>
+    <li><small>tags: <b><%= @ticket.tag_list.sort.join(', ') %></b></small></li>
+    <% end %>
   </ul>
 </div>
+
 
 <%= render :partial => '/comments/comment', :collection => [@ticket.comments.first] %>
 

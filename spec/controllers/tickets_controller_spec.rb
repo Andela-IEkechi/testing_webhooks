@@ -259,13 +259,13 @@ describe TicketsController, :type => :controller do
     end
 
     it "finds only tickets that match the search" do
-      get :index, :project_id => @project.to_param, :q => {:title_cont => @ticket.title}
+      get :index, :project_id => @project.to_param, :query => @ticket.title
       expect(assigns(:tickets).size).to eq(1)
       expect(assigns(:tickets).first.title).to eq(@ticket.title)
     end
 
     it "orders tickets by id" do
-      get :index, :project_id => @project.to_param, :q => {:title_cont => @user.email}
+      get :index, :project_id => @project.to_param, :query => @user.email
       expect(assigns(:tickets).size).to eq(2)
       result_ids = assigns(:tickets).collect(&:scoped_id)
       expect(result_ids).to eq(result_ids.sort)

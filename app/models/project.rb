@@ -8,11 +8,13 @@ class Project < ActiveRecord::Base
   belongs_to :user
   has_many :features, :dependent => :destroy, :order => :scoped_id
   has_many :tickets, :dependent => :destroy, :include => :comments
+  has_many :comments, :through => :tickets
   has_many :sprints, :dependent => :destroy, :order => :scoped_id
   has_many :assets, :dependent => :destroy, :order => :scoped_id
   has_many :ticket_statuses, :dependent => :destroy, :order => 'ticket_statuses.sort_index asc'
 
   has_many :memberships, :dependent => :destroy, :include => :user, :order => 'users.email asc'
+  has_many :users, :through => :memberships
   has_many :api_keys, :dependent => :destroy
 
   mount_uploader  :logo, LogoUploader

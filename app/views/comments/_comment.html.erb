@@ -79,6 +79,12 @@
             cost: <b><%= cost_long(comment.cost) %></b>
           </li>
         <% end %>
+        <% if changeset[:tags_removed] && changeset[:tags_removed].any? %>
+          removed tags: <b><%= changeset[:tags_removed].join(', ') %></b>
+        <% end %>
+        <% if changeset[:tags_added] && changeset[:tags_added].any? %>
+          new tags: <b><%= changeset[:tags_added].join(', ') %></b>
+        <% end %>
       </ul>
     </div>
   <% end %>
