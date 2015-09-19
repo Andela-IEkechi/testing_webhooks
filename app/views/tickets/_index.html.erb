@@ -48,8 +48,10 @@
             </div>
           </td>
           <td>
-            <div class="overflow" title="<%= ticket.tag_list %>">
-              <%= ticket.tag_list %>
+            <div class="overflow taglist" title="<%= ticket.tag_list %>">
+              <% ticket.tag_list.each do |tag| %>
+                 <%= content_tag(:span, tag, :class => "badge badge-info") %>
+              <% end %>
             </div>
           </td>
           <td>
