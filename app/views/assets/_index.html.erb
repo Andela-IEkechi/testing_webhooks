@@ -17,9 +17,7 @@
                 remote:  true,
                 builder: SimpleForm::FormBuilder do |f| %>
 
-            <% # this field can be any valid ransack term as it gets  %>
-            <% # overwritten in the backend based on seach type       %>
-            <%= f.input_field :payload_cont, label: false, placeholder: 'search', value: @term %>
+            <%= f.input_field :query, :label => false, :placeholder => 'search', value: @term %>
 
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
             <%= f.hidden_field :project_id, :value => project_id %>
