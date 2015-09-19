@@ -146,7 +146,7 @@ class TicketsController < ApplicationController
       #see if we have a known key like foo:bar
       k,v = part.split(':')
       if k.present? && v.present?
-        elsif ('sprint' =~ /^#{k}/).present?
+        if ('sprint' =~ /^#{k}/).present?
           result[:sprint] << v
         elsif ('status' =~ /^#{k}/).present?
           result[:status] << v
