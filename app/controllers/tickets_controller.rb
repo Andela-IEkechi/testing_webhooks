@@ -177,7 +177,7 @@ class TicketsController < ApplicationController
   def filtered_tickets
     search_params = process_search_params((params[:search][:query] rescue ''))
     #filter tickets
-    tickets = @project.tickets
+    tickets = scoped_tickets
     if search_params[:ticket].any?
       #get all the tickets we are interested in
       search_params[:ticket].each { |s|
