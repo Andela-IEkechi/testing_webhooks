@@ -8,8 +8,6 @@ module TabHeadingHelper
       @ticket.id ? "##{@ticket.scoped_id} - #{@ticket}" : "New ticket"
     elsif @sprint
       @sprint.id ? "Sprint - #{@sprint}" : "New sprint"
-    elsif @feature
-      @feature.id ? "Feature - #{@feature}" : "New feature"
     elsif @project
       @project.id ? "Project - #{@project}" : "New project"
     else

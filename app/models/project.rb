@@ -6,7 +6,6 @@ class Project < ActiveRecord::Base
   after_create :default_statuses
 
   belongs_to :user
-  has_many :features, :dependent => :destroy, :order => :scoped_id
   has_many :tickets, :dependent => :destroy, :include => :comments
   has_many :comments, :through => :tickets
   has_many :sprints, :dependent => :destroy, :order => :scoped_id

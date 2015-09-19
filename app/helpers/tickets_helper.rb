@@ -16,7 +16,6 @@ module TicketsHelper
       :title => (@overview && options[:project_id] && Project.find(options[:project_id]).title) || 'Tickets',
       :project_id => @project && @project.id,
       :sprint_id => @sprint && @sprint.to_param,
-      :feature_id => @feature && @feature.to_param,
       :overview_id => @overview && @overview.id,
       :query => ( @term || (@overview && @overview.filter))
     }.merge(options)

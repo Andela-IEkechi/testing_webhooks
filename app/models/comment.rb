@@ -12,14 +12,14 @@ class Comment < ActiveRecord::Base
   has_many   :assets, :dependent => :destroy
 
   belongs_to :sprint
-  belongs_to :feature
+  belongs_to :feature #TODO - remove after deployment of #954
   belongs_to :assignee, :class_name => 'User' # the user the ticket is assigned to
   belongs_to :status, :class_name => 'TicketStatus'
 
   accepts_nested_attributes_for :assets
 
   attr_accessible :body, :cost, :rendered_body, :commenter, :git_commit_uuid, :created_at
-  attr_accessible :ticket_id, :user_id, :status_id, :feature_id, :sprint_id, :assignee_id, :assets_attributes, :api_key_name, :asset_ids
+  attr_accessible :ticket_id, :user_id, :status_id, :sprint_id, :assignee_id, :assets_attributes, :api_key_name, :asset_ids
   attr_accessible :tag_list
   attr_accessor :foo
 
@@ -45,7 +45,7 @@ class Comment < ActiveRecord::Base
   end
 
   def parent
-    sprint || feature || project
+    sprint || project
   end
 
   def previous

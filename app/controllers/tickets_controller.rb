@@ -4,7 +4,6 @@ class TicketsController < ApplicationController
   before_filter :clear_assets_attributes, :only => [:create, :update]
 
   load_and_authorize_resource :project
-  load_and_authorize_resource :feature, :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :sprint,  :through => :project, :find_by => :scoped_id
   load_and_authorize_resource :ticket,  :through => :project, :find_by => :scoped_id, :except => :index
   load_and_authorize_resource :overview
@@ -13,7 +12,7 @@ class TicketsController < ApplicationController
   include AccountStatus
 
   def index
-    @tickets = filtered_tickets.includes(:last_comment => [:sprint, :feature, :status]).page(params[:page]).per(current_user.preferences.page_size.to_i)
+    @tickets = filtered_tickets.includes(:last_comment => [:sprint, :status]).page(params[:page]).per(current_user.preferences.page_size.to_i)
 
     @term = (params[:search][:query] rescue '')
 
@@ -39,17 +38,15 @@ class TicketsController < ApplicationController
     #create a new comment, but dont tell the ticket about it, or it will render
     @comment = Comment.new(:ticket_id   => @ticket.to_param,
                            :status_id   => @ticket.status.to_param,
-                           :feature_id  => @ticket.feature_id, #use the real id here!
                            :sprint_id   => @ticket.sprint_id, #use the real id here!
                            :assignee_id => @ticket.assignee.to_param,
                            :cost        => @ticket.cost)
   end
 
   def new
-    #must have a project to make a new ticket, optionally has a feature/sprint also
+    #must have a project to make a new ticket, optionally has a sprint also
     @ticket.project = @project
     @comment = @ticket.comments.build()
-    @comment.feature = @feature
     @comment.sprint  = @sprint
   end
 
@@ -65,7 +62,7 @@ class TicketsController < ApplicationController
       if params[:create_another]
         flash.keep[:notice] = "Ticket was added. ##{@ticket.scoped_id} #{@ticket.title}"
         @ticket.reload #refresh the assoc to last_comment
-        redirect_to new_project_ticket_path(@ticket.project, :feature_id => @ticket.feature, :sprint_id => @ticket.sprint)
+        redirect_to new_project_ticket_path(@ticket.project, :sprint_id => @ticket.sprint)
       else
         flash.keep[:notice] = "Ticket was added"
         @ticket.reload # refresh the ID from the DB
@@ -74,7 +71,6 @@ class TicketsController < ApplicationController
     else
       flash[:alert] = "Ticket could not be created"
       @sprint = @ticket.sprint
-      @feature = @ticket.feature
       render 'new'
     end
   end
@@ -113,22 +109,19 @@ class TicketsController < ApplicationController
 
   def parent_path
     return project_sprint_path(@ticket.project, @ticket.sprint) if @ticket.sprint
-    return project_feature_path(@ticket.project, @ticket.feature) if @ticket.feature
     project_path(@ticket.project)
   end
 
   def load_ticket_parents
-    #if we dont pass the feature_id/sprint_id in on the url, we grab the ones from the ticket, if any
+    #if we dont pass the sprint_id in on the url, we grab the ones from the ticket, if any
     if @ticket
       @sprint  ||= @ticket.sprint
-      @feature ||= @ticket.feature
     end
   end
 
   #TODO: refactor this method
   def scoped_tickets
     return @sprint.assigned_tickets if @sprint
-    return @feature.assigned_tickets if @feature
     return @project.tickets if @project
   end
 
@@ -140,7 +133,6 @@ class TicketsController < ApplicationController
     #split it on spaces
     result = {
       :ticket => [],
-      :feature => [],
       :sprint => [],
       :status => [],
       :cost => [],
@@ -154,8 +146,6 @@ class TicketsController < ApplicationController
       #see if we have a known key like foo:bar
       k,v = part.split(':')
       if k.present? && v.present?
-        if ('feature' =~ /^#{k}/).present?
-          result[:feature] << v
         elsif ('sprint' =~ /^#{k}/).present?
           result[:sprint] << v
         elsif ('status' =~ /^#{k}/).present?
@@ -184,20 +174,12 @@ class TicketsController < ApplicationController
         tickets = tickets.search(s)
       }
     end
-    #filter tickets by feature
-    if search_params[:feature].any? && @feature.blank? #no point in double filtering
-      #get all the features we are limited to
-      features = @project.features
-      search_params[:feature].each { |s|
-        features = features.search(s)
-      }
-    end
     #filter tickets by sprint
     if search_params[:sprint].any? && @sprint.blank? #no point in double filtering
       #get all the sprints we are limited to
       sprints = @project.sprints
       search_params[:sprint].each { |s|
-        features = features.search(s)
+        sprints = sprints.search(s)
       }
     end
     #filter tickets by status
@@ -228,7 +210,6 @@ class TicketsController < ApplicationController
       }
     end
     #now we limit the comments to those who have the required values set
-    comments = comments.where(:feature_id => features.collect(&:id)) if features.present?
     comments = comments.where(:sprint_id => sprints.collect(&:id)) if sprints.present?
     comments = comments.where(:status_id => statuses.collect(&:id)) if statuses.present?
     comments = comments.where(:assignee_id => assignees.collect(&:id)) if assignees.present?

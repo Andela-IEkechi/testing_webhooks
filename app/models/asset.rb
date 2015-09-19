@@ -15,7 +15,7 @@ class Asset < ActiveRecord::Base
   scope :for_sprint, lambda{|sprint_id| {:conditions => {:sprint_id => sprint_id}}}
   scope :for_comment, lambda{|comment_id| {:conditions => {:comment_id => comment_id}}}
   scope :general, lambda{{:conditions => {:comment_id => nil}}}
-  scope :unassigned, lambda{{:conditions => {:comment_id => nil, :sprint_id => nil, :feature_id => nil}}}
+  scope :unassigned, lambda{{:conditions => {:comment_id => nil, :sprint_id => nil}}}
 
   scope :search, lambda{ |s|
     {

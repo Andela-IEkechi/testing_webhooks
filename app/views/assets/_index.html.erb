@@ -1,10 +1,8 @@
 <%
   project_id ||= @project && @project.id
   sprint_id ||= @sprint && @sprint.to_param
-  feature_id ||= @feature && @feature.to_param
 
   parent = "sprint-#{sprint_id}" if sprint_id
-  parent ||= "feature-#{feature_id}" if feature_id
   parent ||= "project-#{project_id}" if project_id
 %>
 
@@ -24,7 +22,6 @@
             <%= f.input_field :payload_cont, label: false, placeholder: 'search', value: @term %>
 
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
-            <%= f.hidden_field :feature_id, :value => feature_id %>
             <%= f.hidden_field :project_id, :value => project_id %>
             <%= f.submit 'Search' %>
           <% end %>
@@ -36,7 +33,6 @@
       <th class="width-5">#</th>
       <th>Filename</th>
       <th class="width-15">Sprint</th>
-      <th class="width-15">Feature</th>
       <th class="width-10">Size</th>
       <th class="width-15">Uploaded</th>
       <th class="width-10">Manage</th>
@@ -53,7 +49,6 @@
             <% end %>
           </td>
           <td><%= link_to(asset.sprint, project_sprint_path(@project, asset.sprint)) if asset.sprint %></td>
-          <td><%= link_to(asset.feature, project_feature_path(@project, asset.feature)) if asset.feature %></td>
           <td><%= number_to_human_size(asset.payload_size) rescue 'unknown' %></td>
           <td ><%= asset.created_at.to_s(:short) %></td>
           <td>

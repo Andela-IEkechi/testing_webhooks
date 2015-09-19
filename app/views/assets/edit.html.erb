@@ -15,10 +15,6 @@
   </dl>
 
   <% if can? :manage, @project %>
-    <%= f.input :feature do %>
-      <%= f.select :feature_id, @asset.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
-    <% end %>
-
     <%= f.input :sprint do %>
       <%= f.select :sprint_id, @asset.project.sprints.all.select(&:open?).map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
     <% end %>

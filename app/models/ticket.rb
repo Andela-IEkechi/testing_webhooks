@@ -7,7 +7,6 @@ class Ticket < ActiveRecord::Base
 
   belongs_to :last_comment, :class_name => 'Comment'
   has_one :assignee, :through => :last_comment
-  has_one :feature,  :through => :last_comment
   has_one :sprint,   :through => :last_comment
   has_one :status,   :through => :last_comment
 
@@ -23,7 +22,6 @@ class Ticket < ActiveRecord::Base
 
   scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment, :include => :status}}
   scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment, :include => :status}}
-  scope :for_feature_id, lambda{|feature_id| { :conditions => ['comments.feature_id = ?', feature_id], :joins => :last_comment, :include => :status}}
 
   scope :search, lambda{ |s|
     {
@@ -64,16 +62,12 @@ class Ticket < ActiveRecord::Base
     (last_comment.sprint.id rescue nil)
   end
 
-  def feature_id
-    (last_comment.feature.id rescue nil)
-  end
-
   def assignees
     @assignees ||= comments.collect(&:assignee).compact.uniq
   end
 
   def filter_summary
-    [id, title, feature && feature.title, sprint && sprint.goal, status].join("").downcase
+    [id, title, sprint && sprint.goal, status].join("").downcase
   end
 
   def open?

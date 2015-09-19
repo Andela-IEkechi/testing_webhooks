@@ -12,7 +12,7 @@ module CommentsHelper
     changeset = {}
     previous = comment.previous
     #get what changed
-    [:status_id, :feature_id, :sprint_id, :assignee_id, :cost, :assets].each do |attr|
+    [:status_id, :sprint_id, :assignee_id, :cost, :assets].each do |attr|
       now = comment.send(attr)
       if previous
         was = previous.send(attr)
@@ -32,9 +32,7 @@ module CommentsHelper
   end
 
   def cancel_link
-    if @feature
-      link_to 'cancel', project_feature_path(@ticket.project, @feature), :class => 'btn', :title => 'back to the feature'
-    elsif @sprint
+    if @sprint
       link_to 'cancel', project_sprint_path(@ticket.project, @sprint), :class => 'btn', :title => 'back to the sprint'
     elsif !@ticket.new_record?
       link_to 'cancel', project_ticket_path(@ticket.project, @ticket), :class => 'btn', :title => 'back to the ticket'

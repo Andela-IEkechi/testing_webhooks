@@ -10,25 +10,21 @@
       <%= action_add(current_user.overviews.new()) if !(@project || @overview) %>
 
       <% if @project %>
-        <%= action_back_to(@project) if (@feature || @sprint || @ticket) %>
-        <%= action_back_to(@feature) if @ticket %>
+        <%= action_back_to(@project) if (@sprint || @ticket) %>
         <%= action_back_to(@sprint) if @ticket %>
 
-        <%= action_edit(@project) if @project && !(@feature || @sprint || @ticket) %>
-        <%= action_edit(@feature) if @feature && !@ticket %>
+        <%= action_edit(@project) if @project && !(@sprint || @ticket) %>
         <%= action_edit(@sprint)  if @sprint  && !@ticket %>
         <%= action_edit(@ticket)  if @ticket %>
 
-        <%= action_remove(@feature) if @feature && !@ticket %>
         <%= action_remove(@sprint)  if @sprint && !@ticket%>
         <%= action_remove(@asset)   if @asset %>
         <%= action_remove(@ticket)  if @ticket %>
 
         <% if !@project.new_record? && current_membership  %>
-          <%= action_add(@project.features.new()) if current_membership.admin? && @project && !(@sprint || @ticket|| (@feature && @feature.new_record?)) %>
-          <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@feature || @ticket || (@sprint && @sprint.new_record?)) %>
-          <%= action_add(@project.assets.new())  if current_membership.admin? && @project && !((@feature && @feature.new_record?) || (@ticket && @ticket.new_record?) || (@sprint && @sprint.new_record?)) %>
-          <%= action_add(@project.tickets.new())  if (current_membership.admin? || current_membership.regular?) && !(@ticket && @ticket.new_record?) && !(@sprint && @sprint.new_record?) && !(@feature && @feature.new_record?) %>
+          <%= action_add(@project.sprints.new())  if current_membership.admin? && @project && !(@ticket || (@sprint && @sprint.new_record?)) %>
+          <%= action_add(@project.assets.new())  if current_membership.admin? && @project && !((@ticket && @ticket.new_record?) || (@sprint && @sprint.new_record?)) %>
+          <%= action_add(@project.tickets.new())  if (current_membership.admin? || current_membership.regular?) && !(@ticket && @ticket.new_record?) && !(@sprint && @sprint.new_record?) %>
         <% end %>
       <% end %>
 
@@ -56,7 +52,7 @@
 <% end %>
 
 <div class="clearfix assets">
-  <% [@ticket, @sprint, @feature, @project].reject{|s| s.nil? || !s.assets.any?}.each do |scope| %>
+  <% [@ticket, @sprint, @project].reject{|s| s.nil? || !s.assets.any?}.each do |scope| %>
     <%
       assets = scope.assets
       assets = assets.unassigned if 'Project' == scope.class.name

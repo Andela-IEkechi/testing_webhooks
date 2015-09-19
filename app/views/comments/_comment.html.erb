@@ -48,11 +48,6 @@
             state: <b><%= comment.status %></b>
           </li>
         <% end %>
-        <% if changeset[:feature_id] %>
-          <li>
-            feature: <b><%= comment.feature || 'none' %></b>
-          </li>
-        <% end %>
         <% if changeset[:sprint_id] %>
           <li>
             sprint: <b><%= comment.sprint || 'none' %></b>

@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
 
   include AccountStatus
 
-  before_filter :set_feature_and_sprint, :only => [:create, :update]
+  before_filter :set_sprint, :only => [:create, :update]
   before_filter :process_multiple_assets, :only => [:create, :update]
 
   def new
@@ -81,12 +81,11 @@ class CommentsController < ApplicationController
     end
   end
 
-  #used to set the current sprint and feature of a ticket if a regular user comments on it.
-  #regular users are not allowed to change the sprint/feature assignment, so the fields are not passed back,
+  #used to set the current sprint of a ticket if a regular user comments on it.
+  #regular users are not allowed to change the sprint assignment, so the fields are not passed back,
   #causing it to unintentionally un-assigned if not for this.
-  def set_feature_and_sprint
+  def set_sprint
     if cannot? :manage, @project
-      @comment.feature = @ticket.feature
       @comment.sprint = @ticket.sprint
     end
   end

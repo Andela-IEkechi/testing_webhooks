@@ -13,8 +13,6 @@ module ActionsHelper
     link_path = case target.class.name
     when 'Project'
       project_path(target)
-    when 'Feature'
-      project_feature_path(target.project, target)
     when 'Sprint'
       project_sprint_path(target.project, target)
     when 'Asset'
@@ -42,8 +40,6 @@ module ActionsHelper
     link_path = case target.class.name
     when 'Project'
       edit_project_path(target)
-    when 'Feature'
-      edit_project_feature_path(target.project, target)
     when 'Sprint'
       edit_project_sprint_path(target.project, target)
     when 'Asset'
@@ -75,8 +71,6 @@ module ActionsHelper
     link_path = case target.class.name
     when 'Project'
       project_path(target)
-    when 'Feature'
-      project_feature_path(target.project, target)
     when 'Sprint'
       project_sprint_path(target.project, target)
     when 'Asset'
@@ -108,14 +102,12 @@ module ActionsHelper
     link_path = case target.class.name
     when 'Project'
       new_project_path()
-    when 'Feature'
-      new_project_feature_path(target.project)
     when 'Sprint'
       new_project_sprint_path(target.project)
     when 'Asset'
       new_project_asset_path(target.project)
     when 'Ticket'
-      new_project_ticket_path(target.project, :sprint_id => (@sprint rescue nil), :feature_id => (@feature rescue nil))
+      new_project_ticket_path(target.project, :sprint_id => (@sprint rescue nil))
     when 'Overview'
       new_user_overview_path(target.user)
     else '#'
