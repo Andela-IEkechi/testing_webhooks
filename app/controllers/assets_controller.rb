@@ -8,7 +8,7 @@ class AssetsController < ApplicationController
 
   def index
     #get the search warmed up
-    @assets = scoped_assets.search(params[:query]).includes([:sprint, :feature]).page(params[:page]).per(current_user.preferences.page_size.to_i)
+    @assets = scoped_assets.search(params[:query]).includes([:sprint]).page(params[:page]).per(current_user.preferences.page_size.to_i)
 
     @term = (params[:search][:query] rescue '')
     @show_search = true
@@ -90,7 +90,6 @@ class AssetsController < ApplicationController
   #TODO: refactor this method
   def scoped_assets
     return @sprint.assets.general if @sprint
-    return @feature.assets.general if @feature
     return @project.assets.general if @project
   end
 

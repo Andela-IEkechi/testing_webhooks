@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150919191902) do
+ActiveRecord::Schema.define(:version => 20150919204843) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -40,7 +40,6 @@ ActiveRecord::Schema.define(:version => 20150919191902) do
     t.datetime "updated_at",                  :null => false
     t.integer  "project_id",                  :null => false
     t.integer  "sprint_id"
-    t.integer  "feature_id"
     t.integer  "scoped_id",    :default => 0
     t.integer  "payload_size", :default => 0
   end
