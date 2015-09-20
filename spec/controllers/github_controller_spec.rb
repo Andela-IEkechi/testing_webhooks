@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController, :type => :controller do
+describe GithubController, :type => :controller, :quarantine => true do
   let(:project) {create(:project)}
   let(:user) {create(:user)}
   let(:ticket) {create(:ticket, :project => project)}

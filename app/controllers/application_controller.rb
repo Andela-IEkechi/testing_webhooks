@@ -73,7 +73,6 @@ class ApplicationController < ActionController::Base
       :tag => []
     }
     return result unless @query.present?
-
     parts = @query.downcase.split(' ')
     parts.each do |part|
       #see if we have a known key like foo:bar

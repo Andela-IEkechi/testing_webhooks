@@ -232,7 +232,7 @@ describe TicketsController, :type => :controller do
     end
 
     it "orders tickets by id" do
-      get :index, :project_id => @project.to_param, :query => @user.email
+      get :index, :project_id => @project.to_param, :query => "assign:#{@user.email}"
       expect(assigns(:tickets).size).to eq(2)
       result_ids = assigns(:tickets).collect(&:scoped_id)
       expect(result_ids).to eq(result_ids.sort)

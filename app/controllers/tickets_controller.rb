@@ -12,7 +12,12 @@ class TicketsController < ApplicationController
   include AccountStatus
 
   def index
-    @tickets = filtered_tickets.includes(:last_comment => [:sprint, :status]).page(params[:page]).per(current_user.preferences.page_size.to_i)
+    @tickets = filtered_tickets.includes(:last_comment => [:sprint, :status])
+    #sort correctly
+    @tickets = @tickets.reorder("tickets.id #{current_user.preferences.ticket_order || 'ASC'}")
+
+    #paginate
+    @tickets = @tickets.page(params[:page]).per(current_user.preferences.page_size.to_i)
 
     @title = params[:title] if params[:title]
     @show_search = true unless params[:show_search] == 'false'
