@@ -14,8 +14,6 @@ class TicketsController < ApplicationController
   def index
     @tickets = filtered_tickets.includes(:last_comment => [:sprint, :status]).page(params[:page]).per(current_user.preferences.page_size.to_i)
 
-    @term = (params[:search][:query] rescue '')
-
     @title = params[:title] if params[:title]
     @show_search = true unless params[:show_search] == 'false'
 
@@ -129,43 +127,8 @@ class TicketsController < ApplicationController
     params[:ticket][:comments_attributes][:'0'].delete(:assets_attributes) if (params[:ticket][:comments_attributes][:'0'] rescue false)
   end
 
-  def process_search_params(term)
-    #split it on spaces
-    result = {
-      :ticket => [],
-      :sprint => [],
-      :status => [],
-      :cost => [],
-      :assigned => [],
-      :tag => []
-    }
-    return result unless term.present?
-
-    parts = term.downcase.split(' ')
-    parts.each do |part|
-      #see if we have a known key like foo:bar
-      k,v = part.split(':')
-      if k.present? && v.present?
-        if ('sprint' =~ /^#{k}/).present?
-          result[:sprint] << v
-        elsif ('status' =~ /^#{k}/).present?
-          result[:status] << v
-        elsif ('cost' =~ /^#{k}/).present?
-          result[:cost] << v
-        elsif ('assign' =~ /^#{k}/).present?
-          result[:assigned] << v
-        elsif ('tag' =~ /^#{k}/).present?
-          result[:tag] << v
-        end
-      elsif k.present?
-        result[:ticket] << k
-      end
-    end
-    return result
-  end
-
   def filtered_tickets
-    search_params = process_search_params((params[:search][:query] rescue ''))
+    search_params = process_search_query
     #filter tickets
     tickets = scoped_tickets
     if search_params[:ticket].any?
@@ -202,7 +165,7 @@ class TicketsController < ApplicationController
     end
     #filter tickets by assignee
     if search_params[:assigned].any?
-      assignee_ids = comments.collect(&:assignee_id)
+      assignee_ids = comments.collect(&:assignee_id).compact
       #get all the assignees we are limited to
       assignees = User.where(:id => assignee_ids)
       search_params[:assigned].each { |s|
@@ -210,9 +173,9 @@ class TicketsController < ApplicationController
       }
     end
     #now we limit the comments to those who have the required values set
-    comments = comments.where(:sprint_id => sprints.collect(&:id)) if sprints.present?
-    comments = comments.where(:status_id => statuses.collect(&:id)) if statuses.present?
-    comments = comments.where(:assignee_id => assignees.collect(&:id)) if assignees.present?
-    @project.tickets.where(:id => comments.collect(&:ticket_id))
+    comments = comments.where(:sprint_id => sprints.collect(&:id)) if search_params[:sprint].present?
+    comments = comments.where(:status_id => statuses.collect(&:id)) if search_params[:status].present?
+    comments = comments.where(:assignee_id => assignees.collect(&:id)) if search_params[:assigned].present?
+    scoped_tickets.where(:id => comments.collect(&:ticket_id))
   end
 end

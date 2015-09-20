@@ -7,10 +7,8 @@ class AssetsController < ApplicationController
   before_filter :process_multiple_assets, :only => [:create]
 
   def index
-    #get the search warmed up
-    @assets = scoped_assets.search(params[:query]).includes([:sprint]).page(params[:page]).per(current_user.preferences.page_size.to_i)
+    @assets = scoped_assets.search(@query).page(params[:page]).per(current_user.preferences.page_size.to_i)
 
-    @term = (params[:search][:query] rescue '')
     @show_search = true
 
     respond_to do |format|

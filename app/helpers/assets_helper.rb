@@ -5,7 +5,7 @@ module AssetsHelper
       :paginate => true,
       :project_id => @project && @project.id,
       :sprint_id => @sprint && @sprint.to_param,
-      :query => @term
+      :query => @query
     }.merge(options)
   end
 

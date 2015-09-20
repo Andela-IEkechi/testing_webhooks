@@ -14,7 +14,7 @@
           <%= simple_form_for('search', :url => project_tickets_path(@project), :html => {:method => :get, :class => 'form-search'}, :remote => true) do |f| %>
             <% # this field can be any valid ransack term as it gets  %>
             <% # overwritten in the backend based on seach type       %>
-            <%= f.input_field :query, :label => false, :placeholder => 'search', value: @term %>
+            <%= f.input_field :query, :label => false, :placeholder => 'search', value: @query %>
 
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
             <%= f.hidden_field :project_id, :value => project_id %>
@@ -22,7 +22,14 @@
           <% end %>
         <% end %>
       </div>
-      <h4><%= @title || 'Tickets' %></h4>
+      <h4>
+        <% if @title %>
+          <%= link_to @title, project_path(@project, :params => {:query => (@overview.filter rescue nil)}) %>
+        <% else %>
+          Tickets
+        <% end %>
+      </h4>
+
     </caption>
     <!--title row -->
     <thead>
@@ -50,7 +57,7 @@
           <td>
             <div class="overflow taglist" title="<%= ticket.tag_list %>">
               <% ticket.tag_list.each do |tag| %>
-                 <%= content_tag(:span, tag, :class => "badge badge-info") %>
+                <%= ticket_load_link raw(content_tag(:span, tag, :class => "badge badge-info")), {:query => "tag:#{tag} #{@overview && @overview.filter}"} %>
               <% end %>
             </div>
           </td>

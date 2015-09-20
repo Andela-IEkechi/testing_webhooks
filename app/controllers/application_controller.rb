@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   load_resource :project, :if => @current_user
   before_filter :load_membership
+  before_filter :process_search_query
 
   helper_method :current_membership
 
@@ -60,4 +61,39 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def process_search_query
+    @query = params[:search][:query].to_s rescue params[:query].to_s
+    #split it on spaces
+    result = {
+      :ticket => [],
+      :sprint => [],
+      :status => [],
+      :cost => [],
+      :assigned => [],
+      :tag => []
+    }
+    return result unless @query.present?
+
+    parts = @query.downcase.split(' ')
+    parts.each do |part|
+      #see if we have a known key like foo:bar
+      k,v = part.split(':')
+      if k.present? && v.present?
+        if ('sprint' =~ /^#{k}/).present?
+          result[:sprint] << v
+        elsif ('status' =~ /^#{k}/).present?
+          result[:status] << v
+        elsif ('cost' =~ /^#{k}/).present?
+          result[:cost] << v
+        elsif ('assignee' =~ /^#{k}/).present? || ('assigned' =~ /^#{k}/).present? #'assign' will also match here
+          result[:assigned] << v
+        elsif ('tags' =~ /^#{k}/).present? # 'tag' will also match here
+          result[:tag] << v
+        end
+      elsif k.present?
+        result[:ticket] << k
+      end
+    end
+    return result
+  end
 end
