@@ -75,10 +75,14 @@
           </li>
         <% end %>
         <% if changeset[:tags_removed] && changeset[:tags_removed].any? %>
-          removed tags: <b><%= changeset[:tags_removed].join(', ') %></b>
+          <li>
+            removed tags: <b><%= changeset[:tags_removed].join(', ') %></b>
+          </li>
         <% end %>
         <% if changeset[:tags_added] && changeset[:tags_added].any? %>
-          new tags: <b><%= changeset[:tags_added].join(', ') %></b>
+          <li>
+            new tags: <b><%= changeset[:tags_added].join(', ') %></b>
+          </li>
         <% end %>
       </ul>
     </div>
