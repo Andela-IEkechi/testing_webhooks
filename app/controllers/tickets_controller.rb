@@ -134,6 +134,7 @@ class TicketsController < ApplicationController
 
   def filtered_tickets
     search_params = process_search_query
+
     #filter tickets
     tickets = scoped_tickets
     if search_params[:ticket].any?

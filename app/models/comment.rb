@@ -32,7 +32,7 @@ class Comment < ActiveRecord::Base
   scope :search, lambda{ |s|
     {
       :conditions => [
-        "comments.cost = #{s.to_i} OR
+        "CAST(comments.cost as TEXT) LIKE :search OR
         LOWER(tags.name) LIKE :search",
         {:search => "%#{s.to_s.downcase}%"}
       ],
