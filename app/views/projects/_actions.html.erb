@@ -51,7 +51,7 @@
     <% end %>
     <%
       #we explicitly dont render the remove project link in the quick action menus
-      #action_remove(@project) if @project && !(@feature || @sprint || @ticket)
+      #action_remove(@project) if @project && !(@sprint || @ticket)
       #so instead we're adding it here
     %>
     <% if can_delete_project?(@project) %>

@@ -10,15 +10,15 @@ module TicketsHelper
   end
 
   def ticket_url_params(options={})
+    project_title = (@project || Project.find(options[:project_id])).title rescue nil
     {
       :paginate => true,
       :show_search => !@overview,
-      :title => (@overview && options[:project_id] && Project.find(options[:project_id]).title) || 'Tickets',
+      :title => (@overview && project_title) || 'Tickets',
       :project_id => @project && @project.id,
       :sprint_id => @sprint && @sprint.to_param,
-      :feature_id => @feature && @feature.to_param,
       :overview_id => @overview && @overview.id,
-      :q => {:title_cont => @term || (@overview && @overview.filter)}
+      :query => "#{@query} #{(@overview && @overview.filter)}"
     }.merge(options)
   end
 

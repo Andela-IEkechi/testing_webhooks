@@ -3,15 +3,15 @@ shared_examples("ticket_holder") do
   it {expect(subject).to have_many(:comments)}
 
   describe 'orphan_comments!' do
-    it "removes the comment from the feature and sprint" do
+    it "removes the comment from the sprint" do
       #create some comments
-      tmp = create(:comment_with_feature_and_sprint)
+      tmp = create(:comment_with_sprint)
 
       subject = tmp.send(subject.class.name.downcase.to_sym)
 
       expect {
         subject.orphan_comments!
-      }.to change(subject.comments.where(:feature => nil, :sprint => nil)).by(-1)
+      }.to change(subject.comments.where(:sprint => nil)).by(-1)
     end
   end
 

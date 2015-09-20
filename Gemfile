@@ -27,6 +27,7 @@ gem "pygmentize"
 gem "jquery-rails" #installs 3.1 currently which uses jQuery 1.11.1
 gem "jquery-ui-rails", "5.0.1" #requires jQuery 1.11.1
 gem "bootstrap-sass", "~>2.3.0"
+gem 'bootstrap-tagsinput-rails'
 
 #file uploads
 gem "carrierwave"
@@ -36,10 +37,6 @@ gem "fog"
 #image manimpulation
 gem "rmagick"
 
-#monitoring
-
-#searching
-gem "ransack"
 
 #production runs on this server
 gem "unicorn"
@@ -54,6 +51,9 @@ gem 'exception_notification'
 
 #connect to cache
 gem "dalli"
+
+#tagging
+gem 'acts-as-taggable-on'
 
 # Gems used only for assets and not required
 # in production environments by default.

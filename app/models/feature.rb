@@ -12,6 +12,17 @@ class Feature < ActiveRecord::Base
 
   default_scope :order => "title ASC"
 
+  scope :search, lambda{ |s|
+    {
+      :conditions => [
+        "features.scoped_id = #{s.to_i} OR
+        LOWER(features.title) LIKE :search OR
+        LOWER(features.description) LIKE :search",
+        {:search => "%#{s.to_s.downcase}%"}
+      ]
+    }
+  }
+
   def to_s
     title
   end

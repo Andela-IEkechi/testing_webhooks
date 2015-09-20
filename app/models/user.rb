@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   acts_as_token_authenticatable
+  acts_as_tagger
 
   has_one :account, :dependent => :destroy
   has_many :projects, :dependent => :destroy #projects we own
@@ -33,6 +34,17 @@ class User < ActiveRecord::Base
     user.preferences = OpenStruct.new(user.preferences) unless user.preferences.class == OpenStruct #dont do it twice
     user.preferences.page_size ||= 10 #default it to something sane
   end
+
+  scope :search, lambda{ |s|
+    {
+      :conditions => [
+        "LOWER(users.email) LIKE :search OR
+        LOWER(users.full_name) LIKE :search OR
+        LOWER(users.github_login) LIKE :search",
+        {:search => "%#{s.to_s.downcase}%"}
+      ]
+    }
+  }
 
   def to_s
     if confirmed?

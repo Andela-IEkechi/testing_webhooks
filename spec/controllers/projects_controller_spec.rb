@@ -54,7 +54,7 @@ describe ProjectsController, :type => :controller do
 
   describe "GET #show" do
     before(:each) do
-      @requested_tab = ['tickets', 'sprints', 'features'].sample
+      @requested_tab = ['tickets', 'sprints'].sample
       get :show, :id => @project, :tab => @requested_tab
     end
 

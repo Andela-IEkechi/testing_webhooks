@@ -5,7 +5,6 @@ describe Asset do
 
   it {expect(subject).to respond_to(:created_at)}
   it {expect(subject).to respond_to(:updated_at)}
-  it {expect(subject).to respond_to(:feature)}
   it {expect(subject).to respond_to(:sprint)}
   it {expect(subject).to respond_to(:comment)}
   it {expect(subject).to belong_to(:project)}

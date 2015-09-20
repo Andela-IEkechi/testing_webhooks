@@ -43,11 +43,6 @@ describe Ability do
       @ability.should be_able_to(:manage, @project)
     end
 
-    it 'can manage features' do
-      feature = create(:feature, :project => @project)
-      @ability.should be_able_to(:manage, feature)
-    end
-
     it 'can manage sprints' do
       sprint = create(:sprint, :project => @project)
       @ability.should be_able_to(:manage, sprint)
@@ -106,19 +101,9 @@ describe Ability do
       @ability.should_not be_able_to(:manage, @project)
     end
 
-    it 'cannot manage features' do
-      feature = create(:feature, :project => @project)
-      @ability.should_not be_able_to(:manage, feature)
-    end
-
     it 'cannot manage sprints' do
       sprint = create(:sprint, :project => @project)
       @ability.should_not be_able_to(:manage, sprint)
-    end
-
-    it 'can view all features' do
-      feature = create(:feature, :project => @project)
-      @ability.should be_able_to(:read, feature)
     end
 
     it 'can view all sprints' do
@@ -168,15 +153,6 @@ describe Ability do
       @ability.should_not be_able_to(:manage, @project)
     end
 
-    it 'cannot manage features' do
-      feature = create(:feature, :project => @project)
-      @ability.should_not be_able_to(:manage, feature)
-    end
-
-    it "cannot create a new feature" do
-      @ability.should_not be_able_to(:create, @project.features.new())
-    end
-
     it 'cannot manage sprints' do
       sprint = create(:sprint, :project => @project)
       @ability.should_not be_able_to(:manage, sprint)
@@ -184,11 +160,6 @@ describe Ability do
 
     it "cannot create a new sprint" do
       @ability.should_not be_able_to(:create, @project.sprints.new())
-    end
-
-    it 'can view all features' do
-      feature = create(:feature, :project => @project)
-      @ability.should be_able_to(:read, feature)
     end
 
     it 'can view all sprints' do
@@ -239,12 +210,6 @@ describe Ability do
     it 'cannot view/manage projects' do
       @ability.should_not be_able_to(:read, @project)
       @ability.should_not be_able_to(:manage, @project)
-    end
-
-    it 'cannot view/manage features' do
-      feature = create(:feature, :project => @project)
-      @ability.should_not be_able_to(:read, feature)
-      @ability.should_not be_able_to(:manage, feature)
     end
 
     it 'cannot view/manage sprints' do

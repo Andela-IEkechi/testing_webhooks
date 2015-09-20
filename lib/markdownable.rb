@@ -2,6 +2,7 @@ module Markdownable
   extend ActiveSupport::Concern
 
   included do
+    attr_accessor :skip_before_save_render_body
     before_save :render_body
   end
 
@@ -22,7 +23,9 @@ module Markdownable
   private
 
   def render_body
-    return self.rendered_body = Markdownable.to_html(self.body)
+    unless @skip_before_save_render_body.present?
+      return self.rendered_body = Markdownable.to_html(self.body)
+    end
   end
 end
 

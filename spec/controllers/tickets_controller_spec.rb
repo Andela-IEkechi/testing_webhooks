@@ -13,8 +13,6 @@ describe TicketsController, :type => :controller do
       before(:each) do
         if @sprint
           get :index, :project_id => @project.to_param, :sprint_id => @sprint.to_param
-        elsif @feature
-          get :index, :project_id => @project.to_param, :feature_id => @feature.to_param
         else
           get :index, :project_id => @project.to_param
         end
@@ -32,12 +30,7 @@ describe TicketsController, :type => :controller do
         end
       end
 
-      it "uses only tickets for the current @feature or @sprint if it's assigned" do
-        if @feature
-          assigns(:tickets).each do |ticket|
-            expect(ticket.feature).to eq(@feature)
-          end
-        end
+      it "uses only tickets for the current @sprint if it's assigned" do
         if @sprint
           assigns(:tickets).each do |ticket|
             expect(ticket.sprint).to eq(@sprint)
@@ -54,8 +47,6 @@ describe TicketsController, :type => :controller do
       before(:each) do
         if @sprint
           get :show, :project_id => @project.to_param, :sprint_id => @sprint.to_param, :id => @ticket
-        elsif @feature
-          get :show, :project_id => @project.to_param, :feature_id => @feature.to_param, :id => @ticket
         else
           get :show, :project_id => @project.to_param, :id => @ticket
         end
@@ -70,8 +61,6 @@ describe TicketsController, :type => :controller do
       before(:each) do
         if @sprint
           get :new, :project_id => @project.to_param, :sprint_id => @sprint.to_param
-        elsif @feature
-          get :new, :project_id => @project.to_param, :feature_id => @feature.to_param
         else
           get :new, :project_id => @project.to_param
         end
@@ -85,11 +74,6 @@ describe TicketsController, :type => :controller do
         expect(@ticket.project.id).to eq(@project.id)
       end
 
-      it "@ticket is scoped to the correct @feature or @feature" do
-        expect(@ticket.feature.id).to eq(@feature.id) if @feature
-        expect(@ticket.sprint.id).to eq(@sprint.id) if @sprint
-      end
-
       it "renders the :new template" do
         expect(response).to render_template(:new)
       end
@@ -99,8 +83,6 @@ describe TicketsController, :type => :controller do
       before(:each) do
         if @sprint
           get :edit, :project_id => @project.to_param, :sprint_id => @sprint.to_param, :id => @ticket.scoped_id
-        elsif @feature
-          get :edit, :project_id => @project.to_param, :feature_id => @feature.to_param, :id => @ticket.scoped_id
         else
           get :edit, :project_id => @project.to_param, :id => @ticket.scoped_id
         end
@@ -122,7 +104,6 @@ describe TicketsController, :type => :controller do
           @attrs = attributes_for(:ticket, :project_id => @project.to_param)
           @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => status.id)})
           @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => status.id, :sprint_id => @sprint.to_param)}) if @sprint
-          @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => status.id, :feature_id => @feature.to_param)}) if @feature
         end
 
         it "saves a new ticket to the database" do
@@ -202,9 +183,8 @@ describe TicketsController, :type => :controller do
 
       it "redirects to the ticket index" do
         delete :destroy, :id => @ticket.to_param, :project_id => @project.to_param
-        expect(response).to redirect_to(project_path(@project)) unless (@sprint || @feature)
+        expect(response).to redirect_to(project_path(@project)) unless (@sprint)
         expect(response).to redirect_to(project_sprint_path(@project, @sprint)) if @sprint
-        expect(response).to redirect_to(project_feature_path(@project, @feature)) if @feature
       end
     end
   end
@@ -217,19 +197,6 @@ describe TicketsController, :type => :controller do
       expect(@ticket.user).to_not be_nil
       @another_ticket = create(:ticket, :project => @project)
       create(:comment, :user => @user, :ticket => @another_ticket)
-      @another_ticket.reload
-    end
-    it_behaves_like "access to tickets"
-  end
-
-  context "in the context of a feature" do
-    before(:each) do
-      @feature = create(:feature, :project => @project)
-      @ticket = create(:ticket, :project => @project)
-      create(:comment, :feature => @feature, :user => @user, :ticket => @ticket)
-      @ticket.reload
-      @another_ticket = create(:ticket, :project => @project)
-      create(:comment, :feature => @feature, :user => @user, :ticket => @another_ticket)
       @another_ticket.reload
     end
     it_behaves_like "access to tickets"
@@ -259,13 +226,13 @@ describe TicketsController, :type => :controller do
     end
 
     it "finds only tickets that match the search" do
-      get :index, :project_id => @project.to_param, :q => {:title_cont => @ticket.title}
+      get :index, :project_id => @project.to_param, :query => @ticket.title
       expect(assigns(:tickets).size).to eq(1)
       expect(assigns(:tickets).first.title).to eq(@ticket.title)
     end
 
     it "orders tickets by id" do
-      get :index, :project_id => @project.to_param, :q => {:title_cont => @user.email}
+      get :index, :project_id => @project.to_param, :query => "assign:#{@user.email}"
       expect(assigns(:tickets).size).to eq(2)
       result_ids = assigns(:tickets).collect(&:scoped_id)
       expect(result_ids).to eq(result_ids.sort)
@@ -283,19 +250,6 @@ describe TicketsController, :type => :controller do
         create(:comment, :sprint => @sprint, :user => @user, :ticket => @another_ticket)
         @another_ticket.reload
         @params = {:project_id => @project, :sprint_id => @sprint, :id => @ticket}
-      end
-      it_behaves_like "account_status"
-    end
-    context "@feature" do
-      before(:each) do
-        @feature = create(:feature, :project => @project)
-        @ticket = create(:ticket, :project => @project)
-        create(:comment, :feature => @feature, :user => @user, :ticket => @ticket)
-        @ticket.reload
-        @another_ticket = create(:ticket, :project => @project)
-        create(:comment, :feature => @feature, :user => @user, :ticket => @another_ticket)
-        @another_ticket.reload
-        @params = {:project_id => @project, :feature_id => @feature, :id => @ticket}
       end
       it_behaves_like "account_status"
     end

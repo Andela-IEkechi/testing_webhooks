@@ -21,10 +21,7 @@ class Ability
       (membership.project.user_id == user.id) && ([membership.project.memberships.for_user(user.id)].flatten.first.role == 'admin') && (membership.project.user.account.available_members?)
     end
 
-    #anyone can read features and sprints and assets on projects where they are members
-    can :read, Feature, :project => {:private => true, :memberships => {:user_id => user.id}}
-    can :read, Feature, :project => {:private => false }
-
+    #anyone can read sprints and assets on projects where they are members
     can :read, Sprint, :project => {:private => true, :memberships => {:user_id => user.id}}
     can :read, Sprint, :project => {:private => false }
 
@@ -35,9 +32,8 @@ class Ability
     can :read, Ticket, :project => {:private => true, :memberships => {:user_id => user.id}}
     can :read, Ticket, :project => {:private => false }
 
-    #only admin users can manage sprints and features and only on projects where they are members
+    #only admin users can manage sprints and assets and only on projects where they are members
     #we explicitly dont care who owns the project, no admin = no access
-    can :manage, Feature, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
     can :manage, Sprint, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
     can :manage, Asset, :project => {:memberships => {:user_id => user.id, :role => 'admin'}}
 

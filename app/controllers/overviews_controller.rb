@@ -3,7 +3,6 @@ class OverviewsController < ApplicationController
 
   load_and_authorize_resource :overview, :through => :current_user
 
-
   def show
     #return all the projects for this overview
     @projects = @overview.projects unless @overview.any_project?
