@@ -90,5 +90,4 @@ Rails.logger.info "Could not find ticket for reference: #{ticket_ref}"
     end
     attributes.reject{|k,v| v.nil? }
   end
-
 end
