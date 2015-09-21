@@ -45,6 +45,7 @@ Rails.logger.info "Attributing commit to user: #{commit_user || 'unknown'}"
               #we need to append the attributes from this commit, to whatever was on the last comment. So we use reverse_merge
               if ticket.last_comment
                 last_comment_attrs = ticket.last_comment.attributes.reject{ |k,v| %w(id created_at updated_at user_id).include?(k) }.with_indifferent_access
+                last_comment_attrs["tag_list"] = ticket.last_comment.tag_list
                 attributes.reverse_merge!(last_comment_attrs)
               end
 
@@ -82,6 +83,9 @@ Rails.logger.info "Could not find ticket for reference: #{ticket_ref}"
         attributes['sprint_id'] = (ticket.project.sprints.find_by_scoped_id(value).id rescue nil)
       when 'status'
         attributes['status_id'] = (ticket.project.ticket_statuses.find_by_name(value).id rescue nil)
+      when 'tag'
+        attributes['tag_list'] ||= []
+        attributes['tag_list']<< value
       end
     end
     attributes.reject{|k,v| v.nil? }
