@@ -15,5 +15,4 @@
 //= require jquery-ui/sortable
 //= require jquery_nested_form
 //= require bootstrap
-//= require bootstrap-tagsinput
 //= require_tree .
