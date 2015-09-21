@@ -2,11 +2,9 @@
   project ||= @project
   project_id ||= project && project.id
   sprint_id ||= @sprint && @sprint.to_param
-  feature_id ||= @feature && @feature.to_param
   assignee_id ||= @assignee_id
 
   parent = "sprint-#{sprint_id}" if sprint_id
-  parent ||= "feature-#{feature_id}" if feature_id
   parent ||= "project-#{project_id}" if project_id
  %>
 
@@ -23,10 +21,9 @@
 
             <% # this field can be any valid ransack term as it gets  %>
             <% # overwritten in the backend based on seach type       %>
-            <%= f.input_field :title_cont, label: false, placeholder: 'search', value: @term %>
+            <%= f.input_field :query, label: false, placeholder: 'search', value: @query %>
 
             <%= f.hidden_field :sprint_id, :value => sprint_id %>
-            <%= f.hidden_field :feature_id, :value => feature_id %>
             <%= f.hidden_field :project_id, :value => project_id %>
             <%= f.hidden_field :assignee_id, :value => assignee_id %>
             <%= f.submit 'Search' %>
@@ -40,7 +37,6 @@
     <tr>
       <th class="width-5">#</th>
       <th>Title</th>
-      <th class="width-15">Feature</th>
       <th class="width-15">Sprint</th>
       <th class="width-15">Assignee</th>
       <th class="width-10">State</th>
@@ -52,11 +48,6 @@
     <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
       <td><%= ticket.scoped_id %></td>
       <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
-      <td>
-        <div class="overflow" title="<%= ticket.feature %>">
-          <%= link_to ticket.feature, project_feature_path(ticket.project, ticket.feature) if ticket.feature %>
-        </div>
-      </td>
       <td>
         <div class="overflow" title="<%= ticket.sprint %>">
           <%= link_to ticket.sprint, project_sprint_path(ticket.project, ticket.sprint) if ticket.sprint %>
@@ -83,7 +74,7 @@
     <% unless @tickets %>
       <tr>
         <td colspan="6"><%= link_to 'loading tickets...',
-          project_tickets_path(project, :sprint_id => sprint_id, :feature_id => feature_id, :assignee_id => assignee_id),
+          project_tickets_path(project, :sprint_id => sprint_id, :assignee_id => assignee_id),
           :remote => true, :class => "autoload" %>
         </td>
       </tr>
@@ -97,7 +88,6 @@
           :id => nil,
           :project_id => project_id,
           :sprint_id => sprint_id,
-          :feature_id => feature_id,
           :assignee_id => assignee_id
         },
         :remote => true if @tickets %>

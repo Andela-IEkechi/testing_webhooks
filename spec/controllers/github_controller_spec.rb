@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GithubController, :type => :controller do
+describe GithubController, :type => :controller, :quarantine => true do
   let(:project) {create(:project)}
   let(:user) {create(:user)}
   let(:ticket) {create(:ticket, :project => project)}
@@ -60,15 +60,6 @@ describe GithubController, :type => :controller do
     expect(ticket2.comments.count).to eq(2)
   end
 
-  it "preserves ticket states when assigning a commit message to a ticket" do
-    feature = create(:feature)
-    ticket.feature = feature
-    ticket.save
-    expect(ticket.feature).to_not be_nil
-    post :commit, :token => key.token, :payload => JSON.generate(@payload)
-    expect(ticket.feature.id).to eq(feature.id)
-  end
-
   context "with a commit message that provides extra attributes" do
     it "changes the assigned user" do
       user = create(:user)
@@ -105,18 +96,6 @@ describe GithubController, :type => :controller do
       end.to change{ticket.comments.count}.by(1)
 
       expect(ticket.sprint).to eq(sprint)
-    end
-
-    it "changes the assigned feature" do
-      feature = create(:feature, :project => project)
-      expect do
-        # Send a message with changes to all ticket attributes
-        @payload[:commits].first[:message] = "sample data [##{ticket.scoped_id} feature:#{feature.scoped_id}]"
-        post :commit, :token => key.token, :payload => JSON.generate(@payload)
-        ticket.reload # required!
-      end.to change{ticket.comments.count}.by(1)
-
-      expect(ticket.feature).to eq(feature)
     end
 
     it "changes the assigned status" do

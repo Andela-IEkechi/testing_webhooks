@@ -18,15 +18,6 @@ FactoryGirl.define do
       association(:sprint)
     end
 
-    factory :comment_with_feature do
-      association(:feature)
-    end
-
-    factory :comment_with_feature_and_sprint do
-      association(:feature)
-      association(:sprint)
-    end
-
     factory :comment_by_api_key do
       user nil
       association(:api_key)

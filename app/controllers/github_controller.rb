@@ -80,8 +80,6 @@ Rails.logger.info "Could not find ticket for reference: #{ticket_ref}"
         attributes['assignee_id'] = (ticket.project.memberships.by_email(value).first.user_id rescue nil)
       when 'sprint'
         attributes['sprint_id'] = (ticket.project.sprints.find_by_scoped_id(value).id rescue nil)
-      when 'feature'
-        attributes['feature_id'] = (ticket.project.features.find_by_scoped_id(value).id rescue nil)
       when 'status'
         attributes['status_id'] = (ticket.project.ticket_statuses.find_by_name(value).id rescue nil)
       end

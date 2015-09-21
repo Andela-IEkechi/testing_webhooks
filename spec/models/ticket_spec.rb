@@ -50,29 +50,26 @@ describe Ticket do
   context "last_comment" do
     before(:each) do
       @sprint = create(:sprint, :project => @ticket.project)
-      @feature = create(:feature, :project => @ticket.project)
       @comment = create(:comment, :ticket => @ticket)
       @ticket.reload
     end
 
-    it "should return the sprint and feature ids set in the last comment" do
+    it "should return the sprint ids set in the last comment" do
       @ticket.sprint_id.should be_nil
-      @ticket.feature_id.should be_nil
 
-      create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      create(:comment, :ticket => @ticket, :sprint => @sprint)
       @ticket.sprint_id.should eq(@sprint.id)
-      @ticket.feature_id.should eq(@feature.id)
     end
 
     it "should update the last_comment association when a new comment is added" do
       @ticket.last_comment_id.should eq(@ticket.comments.last.id)
-      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint)
       @ticket.last_comment_id.should eq(@ticket.comments.last.id)
       @ticket.last_comment_id.should eq(new_comment.id)
     end
 
     it "should update the last_comment association when a comment is removed" do
-      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+      new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint)
       @ticket.last_comment_id.should eq(new_comment.id)
       @ticket.last_comment.destroy
       @ticket.reload
@@ -82,17 +79,13 @@ describe Ticket do
 
     it "should update the ticket updated_at timestamp when last_comment changes" do
       expect {
-        new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint, :feature => @feature)
+        new_comment = create(:comment, :ticket => @ticket, :sprint => @sprint)
       }.to change{@ticket.updated_at}
     end
   end
 
   it "should respond to :sprint_id" do
     @ticket.should respond_to(:sprint_id)
-  end
-
-  it "should respond to :feature_id" do
-    @ticket.should respond_to(:feature_id)
   end
 
   context "filter summary" do
@@ -117,16 +110,8 @@ describe Ticket do
   end
 
   context "belongs to a parent" do
-    it "the parent is a project, if there is no feature or sprint" do
+    it "the parent is a project, if there is no sprint" do
       @ticket.parent.should eq(@ticket.project)
-    end
-
-    it "the parent is a feature, if there is no sprint" do
-      @ticket.sprint.should be_nil
-      @ticket.comments << create(:comment_with_feature, :ticket => @ticket)
-      @ticket.should be_valid
-      @ticket.feature.should_not be_nil
-      @ticket.parent.should eq(@ticket.feature)
     end
 
     it "the parent is a sprint, if there is one" do
@@ -134,18 +119,6 @@ describe Ticket do
       @ticket.comments << create(:comment_with_sprint, :ticket => @ticket)
       @ticket.should be_valid
       @ticket.parent.should eq(@ticket.sprint)
-    end
-
-    it "it can belong to both a feature and a sprint at the same time" do
-      @ticket.comments << create(:comment_with_feature_and_sprint, :ticket => @ticket)
-      @ticket.feature.should_not be_nil
-      @ticket.sprint.should_not be_nil
-    end
-
-    it "reports the id of the feature it's assigned to, or nil" do
-      @ticket.feature.should be_nil
-      @ticket.comments << create(:comment_with_feature, :ticket => @ticket)
-      @ticket.feature.should_not be_nil
     end
 
     it "reports the id of the sprint it's assigned to, or nil" do

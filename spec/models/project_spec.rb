@@ -5,7 +5,6 @@ describe Project do
 
   it {expect(subject).to belong_to(:user)}
   it {expect(subject).to validate_presence_of(:user)}
-  it {expect(subject).to have_many(:features)}
   it {expect(subject).to have_many(:tickets)}
   it {expect(subject).to have_many(:sprints)}
   it {expect(subject).to have_many(:assets)}
@@ -70,16 +69,6 @@ describe Project do
     #now create the duplicate name but for the other user
     duplicate = build(:project, :user => sue, :title => project_one.title)
     expect(duplicate).to be_valid
-  end
-
-  it "should delete related features when it's destroyed" do
-    expect {
-      create(:feature, :project => subject)
-      create(:feature, :project => subject)
-    }.to change(Feature, :count).by(2)
-    expect {
-      subject.destroy
-    }.to change(Feature,:count).by(-2)
   end
 
   it "should delete related tickets when it's destroyed" do

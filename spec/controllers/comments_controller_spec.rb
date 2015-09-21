@@ -27,10 +27,10 @@ describe CommentsController, :type => :controller do
     context "with valid attributes" do
       it "saves a new comment to the database"
       context "for project administrators" do
-        it "overrides the current sprint and feature"
+        it "overrides the current sprint"
       end
       context "for regular users" do
-        it "does not override the current sprint and feature"
+        it "does not override the current sprint"
       end
       it "redirects to show the comment's ticket"
     end
@@ -44,10 +44,10 @@ describe CommentsController, :type => :controller do
     context "with valid attributes" do
       it "updates a comment in the database"
       context "for project administrators" do
-        it "overrides the current sprint and feature"
+        it "overrides the current sprint"
       end
       context "for regular users" do
-        it "does not override the current sprint and feature"
+        it "does not override the current sprint"
       end
 
       it "redirects to show the comment's ticket"

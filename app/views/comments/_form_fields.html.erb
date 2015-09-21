@@ -39,10 +39,6 @@
   <%= comment_form.input :cost, :collection => Ticket::COST.map{|x| [(x == 0)? "unknown" : x.to_s,x]}, :include_blank => false %>
 
   <% if can? :manage, @project %>
-    <%= comment_form.input :feature do %>
-      <%= comment_form.select :feature_id, @ticket.project.features.all.map { |f| [f.title, f.id] }, :include_blank => '- unassigned -'  %>
-    <% end %>
-
     <%= comment_form.input :sprint do %>
       <%= comment_form.select :sprint_id, @ticket.project.sprints.all.select(&:open?).map { |s| [s.goal, s.id] }, :include_blank => '- unassigned -'  %>
     <% end %>
@@ -51,6 +47,8 @@
   <%= comment_form.input :assigned_to do %>
     <%= comment_form.select :assignee_id, @ticket.project.memberships.all.map { |s| [s.email, s.user_id] }, :include_blank => '- unassigned -'  %>
   <% end %>
+
+  <%= comment_form.input :tag_list, :input_html => {:value => @ticket.tag_list.sort.join(','), :'data-role' => 'tagsinput'}%>
 
   <!-- Existing assets -->
   <% if @comment && @comment.assets.any? %>

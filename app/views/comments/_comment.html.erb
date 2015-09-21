@@ -48,11 +48,6 @@
             state: <b><%= comment.status %></b>
           </li>
         <% end %>
-        <% if changeset[:feature_id] %>
-          <li>
-            feature: <b><%= comment.feature || 'none' %></b>
-          </li>
-        <% end %>
         <% if changeset[:sprint_id] %>
           <li>
             sprint: <b><%= comment.sprint || 'none' %></b>
@@ -77,6 +72,16 @@
         <% if changeset[:cost] %>
           <li>
             cost: <b><%= cost_long(comment.cost) %></b>
+          </li>
+        <% end %>
+        <% if changeset[:tags_removed] && changeset[:tags_removed].any? %>
+          <li>
+            removed tags: <b><%= changeset[:tags_removed].join(', ') %></b>
+          </li>
+        <% end %>
+        <% if changeset[:tags_added] && changeset[:tags_added].any? %>
+          <li>
+            new tags: <b><%= changeset[:tags_added].join(', ') %></b>
           </li>
         <% end %>
       </ul>

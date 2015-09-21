@@ -15,12 +15,6 @@
       <td><%= @comment.status %></td>
     </tr>
   <% end %>
-  <% if changeset[:feature_id] %>
-    <tr>
-      <th>feature</th>
-      <td><%= @comment.feature || 'none' %></td>
-    </tr>
-  <% end %>
   <% if changeset[:sprint_id] %>
     <tr>
       <th>sprint</th>

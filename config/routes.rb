@@ -25,7 +25,6 @@ Conductor::Application.routes.draw do
       resources :comments
     end
     resource  :access
-    resources :features
     resources :sprints
     resources :assets
     get 'download_asset/:asset_id' => 'assets#download', :as => :download_asset

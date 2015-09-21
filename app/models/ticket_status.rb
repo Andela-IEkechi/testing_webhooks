@@ -11,6 +11,15 @@ class TicketStatus < ActiveRecord::Base
 
   default_scope :order => "sort_index ASC"
 
+  scope :search, lambda{ |s|
+    {
+      :conditions => [
+        "LOWER(ticket_statuses.name) LIKE :search",
+        {:search => "%#{s.to_s.downcase}%"}
+      ]
+    }
+  }
+
   def to_s
     name
   end
