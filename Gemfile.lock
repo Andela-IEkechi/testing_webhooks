@@ -5,6 +5,13 @@ GIT
     capistrano-recipes (0.9.9)
       capistrano (>= 2.14)
 
+GIT
+  remote: https://github.com/caedes/bootstrap-tagsinput-rails
+  revision: 2fdccc42be756f980a1f61beb9d393b52c6b3f35
+  specs:
+    bootstrap-tagsinput-rails (0.4.2.1)
+      railties (>= 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -44,8 +51,6 @@ GEM
       debug_inspector (>= 0.0.1)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
-    bootstrap-tagsinput-rails (0.4.2.1)
-      railties (>= 3.1)
     builder (3.0.4)
     cancan (1.6.9)
     capistrano (2.15.5)
@@ -434,7 +439,7 @@ DEPENDENCIES
   acts-as-taggable-on
   binding_of_caller
   bootstrap-sass (~> 2.3.0)
-  bootstrap-tagsinput-rails
+  bootstrap-tagsinput-rails!
   cancan (= 1.6.9)
   capistrano (~> 2.15)
   capistrano-ext
