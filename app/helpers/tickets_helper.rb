@@ -12,7 +12,6 @@ module TicketsHelper
   def ticket_url_params(options={})
     project_title = (@project || Project.find(options[:project_id])).title rescue nil
     {
-      :paginate => true,
       :show_search => !@overview,
       :title => (@overview && project_title) || 'Tickets',
       :project_id => @project && @project.id,

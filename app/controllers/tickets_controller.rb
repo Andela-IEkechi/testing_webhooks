@@ -26,6 +26,7 @@ class TicketsController < ApplicationController
     @tickets_count = last_comments.count
     @tickets_cost = last_comments.sum(:cost)
     @assignees_count = last_comments.collect(&:assignee_id).uniq.compact.count
+    @sprint ||= (@project.sprints.find_by_scoped_id(params[:search][:sprint_id]) rescue nil)
 
     respond_to do |format|
       format.js do

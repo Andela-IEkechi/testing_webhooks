@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
       if k.present? && v.present?
         if ('sprint' =~ /^#{k}/).present?
           result[:sprint] << v
-        elsif ('status' =~ /^#{k}/).present?
+        elsif ('status' =~ /^#{k}/).present? || ('state' =~ /^#{k}/).present?
           result[:status] << v
         elsif ('cost' =~ /^#{k}/).present?
           result[:cost] << v
