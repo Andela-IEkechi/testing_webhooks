@@ -37,10 +37,9 @@
       <th class="width-5">#</th>
       <th>Title</th>
       <th class="width-15">Sprint</th>
-      <th class="width-15">Tags</th>
-      <th class="width-15">Assignee</th>
+      <th class="width-20">Assignee</th>
       <th class="width-10">State</th>
-      <th class="width-50px">Cost</th>
+      <th class="width-30px">Cost</th>
     </tr>
     </thead>
     <tbody>
@@ -48,25 +47,25 @@
       <%= cache(ticket) do %>
         <tr data-state="<%= ticket.status %>" data-search="<%= ticket.filter_summary %>">
           <td><%= ticket.scoped_id %></td>
-          <td class="overflow" title="<%= ticket.title %>"><%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %></td>
+          <td class="overflow" title="<%= ticket.title %>">
+            <%= link_to ticket.title, project_ticket_path(ticket.project, ticket) %>
+            <div class="overflow taglist" title="<%= ticket.tag_list %>">
+              <% ticket.tag_list.each do |tag| %>
+                <%= ticket_load_link raw(content_tag(:span, tag, :class => "label label-default")), {:query => "tag:#{tag} #{@overview && @overview.filter}"} %>
+              <% end %>
+            </div>
+          </td>
           <td>
             <div class="overflow" title="<%= ticket.sprint %>">
               <%= link_to ticket.sprint, project_sprint_path(ticket.project, ticket.sprint) if ticket.sprint %>
             </div>
           </td>
           <td>
-            <div class="overflow taglist" title="<%= ticket.tag_list %>">
-              <% ticket.tag_list.each do |tag| %>
-                <%= ticket_load_link raw(content_tag(:span, tag, :class => "badge badge-info")), {:query => "tag:#{tag} #{@overview && @overview.filter}"} %>
-              <% end %>
-            </div>
-          </td>
-          <td>
-            <div class="overflow" title="<%= assignee(ticket, true) %>">
+            <div class="overflow" title="<%= assignee(ticket) %>">
               <% if ticket.assignee && ticket.assignee.memberships.to_project(ticket.project.id).any? %>
                 <%= assignee(ticket) %>
               <% else %>
-                <span class='non-member' title="<%= assignee(ticket, true) %> (not a member)">
+                <span class='non-member' title="<%= assignee(ticket) %> (not a member)">
                   <%= assignee(ticket) %>
                 </span>
               <% end %>
@@ -83,19 +82,19 @@
     <% end if @tickets %>
     <% if @tickets && @tickets_count == 0 %>
       <tr>
-        <td colspan="7">There are no tickets</td>
+        <td colspan="6">There are no tickets</td>
       </tr>
     <% end %>
     <% unless @tickets %>
       <tr>
-        <td colspan="7">
+        <td colspan="6">
             <%= ticket_load_link 'loading tickets...', {}, {:class => "autoload"} %>
         </td>
       </tr>
     <% end %>
     <% if @tickets_count %>
       <tr>
-        <td colspan="7">
+        <td colspan="6">
           <span class="pull-right ticket-result-summary">
           <% if @assignees_count > 0 %>
             <%= @assignees_count %> assignees on

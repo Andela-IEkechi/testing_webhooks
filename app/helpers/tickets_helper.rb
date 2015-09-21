@@ -30,16 +30,14 @@ module TicketsHelper
     link_to name, project_tickets_path(url_options), link_options
   end
 
-  def assignee(ticket, include_github_login=false)
+  def assignee(ticket)
     return '' unless ticket.assignee
 
-    parts = []
     if ticket.project.public?
-      parts << ticket.assignee.obfuscated
+      ticket.assignee.obfuscated
     else
-      parts << ticket.assignee.to_s
+      ticket.assignee.to_s
     end
-    parts << ticket.assignee.github_login
-    parts.compact.join(' - ')
   end
+
 end
