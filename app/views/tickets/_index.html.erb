@@ -23,7 +23,7 @@
         <% end %>
       </div>
       <h4>
-        <% if @title %>
+        <% if @title != 'Tickets' %>
           <%= link_to @title, project_path(@project, :params => {:query => (@overview.filter rescue nil)}) %>
         <% else %>
           Tickets
