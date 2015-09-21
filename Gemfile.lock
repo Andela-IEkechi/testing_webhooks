@@ -98,7 +98,7 @@ GEM
       actionmailer (>= 3.0.4)
       activesupport (>= 3.0.4)
     excon (0.45.3)
-    execjs (2.5.2)
+    execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.5.0)
