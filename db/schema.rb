@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150919204843) do
+ActiveRecord::Schema.define(:version => 20150921065749) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -113,18 +113,17 @@ ActiveRecord::Schema.define(:version => 20150919204843) do
   end
 
   create_table "projects", :force => true do |t|
-    t.string   "title",                               :null => false
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
-    t.integer  "user_id",                             :null => false
-    t.integer  "tickets_sequence",  :default => 0
-    t.integer  "features_sequence", :default => 0
-    t.integer  "sprints_sequence",  :default => 0
-    t.boolean  "private",           :default => true
+    t.string   "title",                              :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.integer  "user_id",                            :null => false
+    t.integer  "tickets_sequence", :default => 0
+    t.integer  "sprints_sequence", :default => 0
+    t.boolean  "private",          :default => true
     t.string   "description"
     t.string   "slug"
     t.string   "logo"
-    t.integer  "assets_sequence",   :default => 0
+    t.integer  "assets_sequence",  :default => 0
   end
 
   add_index "projects", ["slug"], :name => "index_projects_on_slug", :unique => true
