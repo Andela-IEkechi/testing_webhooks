@@ -12,7 +12,6 @@ class Comment < ActiveRecord::Base
   has_many   :assets, :dependent => :destroy
 
   belongs_to :sprint
-  belongs_to :feature #TODO - remove after deployment of #954
   belongs_to :assignee, :class_name => 'User' # the user the ticket is assigned to
   belongs_to :status, :class_name => 'TicketStatus'
 
