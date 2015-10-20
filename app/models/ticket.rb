@@ -23,15 +23,9 @@ class Ticket < ActiveRecord::Base
   scope :for_assignee_id, lambda{ |assignee_id| { :conditions => ['comments.assignee_id = ?', assignee_id], :joins => :last_comment, :include => :status}}
   scope :for_sprint_id, lambda{|sprint_id| { :conditions => ['comments.sprint_id = ?', sprint_id], :joins => :last_comment, :include => :status}}
 
-  scope :search, lambda{ |s|
-    {
-      :conditions => [
-        "CAST(tickets.scoped_id AS TEXT) LIKE :search OR
-        LOWER(tickets.title) LIKE :search",
-        {:search => "%#{s.to_s.downcase}%"}
-      ]
-    }
-  }
+  sifter :search do |string|
+    scoped_id.eq(string.to_i) | title.matches("%#{string}%")
+  end
 
   delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
   delegate :tag_list, :to => :last_comment, :prefix => false, :allow_nil => true

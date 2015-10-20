@@ -61,8 +61,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def process_search_query
-    @query = params[:search][:query].to_s rescue params[:query].to_s
+  def has_open_quote(str)
+    1 == str.count("'")
+  end
+
+  def process_search_query(query)
+    @query = query
+    @query ||= params[:search][:query].to_s rescue params[:query].to_s
+
     #split it on spaces
     result = {
       :ticket => [],
@@ -73,24 +79,48 @@ class ApplicationController < ActionController::Base
       :tag => []
     }
     return result unless @query.present?
+
+    # split the query on quotes .split('\'')
+    #every odd numbered index is a quoted string and should be used as-is
+    #every even numbered element can be treated as a sub-query and evaluated normally.
+    # the even numbered query may end in a qualifier like tag:, if the value following it was quoted.
+
     parts = @query.downcase.split(' ')
-    parts.each do |part|
+    combined = []
+
+    parts.each do |el|
+      if combined.last.present? && has_open_quote(combined.last)
+        combined.last << " " << el
+      else
+        combined << el
+      end
+    end
+
+    modifier = 'and'
+    combined.each do |part|
       #see if we have a known key like foo:bar
       k,v = part.split(':')
       if k.present? && v.present?
         if ('sprint' =~ /^#{k}/).present?
           result[:sprint] << v
         elsif ('status' =~ /^#{k}/).present? || ('state' =~ /^#{k}/).present?
-          result[:status] << v
+          result[:sprint] << [v, modifier]
         elsif ('cost' =~ /^#{k}/).present?
-          result[:cost] << v
+          result[:cost] << [v, modifier]
         elsif ('assignee' =~ /^#{k}/).present? || ('assigned' =~ /^#{k}/).present? #'assign' will also match here
-          result[:assigned] << v
+          result[:assigned] << [v, modifier]
         elsif ('tags' =~ /^#{k}/).present? # 'tag' will also match here
-          result[:tag] << v
+          result[:tag] << [v, modifier]
         end
+        modifier = 'and'
       elsif k.present?
-        result[:ticket] << k
+        case k
+        when 'and', 'or', 'not'
+          modifier = k
+        else
+          result[:ticket] << [k, modifier]
+          modifier = 'and' #reset after use
+        end
       end
     end
     return result

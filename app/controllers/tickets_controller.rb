@@ -137,13 +137,25 @@ class TicketsController < ApplicationController
     search_params = process_search_query
 
     #filter tickets
-    tickets = scoped_tickets
+    ticket_ids = scoped_tickets.collect(&:id)
+
     if search_params[:ticket].any?
       #get all the tickets we are interested in
-      search_params[:ticket].each { |s|
-        tickets = tickets.search(s)
+      search_params[:ticket].each { |term, action|
+        case action
+        where 'and'
+          tickets = tickets.where{sift :search, term}
+        where 'or'
+          # if it's an 'or', we need to combine the two result sets
+          additional = scoped_tickets.search(term)
+          combined_ids =
+          tickets = scoped_tickets.where(:id => combined_ids)
+        where 'not'
+          tickets = tickets.where.not{sift :search, term}
+        end
       }
     end
+
     #filter tickets by sprint
     if search_params[:sprint].any? && @sprint.blank? #no point in double filtering
       #get all the sprints we are limited to
