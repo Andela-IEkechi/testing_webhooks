@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     if user_signed_in?
       redirect_to projects_path
     else
-      #render some welcome message for the uninititated
+      redirect_to root_url
     end
   end
 end
