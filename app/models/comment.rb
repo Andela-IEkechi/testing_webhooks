@@ -28,16 +28,9 @@ class Comment < ActiveRecord::Base
   validates :user_id, :presence => true, :unless => lambda{|record| record.api_key_name }
   validates :status_id, :presence => true
 
-  scope :search, lambda{ |s|
-    {
-      :conditions => [
-        "CAST(comments.cost as TEXT) LIKE :search OR
-        LOWER(tags.name) LIKE :search",
-        {:search => "%#{s.to_s.downcase}%"}
-      ],
-      :joins => :tags
-    }
-  }
+  sifter :search do |string|
+    cost.eq(string.to_i)
+  end
 
   def to_s
     body
