@@ -134,68 +134,35 @@ class TicketsController < ApplicationController
   end
 
   def filtered_tickets
-    search_params = process_search_query
+    comments = Comment.where(:id => scoped_tickets.collect(&:last_comment_id))
+    filtered_comment_ids = comments.collect(&:id)
 
-    #filter tickets
-    tickets = scoped_tickets
-    ticket_ids = scoped_tickets.collect(&:id)
+    process_search_query.each do |modifier, context, value|
+      ids = case context
+      when :ticket
+        scoped_tickets.where{sift :search, value}.collect(&:last_comment_id)
+      when :sprint
+        sprint_ids = @project.sprints.where{sift :search, value}.collect(&:id)
+        comments.where(:sprint_id => sprint_ids).collect(&:id)
+      when :cost
+        comments.where(:cost => value).collect(&:id)
+      when :assigned
+        user_ids = @project.users.where{sift :search, value}.collect(&:id)
+        comments.where(:assignee_id => user_ids).collect(&:id)
+      when :tag
+        comments.tagged_with(value).collect(&:id)
+      when :status
+        status_ids = @project.ticket_statuses.where{sift :search, value}.collect(&:id)
+        comments.where(:status_id => status_ids).collect(&:id)
+      end
+      if :and == modifier
+        filtered_comment_ids = filtered_comment_ids & ids
+      else #must be :or then
+        filtered_comment_ids = filtered_comment_ids | ids
+      end
+    end
 
-    # if search_params[:ticket].any?
-    #   #get all the tickets we are interested in
-    #   search_params[:ticket].each { |term, action|
-    #     case action
-    #     when 'and'
-    #       tickets = tickets.where{sift :search, term}
-    #     when 'or'
-    #       # if it's an 'or', we need to combine the two result sets
-    #       additional = scoped_tickets.search(term)
-    #       combined_ids =
-    #       tickets = scoped_tickets.where(:id => combined_ids)
-    #     when 'not'
-    #       tickets = tickets.where.not{sift :search, term}
-    #     end
-    #   }
-    # end
-
-    #filter tickets by sprint
-    if search_params[:sprint].any? && @sprint.blank? #no point in double filtering
-      #get all the sprints we are limited to
-      sprints = @project.sprints
-      search_params[:sprint].each { |s|
-        sprints = sprints.search(s)
-      }
-    end
-    #filter tickets by status
-    if search_params[:status].any?
-      #get all the statuses we are limited to
-      statuses = @project.ticket_statuses
-      search_params[:status].each { |s|
-        statuses = statuses.search(s)
-      }
-    end
-    #filter tickets by comments
-    comments = @project.comments.where(:id => tickets.select(:last_comment_id).collect(&:last_comment_id)) #limit them to the tickets that al least match
-    if search_params[:cost].any? || search_params[:tag].any?
-      #get all the assignees we are limited to
-      combined = [search_params[:cost]] + [search_params[:tag]]
-      combined.flatten!.compact!
-      combined.each { |s|
-        comments = comments.search(s)
-      }
-    end
-    #filter tickets by assignee
-    if search_params[:assigned].any?
-      assignee_ids = comments.collect(&:assignee_id).compact
-      #get all the assignees we are limited to
-      assignees = User.where(:id => assignee_ids)
-      search_params[:assigned].each { |s|
-        assignees = assignees.search(s)
-      }
-    end
-    #now we limit the comments to those who have the required values set
-    comments = comments.where(:sprint_id => sprints.collect(&:id)) if search_params[:sprint].present?
-    comments = comments.where(:status_id => statuses.collect(&:id)) if search_params[:status].present?
-    comments = comments.where(:assignee_id => assignees.collect(&:id)) if search_params[:assigned].present?
-    scoped_tickets.where(:id => comments.collect(&:ticket_id))
+    ticket_ids = Comment.where(:id => filtered_comment_ids).collect(&:ticket_id)
+    Ticket.where(:id => ticket_ids)
   end
 end

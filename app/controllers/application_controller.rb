@@ -69,19 +69,12 @@ class ApplicationController < ActionController::Base
     @query = query
     @query ||= params[:search][:query].to_s rescue params[:query].to_s
 
-    #split it on spaces
-    result = {
-      :ticket => [],
-      :sprint => [],
-      :status => [],
-      :cost => [],
-      :assigned => [],
-      :tag => []
-    }
+    result = []
+
     return result unless @query.present?
     modifier = nil
     #split the query string into terms
-    p "Query: #{@query.downcase}"
+    # p "Query: #{@query.downcase}"
     @query.downcase.split(/(\S*'.*?'|\S*".*?"|\S+)/).select(&:present?).each do |term|
       # test if the term is an AND or an OR
       # p "term: #{term}"
@@ -92,21 +85,22 @@ class ApplicationController < ActionController::Base
         modifier = :or
       else
         # process the term
-        term_result = process_search_term(term, modifier)
-        result[term_result.keys.first] << term_result.values.first
+
+        result << [modifier||:and, process_search_term(term)].flatten
         modifier = nil
       end
       # p "modifier: #{modifier}"
       next if modifier
     end
-    p "result: #{result}"
+    # p "result: #{result}"
     return result
   end
 
-  def process_search_term(term, modifier)
+  def process_search_term(term)
     result = {} #{:value => nil, :modifier => nil, :context => :nil}
     # see if we can split it
     context, value = term.split(/(.+?):(.+)/).select(&:present?)
+    value = value.tr('\'', '').tr('"', '')
     key = if context && value
       #we had someting like "foo:bar"
       case context
@@ -128,8 +122,7 @@ class ApplicationController < ActionController::Base
       value = context
       :ticket
     end
-    # p "search term breakdown: #{{key => [modifier, value]}}"
-    return {key => [modifier||:and, value]}
+    return [key, value]
   end
 
 end

@@ -14,15 +14,9 @@ class Sprint < ActiveRecord::Base
   default_scope :order => "goal ASC"
   scope :notification_enabled, where(:notify_while_open => true)
 
-  scope :search, lambda{ |s|
-    {
-      :conditions => [
-        "sprints.scoped_id = #{s.to_i} OR
-        LOWER(sprints.goal) LIKE :search",
-        {:search => "%#{s.to_s.downcase}%"}
-      ]
-    }
-  }
+  sifter :search do |string|
+    scoped_id.eq(string.to_i) | goal.matches("%#{string}%")
+  end
 
   def to_s
     goal
