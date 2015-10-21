@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
     result = {} #{:value => nil, :modifier => nil, :context => :nil}
     # see if we can split it
     context, value = term.split(/(.+?):(.+)/).select(&:present?)
-    value = value.tr('\'', '').tr('"', '')
+    value = value.tr('\'', '').tr('"', '') if value
     key = if context && value
       #we had someting like "foo:bar"
       case context
