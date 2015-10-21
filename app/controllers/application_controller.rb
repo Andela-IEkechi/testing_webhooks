@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   load_resource :project, :if => @current_user
   before_filter :load_membership
-  before_filter :process_search_query
+  # before_filter :process_search_query
 
   helper_method :current_membership
 
@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
     1 == str.count("'")
   end
 
-  def process_search_query(query)
+  def process_search_query(query=nil)
     @query = query
     @query ||= params[:search][:query].to_s rescue params[:query].to_s
 
@@ -79,50 +79,57 @@ class ApplicationController < ActionController::Base
       :tag => []
     }
     return result unless @query.present?
-
-    # split the query on quotes .split('\'')
-    #every odd numbered index is a quoted string and should be used as-is
-    #every even numbered element can be treated as a sub-query and evaluated normally.
-    # the even numbered query may end in a qualifier like tag:, if the value following it was quoted.
-
-    parts = @query.downcase.split(' ')
-    combined = []
-
-    parts.each do |el|
-      if combined.last.present? && has_open_quote(combined.last)
-        combined.last << " " << el
+    modifier = nil
+    #split the query string into terms
+    p "Query: #{@query.downcase}"
+    @query.downcase.split(/(\S*'.*?'|\S*".*?"|\S+)/).select(&:present?).each do |term|
+      # test if the term is an AND or an OR
+      # p "term: #{term}"
+      case term
+      when 'and', '&', '&&'
+        modifier = :and
+      when 'or', '|', '&&'
+        modifier = :or
       else
-        combined << el
+        # process the term
+        term_result = process_search_term(term, modifier)
+        result[term_result.keys.first] << term_result.values.first
+        modifier = nil
       end
+      # p "modifier: #{modifier}"
+      next if modifier
     end
-
-    modifier = 'and'
-    combined.each do |part|
-      #see if we have a known key like foo:bar
-      k,v = part.split(':')
-      if k.present? && v.present?
-        if ('sprint' =~ /^#{k}/).present?
-          result[:sprint] << v
-        elsif ('status' =~ /^#{k}/).present? || ('state' =~ /^#{k}/).present?
-          result[:sprint] << [v, modifier]
-        elsif ('cost' =~ /^#{k}/).present?
-          result[:cost] << [v, modifier]
-        elsif ('assignee' =~ /^#{k}/).present? || ('assigned' =~ /^#{k}/).present? #'assign' will also match here
-          result[:assigned] << [v, modifier]
-        elsif ('tags' =~ /^#{k}/).present? # 'tag' will also match here
-          result[:tag] << [v, modifier]
-        end
-        modifier = 'and'
-      elsif k.present?
-        case k
-        when 'and', 'or', 'not'
-          modifier = k
-        else
-          result[:ticket] << [k, modifier]
-          modifier = 'and' #reset after use
-        end
-      end
-    end
+    p "result: #{result}"
     return result
   end
+
+  def process_search_term(term, modifier)
+    result = {} #{:value => nil, :modifier => nil, :context => :nil}
+    # see if we can split it
+    context, value = term.split(/(.+?):(.+)/).select(&:present?)
+    key = if context && value
+      #we had someting like "foo:bar"
+      case context
+      when 'sprint'
+        :sprint
+      when 'status', 'state'
+        :status
+      when 'cost'
+        :cost
+      when 'assigned', 'assignee'
+        :assigned
+      when 'tag'
+        :tag
+      else
+        :unknown
+      end
+    else
+      #we had just a simple term like "foobar"
+      value = context
+      :ticket
+    end
+    # p "search term breakdown: #{{key => [modifier, value]}}"
+    return {key => [modifier||:and, value]}
+  end
+
 end
