@@ -56,6 +56,10 @@
   text-align: right;
 }
 
-.taglist .badge {
-  font-size: 0.8em;
+.taglist {
+  min-height:20px;
+  .label {
+    font-size: 0.7em;
+    padding: 0px 2px;
+  }
 }

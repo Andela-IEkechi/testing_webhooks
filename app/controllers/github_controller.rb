@@ -50,6 +50,8 @@ Rails.logger.info "Attributing commit to user: #{commit_user || 'unknown'}"
 
               #add the settings we passed into the commit message, to the ticket
               attributes.merge!(comment_to_hash(others, ticket)) unless others.blank?
+              attributes["tag_list"] ||= []
+              attributes["tag_list"] += ticket.tag_list
 
               ticket.comments.create(attributes)
             else
@@ -82,9 +84,11 @@ Rails.logger.info "Could not find ticket for reference: #{ticket_ref}"
         attributes['sprint_id'] = (ticket.project.sprints.find_by_scoped_id(value).id rescue nil)
       when 'status'
         attributes['status_id'] = (ticket.project.ticket_statuses.find_by_name(value).id rescue nil)
+      when 'tag'
+        attributes['tag_list'] ||= []
+        attributes['tag_list'] << value
       end
     end
     attributes.reject{|k,v| v.nil? }
   end
-
 end
