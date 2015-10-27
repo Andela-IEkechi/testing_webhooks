@@ -179,3 +179,8 @@ background-color: #fff;
     background-color: $alt-table-row-bg-color;
   }
 }
+
+[class^="icon-"], [class*=" icon-"] {
+  color: #000;
+
+}

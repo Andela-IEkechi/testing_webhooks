@@ -56,6 +56,7 @@ class TicketsController < ApplicationController
     #we might be a new ticket split off from somewhere else, in which case we need to use that comment as a seed
     if @source_comment = (Comment.find(params[:comment_id]) rescue nil)
       @comment.body = source_comment_body(@source_comment)
+      @ticket.source_comment = @source_comment
     end
   end
 
