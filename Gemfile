@@ -41,7 +41,7 @@ gem "rmagick"
 #production runs on this server
 gem "unicorn"
 
-gem "font-awesome-rails"
+gem "font-awesome-rails", "~>3.2" #since v4 the usage has changed, so the html will need to be updated
 
 #crontab
 gem "whenever"
