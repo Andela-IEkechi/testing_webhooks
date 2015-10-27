@@ -1,7 +1,7 @@
 <%= yield :form_heading %>
 
 <%= simple_nested_form_for([@ticket.project,@ticket], :html => {:class=>'form-horizontal', :multipart => true}) do |f| %>
-  <%= hidden_field_tag :comment_id, (@source_comment.id rescue nil) %>
+  <%= f.hidden_field :source_comment_id %>
   <%= f.input :title, :input_html => {:class => 'span6'}%>
   <%= f.simple_fields_for :comments, @ticket.comments.first do |c_f| %>
     <%= render :partial => '/comments/form_fields', :locals => {:comment_form => c_f} %>

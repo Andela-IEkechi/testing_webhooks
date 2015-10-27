@@ -4,13 +4,15 @@ class Ticket < ActiveRecord::Base
   belongs_to :project #always
   has_many :comments, :order => :id, :dependent => :destroy
   has_many :assets, :through => :comments
+  has_many :split_tickets, :through => :comments
 
   belongs_to :last_comment, :class_name => 'Comment'
+  belongs_to :source_comment, :class_name => 'Comment'
   has_one :assignee, :through => :last_comment
   has_one :sprint,   :through => :last_comment
   has_one :status,   :through => :last_comment
 
-  attr_accessible :project_id, :comments_attributes, :title
+  attr_accessible :project_id, :comments_attributes, :title, :source_comment_id
   accepts_nested_attributes_for :comments
 
   COST = [0,1,2,3]

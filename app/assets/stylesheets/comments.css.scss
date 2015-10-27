@@ -46,13 +46,13 @@ div.comment-statusbar {
   background-color: #E3E3E3;
   padding-left: 5px;
   padding-right: 10px;
-  line-height:35px;
-  height:35px;
+  line-height:25px;
+  /*min-height:35px;*/
   @include border-radius(3px);
   ul  {
     font-size: 12px;
     list-style-type: none; //bootstrap supports this, but not in the gem we use...yet we should drop this style when "class='inline' is available"
-
+    margin-bottom: 0px;
     li {
       border-right: 1px solid #A7A7A7;
       span.non-member{
@@ -84,4 +84,18 @@ div.show-hide-toggle {
 
 .img-padded{
   margin: 10px;
+}
+
+.split-tickets {
+  ul{
+    padding-top: 2px;
+    margin-bottom: 2px;
+    i {
+      color: #ccc;
+      padding-right: 3px;
+    }
+    li {
+      margin-right: 10px;
+    }
+  }
 }

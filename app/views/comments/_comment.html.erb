@@ -11,6 +11,16 @@
 
   <div class="comment-body"><%= comment.html.html_safe %></div>
 
+  <div class="split-tickets">
+    <% if comment.split_tickets.any? %>
+      <ul class="inline">
+        <% comment.split_tickets.each do |t|%>
+        <li><i class="icon-random"></i><%= link_to "##{t.id} - #{t.title}", project_ticket_path(@project, t) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+
   <%= cache(['comment', 'assets', (comment.assets.order("updated_at DESC").first.updated_at.utc.to_s(:nsec) rescue 'none')]) do %>
     <div class="assets">
     <% comment.assets && comment.assets.each do |asset| %>
@@ -28,21 +38,20 @@
 
   <div class="comment-statusbar">
     <% if can?(:manage, comment) %>
-    <div class="pull-right comment-actions">
-      <%= link_to new_project_ticket_path(@ticket.project, :params => {:comment_id => comment}), :title => 'split ticket' do %>
-        <span><i class='icon-random'></i>split</span>
-      <% end if (current_membership.admin? || current_membership.regular?) && !(@ticket && @ticket.new_record?) && !(@sprint && @sprint.new_record?) %>
-
-      <% unless comment.first? %>
-          <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
-            <span><i class='icon-edit'></i>edit</span>
-          <% end %>
-          &nbsp;
-          <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :remote => true, :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
-            <span><i class='icon-trash'></i>remove</span>
-          <% end %>
-      <% end %>
-    </div>
+      <div class="pull-right comment-actions">
+        <% unless comment.first? %>
+            <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
+              <span><i class='icon-edit'></i>edit</span>
+            <% end %>
+            &nbsp;
+            <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :remote => true, :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
+              <span><i class='icon-trash'></i>remove</span>
+            <% end %>
+        <% end %>
+        <%= link_to new_project_ticket_path(@ticket.project, :params => {:comment_id => comment}), :title => 'split ticket' do %>
+          <span><i class='icon-random'></i>split</span>
+        <% end if (current_membership.admin? || current_membership.regular?) %>
+      </div>
     <% end %>
 
     <%= cache([comment.cache_key, 'status']) do %>
@@ -89,6 +98,6 @@
           </li>
         <% end %>
       </ul>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>
