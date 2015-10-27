@@ -266,4 +266,5 @@ describe TicketsController, :type => :controller do
       it_behaves_like "account_status"
     end
   end
+
 end
