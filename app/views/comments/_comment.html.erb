@@ -27,13 +27,14 @@
   <% end %>
 
   <div class="comment-statusbar">
-    <% if can?(:manage, comment) %>
+    <% if can?(:manage, comment) || current_membership.admin? || current_membership.regular? %>
     <div class="pull-right comment-actions">
       <%= link_to new_project_ticket_path(@ticket.project, :params => {:comment_id => comment}), :title => 'split ticket' do %>
         <span><i class='icon-random'></i>split</span>
-      <% end if (current_membership.admin? || current_membership.regular?) && !(@ticket && @ticket.new_record?) && !(@sprint && @sprint.new_record?) %>
+      <% end %>
 
       <% unless comment.first? %>
+        <% if can?(:manage, comment) %>
           <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
             <span><i class='icon-edit'></i>edit</span>
           <% end %>
@@ -41,6 +42,7 @@
           <%= link_to project_ticket_comment_path(@ticket.project, @ticket, comment), :remote => true, :method => :delete, :data => { :confirm => 'Are you sure you want to remove this comment?' }, :title => 'remove this comment' do %>
             <span><i class='icon-trash'></i>remove</span>
           <% end %>
+        <% end %>
       <% end %>
     </div>
     <% end %>
