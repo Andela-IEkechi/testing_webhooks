@@ -47,7 +47,7 @@ div.comment-statusbar {
   padding-left: 5px;
   padding-right: 10px;
   line-height:25px;
-  /*min-height:35px;*/
+  min-height:25px;
   @include border-radius(3px);
   ul  {
     font-size: 12px;
