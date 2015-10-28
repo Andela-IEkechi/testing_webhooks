@@ -39,7 +39,7 @@
   <div class="comment-statusbar">
     <% if can?(:manage, comment) || current_membership.admin? || current_membership.regular? %>
       <div class="pull-right comment-actions">
-        <% unless comment.first? %>
+        <% if can?(:manage, comment) && !comment.first? %>
             <%= link_to edit_project_ticket_comment_path(@ticket.project, @ticket, comment), :title => 'edit this comment' do %>
               <span><i class='icon-edit'></i>edit</span>
             <% end %>
