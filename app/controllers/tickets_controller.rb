@@ -160,6 +160,8 @@ class TicketsController < ApplicationController
       when :status
         status_ids = @project.ticket_statuses.where{sift :search, value}.collect(&:id)
         comments.where(:status_id => status_ids).collect(&:id)
+      else
+        []
       end
       if :and == modifier
         filtered_comment_ids = filtered_comment_ids & ids
