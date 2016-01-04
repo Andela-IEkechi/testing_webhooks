@@ -15,7 +15,7 @@
     <% if comment.split_tickets.any? %>
       <ul class="inline">
         <% comment.split_tickets.each do |t|%>
-        <li><i class="icon-random"></i><%= link_to "##{t.id} - #{t.title}", project_ticket_path(@project, t) %></li>
+        <li><i class="icon-random"></i><%= link_to "##{t.scoped_id} - #{t.title}", project_ticket_path(@project, t) %></li>
         <% end %>
       </ul>
     <% end %>
