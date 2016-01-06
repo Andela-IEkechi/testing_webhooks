@@ -4,7 +4,7 @@ module ActionsHelper
     return unless target && can?(:read, target)
 
     link_content = content_tag :span, :class => 'navico' do
-      content_tag(:i, :class => 'icon-arrow-left') do
+      content_tag(:i, :class => 'icon-fixed-width icon-arrow-left') do
         #block needs to be here to pass in the class !?
       end
     end
@@ -31,7 +31,7 @@ module ActionsHelper
     return unless target && can?(:edit, target) && !target.new_record?
 
     link_content = content_tag :span, :class => 'navico' do
-      content_tag(:i, :class => 'icon-edit') do
+      content_tag(:i, :class => 'icon-fixed-width icon-edit') do
         #block needs to be here to pass in the class !?
       end
     end
@@ -62,7 +62,7 @@ module ActionsHelper
     return unless target && can?(:delete, target) && !target.new_record?
 
     link_content = content_tag :span, :class => 'navico' do
-      content_tag(:i, :class => 'icon-trash') do
+      content_tag(:i, :class => 'icon-fixed-width icon-trash') do
         #block needs to be here to pass in the class !?
       end
     end
@@ -93,7 +93,7 @@ module ActionsHelper
     return unless target && can?(:create, target)
 
     link_content = content_tag :span, :class => 'navico' do
-      content_tag(:i, :class => 'icon-plus') do
+      content_tag(:i, :class => 'icon-fixed-width icon-plus') do
         #block needs to be here to pass in the class !?
       end
     end

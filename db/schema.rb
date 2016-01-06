@@ -46,13 +46,6 @@ ActiveRecord::Schema.define(:version => 20160106072824) do
 
   add_index "assets", ["project_id"], :name => "index_assets_on_project_id"
 
-  create_table "comment_assets", :force => true do |t|
-    t.integer  "comment_id", :null => false
-    t.string   "payload"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "comments", :force => true do |t|
     t.integer  "ticket_id",                      :null => false
     t.integer  "feature_id"
@@ -76,15 +69,6 @@ ActiveRecord::Schema.define(:version => 20160106072824) do
   add_index "comments", ["sprint_id"], :name => "index_comments_on_sprint_id"
   add_index "comments", ["status_id"], :name => "index_comments_on_status_id"
   add_index "comments", ["ticket_id"], :name => "index_comments_on_ticket_id"
-
-  create_table "features", :force => true do |t|
-    t.string   "title",       :null => false
-    t.string   "description"
-    t.date     "due_on"
-    t.integer  "project_id",  :null => false
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
 
   create_table "friendly_id_slugs", :force => true do |t|
     t.string   "slug",                         :null => false
