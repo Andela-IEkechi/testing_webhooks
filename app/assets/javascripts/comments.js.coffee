@@ -16,3 +16,9 @@ $ ->
       success: (response) ->
           output.html(response.rendered_body)
     )
+
+  $('.img').click ->
+    if $(this).hasClass('img-large')
+      $(this).attr('src', $(this).data('thumb-url')).removeClass('img-large')
+    else
+      $(this).attr('src', $(this).data('original-url')).addClass('img-large')
