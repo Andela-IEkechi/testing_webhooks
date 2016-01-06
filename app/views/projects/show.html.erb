@@ -9,7 +9,7 @@
   end
 %>
 <%
-  open_ticket_count = Rails.cache.fetch(["project_open_ticket_count", @project.tickets.order('updated_at DESC').first.cache_key], :expires_in => 1.hour ) do
+  open_ticket_count = Rails.cache.fetch(["project_open_ticket_count", (@project.tickets.order('updated_at DESC').first.cache_key rescue "none")], :expires_in => 1.hour ) do
     @project.tickets.includes(:last_comment => :status).select{|t| t.open?}.count
   end
 %>
