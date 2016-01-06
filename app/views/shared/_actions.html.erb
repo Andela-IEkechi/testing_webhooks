@@ -77,7 +77,7 @@
     <h3><small>Split tickets</small></h3>
     <% @ticket.split_tickets.each do |st| %>
       <div class="overflow">
-        <%= link_to "##{st.id} - #{st.title}", project_ticket_path(@project, st) %>
+        <%= link_to "##{st.scoped_id} - #{st.title}", project_ticket_path(@project, st) %>
       </div>
     <% end %>
   </div>

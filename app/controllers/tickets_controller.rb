@@ -64,22 +64,10 @@ class TicketsController < ApplicationController
     @ticket.comments.build() unless @ticket.comments.first
     @ticket.comments.first.user = current_user
 
-    #needs to be out here incase we fail
-    @source_comment = (Comment.find(params[:comment_id]) rescue nil)
-
     if @ticket.save
       params[:files].each do |f|
         @ticket.comments.first.assets.create(:payload => f, :project_id => @ticket.project_id)
       end if params[:files]
-
-        #backreference if we were spit off
-        if @source_comment
-          attrs = @source_comment.ticket.last_comment.attributes.with_indifferent_access.slice(:sprint_id, :assignee_id, :status_id, :cost)
-          attrs[:user_id] = current_user.id
-          attrs[:body] = split_comment_body(@ticket)
-
-          @source_comment.ticket.comments.create(attrs)
-        end if
 
       if params[:create_another]
         flash.keep[:notice] = "Ticket was added. ##{@ticket.scoped_id} #{@ticket.title}"
@@ -172,6 +160,8 @@ class TicketsController < ApplicationController
       when :status
         status_ids = @project.ticket_statuses.where{sift :search, value}.collect(&:id)
         comments.where(:status_id => status_ids).collect(&:id)
+      else
+        []
       end
       if :and == modifier
         filtered_comment_ids = filtered_comment_ids & ids
