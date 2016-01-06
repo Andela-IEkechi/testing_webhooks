@@ -40,6 +40,20 @@
     -ms-word-break: break-word;
     word-break: break-word;
   }
+  div.assets {
+    a {
+      display: inline-block;
+      height: 110px;
+      width: 110px;
+      word-wrap: break-word;
+    }
+    img.img-large {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
+    }
+  }
 }
 
 div.comment-statusbar {
