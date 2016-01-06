@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
   belongs_to :api_key, :foreign_key => 'api_key_name', :class_name => 'ApiKey'
   has_one    :project, :through => :ticket
   has_many   :assets, :dependent => :destroy
-  has_many   :split_tickets, :class_name => "Ticket", :foreign_key => "source_comment_id"
+  has_many   :split_tickets, :order => 'tickets.id ASC', :class_name => "Ticket", :foreign_key => "source_comment_id"
 
   belongs_to :sprint
   belongs_to :assignee, :class_name => 'User' # the user the ticket is assigned to
