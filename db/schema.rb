@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151027135421) do
+ActiveRecord::Schema.define(:version => 20160106072824) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -170,12 +170,12 @@ ActiveRecord::Schema.define(:version => 20151027135421) do
   add_index "tickets", ["project_id"], :name => "index_tickets_on_project_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                :default => "",    :null => false
-    t.string   "encrypted_password",                   :default => ""
+    t.string   "email",                  :default => "",    :null => false
+    t.string   "encrypted_password",     :default => ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                        :default => 0
+    t.integer  "sign_in_count",          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -185,13 +185,13 @@ ActiveRecord::Schema.define(:version => 20151027135421) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.string   "authentication_token"
-    t.datetime "created_at",                                              :null => false
-    t.datetime "updated_at",                                              :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "provider"
     t.string   "uid"
     t.string   "full_name"
-    t.boolean  "terms",                                :default => false
-    t.string   "invitation_token",       :limit => 60
+    t.boolean  "terms",                  :default => false
+    t.string   "invitation_token"
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer  "invitation_limit"
@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(:version => 20151027135421) do
     t.text     "preferences"
     t.datetime "deleted_at"
     t.string   "github_login"
+    t.date     "invitation_created_at"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
