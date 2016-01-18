@@ -1,26 +1,19 @@
 shared_examples_for "scoped" do
-  before(:each) do
-    @instance = create(scoped_class.name.downcase.to_sym)
-  end
+  let(:subject) {create(scoped_class.name.downcase.to_sym)}
 
-  it "should respond to :scoped_id" do
-    @instance.should respond_to(:scoped_id)
-  end
+  it {expect(subject).to respond_to(:scoped_id)}
+  it {expect(subject).to respond_to(:to_param)}
 
-  it "should respond to :to_param" do
-    @instance.should respond_to(:scoped_id)
-  end
-
-  it "should have a :scoped_id as the value for :to_param" do
-    @instance.scoped_id = @instance.id + 1
-    @instance.scoped_id.should_not eq(@instance.id)
+  it "scoped_id equals to_param" do
+    subject.scoped_id = subject.id + 1
+    expect(subject.scoped_id).to_not eq(subject.id)
 
     #we might be using a slug
-    if @instance.respond_to? :slug
-      @instance.save #force the slug to update if there is one
-      (@instance.to_param =~ /#{@instance.scoped_id}/).should eq(0) #starts with the scoped id
+    if subject.respond_to? :slug
+      subject.save #force the slug to update if there is one
+      (subject.to_param =~ /#{subject.scoped_id}/).should eq(0) #starts with the scoped id
     else
-      @instance.to_param.should eq(@instance.scoped_id)
+      expect(subject.to_param).to eq(subject.scoped_id)
     end
   end
 

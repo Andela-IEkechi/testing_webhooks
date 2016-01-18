@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'shared/examples_for_scoped'
 
 describe Asset do
   let(:subject) {create(:asset)}
@@ -14,6 +15,10 @@ describe Asset do
 
   it "has a working factory" do
     expect(subject).to_not be_nil
+  end
+
+  it_behaves_like 'scoped' do
+    let(:scoped_class) { Asset }
   end
 
   context "with uploaded files" do
