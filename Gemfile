@@ -5,7 +5,7 @@ gem "pg"
 gem "simple_form"
 gem "nested_form"
 
-gem "devise"
+gem "devise", "~> 3.5.6"
 gem "devise_invitable"
 gem 'simple_token_authentication'
 
