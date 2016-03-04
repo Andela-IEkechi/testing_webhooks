@@ -16,7 +16,11 @@
   </thead>
   <tbody>
   <% sprints.each do |sprint| %>
-    <%= cache(sprint) do %>
+    <%
+      changed_at = sprint.assigned_tickets.reorder(:updated_at).last.updated_at.to_s(:number) if sprint.assigned_tickets.any?
+      changed_at ||= sprint.updated_at.to_s(:number)
+    %>
+    <%= cache(['sprint', "#{sprint.id}-#{changed_at}", sprint.assigned_tickets.count]) do %>
       <tr data-state="<%= sprint.open? && 'open' || 'closed' %>">
         <td title="sprint number"><%= sprint.scoped_id %></td>
         <td class="overflow" title="<%= sprint.goal %>">
