@@ -1,29 +1,28 @@
 source "https://rubygems.org"
 
-gem "rails", "~>5.0"
+gem 'rails', '~>5.0.0.beta1'
 gem "pg"
 
 #form handling
 gem "simple_form", "~>3.2"
-gem "cocoon", "~>1.2"
 
 #authentication
-gem "devise", "~> 4.0"
+gem "devise", "~>4.0.0.rc2"
 
+#audit logging
+gem "paper_trail", "~>4.1.0"
 
+#ui
+gem 'bootstrap', "~>4.0.0.alpha3"
 
-
-
-
-
-
+#Send exceptions mails to support team
+# gem 'exception_notification'
 
 # gem "devise_invitable"
 # gem 'simple_token_authentication'
 
 # gem "cancan", "1.6.9" #DO NOT USE 1.6.10 https://github.com/ryanb/cancan/issues/865
 # gem "omniauth-github"
-# gem "paper_trail"#, "~>3.0.6"
 # gem "rake"
 # gem "ruby-uuid"
 # gem "friendly_id"#, ">=4.0.9"
@@ -49,7 +48,6 @@ gem "devise", "~> 4.0"
 # #image manimpulation
 # gem "rmagick"
 
-
 # #production runs on this server
 # gem "unicorn"
 
@@ -57,9 +55,6 @@ gem "devise", "~> 4.0"
 
 # #crontab
 # gem "whenever"
-
-# #Send exceptions mails to support team
-# gem 'exception_notification'
 
 # #connect to cache
 # gem "dalli"
@@ -82,7 +77,7 @@ gem "devise", "~> 4.0"
 #   gem "uglifier"#, ">= 1.0.3"
 # end
 
-group :development do
+# group :development do
 #   gem "capistrano", "~>2.15"
 #   gem "capistrano-ext", :require => false
 #   gem "capistrano-recipes", :git => "https://github.com/Shuntyard/capistrano-recipes.git", :require => false
@@ -91,10 +86,10 @@ group :development do
 #   gem "spring" #background server reloads for faster specs and dev
 #   gem "spring-commands-rspec"
 #   gem "guard-rspec", :require => false
-end
+# end
 
-group :development,:test do
-  gem "rspec-rails", ""
+# group :development,:test do
+  # gem "rspec-rails", "~>3.5.0"
 #   gem "shoulda-matchers", require: false
 #   gem "rspec-collection_matchers", require: false
 #   gem "rb-readline"
@@ -106,10 +101,10 @@ group :development,:test do
 #   gem "quiet_assets"
 #   gem "binding_of_caller"
 #   gem "thin"
-end
+# end
 
-group :test do
-  gem "faker"
+# group :test do
+  # gem "faker"
 #   gem "database_cleaner"
-  gem "simplecov"
-end
+  # gem "simplecov"
+# end
