@@ -1,0 +1,21 @@
+#copy your pub key on
+scp ~/.ssh/id_rsa.pub root@someip:/tmp/user.pub
+ssh root@someip
+#create a new user
+useradd --disabled-password -s bash deploy
+
+#set the user to use key-based access only
+su - deploy
+ssh-keygen
+#press enter on all questions
+
+#copy the ssh key in to authorised keys
+cat /tmp/user.pub  >> ~/.ssh/authorized_keys
+
+exit #deploy
+
+exit #root
+
+#log in with a key
+ssh deploy@someip
+
