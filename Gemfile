@@ -34,6 +34,10 @@ gem "devise", "~>4.0.0.rc2"
 gem "paper_trail", "~>4.1.0"
 #ui
 gem 'bootstrap', "~>4.0.0.alpha3"
+# tooltips require tethering in bootstrap 4
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.1.0'
+end
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

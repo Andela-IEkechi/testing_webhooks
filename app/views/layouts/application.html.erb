@@ -5,11 +5,105 @@
     <%= csrf_meta_tags %>
     <%= action_cable_meta_tag %>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+    <nav class="navbar navbar-dark bg-primary navbar-fixed-top">
+      <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#topNavbar">
+        &#9776;
+      </button>
+      <div class="collapse navbar-toggleable-xs" id="topNavbar">
+        <a class="navbar-brand" href="#">Conductor</a>
+        <ul class="nav navbar-nav">
+          <% if current_user %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Current project
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">foo</a>
+              <a class="dropdown-item" href="#">bar</a>
+              <a class="dropdown-item" href="#">bin</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">New project</a>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Overviews
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">foo</a>
+              <a class="dropdown-item" href="#">bar</a>
+              <a class="dropdown-item" href="#">bin</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">New overview</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown pull-xs-right">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              <%= current_user.email %>
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Settings</a>
+              <div class="dropdown-divider"></div>
+              <%= link_to "Logout", destroy_user_session_path(), method: :delete, class: "dropdown-item", data: { no_turbolink: true }  %>
+            </div>
+          </li>
+          <% else %>
+          <li class="nav-item hidden-md-down pull-xs-right space-left">
+            <%= link_to "Register", new_user_registration_path(), class: "nav-link", data: { no_turbolink: true }  %>
+          </li>
+          <li class="nav-item hidden-md-down pull-xs-right">
+            <%= link_to "Login", new_user_session_path(), class: "nav-link", data: { no_turbolink: true }  %>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="flasher" >
+      <% flash.each do |key, value| %>
+        <div class="alert alert-<%= key %> alert-dismissable fade in">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%= value %>
+        </div>
+      <% end %>
+      <% flash.clear %>
+    </div>
+
+    <div class="container-fluid">
+      <%= yield %>
+    </div>
+
+    <nav class="navbar navbar-fixed-bottom navbar-full navbar-light bg-faded" id="footerNavbar">
+      <% if  "welcome" == controller_name%>
+      <div class="row">
+        <div class="col-sm-3">
+          <h4>About Us</h4>
+          Conductor is maintained by an enthusiastic team. We use Conductor to manage Conductor. You can find us at <%= link_to 'Shuntyard Technologies', 'http://www.shuntyard.co.za' %>.
+        </div>
+        <div class="col-sm-3">
+          <h4>Terms and Conditions</h4>
+          Conductor is a subscription based service to manage project delivery. By using Conductor, you agree to our <%= link_to 'terms and conditions', welcome_terms_and_conditions_path() %>.
+        </div>
+        <div class="col-sm-3">
+          <h4>Pricing</h4>
+          We offer a range of plans that will suit your needs. Public projects are free. Read more about our <%= link_to 'pricing options', welcome_pricing_path() %>.
+        </div>
+        <div class="col-sm-3">
+          <h4>Contact Us</h4>
+          If you have any questions or comments, please contact us on <a href="callto:+27218519374">+27 21 851 9374</a> or email us at <%= mail_to 'info@conductor-app.com' %>.
+        </div>
+      </div>
+      <% end %>
+      <p class="copyright">Copyright &copy; <%= Date.today.year -%> <%= link_to 'Shuntyard Technologies', 'http://www.shuntyard.co.za' %>. All Rights Reserved.</p>
+    </nav>
   </body>
 </html>
+
