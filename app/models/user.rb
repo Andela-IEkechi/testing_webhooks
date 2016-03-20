@@ -4,3 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 end
+
+# TODO:
+#  user preferences - seperate model?
+#  social auth
