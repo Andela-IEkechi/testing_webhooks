@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   has_many :memberships
   has_many :projects, through: :memberships
+  has_many :overviews
 
   validates :email, presence: true, uniqueness: true
 end

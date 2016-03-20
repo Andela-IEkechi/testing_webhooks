@@ -18,7 +18,10 @@ User.delete_all
 Membership.delete_all
 
 user = User.create(email: "user@example.com", password: "password")
-User.find_each {|u|
-  u.skip_confirmation_notification!
-  u.confirm!
-}
+user.skip_confirmation_notification!
+user.confirm!
+
+Membership::ROLES.each do |role|
+  project = Project.create(title: "#{role} project")
+  user.memberships.create(project: project, role: role)
+end

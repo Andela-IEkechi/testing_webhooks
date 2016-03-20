@@ -22,27 +22,31 @@
           <% if current_user %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              Current project
+              <%= @project.title rescue "Projects" %>
             </a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">foo</a>
-              <a class="dropdown-item" href="#">bar</a>
-              <a class="dropdown-item" href="#">bin</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">New project</a>
+              <% current_user.projects.order(title: :asc).each do |project| %>
+                <%= link_to project.title, project_path(project), class: "dropdown-item" %>
+              <% end %>
+              <% if current_user.projects.any? %>
+                <div class="dropdown-divider"></div>
+              <% end %>
+              <%= link_to "New project", new_project_path(), class: "dropdown-item" %>
             </div>
           </li>
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              Overviews
+              <%= @overview.title rescue "Overviews" %>
             </a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">foo</a>
-              <a class="dropdown-item" href="#">bar</a>
-              <a class="dropdown-item" href="#">bin</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">New overview</a>
+              <% current_user.overviews.order(title: :asc).each do |overview| %>
+                <%= link_to overview.title, overview_path(overview), class: "dropdown-item" %>
+              <% end %>
+              <% if current_user.overviews.any? %>
+                <div class="dropdown-divider"></div>
+              <% end %>
+              <%= link_to "New overview", new_overview_path(), class: "dropdown-item" %>
             </div>
           </li>
           <li class="nav-item dropdown pull-xs-right">
