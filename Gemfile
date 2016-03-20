@@ -27,17 +27,22 @@ gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 #form handling
-gem "simple_form", "~>3.2"
+gem 'simple_form', '~>3.2'
 #authentication
-gem "devise", "~>4.0.0.rc2"
+gem 'devise', '~>4.0.0.rc2'
+gem 'omniauth-facebook'
+gem 'omniauth-github'
+gem 'omniauth-google-oauth2'
 #audit logging
-gem "paper_trail", "~>4.1.0"
+gem 'paper_trail', '~>4.1.0'
 #ui
-gem 'bootstrap', "~>4.0.0.alpha3"
+gem 'bootstrap', '~>4.0.0.alpha3'
 # tooltips require tethering in bootstrap 4
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
 end
+#controll user access
+gem 'pundit', '~>1.1.0'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

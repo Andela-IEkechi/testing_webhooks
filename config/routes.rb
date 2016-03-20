@@ -1,11 +1,22 @@
 Rails.application.routes.draw do
-  resources :foos
-  devise_for :users
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  resources :projects do
+    resources :boards
+    resources :tickets do
+      resources :comments
+    end
+  end
+
+  resources :overviews
+
+  namespace :admin do
+    resources :users
+  end
 
   # Serve websocket cable requests in-process
   mount ActionCable.server => '/cable'
-
 
   # deal with actions for logged out users
   get 'welcome/home'
