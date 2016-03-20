@@ -1,4 +1,4 @@
-class TicketStatusesPolicy < ApplicationPolicy
+class CommentPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       scope

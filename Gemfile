@@ -43,6 +43,8 @@ source 'https://rails-assets.org' do
 end
 #controll user access
 gem 'pundit', '~>1.1.0'
+#icons
+gem 'font-awesome-rails'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

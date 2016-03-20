@@ -1,10 +1,11 @@
 class WelcomeController < ApplicationController
+  skip_after_action :verify_authorized, except: :index
+  skip_after_action :verify_policy_scoped, only: :index
+
   def home
-    flash[:warning] = "this is a warning test"
   end
 
   def tour
-    flash[:success] = "this is a success test"
   end
 
   def pricing

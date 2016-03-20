@@ -1,4 +1,4 @@
-class CommentsPolicy < ApplicationPolicy
+class AssetPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       scope
