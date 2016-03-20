@@ -17,5 +17,8 @@ Account.delete_all
 User.delete_all
 Membership.delete_all
 
-User.create(email: "user@example.com", password: "password")
-User.find_each {|u| u.confirm!}
+user = User.create(email: "user@example.com", password: "password")
+User.find_each {|u|
+  u.skip_confirmation_notification!
+  u.confirm!
+}
