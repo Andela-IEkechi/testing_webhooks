@@ -35,6 +35,12 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.update(project_params)
+
+        #we need to broadcast to every listening user concerned, that the project has been updated
+        @project.memberships.each do |m|
+          ActionCable.server.broadcast "projects_#{m.user_id}", { id: @project.id, title: @project.title, success: "#{@project.title} has been updated" }
+        end
+
         format.html { redirect_to project_path(@project, params: {tab: "settings"}), success: 'Project was successfully updated.'}
         format.json { render :show, status: :updated, location: @project}
       else
