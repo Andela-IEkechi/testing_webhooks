@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20160320193917) do
   create_table "ticket_statuses", force: :cascade do |t|
     t.integer  "project_id"
     t.string   "name",                      null: false
-    t.boolean  "open",       default: true
+    t.boolean  "open",       default: true, null: false
     t.integer  "order"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false

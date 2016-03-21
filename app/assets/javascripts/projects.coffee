@@ -14,6 +14,16 @@ activate_tab = ()->
     wanted = "#boards"
   context("a[href=\"#{wanted}\"]").tab("show")
 
+adjustStatesSortableIndexes = ->
+  # we need to update the input field that stores the relative order
+  context("table tbody#ticket_statuses tr input[id$='order']").each (index, element) ->
+    $(element).val(index)
+
+$(document).on "DOMSubtreeModified", "#{context_name} table tbody#ticket_statuses", (event) ->
+  adjustStatesSortableIndexes()
+
 $ ->
-  console.log "project.coffee"
   activate_tab()
+
+  context("table tbody#ticket_statuses").sortable()
+

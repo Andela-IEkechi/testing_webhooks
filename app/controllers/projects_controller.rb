@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
   def show
     authorize @project
@@ -16,7 +18,6 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        binding.pry
         format.html { redirect_to project_path(@project, params: {tab: 'settings'}), success: 'Project was successfully created.' }
         format.json { render :show, status: :created, location: @project}
       else
@@ -54,6 +55,8 @@ class ProjectsController < ApplicationController
       params[:project] ||= {title: "Untitled"}
     end
 
-    params.require(:project).permit(:id, :_destroy, :title)
+    params.require(:project).permit(:id, :_destroy, :title,
+      ticket_statuses_attributes: [:id, :_destroy, :name, :open, :order]
+      )
   end
 end

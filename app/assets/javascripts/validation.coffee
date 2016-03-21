@@ -38,7 +38,7 @@ prepare_allowed_fields = (input_field) ->
 
 #disable items that require forms to be valid
 $(document).on 'judge:validated', "#{context_name}", ->
-  valid_form = $(this).find('.has-error').length == 0
+  valid_form = $(this).find('.has-danger').length == 0
   for item in $(this).find('[data-requires-valid-form]')
     if valid_form
       $(item).removeAttr('disabled')
@@ -57,12 +57,17 @@ $(document).on 'focusout', "#{context_name} [data-validate]", ->
   judge.validate(this, {
     valid: (element) ->
       $(element).parents('.form-group').removeClass('has-danger')
-      $(element).parents('.form-group').find("small").remove()
+      $(element).parents('.form-group').find("span").remove()
       $(element).parents('.form-group').addClass('has-success')
+      $(element).removeClass('form-control-danger')
+      $(element).addClass('form-control-success')
     invalid: (element, messages) ->
       $(element).parents('.form-group').removeClass('has-success')
       $(element).parents('.form-group').addClass('has-danger')
-      $(element).parents('.form-group').append("<small class=\"help-block has-danger\">#{messages[0]}</small>")
+      $(element).parents('.form-group').find("span").remove() #clear out any existing messages
+      $(element).parents('.form-group').append("<span class=\"text-help\">#{messages[0]}</span>")
+      $(element).addClass('form-control-danger')
+      $(element).removeClass('form-control-success')
 
   })
   $(this).parents('form').trigger("judge:validated")
@@ -72,8 +77,19 @@ $(document).on 'focusout', "#{context_name} [data-validate]", ->
 $(document).on 'focusout', "#{context_name} [data-skip-validate]", ->
   #clear out any existing validation status
   $(this).parents('.form-group').removeClass('has-danger')
-  $(this).parents('.form-group').find("small").remove()
+  $(this).parents('.form-group').find("span").remove()
+  $(this).removeClass('form-control-danger')
+  $(this).removeClass('form-control-success')
   $(this).parents('form').trigger("judge:validated")
+
+#mousing out of the disbursements table should validate all the inputs at once.
+$(document).on "mouseover", "#{context_name} [data-requires-valid-form]", ->
+  for input in $(this).parents('form').find('[data-validate]')
+    $(input).trigger('focusout') #revalidate
+
+
+$(document).on "cocoon:after-remove", "#{context_name}", ->
+  context().trigger("judge:validated")
 
 $ ->
   if context().length > 0

@@ -4,7 +4,7 @@
       <%= f.input :title, validate: true %>
 
       <div class="text-xs-right">
-        <%= f.button :submit, "Update project", class: "btn btn-primary" %>
+        <%= f.button :submit, "Update project", class: "btn btn-primary", data: {'requires-valid-form': true} %>
       </div>
     <% end %>
   </div>
@@ -13,11 +13,34 @@
 <div class="row">
   <div class="col-md-6">
     <h4>Ticket statuses</h4>
-    <%= simple_form_for @project do |f| %>
-      ticket statuses go here
+    <%= simple_form_for @project, wrapper: :horizontal_form do |f| %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>name</th>
+          <th>status</th>
+          <th>action</th>
+        </tr>
+      </thead>
+      <tbody id="ticket_statuses">
+        <%= f.simple_fields_for :ticket_statuses, @project.ticket_statuses.reorder(:order => :asc) do |ts| %>
+          <%= render partial: '/projects/tabs/settings/ticket_status_fields', locals: {f: ts} %>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" class="text-xs-right">
+            <%= link_to_add_association "Add another", f, :ticket_statuses,
+              partial: "/projects/tabs/settings/ticket_status_fields",
+              data: {'association-insertion-node': "tbody#ticket_statuses", 'association-insertion-method': "append"},
+              class: "btn btn-success" %>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
 
       <div class="text-xs-right">
-        <%= f.button :submit, "Update ticket statuses", class: "btn btn-primary" %>
+        <%= f.button :submit, "Update ticket statuses", class: "btn btn-primary", data: {'requires-valid-form': true} %>
       </div>
     <% end %>
   </div>
@@ -30,7 +53,7 @@
       memberships go here
 
       <div class="text-xs-right">
-        <%= f.button :submit, "Update project access", class: "btn btn-primary" %>
+        <%= f.button :submit, "Update project access", class: "btn btn-primary", data: {'requires-valid-form': true} %>
       </div>
     <% end %>
   </div>

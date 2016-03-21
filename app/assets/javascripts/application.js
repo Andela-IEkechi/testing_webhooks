@@ -12,10 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui/sortable
 //= require turbolinks
 //= require tether
 //= require bootstrap-sprockets
 //= require underscore
 //= require json2
 //= require judge
+//= require cocoon
 //= require_tree .
