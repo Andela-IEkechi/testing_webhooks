@@ -18,6 +18,10 @@ Rails.application.routes.draw do
   # Serve websocket cable requests in-process
   mount ActionCable.server => '/cable'
 
+  # Server validation requests in-process
+  mount Judge::Engine => '/judge'
+
+
   # deal with actions for logged out users
   get 'welcome/home'
   get 'welcome/tour'

@@ -28,6 +28,7 @@ gem 'redis', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
 #form handling
 gem 'simple_form', '~>3.2'
+gem 'judge-simple_form'
 #authentication
 gem 'devise', '~>4.0.0.rc2'
 gem 'omniauth-facebook'
@@ -50,12 +51,13 @@ gem 'font-awesome-rails'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-
   gem 'rspec-rails', '>= 3.5.0.beta2', '< 4'
   # Use Factory Girl for generating random test data
   gem 'factory_girl_rails'
+  gem "pry-rails"
+  gem "binding_of_caller"
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  # gem 'byebug'
 end
 
 group :development do
@@ -65,6 +67,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

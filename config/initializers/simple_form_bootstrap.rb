@@ -13,6 +13,7 @@ SimpleForm.setup do |config|
     b.optional :readonly
     b.use :label, class: 'control-label'
 
+    b.use :judge
     b.use :input, class: 'form-control'
     b.use :error, wrap_with: { tag: 'span', class: 'help-block' }
     b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -25,6 +26,7 @@ SimpleForm.setup do |config|
     b.optional :readonly
     b.use :label, class: 'control-label'
 
+    b.use :judge
     b.use :input
     b.use :error, wrap_with: { tag: 'span', class: 'help-block' }
     b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -35,6 +37,7 @@ SimpleForm.setup do |config|
     b.optional :readonly
 
     b.wrapper tag: 'div', class: 'checkbox' do |ba|
+      ba.use :judge
       ba.use :label_input
     end
 
@@ -46,6 +49,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.optional :readonly
     b.use :label, class: 'control-label'
+    b.use :judge
     b.use :input
     b.use :error, wrap_with: { tag: 'span', class: 'help-block' }
     b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -61,6 +65,7 @@ SimpleForm.setup do |config|
     b.use :label, class: 'col-sm-3 control-label'
 
     b.wrapper tag: 'div', class: 'col-sm-9' do |ba|
+      ba.use :judge
       ba.use :input, class: 'form-control'
       ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
       ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -75,6 +80,7 @@ SimpleForm.setup do |config|
     b.use :label, class: 'col-sm-3 control-label'
 
     b.wrapper tag: 'div', class: 'col-sm-9' do |ba|
+      ba.use :judge
       ba.use :input
       ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
       ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -87,6 +93,7 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: 'div', class: 'col-sm-offset-3 col-sm-9' do |wr|
       wr.wrapper tag: 'div', class: 'checkbox' do |ba|
+        ba.use :judge
         ba.use :label_input
       end
 
@@ -102,6 +109,7 @@ SimpleForm.setup do |config|
     b.use :label, class: 'col-sm-3 control-label'
 
     b.wrapper tag: 'div', class: 'col-sm-9' do |ba|
+      ba.use :judge
       ba.use :input
       ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
       ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -117,6 +125,7 @@ SimpleForm.setup do |config|
     b.optional :readonly
     b.use :label, class: 'sr-only'
 
+    b.use :judge
     b.use :input, class: 'form-control'
     b.use :error, wrap_with: { tag: 'span', class: 'help-block' }
     b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
@@ -127,6 +136,7 @@ SimpleForm.setup do |config|
     b.optional :readonly
     b.use :label, class: 'control-label'
     b.wrapper tag: 'div', class: 'form-inline' do |ba|
+      ba.use :judge
       ba.use :input, class: 'form-control'
       ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
       ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }

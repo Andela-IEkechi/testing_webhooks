@@ -4,9 +4,9 @@
   <div class="row">
     <div class="col-sm-1">
       <!-- Nav tabs -->
-      <ul class="nav nav-pills nav-stacked" role="tablist">
+      <ul class="nav nav-pills nav-stacked" role="tablist" data-active-tab="#<%= params[:tab] || 'boards' %>">
         <li class="nav-item text-xs-center">
-          <a class="nav-link active" data-toggle="tab" href="#boards" role="tab" title="Boards"><%= fa_icon "table" %></a>
+          <a class="nav-link" data-toggle="tab" href="#boards" role="tab" title="Boards"><%= fa_icon "table" %></a>
         </li>
         <li class="nav-item text-xs-center">
           <a class="nav-link" data-toggle="tab" href="#tickets" role="tab" title="Tickets"><%= fa_icon "check-square" %></a>

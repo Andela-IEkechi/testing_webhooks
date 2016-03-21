@@ -1,9 +1,40 @@
-placeholder for settings
+<div class="row">
+  <div class="col-md-6">
+    <%= simple_form_for @project do |f| %>
+      <%= f.input :title, validate: true %>
 
-add form for:
+      <div class="text-xs-right">
+        <%= f.button :submit, "Update project", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
 
-title
-ticket statuses (sortable, with default system statuses: new, closed, invalid, open)
-memberships (members and their roles)
-hand over project
-delete project
+<div class="row">
+  <div class="col-md-6">
+    <h4>Ticket statuses</h4>
+    <%= simple_form_for @project do |f| %>
+      ticket statuses go here
+
+      <div class="text-xs-right">
+        <%= f.button :submit, "Update ticket statuses", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <h4>Access controll</h4>
+    <%= simple_form_for @project do |f| %>
+      memberships go here
+
+      <div class="text-xs-right">
+        <%= f.button :submit, "Update project access", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+

@@ -15,4 +15,7 @@
 //= require turbolinks
 //= require tether
 //= require bootstrap-sprockets
+//= require underscore
+//= require json2
+//= require judge
 //= require_tree .

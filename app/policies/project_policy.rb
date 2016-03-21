@@ -10,4 +10,9 @@ class ProjectPolicy < ApplicationPolicy
     true
   end
 
+  def update?
+    #TODO: we should check if the user is an admin or an owner of the project
+    true
+  end
+
 end

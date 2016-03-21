@@ -8,4 +8,6 @@ class Project < ApplicationRecord
 
   # TODO: add a logo
   # TODO: add slugs
+
+
 end
