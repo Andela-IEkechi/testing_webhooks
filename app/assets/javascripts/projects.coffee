@@ -22,6 +22,10 @@ adjustStatesSortableIndexes = ->
 $(document).on "DOMSubtreeModified", "#{context_name} table tbody#ticket_statuses", (event) ->
   adjustStatesSortableIndexes()
 
+$(document).on "shown.bs.tab", "#{context_name} [id^='board-']", ->
+  board_id = $(this).attr('id')
+  App.board_tickets.retrieve(board_id)
+
 $ ->
   activate_tab()
 

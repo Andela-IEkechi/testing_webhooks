@@ -1,7 +1,7 @@
 App.board_tickets = App.cable.subscriptions.create "BoardTicketsChannel",
   connected: ->
     # Called when the subscription is ready for use on the server
-    @retrieve()
+    # @retrieve()
 
   disconnected: ->
     # Called when the subscription has been terminated by the server
@@ -10,8 +10,7 @@ App.board_tickets = App.cable.subscriptions.create "BoardTicketsChannel",
     # Called when there's incoming data on the websocket for this channel
     console.log "BoardTicketsChannel... #{data}"
 
-  retrieve: ->
+  retrieve: (board_id)->
     # Calls `BoardTicketsChannel#retrieve(data)` on the server
-    for board in $(".board")
-      console.log "retrieving board: #{board.data("board-id")}"
-      @perform("retrieve", board_id: board.data("board-id"))
+    console.log "retrieving board: #{board_id}"
+      @perform("retrieve", board_id: board_id)
