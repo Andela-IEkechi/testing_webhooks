@@ -56,6 +56,7 @@ group :development, :test do
   gem 'rspec-rails', '>= 3.5.0.beta2', '< 4'
   # Use Factory Girl for generating random test data
   gem 'factory_girl_rails'
+  gem 'faker'
   gem "pry-rails"
   gem "binding_of_caller"
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

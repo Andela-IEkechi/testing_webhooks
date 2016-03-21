@@ -9,32 +9,32 @@ context = (selector) ->
 
 # NOTE: Pull valid options dynamically from the backend
 prepare_allowed_fields = (input_field) ->
-#     url = $(input_field).data('allowed-values-url') + '?query=%QUERY'
-#     field_name = $(input_field).data('allowed-values-field')
-#     values = new Bloodhound({
-#       remote: url,
-#       queryTokenizer: Bloodhound.tokenizers.whitespace,
-#       datumTokenizer: (d) ->
-#         # force string conversion, otherwise we get a js error on backspace
-#         Bloodhound.tokenizers.obj.whitespace(""+field_name)
-#     })
+    # url = $(input_field).data('allowed-values-url') + '?query=%QUERY'
+    # field_name = $(input_field).data('allowed-values-field')
+    # values = new Bloodhound({
+    #   remote: url,
+    #   queryTokenizer: Bloodhound.tokenizers.whitespace,
+    #   datumTokenizer: (d) ->
+    #     # force string conversion, otherwise we get a js error on backspace
+    #     Bloodhound.tokenizers.obj.whitespace(""+field_name)
+    # })
 
-#     values.initialize()
+    # values.initialize()
 
-#     $(this).typeahead(
-#       {
-#         hint: true;
-#         highlight: true,
-#         minLength: 1
-#       },
-#       {
-#         name: 'Values',
-#         displayKey: (value)->
-#           # force string conversion, otherwise we get a js error on backspace
-#           return ""+value[field_name]
-#         source: values.ttAdapter()
-#       }
-#     )
+    # $(this).typeahead(
+    #   {
+    #     hint: true;
+    #     highlight: true,
+    #     minLength: 1
+    #   },
+    #   {
+    #     name: 'Values',
+    #     displayKey: (value)->
+    #       # force string conversion, otherwise we get a js error on backspace
+    #       return ""+value[field_name]
+    #     source: values.ttAdapter()
+    #   }
+    # )
 
 #disable items that require forms to be valid
 $(document).on 'judge:validated', "#{context_name}", ->

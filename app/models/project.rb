@@ -1,8 +1,8 @@
 class Project < ApplicationRecord
+  has_many :ticket_statuses
   has_many :memberships
   has_many :boards
   has_many :tickets
-  has_many :ticket_statuses
 
   validates :title, presence: true
 
@@ -10,6 +10,7 @@ class Project < ApplicationRecord
   # TODO: add slugs
 
   accepts_nested_attributes_for :ticket_statuses, allow_destroy: true
+  accepts_nested_attributes_for :memberships, allow_destroy: true
 
   after_create :ensure_system_statuses
 

@@ -1,0 +1,13 @@
+<tr class="nested-fields">
+  <td>
+    <%= f.input :email, as: :email, :validate => true, label: false %>
+    <!-- TODO: we need to autocomplete known email addresses: everyone on projects we are involved in -->
+  </td>
+  <td>
+    <%= f.input :role, collection: Membership::ROLES, label: false, include_blank: false %>
+  </td>
+  <td class="text-xs-right">
+    <%= f.hidden_field :id %>
+    <%= link_to_remove_association raw("&times;"), f %>
+  </td>
+</tr>

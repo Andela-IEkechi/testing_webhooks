@@ -61,8 +61,21 @@ class ProjectsController < ApplicationController
       params[:project] ||= {title: "Untitled"}
     end
 
+    #We get email addresses in on params[:membership_attributes], and those need to be translated into user ids
+    if params[:project][:memberships_attributes]
+      params[:project][:memberships_attributes].each do |id, attrs|
+        if user_from_email = User.where(:email => attrs[:email]).first
+          attrs[:user_id] = user_from_email.id
+        else #if we could not locate the user, we remove the membership attrs
+          attrs.clear
+          params[:project][:memberships_attributes].compact!
+        end
+      end
+    end
+
     params.require(:project).permit(:id, :_destroy, :title,
-      ticket_statuses_attributes: [:id, :_destroy, :name, :open, :order]
+      ticket_statuses_attributes: [:id, :_destroy, :name, :open, :order],
+      memberships_attributes: [:id, :_destroy, :user_id, :project_id, :role]
       )
   end
 end
