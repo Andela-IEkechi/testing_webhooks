@@ -4,27 +4,33 @@ class ProjectsController < ApplicationController
     authorize @project
   end
 
-  private
+  def create
+    authorize @project
 
-  def load_resource
-    klass = (controller_name.singularize.classify.constantize rescue nil)
-    klass_name = (klass.name.underscore rescue nil)
+    #also create an owner membership
+    @project.memberships.owner.build(user: current_user)
 
-    #if we are in a thing with a model. have a stab at loading it
-    if klass
-      @resource_scope ||= klass
-      @resource_scope = policy_scope(@resource_scope)
-
-      case action_name
-      when 'index' then
-        eval("@#{klass_name.pluralize} = @resource_scope.all")
-      when 'show', 'edit', 'update', 'destroy' then
-        eval("@#{klass_name} = @resource_scope.find(params[:id])")
-      when 'new' then
-        eval("@#{klass_name} = @resource_scope.new()")
-      when 'create' then
-        eval("@#{klass_name} = @resource_scope.new(#{klass_name}_params)")
+    respond_to do |format|
+      if @project.save
+        format.html { redirect_to @project, success: 'Project was successfully created.' }
+        format.json { render :show, status: :created, location: @project }
+      else
+        format.html { redirect_to :back, status: :unprocessable_entity }
+        format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  private
+
+
+
+  def project_params
+    case action_name
+    when "create"
+      params[:project] ||= {title: "new project #{current_user.projects.count + 1}"}
+    end
+
+    params.require(:project).permit(:id, :_destroy, :title)
   end
 end

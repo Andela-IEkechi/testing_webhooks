@@ -4,6 +4,8 @@ class Project < ApplicationRecord
   has_many :tickets
   has_many :ticket_statuses
 
-  validates :title, presence: true, uniqueness: true
+  validates :title, presence: true
+
   # TODO: add a logo
+  # TODO: add slugs
 end

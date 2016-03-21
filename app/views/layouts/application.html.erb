@@ -31,7 +31,7 @@
               <% if current_user.projects.any? %>
                 <div class="dropdown-divider"></div>
               <% end %>
-              <%= link_to "New project", new_project_path(), class: "dropdown-item" %>
+              <%= link_to "New project", projects_path(), method: 'POST', class: "dropdown-item" %>
             </div>
           </li>
 
@@ -54,9 +54,9 @@
               <%= current_user.email %>
             </a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Settings</a>
+              <a class="dropdown-item" href="#"><%= fa_icon "gear" %>Settings</a>
               <div class="dropdown-divider"></div>
-              <%= link_to "Logout", destroy_user_session_path(), method: :delete, class: "dropdown-item" %>
+              <%= link_to raw(fa_icon("sign-out") + "Logout"), destroy_user_session_path(), method: :delete, class: "dropdown-item" %>
             </div>
           </li>
           <% else %>

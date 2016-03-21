@@ -5,24 +5,24 @@
     <div class="col-sm-1">
       <!-- Nav tabs -->
       <ul class="nav nav-pills nav-stacked" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" href="#boards" role="tab">Boards</a>
+        <li class="nav-item text-xs-center">
+          <a class="nav-link active" data-toggle="tab" href="#boards" role="tab" title="Boards"><%= fa_icon "table" %></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#tickets" role="tab">Tickets</a>
+        <li class="nav-item text-xs-center">
+          <a class="nav-link" data-toggle="tab" href="#tickets" role="tab" title="Tickets"><%= fa_icon "check-square" %></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#assets" role="tab">Assets</a>
+        <li class="nav-item text-xs-center">
+          <a class="nav-link" data-toggle="tab" href="#assets" role="tab" title="Assets"><%= fa_icon "paperclip" %></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a>
+        <li class="nav-item text-xs-center">
+          <a class="nav-link" data-toggle="tab" href="#settings" role="tab" title="Settings"><%= fa_icon "gear" %></a>
         </li>
       </ul>
     </div>
     <div class="col-sm-11">
       <!-- Tab panes -->
       <div class="tab-content">
-        <div class="tab-pane active" id="board" role="tabpanel"><%= render partial: '/projects/tabs/boards' %></div>
+        <div class="tab-pane active" id="boards" role="tabpanel"><%= render partial: '/projects/tabs/boards' %></div>
         <div class="tab-pane" id="tickets" role="tabpanel"><%= render partial: '/projects/tabs/tickets' %></div>
         <div class="tab-pane" id="assets" role="tabpanel"><%= render partial: '/projects/tabs/assets' %></div>
         <div class="tab-pane" id="settings" role="tabpanel"><%= render partial: '/projects/tabs/settings' %></div>
