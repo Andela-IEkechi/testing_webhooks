@@ -1,0 +1,16 @@
+<table class="table" class="board" data-board-id="<%= board.id %>">
+  <thead>
+    <tr>
+    <% board.project.ticket_statuses.each do |ts| %>
+      <th><%= ts.name %></th>
+    <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <% board.project.ticket_statuses.each do |ts| %>
+      <td data-ticket-status-name="<%= ts.name %>">todo</td>
+    <% end %>
+    </tr>
+  </tbody>
+</table>

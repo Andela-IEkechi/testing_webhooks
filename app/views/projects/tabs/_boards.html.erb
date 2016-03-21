@@ -1,5 +1,28 @@
-placeholder for boards
+<div class="row">
+  <div class="col-sm-12">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <% @project.boards.each do |board| %>
+      <li class="nav-item text-xs-center">
+        <a class="nav-link" data-toggle="tab" href="#board-<%=board.id%>" role="tab"><%= board.name %></a>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <% @project.boards.each do |board| %>
+      <div class="tab-pane" id="board-<%=board.id%>" role="tabpanel"><%= render partial: '/projects/tabs/boards/board', object: board %></div>
+      <% end %>
+    </div>
+  </div>
+</div>
 
+
+<p>
 List boards
 + new board
 view boards on list
@@ -13,3 +36,5 @@ So we are going for a simply icebox and progression view. NOT dates. We might wa
 
 
 adding/editing a  board should be a modal overlay
+</p>
+

@@ -19,7 +19,6 @@ Membership::ROLES.each do |role|
   user.memberships.create(project: project, role: role)
 end
 
-
 # create a few more users
 4.times do
   user = User.create(email: Faker::Internet.email, password: "password")
@@ -34,4 +33,10 @@ User.where.not(:id => user.id).find_each do |user|
   end
 end
 
+#create a few boards for every project
+Project.find_each do |proj|
+  proj.boards.create(name: Faker::Lorem.word)
+  proj.boards.create(name: Faker::Lorem.word)
+  proj.boards.create(name: Faker::Lorem.word)
+end
 
