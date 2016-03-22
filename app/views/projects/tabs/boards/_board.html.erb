@@ -1,15 +1,19 @@
-<table class="table" class="board" data-board-id="<%= board.id %>">
+<table class="table board"
+  data-board-id="<%= board.id %>"
+  data-board-url="<%= project_board_path(board.project, board) %>"
+  data-ticket-template="<%= CGI::escapeHTML render(partial: '/projects/tabs/boards/ticket') %>"
+  >
   <thead>
     <tr>
-    <% board.project.ticket_statuses.each do |ts| %>
+    <% board.project.statuses.each do |ts| %>
       <th><%= ts.name %></th>
     <% end %>
     </tr>
   </thead>
   <tbody>
     <tr>
-    <% board.project.ticket_statuses.each do |ts| %>
-      <td data-ticket-status-name="<%= ts.name %>">todo</td>
+    <% board.project.statuses.each do |ts| %>
+      <td data-status-id="<%=ts.id%>" class="connectedSortable"></td>
     <% end %>
     </tr>
   </tbody>

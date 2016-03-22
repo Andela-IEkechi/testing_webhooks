@@ -4,7 +4,7 @@ Asset.delete_all
 Comment.delete_all
 Ticket.delete_all
 Board.delete_all
-TicketStatus.delete_all
+Status.delete_all
 Project.delete_all
 Account.delete_all
 User.delete_all
@@ -40,3 +40,12 @@ Project.find_each do |proj|
   proj.boards.create(name: Faker::Lorem.word)
 end
 
+#create a few tickets for every board
+Board.find_each do |board|
+  3.times do
+    ticket = board.tickets.create(title: Faker::Lorem.sentence(3), project_id: board.project_id)
+    # create a few comments for this ticket
+    ticket.comments.create(content: Faker::Lorem::paragraph(), status_id: board.project.statuses.sample.id, user_id: board.project.memberships.sample.user_id)
+    ticket.comments.create(content: Faker::Lorem::paragraph(), status_id: board.project.statuses.sample.id, user_id: board.project.memberships.sample.user_id)
+  end
+end

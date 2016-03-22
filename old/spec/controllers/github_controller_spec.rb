@@ -99,7 +99,7 @@ describe GithubController, :type => :controller, :quarantine => true do
     end
 
     it "changes the assigned status" do
-      status = create(:ticket_status, :project => project)
+      status = create(:status, :project => project)
       expect do
         # Send a message with changes to all ticket attributes
         @payload[:commits].first[:message] = "sample data [##{ticket.scoped_id} status:#{status.name}]"
@@ -111,7 +111,7 @@ describe GithubController, :type => :controller, :quarantine => true do
     end
 
     it "changes more than one assigned attribute at a time" do
-      status = create(:ticket_status, :project => project)
+      status = create(:status, :project => project)
       expect(ticket.cost).to_not eq(3)
       expect do
         # Send a message with changes to all ticket attributes
@@ -125,7 +125,7 @@ describe GithubController, :type => :controller, :quarantine => true do
     end
 
     it "ignores superfluous content in the comment (non key:value)" do
-      status = create(:ticket_status, :project => project)
+      status = create(:status, :project => project)
       expect(ticket.cost).to_not eq(3)
       expect do
         # Send a message with changes to all ticket attributes

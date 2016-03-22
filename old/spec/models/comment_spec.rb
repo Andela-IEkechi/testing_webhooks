@@ -47,7 +47,7 @@ describe Comment do
 
   context 'contains body markup that' do
     before(:each) do
-      subject = build(:comment, :status => create(:ticket_status))
+      subject = build(:comment, :status => create(:status))
     end
 
     it 'can be plain text' do

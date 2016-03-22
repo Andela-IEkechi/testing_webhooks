@@ -22,17 +22,17 @@
           <th>action</th>
         </tr>
       </thead>
-      <tbody id="ticket_statuses">
-        <%= f.simple_fields_for :ticket_statuses, @project.ticket_statuses.reorder(order: :asc).all do |ts| %>
-          <%= render partial: '/projects/tabs/settings/ticket_status_fields', locals: {f: ts} %>
+      <tbody id="statuses">
+        <%= f.simple_fields_for :statuses, @project.statuses.reorder(order: :asc).all do |ts| %>
+          <%= render partial: '/projects/tabs/settings/status_fields', locals: {f: ts} %>
         <% end %>
       </tbody>
       <tfoot>
         <tr>
           <td colspan="3" class="text-xs-right">
-            <%= link_to_add_association "Add another", f, :ticket_statuses,
-              partial: "/projects/tabs/settings/ticket_status_fields",
-              data: {'association-insertion-node': "tbody#ticket_statuses", 'association-insertion-method': "append"},
+            <%= link_to_add_association "Add another", f, :statuses,
+              partial: "/projects/tabs/settings/status_fields",
+              data: {'association-insertion-node': "tbody#statuses", 'association-insertion-method': "append"},
               class: "btn btn-success" %>
           </td>
         </tr>

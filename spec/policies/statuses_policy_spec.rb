@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TicketStatusesPolicy do
+RSpec.describe StatusesPolicy do
 
   let(:user) { User.new }
 

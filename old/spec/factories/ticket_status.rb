@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :ticket_status do
+  factory :status do
     sequence(:name) {|n| "status-#{n}" }
     association(:project)
   end

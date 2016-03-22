@@ -1,4 +1,4 @@
-class TicketStatus < ApplicationRecord
+class Status < ApplicationRecord
   belongs_to :project
 
   SYSTEM={

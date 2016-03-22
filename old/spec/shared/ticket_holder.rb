@@ -36,41 +36,41 @@ shared_examples("ticket_holder") do
     end
   end
 
-  describe ".ticket_status_count" do
+  describe ".status_count" do
     before(:each) do
       subject.tickets << create(:ticket)
       ticket = subject.tickets << create(:ticket)
 
-      open_status = create(:ticket_status, :project => ticket.project, :open => true)
-      closed_status = create(:ticket_status, :project => ticket.project, :open => false)
+      open_status = create(:status, :project => ticket.project, :open => true)
+      closed_status = create(:status, :project => ticket.project, :open => false)
 
       2.times do
         subject.tickets << create(:ticket)
         ticket = subject.tickets.last
-        ticket.comments << create(:comment, :ticket_status => open_status)
+        ticket.comments << create(:comment, :status => open_status)
       end
 
       4.times do
         subject.tickets << create(:ticket)
         ticket = subject.tickets.last
-        ticket.comments << create(:comment, :ticket_status => closed_status)
+        ticket.comments << create(:comment, :status => closed_status)
       end
     end
 
     it "returns a hash with counters" do
-      expect(subject.ticket_status_count.keys).to eq(['a', 't', 'f'])
+      expect(subject.status_count.keys).to eq(['a', 't', 'f'])
     end
 
     it "counts the number of open tickets" do
-      expect(subject.ticket_status_count['t']).to eq(subject.tickets.select{|t| t.status.open?}.count)
+      expect(subject.status_count['t']).to eq(subject.tickets.select{|t| t.status.open?}.count)
     end
 
     it "counts the number of closed tickets" do
-      expect(subject.ticket_status_count['f']).to eq(subject.tickets.select{|t| !t.status.open?}.count)
+      expect(subject.status_count['f']).to eq(subject.tickets.select{|t| !t.status.open?}.count)
     end
 
     it "counts the total number of tickets" do
-      expect(subject.ticket_status_count['a']).to eq(subject.tickets.count)
+      expect(subject.status_count['a']).to eq(subject.tickets.count)
     end
   end
 
@@ -83,19 +83,19 @@ shared_examples("ticket_holder") do
       subject.tickets << create(:ticket)
       ticket = subject.tickets << create(:ticket)
 
-      open_status = create(:ticket_status, :project => ticket.project, :open => true)
-      closed_status = create(:ticket_status, :project => ticket.project, :open => false)
+      open_status = create(:status, :project => ticket.project, :open => true)
+      closed_status = create(:status, :project => ticket.project, :open => false)
 
       2.times do
         subject.tickets << create(:ticket)
         ticket = subject.tickets.last
-        ticket.comments << create(:comment, :ticket_status => open_status)
+        ticket.comments << create(:comment, :status => open_status)
       end
 
       4.times do
         subject.tickets << create(:ticket)
         ticket = subject.tickets.last
-        ticket.comments << create(:comment, :ticket_status => closed_status)
+        ticket.comments << create(:comment, :status => closed_status)
       end
 
       expect(subject.progess_count).to eq((4/6).round.to_i)
@@ -105,21 +105,21 @@ shared_examples("ticket_holder") do
 
   describe ".open_ticket_count" do
     it "returns the 't' value on the counter" do
-      subject.ticket_status_count['t'] = 99
+      subject.status_count['t'] = 99
       expect(subject.open_ticket_count).to eq(99)
     end
   end
 
   describe ".closed_ticket_count" do
     it "returns the 'f' value on the counter" do
-      subject.ticket_status_count['f'] = 99
+      subject.status_count['f'] = 99
       expect(subject.closed_ticket_count).to eq(99)
     end
   end
 
   describe ".ticket_count" do
     it "returns the 'a' value on the counter" do
-      subject.ticket_status_count['a'] = 99
+      subject.status_count['a'] = 99
       expect(subject.ticket_count).to eq(99)
     end
   end

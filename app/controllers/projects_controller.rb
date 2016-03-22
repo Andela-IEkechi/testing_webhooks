@@ -10,18 +10,16 @@ class ProjectsController < ApplicationController
   def create
     authorize @project
 
-    #also create an owner membership
-    @project.memberships.owner.build(user: current_user)
-
-    # @project.save
-    # respond_with(@project)
-
     respond_to do |format|
       if @project.save
+
+        #also create an owner membership
+        @project.memberships.owner.create(user: current_user)
+
         format.html { redirect_to project_path(@project, params: {tab: 'settings'}), success: 'Project was successfully created.' }
         format.json { render :show, status: :created, location: @project}
       else
-        format.html { render nil, status: :unprocessable_entity }
+        format.html { render nothing: true, status: :unprocessable_entity }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
@@ -74,7 +72,7 @@ class ProjectsController < ApplicationController
     end
 
     params.require(:project).permit(:id, :_destroy, :title,
-      ticket_statuses_attributes: [:id, :_destroy, :name, :open, :order],
+      statuses_attributes: [:id, :_destroy, :name, :open, :order],
       memberships_attributes: [:id, :_destroy, :user_id, :project_id, :role]
       )
   end

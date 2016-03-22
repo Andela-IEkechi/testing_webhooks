@@ -1,4 +1,4 @@
-class TicketStatus < ActiveRecord::Base
+class Status < ActiveRecord::Base
   belongs_to :project
   has_many :comments, :foreign_key => 'status_id'
 

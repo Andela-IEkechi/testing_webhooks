@@ -1,5 +1,5 @@
-class AddSortIndexToTicketStatuses < ActiveRecord::Migration
+class AddSortIndexToStatuses < ActiveRecord::Migration
   def change
-    add_column :ticket_statuses, :sort_index, :integer
+    add_column :statuses, :sort_index, :integer
   end
 end

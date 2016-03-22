@@ -8,7 +8,7 @@ describe Project do
   it {expect(subject).to have_many(:tickets)}
   it {expect(subject).to have_many(:sprints)}
   it {expect(subject).to have_many(:assets)}
-  it {expect(subject).to have_many(:ticket_statuses)}
+  it {expect(subject).to have_many(:statuses)}
   it {expect(subject).to have_many(:memberships)}
   it {expect(subject).to have_many(:api_keys)}
   it {expect(subject).to respond_to(:logo)}
@@ -44,7 +44,7 @@ describe Project do
   end
 
   it "should create default statuses of new and closed" do
-    expect(subject.ticket_statuses.collect(&:name).sort).to eq(['new', 'closed'].sort)
+    expect(subject.statuses.collect(&:name).sort).to eq(['new', 'closed'].sort)
   end
 
   it "should have an owner membership" do
@@ -91,17 +91,17 @@ describe Project do
     }.to change(Sprint,:count).by(-2)
   end
 
-  it "should delete related ticket_statuses when it's destroyed" do
-    expect(subject).to have_at_least(2).ticket_statuses
+  it "should delete related statuses when it's destroyed" do
+    expect(subject).to have_at_least(2).statuses
     expect {
       subject.destroy
-    }.to change(TicketStatus,:count).by(-2) #two default statuses
+    }.to change(Status,:count).by(-2) #two default statuses
   end
 
-  it "should not be deleted when a related ticket_statuses is destroyed" do
-    expect(subject.ticket_statuses.count).to eq(2)
+  it "should not be deleted when a related statuses is destroyed" do
+    expect(subject.statuses.count).to eq(2)
     expect {
-      subject.ticket_statuses.first.destroy
+      subject.statuses.first.destroy
     }.to change(Project,:count).by(0)
   end
 

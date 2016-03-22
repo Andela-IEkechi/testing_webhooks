@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe TicketStatus do
-  let(:subject) {create(:ticket_status)}
+describe Status do
+  let(:subject) {create(:status)}
 
   it {expect(subject).to belong_to(:project)}
   it {expect(subject).to validate_presence_of(:project)}
@@ -43,10 +43,10 @@ describe TicketStatus do
     status = comment.status
     expect {
       status.destroy
-    }.to change(TicketStatus, :count).by(0)
+    }.to change(Status, :count).by(0)
     expect {
       status.comments.find_each(&:destroy)
       status.destroy
-    }.to change(TicketStatus, :count).by(-1)
+    }.to change(Status, :count).by(-1)
   end
 end

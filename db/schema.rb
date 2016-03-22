@@ -48,11 +48,15 @@ ActiveRecord::Schema.define(version: 20160320193917) do
   create_table "comments", force: :cascade do |t|
     t.integer  "ticket_id"
     t.integer  "user_id"
+    t.integer  "assignee_id"
+    t.integer  "status_id"
     t.text     "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
+  add_index "comments", ["assignee_id"], name: "index_comments_on_assignee_id", using: :btree
+  add_index "comments", ["status_id"], name: "index_comments_on_status_id", using: :btree
   add_index "comments", ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
@@ -84,7 +88,7 @@ ActiveRecord::Schema.define(version: 20160320193917) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "ticket_statuses", force: :cascade do |t|
+  create_table "statuses", force: :cascade do |t|
     t.integer  "project_id"
     t.string   "name",                      null: false
     t.boolean  "open",       default: true, null: false
@@ -93,15 +97,18 @@ ActiveRecord::Schema.define(version: 20160320193917) do
     t.datetime "updated_at",                null: false
   end
 
-  add_index "ticket_statuses", ["project_id"], name: "index_ticket_statuses_on_project_id", using: :btree
+  add_index "statuses", ["project_id"], name: "index_statuses_on_project_id", using: :btree
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "project_id"
+    t.integer  "board_id"
     t.datetime "due_at"
+    t.string   "title",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_index "tickets", ["board_id"], name: "index_tickets_on_board_id", using: :btree
   add_index "tickets", ["project_id"], name: "index_tickets_on_project_id", using: :btree
 
   create_table "users", force: :cascade do |t|

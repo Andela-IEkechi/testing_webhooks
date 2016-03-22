@@ -1,5 +1,5 @@
 # Judge.configure do
-#   expose TicketStatus, :name
+#   expose Status, :name
 # end
 
-Judge.config.exposed[TicketStatus] = [:name]
+Judge.config.exposed[Status] = [:name]

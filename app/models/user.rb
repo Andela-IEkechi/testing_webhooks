@@ -7,9 +7,10 @@ class User < ApplicationRecord
 
   devise :omniauthable, :omniauth_providers => [:facebook, :github, :google_oauth2]
 
-  has_many :memberships
+  has_one :account, dependent: :destroy
+  has_many :memberships, dependent: :destroy
   has_many :projects, through: :memberships
-  has_many :overviews
+  has_many :overviews, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true
 end

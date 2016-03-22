@@ -100,7 +100,7 @@ describe TicketsController, :type => :controller do
     describe "POST #create" do
       context "with valid attributes" do
         before(:each) do
-          status = create(:ticket_status, :project => @project)
+          status = create(:status, :project => @project)
           @attrs = attributes_for(:ticket, :project_id => @project.to_param)
           @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => status.id)})
           @attrs.merge!(:comments_attributes => { 0 => attributes_for(:comment, :status_id => status.id, :sprint_id => @sprint.to_param)}) if @sprint

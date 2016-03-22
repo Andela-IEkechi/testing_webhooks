@@ -2,7 +2,7 @@ class Ticket < ActiveRecord::Base
   include Scoped
 
   belongs_to :project #always
-  has_many :comments, :order => :id, :dependent => :destroy
+  has_many :comments, :order => :id, dependent: :destroy
   has_many :assets, :through => :comments
   has_many :split_tickets, :order => 'tickets.id ASC', :through => :comments
 

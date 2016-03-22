@@ -1,9 +1,9 @@
-class RemoveNatureFromTicketStatus < ActiveRecord::Migration
+class RemoveNatureFromStatus < ActiveRecord::Migration
   def up
-    remove_column :ticket_statuses, :nature
+    remove_column :statuses, :nature
   end
 
   def down
-    add_column :ticket_statuses, :nature, :string, :default => 'undefined'
+    add_column :statuses, :nature, :string, :default => 'undefined'
   end
 end

@@ -148,7 +148,7 @@ ActiveRecord::Schema.define(:version => 20160118103245) do
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
 
-  create_table "ticket_statuses", :force => true do |t|
+  create_table "statuses", :force => true do |t|
     t.integer "project_id",                        :null => false
     t.string  "name",                              :null => false
     t.boolean "open",           :default => true

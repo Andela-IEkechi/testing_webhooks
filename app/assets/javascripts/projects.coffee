@@ -16,18 +16,12 @@ activate_tab = ()->
 
 adjustStatesSortableIndexes = ->
   # we need to update the input field that stores the relative order
-  context("table tbody#ticket_statuses tr input[id$='order']").each (index, element) ->
+  context("table tbody#statuses tr input[id$='order']").each (index, element) ->
     $(element).val(index)
 
-$(document).on "DOMSubtreeModified", "#{context_name} table tbody#ticket_statuses", (event) ->
+$(document).on "DOMSubtreeModified", "#{context_name} table tbody#statuses", (event) ->
   adjustStatesSortableIndexes()
-
-$(document).on "shown.bs.tab", "#{context_name} [id^='board-']", ->
-  board_id = $(this).attr('id')
-  App.board_tickets.retrieve(board_id)
 
 $ ->
   activate_tab()
-
-  context("table tbody#ticket_statuses").sortable()
-
+  context("table tbody#statuses").sortable()

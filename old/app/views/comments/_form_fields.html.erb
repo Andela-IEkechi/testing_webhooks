@@ -33,7 +33,7 @@
   </div>
 
   <%= comment_form.input :status do %>
-    <%= comment_form.select :status_id, @ticket.project.ticket_statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
+    <%= comment_form.select :status_id, @ticket.project.statuses.all.map { |s| [s.name, s.id] }, :include_blank => false %>
   <% end %>
 
   <%= comment_form.input :cost, :collection => Ticket::COST.map{|x| [(x == 0)? "unknown" : x.to_s,x]}, :include_blank => false %>

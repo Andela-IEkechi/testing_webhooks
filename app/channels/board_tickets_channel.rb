@@ -11,16 +11,6 @@ class BoardTicketsChannel < ApplicationCable::Channel
     # Any cleanup needed when channel is unsubscribed
   end
 
-  def retrieve(data)
-    #TODO: make sure the user can access the board! Use policies!
-    board = Board.find(data[:board_id])
-
-    # broadcast all the tickets on the particular board
-    if board.tickets.any?
-      ActionCable.server.broadcast "board:#{board.id}:tickets", board.tickets.map{|t| t.attributes}
-    end
-  end
-
   protected
 
   def available_boards

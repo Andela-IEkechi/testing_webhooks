@@ -14,7 +14,7 @@
   <tbody>
     <% total_count = 0 %>
     <% total_cost = 0 %>
-    <% @sprint.project.ticket_statuses.where(:open => true).each do |ts|%>
+    <% @sprint.project.statuses.where(:open => true).each do |ts|%>
       <%
         pool = [@sprint.assigned_tickets.select{|t| t.status == ts}].flatten.compact
         total_count += pool.count
@@ -35,7 +35,7 @@
 
     <% total_count = 0 %>
     <% total_cost = 0 %>
-    <% @sprint.project.ticket_statuses.where(:open => false).each do |ts|%>
+    <% @sprint.project.statuses.where(:open => false).each do |ts|%>
       <%
         pool = [@sprint.assigned_tickets.select{|t| t.status == ts}].flatten.compact
         total_count += pool.count

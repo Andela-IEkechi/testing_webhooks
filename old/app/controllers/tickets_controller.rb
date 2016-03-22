@@ -158,7 +158,7 @@ class TicketsController < ApplicationController
       when :tag
         comments.tagged_with(value).collect(&:id)
       when :status
-        status_ids = @project.ticket_statuses.where{sift :search, value}.collect(&:id)
+        status_ids = @project.statuses.where{sift :search, value}.collect(&:id)
         comments.where(:status_id => status_ids).collect(&:id)
       else
         []

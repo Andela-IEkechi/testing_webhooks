@@ -27,7 +27,7 @@ DROP INDEX public.index_accounts_on_user_id;
 ALTER TABLE ONLY public.versions DROP CONSTRAINT versions_pkey;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
 ALTER TABLE ONLY public.tickets DROP CONSTRAINT tickets_pkey;
-ALTER TABLE ONLY public.ticket_statuses DROP CONSTRAINT ticket_statuses_pkey;
+ALTER TABLE ONLY public.statuses DROP CONSTRAINT statuses_pkey;
 ALTER TABLE ONLY public.sprints DROP CONSTRAINT sprints_pkey;
 ALTER TABLE ONLY public.projects DROP CONSTRAINT projects_pkey;
 ALTER TABLE ONLY public.memberships DROP CONSTRAINT memberships_pkey;
@@ -38,7 +38,7 @@ ALTER TABLE ONLY public.accounts DROP CONSTRAINT accounts_pkey;
 ALTER TABLE public.versions ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.users ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.tickets ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.ticket_statuses ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.statuses ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.sprints ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.projects ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.memberships ALTER COLUMN id DROP DEFAULT;
@@ -52,8 +52,8 @@ DROP SEQUENCE public.users_id_seq;
 DROP TABLE public.users;
 DROP SEQUENCE public.tickets_id_seq;
 DROP TABLE public.tickets;
-DROP SEQUENCE public.ticket_statuses_id_seq;
-DROP TABLE public.ticket_statuses;
+DROP SEQUENCE public.statuses_id_seq;
+DROP TABLE public.statuses;
 DROP SEQUENCE public.sprints_id_seq;
 DROP TABLE public.sprints;
 DROP TABLE public.schema_migrations;
@@ -89,14 +89,14 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -109,7 +109,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: accounts; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: accounts; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE accounts (
@@ -146,7 +146,7 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 
 
 --
--- Name: api_keys; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: api_keys; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE api_keys (
@@ -161,7 +161,7 @@ CREATE TABLE api_keys (
 ALTER TABLE public.api_keys OWNER TO conductor;
 
 --
--- Name: comment_assets; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: comment_assets; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE comment_assets (
@@ -197,7 +197,7 @@ ALTER SEQUENCE comment_assets_id_seq OWNED BY comment_assets.id;
 
 
 --
--- Name: comments; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: comments; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE comments (
@@ -243,7 +243,7 @@ ALTER SEQUENCE comments_id_seq OWNED BY comments.id;
 
 
 --
--- Name: features; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: features; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE features (
@@ -282,7 +282,7 @@ ALTER SEQUENCE features_id_seq OWNED BY features.id;
 
 
 --
--- Name: memberships; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: memberships; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE memberships (
@@ -317,7 +317,7 @@ ALTER SEQUENCE memberships_id_seq OWNED BY memberships.id;
 
 
 --
--- Name: projects; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: projects; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE projects (
@@ -357,7 +357,7 @@ ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE schema_migrations (
@@ -368,7 +368,7 @@ CREATE TABLE schema_migrations (
 ALTER TABLE public.schema_migrations OWNER TO conductor;
 
 --
--- Name: sprints; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: sprints; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE sprints (
@@ -406,10 +406,10 @@ ALTER SEQUENCE sprints_id_seq OWNED BY sprints.id;
 
 
 --
--- Name: ticket_statuses; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: statuses; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
-CREATE TABLE ticket_statuses (
+CREATE TABLE statuses (
     id integer NOT NULL,
     project_id integer NOT NULL,
     name character varying(255) NOT NULL,
@@ -417,13 +417,13 @@ CREATE TABLE ticket_statuses (
 );
 
 
-ALTER TABLE public.ticket_statuses OWNER TO conductor;
+ALTER TABLE public.statuses OWNER TO conductor;
 
 --
--- Name: ticket_statuses_id_seq; Type: SEQUENCE; Schema: public; Owner: conductor
+-- Name: statuses_id_seq; Type: SEQUENCE; Schema: public; Owner: conductor
 --
 
-CREATE SEQUENCE ticket_statuses_id_seq
+CREATE SEQUENCE statuses_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -431,17 +431,17 @@ CREATE SEQUENCE ticket_statuses_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.ticket_statuses_id_seq OWNER TO conductor;
+ALTER TABLE public.statuses_id_seq OWNER TO conductor;
 
 --
--- Name: ticket_statuses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: conductor
+-- Name: statuses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: conductor
 --
 
-ALTER SEQUENCE ticket_statuses_id_seq OWNED BY ticket_statuses.id;
+ALTER SEQUENCE statuses_id_seq OWNED BY statuses.id;
 
 
 --
--- Name: tickets; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: tickets; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE tickets (
@@ -479,7 +479,7 @@ ALTER SEQUENCE tickets_id_seq OWNED BY tickets.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE users (
@@ -539,7 +539,7 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
--- Name: versions; Type: TABLE; Schema: public; Owner: conductor; Tablespace: 
+-- Name: versions; Type: TABLE; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE TABLE versions (
@@ -630,7 +630,7 @@ ALTER TABLE ONLY sprints ALTER COLUMN id SET DEFAULT nextval('sprints_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: conductor
 --
 
-ALTER TABLE ONLY ticket_statuses ALTER COLUMN id SET DEFAULT nextval('ticket_statuses_id_seq'::regclass);
+ALTER TABLE ONLY statuses ALTER COLUMN id SET DEFAULT nextval('statuses_id_seq'::regclass);
 
 
 --
@@ -4277,7 +4277,7 @@ COPY comments (id, ticket_id, feature_id, sprint_id, assignee_id, status_id, bod
 2502	756	4	29	10	6	Done with helper.	1	1	2013-01-25 15:18:16.867486	2013-01-25 15:18:16.867486	<p>Done with helper.</p>	\N	\N	\N
 2503	682	4	29	13	1		1	1	2013-01-25 15:18:46.128798	2013-01-25 15:18:46.128798	\N	\N	\N	\N
 2504	757	4	29	1	6	updated the controler and the specs.	1	1	2013-01-25 15:19:14.680344	2013-01-25 15:19:14.680344	<p>updated the controler and the specs.</p>	\N	\N	\N
-2505	775	33	\N	13	1	We currently allow ticket search on field values like 'blah'\r\n\r\nWe should be able to refine searches like: "feature:github" which will limit results to just the feature column matches for '%github%'\r\n\r\nSo, the qualification of xxx: should limit the columns we consider in the search.\r\n\r\nWe should also be able to search on "xxx:foo yyy:bar" which **AND**s the conditions in the search.\r\n\r\nvalid key words are:\r\n\r\n*id -> scope_id\r\n*title -> title\r\n*assigned -> user.email\r\n*status -> ticket_status.name\r\n*feature -> feature.name\r\n*sprint -> sprint.goal\r\n*cost -> cost\r\n\r\n	3	1	2013-01-25 15:25:56.034657	2013-01-25 15:25:56.034657	<p>We currently allow ticket search on field values like &#39;blah&#39;</p>\n\n<p>We should be able to refine searches like: &quot;feature:github&quot; which will limit results to just the feature column matches for &#39;%github%&#39;</p>\n\n<p>So, the qualification of xxx: should limit the columns we consider in the search.</p>\n\n<p>We should also be able to search on &quot;xxx:foo yyy:bar&quot; which <strong>AND</strong>s the conditions in the search.</p>\n\n<p>valid key words are:</p>\n\n<p>*id -&gt; scope<em>id\n*title -&gt; title\n*assigned -&gt; user.email\n*status -&gt; ticket</em>status.name\n*feature -&gt; feature.name\n*sprint -&gt; sprint.goal\n*cost -&gt; cost</p>	\N	\N	\N
+2505	775	33	\N	13	1	We currently allow ticket search on field values like 'blah'\r\n\r\nWe should be able to refine searches like: "feature:github" which will limit results to just the feature column matches for '%github%'\r\n\r\nSo, the qualification of xxx: should limit the columns we consider in the search.\r\n\r\nWe should also be able to search on "xxx:foo yyy:bar" which **AND**s the conditions in the search.\r\n\r\nvalid key words are:\r\n\r\n*id -> scope_id\r\n*title -> title\r\n*assigned -> user.email\r\n*status -> status.name\r\n*feature -> feature.name\r\n*sprint -> sprint.goal\r\n*cost -> cost\r\n\r\n	3	1	2013-01-25 15:25:56.034657	2013-01-25 15:25:56.034657	<p>We currently allow ticket search on field values like &#39;blah&#39;</p>\n\n<p>We should be able to refine searches like: &quot;feature:github&quot; which will limit results to just the feature column matches for &#39;%github%&#39;</p>\n\n<p>So, the qualification of xxx: should limit the columns we consider in the search.</p>\n\n<p>We should also be able to search on &quot;xxx:foo yyy:bar&quot; which <strong>AND</strong>s the conditions in the search.</p>\n\n<p>valid key words are:</p>\n\n<p>*id -&gt; scope<em>id\n*title -&gt; title\n*assigned -&gt; user.email\n*status -&gt; ticket</em>status.name\n*feature -&gt; feature.name\n*sprint -&gt; sprint.goal\n*cost -&gt; cost</p>	\N	\N	\N
 2506	776	33	\N	13	1	Once the search fields are supported in [#707](https://www.conductor-app.co.za/projects/1/tickets/707?feature_id=33), we need to extend the GH commit message to allow keywords to be passed down through the commit messages.\r\n\r\nvalues are:\r\n\r\n*cost\r\n*assigned\r\n*sprint\r\n*feature\r\n*status\r\n\r\nif any value does not exist in the context of the ticket or project, then it gets ignored.\r\n	2	1	2013-01-25 15:28:40.763501	2013-01-25 15:28:40.763501	<p>Once the search fields are supported in <a href="https://www.conductor-app.co.za/projects/1/tickets/707?feature_id=33">#707</a>, we need to extend the GH commit message to allow keywords to be passed down through the commit messages.</p>\n\n<p>values are:</p>\n\n<p>*cost\n*assigned\n*sprint\n*feature\n*status</p>\n\n<p>if any value does not exist in the context of the ticket or project, then it gets ignored.</p>	\N	\N	\N
 2507	641	50	31	16	49		3	5	2013-01-25 15:37:48.169302	2013-01-25 15:37:48.169302	\N	\N	\N	\N
 2508	396	4	\N	1	6	Implemented. We should get some user feedback regarding the showing/not of the "pending" message for new keys.\r\n\r\n	1	1	2013-01-26 14:07:20.176454	2013-01-26 14:07:20.176454	<p>Implemented. We should get some user feedback regarding the showing/not of the &quot;pending&quot; message for new keys.</p>	\N	\N	\N
@@ -9155,10 +9155,10 @@ SELECT pg_catalog.setval('sprints_id_seq', 97, true);
 
 
 --
--- Data for Name: ticket_statuses; Type: TABLE DATA; Schema: public; Owner: conductor
+-- Data for Name: statuses; Type: TABLE DATA; Schema: public; Owner: conductor
 --
 
-COPY ticket_statuses (id, project_id, name, open) FROM stdin;
+COPY statuses (id, project_id, name, open) FROM stdin;
 1	1	new	t
 3	2	new	t
 6	1	implemented	t
@@ -9345,10 +9345,10 @@ COPY ticket_statuses (id, project_id, name, open) FROM stdin;
 
 
 --
--- Name: ticket_statuses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: conductor
+-- Name: statuses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: conductor
 --
 
-SELECT pg_catalog.setval('ticket_statuses_id_seq', 195, true);
+SELECT pg_catalog.setval('statuses_id_seq', 195, true);
 
 
 --
@@ -11076,7 +11076,7 @@ SELECT pg_catalog.setval('versions_id_seq', 1, false);
 
 
 --
--- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY accounts
@@ -11084,7 +11084,7 @@ ALTER TABLE ONLY accounts
 
 
 --
--- Name: comment_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: comment_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY comment_assets
@@ -11092,7 +11092,7 @@ ALTER TABLE ONLY comment_assets
 
 
 --
--- Name: comments_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: comments_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY comments
@@ -11100,7 +11100,7 @@ ALTER TABLE ONLY comments
 
 
 --
--- Name: features_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: features_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY features
@@ -11108,7 +11108,7 @@ ALTER TABLE ONLY features
 
 
 --
--- Name: memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY memberships
@@ -11116,7 +11116,7 @@ ALTER TABLE ONLY memberships
 
 
 --
--- Name: projects_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: projects_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY projects
@@ -11124,7 +11124,7 @@ ALTER TABLE ONLY projects
 
 
 --
--- Name: sprints_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: sprints_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY sprints
@@ -11132,15 +11132,15 @@ ALTER TABLE ONLY sprints
 
 
 --
--- Name: ticket_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
-ALTER TABLE ONLY ticket_statuses
-    ADD CONSTRAINT ticket_statuses_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY statuses
+    ADD CONSTRAINT statuses_pkey PRIMARY KEY (id);
 
 
 --
--- Name: tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY tickets
@@ -11148,7 +11148,7 @@ ALTER TABLE ONLY tickets
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY users
@@ -11156,7 +11156,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace: 
+-- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: conductor; Tablespace:
 --
 
 ALTER TABLE ONLY versions
@@ -11164,98 +11164,98 @@ ALTER TABLE ONLY versions
 
 
 --
--- Name: index_accounts_on_user_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_accounts_on_user_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_accounts_on_user_id ON accounts USING btree (user_id);
 
 
 --
--- Name: index_comments_on_git_commit_uuid; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_comments_on_git_commit_uuid; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_comments_on_git_commit_uuid ON comments USING btree (git_commit_uuid);
 
 
 --
--- Name: index_features_on_project_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_features_on_project_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_features_on_project_id ON features USING btree (project_id);
 
 
 --
--- Name: index_sprints_on_project_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_sprints_on_project_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_sprints_on_project_id ON sprints USING btree (project_id);
 
 
 --
--- Name: index_tickets_on_project_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_tickets_on_project_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_tickets_on_project_id ON tickets USING btree (project_id);
 
 
 --
--- Name: index_tickets_on_project_id_and_scoped_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_tickets_on_project_id_and_scoped_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_tickets_on_project_id_and_scoped_id ON tickets USING btree (project_id, scoped_id);
 
 
 --
--- Name: index_users_on_authentication_token; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_users_on_authentication_token; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_users_on_authentication_token ON users USING btree (authentication_token);
 
 
 --
--- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
 
 
 --
--- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
--- Name: index_users_on_invitation_token; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_users_on_invitation_token; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_users_on_invitation_token ON users USING btree (invitation_token);
 
 
 --
--- Name: index_users_on_invited_by_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_users_on_invited_by_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_users_on_invited_by_id ON users USING btree (invited_by_id);
 
 
 --
--- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
 
 
 --
--- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: conductor; Tablespace: 
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: conductor; Tablespace:
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);

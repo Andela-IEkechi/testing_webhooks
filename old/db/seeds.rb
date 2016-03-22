@@ -41,7 +41,7 @@ Ticket.find_each(&:destroy)
 15.times do |x|
   ticket = mhp.tickets.create(title: Faker::Lorem.words(4).join(' '))
   (1..7).to_a.each do |x| #at least more than 6 comments, so we can enable folding
-    comment = ticket.comments.build(:body => Faker::Lorem.paragraph, :status_id => mhp.ticket_statuses.first.id)
+    comment = ticket.comments.build(:body => Faker::Lorem.paragraph, :status_id => mhp.statuses.first.id)
     comment.sprint = sprint if x == 1
     comment.user = admin
     comment.assignee = regular if x == 20

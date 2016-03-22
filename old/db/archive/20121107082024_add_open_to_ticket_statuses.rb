@@ -1,5 +1,5 @@
-class AddOpenToTicketStatuses < ActiveRecord::Migration
+class AddOpenToStatuses < ActiveRecord::Migration
   def change
-    add_column :ticket_statuses, :open, :boolean, :default => true
+    add_column :statuses, :open, :boolean, :default => true
   end
 end
