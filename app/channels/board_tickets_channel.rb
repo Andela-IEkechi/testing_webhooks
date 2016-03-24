@@ -20,8 +20,10 @@ class BoardTicketsChannel < ApplicationCable::Channel
     #find the status
     status = ticket.project.statuses.find(data[:status_id])
 
+    order = data[:order].to_i
+
     #move the ticket to the new status if we can
-    ticket.move!(status, current_user) if ticket && status
+    ticket.move!(status, order, current_user) if ticket && status
 
     #broadcast the ticket info, it might have failed to move, thats ok.
     ActionCable.server.broadcast "board:#{ticket.board_id}:tickets", ticket.broadcast_data

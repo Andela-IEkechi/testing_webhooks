@@ -5,6 +5,7 @@ class CreateTickets < ActiveRecord::Migration[5.0]
       t.belongs_to :board, null: true
       t.datetime :due_at
       t.string :title, null: false
+      t.integer :order, null: false, default: 0
       t.timestamps
     end
   end

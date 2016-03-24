@@ -9,6 +9,9 @@ class Ticket < ApplicationRecord
 
   validates :title, :length => {:minimum => 3}
 
+  scope :for_status, ->(status){joins(project: :statuses).where(statuses: {id: status.id})}
+  scope :ordered, ->{reorder(order: :asc)}
+
   def last_comment
     comments.order(id: :asc).last
   end
@@ -22,20 +25,41 @@ class Ticket < ApplicationRecord
   delegate :user, :to => :first_comment, :prefix => false
 
   #move a ticket to a new status and attribute the move to the user provided
-  def move!(status, user)
+  def move!(status, order, user)
     #check if the status provided is in the current project
-    return unless status.project == self.project
+    return unless status.project == project
 
     #check if the user is on the project
-    return unless self.project.has_member(user)
+    return unless project.has_member(user)
 
     #move the ticket to the new status, by adding a comment to the ticket
-    self.comments.create(user_id: user.id, status_id: status.id)
+    comments.create(user_id: user.id, status_id: status.id)
+
+    reorder!(order)
     #possibly need to reload to refresh the interpretation of last_comment
-    self.reload
+    reload
+    self
   end
 
   def broadcast_data
-    self.as_json(include: [:status, :assignee, :user])
+    as_json(include: [:status, :assignee, :user])
+  end
+
+  private
+
+  #place this ticket in a new relative position in the status for it's board
+  def reorder!(order)
+    #get all the tickets in their current order, by board and status
+    #exclude ourselves
+    tickets = board.tickets.for_status(status).ordered.where.not(id: id).to_a
+
+    #stick this ticket into the right place
+    tickets.insert(order, self)
+
+    #save all the tickets in their new order
+    tickets.each_with_index do |ticket, idx|
+      ticket.update_column(:order, idx)
+    end
+    self
   end
 end

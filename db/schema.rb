@@ -103,9 +103,10 @@ ActiveRecord::Schema.define(version: 20160320193917) do
     t.integer  "project_id"
     t.integer  "board_id"
     t.datetime "due_at"
-    t.string   "title",      null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "title",                  null: false
+    t.integer  "order",      default: 0, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   add_index "tickets", ["board_id"], name: "index_tickets_on_board_id", using: :btree
