@@ -3,3 +3,4 @@
 # end
 
 Judge.config.exposed[Status] = [:name]
+Judge.config.exposed[Board] = [:name]

@@ -14,6 +14,11 @@ class Project < ApplicationRecord
 
   after_create :ensure_system_statuses
 
+  def has_member(user)
+    return false unless user.is_a?(User)
+    memberships.where(user_id: user.id).any?
+  end
+
   private
 
   #create the predefined system statuses for tickets

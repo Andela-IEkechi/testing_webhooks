@@ -1,12 +1,16 @@
 <div class="row">
   <div class="col-sm-12">
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
+    <ul class="nav nav-tabs boards-nav" role="tablist">
       <% @project.boards.each do |board| %>
       <li class="nav-item text-xs-center">
         <a class="nav-link" data-toggle="tab" href="#board-<%=board.id%>" role="tab"><%= board.name %></a>
       </li>
       <% end %>
+      <li class="nav-item text-xs-center">
+        <a class="nav-link" data-toggle="tab" href="#board-new" role="tab">+</a>
+      </li>
+      <li class="pull-right"><%= link_to raw(fa_icon("gear")), "#settings", class: 'nav-link board-settings' %></li>
     </ul>
   </div>
 </div>
@@ -17,6 +21,14 @@
       <% @project.boards.each do |board| %>
       <div class="tab-pane" id="board-<%=board.id%>" role="tabpanel"><%= render partial: '/projects/tabs/boards/board', object: board %></div>
       <% end %>
+      <div class="tab-pane" id="board-new" role="tabpanel">
+        <p>board edit screen goes here</p>
+        <p>
+          We need to capture the board name, a due date.
+          also need to opt in/out of board status update emails.
+          "create" button reloads the page and shows the new board.
+        </p>
+      </div>
     </div>
   </div>
 </div>
