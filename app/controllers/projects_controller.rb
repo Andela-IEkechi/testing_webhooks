@@ -28,9 +28,6 @@ class ProjectsController < ApplicationController
   def update
     authorize @project
 
-    # @project.update(project_params)
-    # respond_with(@project)
-
     respond_to do |format|
       if @project.update(project_params)
 
@@ -60,7 +57,7 @@ class ProjectsController < ApplicationController
     end
 
     #We get email addresses in on params[:membership_attributes], and those need to be translated into user ids
-    if params[:project][:members_attributes]
+    if params.has_key?(:project) && params[:project].has_key?(:members_attributes)
       params[:project][:members_attributes].each do |id, attrs|
         if user_from_email = User.where(:email => attrs[:email]).first
           attrs[:user_id] = user_from_email.id
@@ -71,9 +68,10 @@ class ProjectsController < ApplicationController
       end
     end
 
-    params.require(:project).permit(:id, :_destroy, :name,
+    params.require(:project).permit(:id, :_destroy, :name, :logo,
       statuses_attributes: [:id, :_destroy, :name, :open, :order],
-      members_attributes: [:id, :_destroy, :user_id, :project_id, :role]
+      members_attributes: [:id, :_destroy, :user_id, :project_id, :role],
+      documents_attributes: [:file]
       )
   end
 end

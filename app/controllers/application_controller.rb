@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   add_flash_types :success, :warning, :danger, :info
 
   before_action :load_resource
+  before_action :process_multiple_documents, only: [:create, :update]
   before_action :clear_flash
 
   rescue_from ActiveRecord::RecordNotFound, :with => :not_found
@@ -57,5 +58,24 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     flash[:error] = "You are not authorized to perform this action."
     redirect_to request.headers["Referer"] || root_path
+  end
+
+  #this services projects and tickets, which are for now they only two attachment bearing models.
+  def process_multiple_documents
+    klass = (controller_name.singularize.classify.constantize rescue nil)
+    klass_name = (klass.name.underscore rescue nil)
+
+    return unless klass_name.present? && params.has_key?(klass_name.to_sym) && params[klass_name.to_sym].has_key?(:files)
+    # clear out empty file upload input fields
+    params[klass_name.to_sym][:documents_attributes] ||= []
+    params[klass_name.to_sym][:documents_attributes].each do |id, attrs|
+      params[klass_name.to_sym][:documents_attributes].delete(id) unless attrs[:file]
+    end
+    # extend this list if we have more models later on
+    resource = @document || @project
+
+    params[klass_name.to_sym][:files].each do |f|
+      resource.documents.new(:file => f)
+    end
   end
 end

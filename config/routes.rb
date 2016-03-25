@@ -7,7 +7,9 @@ Rails.application.routes.draw do
     resources :tickets do
       resources :comments
     end
+    resources :documents
   end
+
 
   resources :overviews
 

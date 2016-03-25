@@ -48,13 +48,18 @@ end
 gem 'pundit', '~>1.1.0'
 #icons
 gem 'font-awesome-rails'
+#file attachments
+gem 'carrierwave'
+# gem 'mini_magick'
+gem 'rmagick'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
-  gem "pry-rails"
-  gem "binding_of_caller"
+  gem 'pry-rails'
+  gem 'better_errors'
+  gem 'binding_of_caller'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   # gem 'byebug'
   gem 'rspec', '>= 3.5.0.beta2', '< 4'
@@ -80,7 +85,7 @@ group :test do
   gem 'simplecov', :require => false
   # Use Factory Girl for generating random test data
   gem 'rspec-collection_matchers'
-  gem 'shoulda-matchers', ">3.1"
+  gem 'shoulda-matchers', '>3.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

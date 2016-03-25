@@ -11,11 +11,13 @@ RSpec.describe Project, type: :model do
   it {is_expected.to have_many(:members).dependent(:destroy)}
   it {is_expected.to have_many(:boards).dependent(:destroy)}
   it {is_expected.to have_many(:tickets).dependent(:destroy)}
-  it {is_expected.to have_many(:assets).dependent(:destroy)}
+  it {is_expected.to have_many(:documents).dependent(:destroy)}
 
   it {is_expected.to validate_length_of(:name).is_at_least(3)}
 
   it {is_expected.to accept_nested_attributes_for(:statuses).allow_destroy(true)}
+  it {is_expected.to accept_nested_attributes_for(:members).allow_destroy(true)}
+  it {is_expected.to accept_nested_attributes_for(:documents).allow_destroy(true)}
 
   describe ".ensure_system_statuses" do
     it "creates default statuses on the project" do

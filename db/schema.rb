@@ -25,17 +25,6 @@ ActiveRecord::Schema.define(version: 20160325012210) do
 
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
 
-  create_table "assets", force: :cascade do |t|
-    t.string   "assetable_type"
-    t.integer  "assetable_id"
-    t.string   "payload"
-    t.string   "payload_size"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
-
-  add_index "assets", ["assetable_type", "assetable_id"], name: "index_assets_on_assetable_type_and_assetable_id", using: :btree
-
   create_table "boards", force: :cascade do |t|
     t.integer  "project_id"
     t.string   "name",       null: false
@@ -64,6 +53,18 @@ ActiveRecord::Schema.define(version: 20160325012210) do
   add_index "comments", ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
+  create_table "documents", force: :cascade do |t|
+    t.string   "documentable_type"
+    t.integer  "documentable_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "file"
+    t.integer  "file_size"
+    t.string   "file_content_type"
+  end
+
+  add_index "documents", ["documentable_type", "documentable_id"], name: "index_documents_on_documentable_type_and_documentable_id", using: :btree
+
   create_table "members", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "project_id"
@@ -86,10 +87,13 @@ ActiveRecord::Schema.define(version: 20160325012210) do
   add_index "overviews", ["user_id"], name: "index_overviews_on_user_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name",        null: false
+    t.string   "name",              null: false
     t.string   "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "logo"
+    t.integer  "logo_size"
+    t.string   "logo_content_type"
   end
 
   create_table "statuses", force: :cascade do |t|

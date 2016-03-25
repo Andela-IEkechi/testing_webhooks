@@ -6,7 +6,7 @@ class Ticket < ApplicationRecord
   belongs_to :comment, optional: true #we are split off from this comment
   has_many :comments, dependent: :destroy
 
-  has_many :assets, through: :comments
+  has_many :documents, through: :comments
   has_many :tickets, through: :comments, source: "ticket"
 
   validates :name, length: {minimum: 3}

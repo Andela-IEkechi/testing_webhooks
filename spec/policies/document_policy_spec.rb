@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AssetPolicy do
+RSpec.describe DocumentPolicy do
 
   let(:user) { User.new }
 

@@ -1,0 +1,34 @@
+<div class="row">
+  <div class="col-md-6">
+    <h4>Documents</h4>
+    <div class="documents">
+      <% @project.documents.each do |doc| %>
+        <%= render partial: '/projects/tabs/documents/document_form', locals: {document: doc} %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<p>
+Need to implement a top-level documents download controller.
+</p>
+
+<div class="upload-zone">
+  I want a "drag hotspot" to upload files
+</div>
+<div class="upload">
+  I want a single "upload" form to add new documents by choosing them on disc.
+  Files uploaded like this (should support multiple) are not named before the upload, they are just added
+  to the list of current files and highlighted as new.
+
+  <%= simple_form_for @project, wrapper: :horizontal_form do |f| %>
+    <%= f.file_field :files, :multiple => true, validate: true %>
+    <div class="text-xs-right">
+      <%= f.button :submit, "Upload files", class: "btn btn-primary", data: {'requires-valid-form': true} %>
+    </div>
+  <% end %>
+</div>
+
+We should be able to filter the list on partial text like, even file extensions.
+
+add/edit should be a modal overlay.
+

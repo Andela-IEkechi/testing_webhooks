@@ -10,7 +10,7 @@ RSpec.describe Ticket, type: :model do
   it {is_expected.to belong_to :project}
   it {is_expected.to belong_to :comment} #split from this comment
   it {is_expected.to have_many :comments}
-  it {is_expected.to have_many :assets} #no check for dependent detroy, it's a :through assoc.
+  it {is_expected.to have_many :documents} #no check for dependent detroy, it's a :through assoc.
   it {is_expected.to have_many :tickets} #tickets split from our comments
 
   it {is_expected.to validate_presence_of(:project).with_message("must exist")}

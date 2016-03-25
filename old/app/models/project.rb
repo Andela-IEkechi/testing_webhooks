@@ -26,8 +26,6 @@ class Project < ActiveRecord::Base
   validates :title, :presence => true
   validates :user, :presence => true
 
-  attr :remove_me
-
   default_scope order('projects.title ASC')
 
   scope :opensource, where(:private => false)

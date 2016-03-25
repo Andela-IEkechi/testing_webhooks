@@ -1,6 +1,6 @@
 require "faker"
 
-Asset.delete_all
+Document.delete_all
 Comment.delete_all
 Ticket.delete_all
 Board.delete_all

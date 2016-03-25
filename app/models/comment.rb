@@ -4,7 +4,7 @@ class Comment < ApplicationRecord
   after_destroy(:set_last_comment)
 
   belongs_to :ticket
-  has_many   :assets, as: :assetable, dependent: :destroy
+  has_many   :documents, as: :documentable, dependent: :destroy
   has_many   :tickets #split tickets
 
   belongs_to :user, optional: true
@@ -12,15 +12,11 @@ class Comment < ApplicationRecord
   belongs_to :board, optional: true
   belongs_to :assignee, class_name: 'User', optional: true # the user the ticket is assigned to
 
-  COSTS = {
-    "unknown": 0,
-    "low": 1,
-    "moderate": 2,
-    "high": 3,
-    "very high": 99
-  }
+  COSTS = {"unknown": 0, "low": 1, "moderate": 2, "high": 3, "very high": 99 }
 
   validates :cost, presence: true, inclusion: {in: COSTS.values}
+
+  accepts_nested_attributes_for :documents, allow_destroy: true
 
   private
 

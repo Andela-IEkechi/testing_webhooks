@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   has_one :account, dependent: :destroy
   has_many :memberships, class_name: "Member", dependent: :destroy
-  has_many :projects, through: :members
+  has_many :projects, through: :memberships
   has_many :overviews, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true

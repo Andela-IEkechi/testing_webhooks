@@ -11,7 +11,7 @@ RSpec.describe Board, type: :model do
   it {is_expected.to have_many :statuses}
   it {is_expected.to have_many :comments}
   it {is_expected.to have_many(:tickets)}
-  it {is_expected.to have_many(:assets).dependent(:destroy)}
+  it {is_expected.to have_many(:documents)}
 
   it {is_expected.to validate_uniqueness_of(:name).scoped_to(:project_id)}
   it {is_expected.to validate_length_of(:name).is_at_least(3)}

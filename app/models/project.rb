@@ -5,7 +5,7 @@ class Project < ApplicationRecord
   has_many :members, dependent: :destroy
   has_many :boards, dependent: :destroy
   has_many :tickets, dependent: :destroy
-  has_many :assets, as: :assetable, dependent: :destroy
+  has_many :documents, as: :documentable, dependent: :destroy
 
   validates :name, presence: true, length: {minimum: 3}
 
@@ -15,7 +15,12 @@ class Project < ApplicationRecord
   accepts_nested_attributes_for :statuses, allow_destroy: true
   accepts_nested_attributes_for :members, allow_destroy: true
 
+  accepts_nested_attributes_for :documents, allow_destroy: true
+
   after_create :ensure_system_statuses
+
+  attr :files #used for file uploads
+  mount_uploader :logo, LogoUploader
 
   def has_member?(user)
     return false unless user.is_a?(User)

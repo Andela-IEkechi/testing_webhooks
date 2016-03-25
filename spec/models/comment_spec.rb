@@ -9,7 +9,7 @@ RSpec.describe Comment, type: :model do
 
   it {is_expected.to belong_to :ticket}
   it {is_expected.to belong_to :user}
-  it {is_expected.to have_many(:assets).dependent(:destroy)}
+  it {is_expected.to have_many(:documents).dependent(:destroy)}
   it {is_expected.to belong_to :assignee}
   it {is_expected.to belong_to :status}
   it {is_expected.to belong_to :board}

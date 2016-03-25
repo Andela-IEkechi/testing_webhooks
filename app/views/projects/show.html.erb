@@ -12,26 +12,24 @@
           <a class="nav-link" data-toggle="tab" href="#tickets" role="tab" title="Tickets"><%= fa_icon "check-square" %></a>
         </li>
         <li class="nav-item text-xs-center">
-          <a class="nav-link" data-toggle="tab" href="#assets" role="tab" title="Assets"><%= fa_icon "paperclip" %></a>
+          <a class="nav-link" data-toggle="tab" href="#documents" role="tab" title="Documents"><%= fa_icon "paperclip" %></a>
         </li>
         <li class="nav-item text-xs-center">
           <a class="nav-link" data-toggle="tab" href="#settings" role="tab" title="Settings"><%= fa_icon "gear" %></a>
         </li>
       </ul>
+      <% if @project.logo.present? %>
+        <%= image_tag @project.logo_url(:thumb) %>
+      <% end %>
     </div>
     <div class="col-sm-11">
       <!-- Tab panes -->
       <div class="tab-content">
         <div class="tab-pane" id="boards" role="tabpanel"><%= render partial: '/projects/tabs/boards' %></div>
         <div class="tab-pane" id="tickets" role="tabpanel"><%= render partial: '/projects/tabs/tickets' %></div>
-        <div class="tab-pane" id="assets" role="tabpanel"><%= render partial: '/projects/tabs/assets' %></div>
+        <div class="tab-pane" id="documents" role="tabpanel"><%= render partial: '/projects/tabs/documents' %></div>
         <div class="tab-pane" id="settings" role="tabpanel"><%= render partial: '/projects/tabs/settings' %></div>
       </div>
     </div>
   </div>
-
-
-
-
 </div>
-
