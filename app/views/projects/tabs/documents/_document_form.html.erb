@@ -1,5 +1,9 @@
 <div class="document">
-  <%= document.to_s %>
+  <% if policy(document).show? %>
+    <%= link_to document.to_s, document_download_path(document) %>
+  <% else %>
+    <%= document.to_s %>
+  <% end %>
 </div>
 
 <!--

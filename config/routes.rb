@@ -10,8 +10,13 @@ Rails.application.routes.draw do
     resources :documents
   end
 
-
   resources :overviews
+
+  resources :documents, only: [:download] do
+    member do
+      get 'download' => "documents#download"
+    end
+  end
 
   namespace :admin do
     resources :users
