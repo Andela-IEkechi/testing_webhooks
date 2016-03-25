@@ -36,7 +36,7 @@ class ProjectsController < ApplicationController
 
         #we need to broadcast to every listening user concerned, that the project has been updated
         @project.members.each do |m|
-          ActionCable.server.broadcast "projects_#{m.user_id}", { id: @project.id, title: @project.title, success: "#{@project.title} has been updated" }
+          ActionCable.server.broadcast "projects_#{m.user_id}", { id: @project.id, name: @project.name, success: "#{@project.name} has been updated" }
         end
 
         format.html { redirect_to project_path(@project, params: {tab: "settings"}), success: 'Project was successfully updated.'}
@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
   def project_params
     case action_name
     when "create"
-      params[:project] ||= {title: "Untitled"}
+      params[:project] ||= {name: "Untitled"}
     end
 
     #We get email addresses in on params[:membership_attributes], and those need to be translated into user ids
@@ -71,7 +71,7 @@ class ProjectsController < ApplicationController
       end
     end
 
-    params.require(:project).permit(:id, :_destroy, :title,
+    params.require(:project).permit(:id, :_destroy, :name,
       statuses_attributes: [:id, :_destroy, :name, :open, :order],
       members_attributes: [:id, :_destroy, :user_id, :project_id, :role]
       )

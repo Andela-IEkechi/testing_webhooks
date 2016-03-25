@@ -10,11 +10,13 @@ RSpec.describe Ticket, type: :model do
   it {is_expected.to belong_to :project}
   it {is_expected.to belong_to :comment} #split from this comment
   it {is_expected.to have_many :comments}
-  it {is_expected.to have_many :assets}
+  it {is_expected.to have_many :assets} #no check for dependent detroy, it's a :through assoc.
   it {is_expected.to have_many :tickets} #tickets split from our comments
 
   it {is_expected.to validate_presence_of(:project).with_message("must exist")}
-  it {is_expected.to validate_length_of(:title).is_at_least(3)}
+  it {is_expected.to validate_length_of(:name).is_at_least(3)}
+
+  it {is_expected.to accept_nested_attributes_for(:comments).allow_destroy(true)}
 
   describe "scopes" do
     describe "#ordered" do
@@ -100,6 +102,10 @@ RSpec.describe Ticket, type: :model do
       ticket.set_last_comment!
       expect(ticket.comments.where(last: true)).to have_exactly(1).match
     end
+    it "returns nil unless last_comment is present" do
+      assert subject.comments.empty?, "not expecting to have comments"
+      expect(subject.set_last_comment!).to eq(nil)
+    end
   end
 
   describe "last_comment" do
@@ -167,4 +173,5 @@ RSpec.describe Ticket, type: :model do
       expect(subject.move!(@status, rand(10), @user)).to eq(subject)
     end
   end
+
 end

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :project do
-    title {Faker::Lorem.sentence}
+    name {Faker::Lorem.sentence}
 
     factory :project_with_tickets do
       transient do

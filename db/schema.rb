@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 20160325012210) do
 
   create_table "overviews", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "title",                       null: false
+    t.string   "name",                        null: false
     t.text     "criteria",   default: "--{}"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 20160325012210) do
   add_index "overviews", ["user_id"], name: "index_overviews_on_user_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
-    t.string   "title",       null: false
+    t.string   "name",        null: false
     t.string   "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 20160325012210) do
   create_table "tickets", force: :cascade do |t|
     t.integer  "project_id"
     t.datetime "due_at"
-    t.string   "title",                  null: false
+    t.string   "name",                   null: false
     t.integer  "order",      default: 0, null: false
     t.integer  "comment_id"
     t.datetime "created_at",             null: false

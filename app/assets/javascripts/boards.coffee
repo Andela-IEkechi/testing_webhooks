@@ -11,7 +11,7 @@ construct_ticket_html = (template, ticket)->
   ticket_html.attr("data-id", ticket.id)
   ticket_html.attr("data-order", ticket.order)
   ticket_html.find(".id").html(ticket.id)
-  ticket_html.find(".title").html(ticket.title)
+  ticket_html.find(".name").html(ticket.name)
   if ticket.assignee
     ticket_html.find(".assignee").html(ticket.assignee.email)
   else

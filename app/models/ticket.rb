@@ -9,7 +9,9 @@ class Ticket < ApplicationRecord
   has_many :assets, through: :comments
   has_many :tickets, through: :comments, source: "ticket"
 
-  validates :title, length: {minimum: 3}
+  validates :name, length: {minimum: 3}
+
+  accepts_nested_attributes_for :comments, allow_destroy: true
 
   scope :ordered, ->{reorder(order: :asc)}
 
@@ -31,8 +33,9 @@ class Ticket < ApplicationRecord
 
   #Make sure only one comment is marked as being the last
   def set_last_comment!
+    return unless last_comment.present?
     comments.where(last: true).update_all(last: false)
-    last_comment.update_column(:last, true)
+    last_comment.update_column(:last, true) if last_comment.present?
   end
 
   def last_comment
@@ -55,7 +58,7 @@ class Ticket < ApplicationRecord
     #check if the status provided is in the current project
     return unless status.project == project
     #check if the user is on the project
-    return unless project.has_member(user)
+    return unless project.has_member?(user)
     #move the ticket to the new status, by adding a comment to the ticket
     comments.create(user_id: user.id, status_id: status.id, cost: Comment::COSTS.values.first)
 

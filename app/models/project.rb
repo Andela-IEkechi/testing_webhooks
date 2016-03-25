@@ -1,10 +1,13 @@
 class Project < ApplicationRecord
+  has_paper_trail
+
   has_many :statuses, dependent: :destroy
   has_many :members, dependent: :destroy
   has_many :boards, dependent: :destroy
   has_many :tickets, dependent: :destroy
+  has_many :assets, as: :assetable, dependent: :destroy
 
-  validates :title, presence: true
+  validates :name, presence: true, length: {minimum: 3}
 
   # TODO: add a logo
   # TODO: add slugs
@@ -14,7 +17,7 @@ class Project < ApplicationRecord
 
   after_create :ensure_system_statuses
 
-  def has_member(user)
+  def has_member?(user)
     return false unless user.is_a?(User)
     members.where(user_id: user.id).any?
   end

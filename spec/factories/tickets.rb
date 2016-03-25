@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :ticket do
     association(:project)
-    title {Faker::Lorem.sentence}
+    name {Faker::Lorem.sentence}
 
     factory :ticket_with_comments do
       transient do

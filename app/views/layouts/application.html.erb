@@ -22,11 +22,11 @@
           <% if current_user %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <%= @project.title rescue "Projects" %>
+              <%= @project.name rescue "Projects" %>
             </a>
             <div class="dropdown-menu">
-              <% current_user.projects.order(title: :asc).each do |project| %>
-                <%= link_to project.title, project_path(project), class: "dropdown-item" %>
+              <% current_user.projects.order(name: :asc).each do |project| %>
+                <%= link_to project.name, project_path(project), class: "dropdown-item" %>
               <% end %>
               <% if current_user.projects.any? %>
                 <div class="dropdown-divider"></div>
@@ -37,11 +37,11 @@
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <%= @overview.title rescue "Overviews" %>
+              <%= @overview.name rescue "Overviews" %>
             </a>
             <div class="dropdown-menu">
-              <% current_user.overviews.order(title: :asc).each do |overview| %>
-                <%= link_to overview.title, overview_path(overview), class: "dropdown-item" %>
+              <% current_user.overviews.order(name: :asc).each do |overview| %>
+                <%= link_to overview.name, overview_path(overview), class: "dropdown-item" %>
               <% end %>
               <% if current_user.overviews.any? %>
                 <div class="dropdown-divider"></div>

@@ -15,7 +15,7 @@ user.skip_confirmation_notification!
 user.confirm!
 
 Member::ROLES.each do |role|
-  project = Project.create(title: "#{role} project")
+  project = Project.create(name: "#{role} project")
   user.memberships.create(project: project, role: role)
 end
 
@@ -43,7 +43,7 @@ end
 #create a few tickets for every board
 Board.find_each do |board|
   3.times do
-    ticket = Ticket.create(title: Faker::Lorem.sentence(3), project_id: board.project_id)
+    ticket = Ticket.create(name: Faker::Lorem.sentence(3), project_id: board.project_id)
     ticket.comments.create(content: Faker::Lorem::paragraph(), status_id: board.project.statuses.sample.id, user_id: board.project.members.sample.user_id, board_id: board.id)
     # create a few comments for this ticket
     ticket.comments.create(content: Faker::Lorem::paragraph(), status_id: board.project.statuses.sample.id, user_id: board.project.members.sample.user_id)
