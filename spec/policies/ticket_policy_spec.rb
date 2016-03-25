@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ProjectsPolicy do
+RSpec.describe TicketPolicy do
 
   let(:user) { User.new }
 

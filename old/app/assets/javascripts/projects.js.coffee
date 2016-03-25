@@ -5,9 +5,9 @@
 $ ->
   $("a.autoload").click()
 
-  # Ask to confirm if one of the memberships will be revoked
-  $(".memberships").submit ->
-    values = (sel.value for sel in $('.memberships select'))
+  # Ask to confirm if one of the members will be revoked
+  $(".members").submit ->
+    values = (sel.value for sel in $('.members select'))
     if (values.indexOf("") > -1)
       if (!confirm("You are about to revoke the membership of some users. Are you sure?"))
         return false

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe MembershipsPolicy do
+RSpec.describe AssetPolicy do
 
   let(:user) { User.new }
 

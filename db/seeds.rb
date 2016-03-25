@@ -8,7 +8,7 @@ Status.delete_all
 Project.delete_all
 Account.delete_all
 User.delete_all
-Membership.delete_all
+Members.delete_all
 
 user = User.create(email: "user@example.com", password: "password")
 user.skip_confirmation_notification!
@@ -29,7 +29,7 @@ end
 #assign them to projects
 User.where.not(:id => user.id).find_each do |user|
   Project.find_each do |proj|
-    proj.memberships.create(user_id: user.id, role: Membership::ROLES.sample)
+    proj.members.create(user_id: user.id, role: Membership::ROLES.sample)
   end
 end
 
@@ -45,7 +45,7 @@ Board.find_each do |board|
   3.times do
     ticket = board.tickets.create(title: Faker::Lorem.sentence(3), project_id: board.project_id)
     # create a few comments for this ticket
-    ticket.comments.create(content: Faker::Lorem::paragraph(), status_id: board.project.statuses.sample.id, user_id: board.project.memberships.sample.user_id)
-    ticket.comments.create(content: Faker::Lorem::paragraph(), status_id: board.project.statuses.sample.id, user_id: board.project.memberships.sample.user_id)
+    ticket.comments.create(content: Faker::Lorem::paragraph(), status_id: board.project.statuses.sample.id, user_id: board.project.members.sample.user_id)
+    ticket.comments.create(content: Faker::Lorem::paragraph(), status_id: board.project.statuses.sample.id, user_id: board.project.members.sample.user_id)
   end
 end

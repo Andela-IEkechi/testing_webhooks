@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Foos", type: :request do
+RSpec.describe "Foos", type: :request, quarantine: true do
   describe "GET /foos" do
     it "works! (now write some real specs)" do
       get foos_path

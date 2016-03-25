@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe StatusesPolicy do
+RSpec.describe StatusPolicy do
 
   let(:user) { User.new }
 

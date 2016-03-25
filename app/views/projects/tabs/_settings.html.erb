@@ -58,17 +58,17 @@
           <th>action</th>
         </tr>
       </thead>
-      <tbody id="memberships">
-        <%= f.simple_fields_for :memberships, @project.memberships.all do |m| %>
+      <tbody id="members">
+        <%= f.simple_fields_for :members, @project.members.all do |m| %>
           <%= render partial: '/projects/tabs/settings/membership_fields', locals: {f: m} %>
         <% end %>
       </tbody>
       <tfoot>
         <tr>
           <td colspan="3" class="text-xs-right">
-            <%= link_to_add_association "Add another", f, :memberships,
+            <%= link_to_add_association "Add another", f, :members,
               partial: "/projects/tabs/settings/membership_fields",
-              data: {'association-insertion-node': "tbody#memberships", 'association-insertion-method': "append"},
+              data: {'association-insertion-node': "tbody#members", 'association-insertion-method': "append"},
               class: "btn btn-success" %>
           </td>
         </tr>

@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20160320193917) do
   add_index "comments", ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
-  create_table "memberships", force: :cascade do |t|
+  create_table "members", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "project_id"
     t.string   "role",       null: false
@@ -68,8 +68,8 @@ ActiveRecord::Schema.define(version: 20160320193917) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "memberships", ["project_id"], name: "index_memberships_on_project_id", using: :btree
-  add_index "memberships", ["user_id"], name: "index_memberships_on_user_id", using: :btree
+  add_index "members", ["project_id"], name: "index_members_on_project_id", using: :btree
+  add_index "members", ["user_id"], name: "index_members_on_user_id", using: :btree
 
   create_table "overviews", force: :cascade do |t|
     t.integer  "user_id"

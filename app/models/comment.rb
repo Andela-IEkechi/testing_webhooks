@@ -1,4 +1,6 @@
 class Comment < ApplicationRecord
+  has_paper_trail
+
   belongs_to :ticket
   belongs_to :user
   has_many :assets, as: :assetable, dependent: :destroy

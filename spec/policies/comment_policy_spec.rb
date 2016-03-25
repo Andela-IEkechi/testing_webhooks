@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe OverviewsPolicy do
+RSpec.describe CommentPolicy do
 
   let(:user) { User.new }
 

@@ -8,8 +8,8 @@ class User < ApplicationRecord
   devise :omniauthable, :omniauth_providers => [:facebook, :github, :google_oauth2]
 
   has_one :account, dependent: :destroy
-  has_many :memberships, dependent: :destroy
-  has_many :projects, through: :memberships
+  has_many :memberships, class_name: "Member", dependent: :destroy
+  has_many :projects, through: :members
   has_many :overviews, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true

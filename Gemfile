@@ -53,14 +53,15 @@ gem 'font-awesome-rails'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
-  gem 'rspec-rails', '>= 3.5.0.beta2', '< 4'
-  # Use Factory Girl for generating random test data
-  gem 'factory_girl_rails'
-  gem 'faker'
   gem "pry-rails"
   gem "binding_of_caller"
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   # gem 'byebug'
+  gem 'rspec', '>= 3.5.0.beta2', '< 4'
+  gem 'rspec-rails', '>= 3.5.0.beta2', '< 4'
+  gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'awesome_print'
 end
 
 group :development do
@@ -70,8 +71,15 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-commands-rspec'
+  gem 'guard-rspec', '~>4.6.0', require: false
+end
 
-
+group :test do
+  gem 'simplecov', :require => false
+  # Use Factory Girl for generating random test data
+  gem 'rspec-collection_matchers'
+  gem 'shoulda-matchers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
