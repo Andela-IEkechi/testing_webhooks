@@ -73,13 +73,14 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'spring-commands-rspec'
   gem 'guard-rspec', '~>4.6.0', require: false
+  gem 'database_cleaner'
 end
 
 group :test do
   gem 'simplecov', :require => false
   # Use Factory Girl for generating random test data
   gem 'rspec-collection_matchers'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', ">3.1"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

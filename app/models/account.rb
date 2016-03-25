@@ -1,7 +1,8 @@
 class Account < ApplicationRecord
   belongs_to :user
 
-  validates :plan, presence: true, inclusion: {in: ['free', 'small', 'medium', 'large']}
+  PLANS=['free', 'small', 'medium', 'large']
+  validates :plan, presence: true, inclusion: {in: PLANS}
 
   # TODO: deal with plans
 end

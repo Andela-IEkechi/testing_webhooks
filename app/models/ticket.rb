@@ -1,19 +1,42 @@
 class Ticket < ApplicationRecord
-  belongs_to :project
-  belongs_to :board, optional: true
+  has_paper_trail
 
+  belongs_to :project
+
+  belongs_to :comment, optional: true #we are split off from this comment
   has_many :comments, dependent: :destroy
 
-  # has_many :assets, :through => :comments
-  # has_many :split_tickets, :order => 'tickets.id ASC', :through => :comments
+  has_many :assets, through: :comments
+  has_many :tickets, through: :comments, source: "ticket"
 
-  validates :title, :length => {:minimum => 3}
+  validates :title, length: {minimum: 3}
 
-  scope :for_status, ->(status){joins(project: :statuses).where(statuses: {id: status.id})}
   scope :ordered, ->{reorder(order: :asc)}
 
+  scope :for_status, ->(status){ joins(:comments).
+    where(comments: {last: true}).
+    where(comments: {status_id: (status.id rescue nil)}) }
+  scope :for_cost, ->(cost){ joins(:comments).
+    where(comments: {last: true}).
+    where(comments: {cost: cost}) }
+  scope :for_assignee, ->(assignee){ joins(:comments).
+    where(comments: {last: true}).
+    where(comments: {assignee_id: assignee.id}) }
+  scope :for_user, ->(user){ joins(:comments).
+    where(comments: {last: true}).
+    where(comments: {user_id: (user.id rescue nil)}) }
+  scope :for_board, ->(board){ joins(:comments).
+    where(comments: {last: true}).
+    where(comments: {board_id: (board.id rescue nil)}) }
+
+  #Make sure only one comment is marked as being the last
+  def set_last_comment!
+    comments.where(last: true).update_all(last: false)
+    last_comment.update_column(:last, true)
+  end
+
   def last_comment
-    comments.order(id: :asc).last
+    last = comments.order(id: :asc).last
   end
 
   def first_comment
@@ -21,23 +44,23 @@ class Ticket < ApplicationRecord
   end
 
   delegate :assignee, :to => :last_comment, :prefix => false, :allow_nil => true
-  delegate :status, :to => :last_comment, :prefix => false
-  delegate :user, :to => :first_comment, :prefix => false
+  delegate :status, :to => :last_comment, :prefix => false, :allow_nil => true
+  delegate :user, :to => :first_comment, :prefix => false, :allow_nil => true
+  delegate :board, :to => :last_comment, :prefix => false, :allow_nil => true
+  delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
+
 
   #move a ticket to a new status and attribute the move to the user provided
   def move!(status, order, user)
     #check if the status provided is in the current project
     return unless status.project == project
-
     #check if the user is on the project
     return unless project.has_member(user)
-
     #move the ticket to the new status, by adding a comment to the ticket
-    comments.create(user_id: user.id, status_id: status.id)
+    comments.create(user_id: user.id, status_id: status.id, cost: Comment::COSTS.values.first)
 
     reorder!(order)
     #possibly need to reload to refresh the interpretation of last_comment
-    reload
     self
   end
 
@@ -51,10 +74,10 @@ class Ticket < ApplicationRecord
   def reorder!(order)
     #get all the tickets in their current order, by board and status
     #exclude ourselves
-    tickets = board.tickets.for_status(status).ordered.where.not(id: id).to_a
+    tickets = project.tickets.for_board(board).for_status(status).ordered.where.not(id: id).to_a.compact
 
-    #stick this ticket into the right place
-    tickets.insert(order, self)
+    #stick this ticket into the right place, this will insert preceeding nils if required
+    tickets.insert(order, self).compact!
 
     #save all the tickets in their new order
     tickets.each_with_index do |ticket, idx|
@@ -62,4 +85,5 @@ class Ticket < ApplicationRecord
     end
     self
   end
+
 end

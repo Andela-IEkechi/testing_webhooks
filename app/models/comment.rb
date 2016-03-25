@@ -1,15 +1,36 @@
 class Comment < ApplicationRecord
   has_paper_trail
+  after_create(:set_last_comment)
+  after_destroy(:set_last_comment)
 
   belongs_to :ticket
-  belongs_to :user
-  has_many :assets, as: :assetable, dependent: :destroy
+  has_many   :assets, as: :assetable, dependent: :destroy
+  has_many   :tickets #split tickets
 
-  # has_many   :split_tickets, :order => 'tickets.id ASC', :class_name => "Ticket", :foreign_key => "source_comment_id"
-  # has_many   :assets, dependent: :destroy
-
+  belongs_to :user, optional: true
+  belongs_to :status, optional: true
+  belongs_to :board, optional: true
   belongs_to :assignee, class_name: 'User', optional: true # the user the ticket is assigned to
-  belongs_to :status
 
-  # TODO: add attachments, status, cost, user,
+  COSTS = {
+    "unknown": 0,
+    "low": 1,
+    "moderate": 2,
+    "high": 3,
+    "very high": 99
+  }
+
+  validates :cost, presence: true, inclusion: {in: COSTS.values}
+
+  private
+
+  def set_last_comment
+    ticket.set_last_comment!
+  end
 end
+
+
+# tags
+# split tickets
+# api hook to attribute to comitter
+# should be searchable on text and attachment names
