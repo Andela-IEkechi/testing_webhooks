@@ -5,7 +5,7 @@ class BoardsController < ApplicationController
   def show
     authorize @board
     respond_to do |format|
-      format.json { render json: @board.to_json(include: { tickets: {include: [:status, :assignee, :user]}})}
+      format.json { render json: @board.to_json(include: { tickets: {include: [:status, :assignee, :user, :board]}})}
     end
   end
 

@@ -1,8 +1,11 @@
-<div class="row">
+<div class="row tickets"
+  data-tickets-url="<%= project_tickets_url(@project, :format => 'json') %>"
+  data-ticket-template="<%= CGI::escapeHTML render(partial: '/projects/tabs/tickets/ticket') %>"
+>
   <div class="col-sm-12">
     <!-- Tab panes -->
     <div class="tab-content">
-      <table class="table" data-ticket-template="<%= CGI::escapeHTML render(partial: '/projects/tabs/tickets/ticket') %>" data-tickets-url="<%= project_tickets_url(@project, :format => 'json') %>">
+      <table class="table">
         <thead>
           <tr>
             <th>#</th>

@@ -1,5 +1,6 @@
 class Ticket < ApplicationRecord
   has_paper_trail
+  include Broadcast::Ticket
 
   belongs_to :project
 
@@ -52,7 +53,6 @@ class Ticket < ApplicationRecord
   delegate :board, :to => :last_comment, :prefix => false, :allow_nil => true
   delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
 
-
   #move a ticket to a new status and attribute the move to the user provided
   def move!(status, order, user)
     #check if the status provided is in the current project
@@ -60,15 +60,20 @@ class Ticket < ApplicationRecord
     #check if the user is on the project
     return unless project.has_member?(user)
     #move the ticket to the new status, by adding a comment to the ticket
-    comments.create(user_id: user.id, status_id: status.id, cost: Comment::COSTS.values.first)
+    # be sure to preserve previsous comment values for cost, assignee and board
+    comments.create(
+      user_id: user.id,
+      status_id: status.id,
+      cost: (cost rescue nil),
+      board_id: (board.id rescue nil),
+      assignee_id: (assignee.id rescue nil)
+    )
 
     reorder!(order)
     #possibly need to reload to refresh the interpretation of last_comment
-    self
-  end
 
-  def broadcast_data
-    as_json(include: [:status, :assignee, :user])
+    broadcast_update
+    self
   end
 
   private

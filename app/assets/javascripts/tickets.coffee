@@ -1,9 +1,21 @@
-context_name = ".ticket"
-context = (selector) ->
-  if selector
-    $(context_name).find(selector)
-  else
-    $(context_name)
+# Tickets
+#---------
+
+fetch_tickets = (tickets)->
+  #get the url we need to pull the ticket info from
+  tickets_url = $(tickets).data("tickets-url")
+  $.ajax tickets_url,
+    datatype: "json",
+    method: "GET",
+    success: (data)->
+      # remove the placeholder row
+      $(tickets).find("tbody tr").remove()
+      template = $(tickets).data("ticket-template")
+      for ticket in data
+        ticket_html = construct_ticket_html(template, ticket)
+        # insert the ticket html into the table
+        column = $(tickets).find("tbody")
+        column.append(ticket_html)
 
 construct_ticket_html = (template, ticket)->
   ticket_html = $($('<textarea />').html(template).text())
@@ -27,24 +39,24 @@ construct_ticket_html = (template, ticket)->
 
   return ticket_html[0].outerHTML
 
-fetch_tickets = (tickets)->
-  #get the url we need to pull the ticket info from
-  tickets_url = $(tickets).data("tickets-url")
-  $.ajax tickets_url,
-    datatype: "json",
-    method: "GET",
-    success: (data)->
-      # remove the placeholder row
-      $(tickets).find("tbody tr").remove()
-      template = $(tickets).data("ticket-template")
-      for ticket in data
-        ticket_html = construct_ticket_html(template, ticket)
-        # insert the ticket html into the table
-        column = $(tickets).find("tbody")
-        column.append(ticket_html)
+$(document).on "project:ticket:create", ".tickets", (event, ticket)->
+  #construct a new ticket
+  template = $(this).data("ticket-template")
+  ticket_html = construct_ticket_html(template, ticket)
+  #place it on the project
+  $(project).find("tbody").append(ticket_html)
 
+$(document).on "project:ticket:update", ".tickets", (event, ticket)->
+  #construct a new ticket
+  template = $(this).data("ticket-template")
+  #find the ticket that was updated, and replace
+  ticket_html = construct_ticket_html(template, ticket)
+  $(template).replace(ticket_html)
+
+$(document).on "project:ticket:destroy", ".tickets", (event, ticket)->
+  $(this).find(".ticket[data-id=#{ticket.id}]").remove()
 
 # we need to load this on a turbolinks event, so we can load tickets when the project changes
 $(document).on "turbolinks:load", ->
-  if $("#tickets table")
-    fetch_tickets($("#tickets table"))
+  if $(".tickets")
+    fetch_tickets($(".tickets"))

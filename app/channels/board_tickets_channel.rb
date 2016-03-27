@@ -2,7 +2,7 @@
 class BoardTicketsChannel < ApplicationCable::Channel
   def subscribed
     # try and stream from all available boards
-    self.available_boards.each do |board_id|
+    self.available_board_ids.each do |board_id|
       stream_from "board:#{board_id}:tickets"
     end
   end
@@ -12,26 +12,22 @@ class BoardTicketsChannel < ApplicationCable::Channel
   end
 
   def moved(data)
+    p "moving ticket..."
     #find the ticket
     data = data.with_indifferent_access
     tickets = TicketPolicy::Scope.new(current_user, Ticket).resolve
     ticket = tickets.find(data[:ticket_id])
 
-    #find the status
     status = ticket.project.statuses.find(data[:status_id])
-
     order = data[:order].to_i
 
     #move the ticket to the new status if we can
     ticket.move!(status, order, current_user) if ticket && status
-
-    #broadcast the ticket info, it might have failed to move, thats ok.
-    ActionCable.server.broadcast "board:#{ticket.board_id}:tickets", ticket.broadcast_data
   end
 
   protected
 
-  def available_boards
+  def available_board_ids
     current_user.projects.includes(:boards).collect{|proj| proj.boards.collect(&:id)}.flatten
   end
 

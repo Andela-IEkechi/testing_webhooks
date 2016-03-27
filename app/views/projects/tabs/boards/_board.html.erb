@@ -1,9 +1,9 @@
-<div class="board">
-  <table class="table"
-    data-board-id="<%= board.id %>"
-    data-board-url="<%= project_board_path(board.project, board) %>"
-    data-ticket-template="<%= CGI::escapeHTML render(partial: '/projects/tabs/boards/ticket') %>"
-    >
+<div class="board"
+  data-board-id="<%= board.id %>"
+  data-board-url="<%= project_board_path(board.project, board) %>"
+  data-ticket-template="<%= CGI::escapeHTML render(partial: '/projects/tabs/boards/ticket') %>"
+>
+  <table class="table">
     <thead>
       <tr>
       <% board.project.statuses.each do |ts| %>

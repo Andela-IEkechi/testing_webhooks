@@ -8,7 +8,13 @@ App.board_tickets = App.cable.subscriptions.create "BoardTicketsChannel",
 
   received: (data) ->
     # Called when there's incoming data on the websocket for this channel
-    $(".board").trigger("board:ticket:updated", data)
+    #TODO: we should ignore broadcasts which are caused by our own actions. Perhaps compare the data.user.id to ours  ?
+    if data.create
+      $(".board").trigger("board:ticket:create", data.create)
+    else if data.update
+      $(".board").trigger("board:ticket:update", data.update)
+    else if data.destroy
+      $(".board").trigger("board:ticket:destroy", data.destroy)
 
   moved: (data) ->
     # tell the server we moved a ticket
