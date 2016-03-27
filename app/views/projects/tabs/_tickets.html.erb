@@ -1,1 +1,24 @@
-placeholder for tickets
+<div class="row">
+  <div class="col-sm-12">
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <table class="table" data-ticket-template="<%= CGI::escapeHTML render(partial: '/projects/tabs/tickets/ticket') %>" data-tickets-url="<%= project_tickets_url(@project, :format => 'json') %>">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>name</th>
+            <th>board</th>
+            <th>assignee</th>
+            <th>state</th>
+            <th>cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="6">Loading tickets...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,6 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+context_name = ".document"
+context = (selector) ->
+  if selector
+    $(context_name).find(selector)
+  else
+    $(context_name)

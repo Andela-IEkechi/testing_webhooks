@@ -1,6 +1,6 @@
 <div class="document">
   <% if policy(document).show? %>
-    <%= link_to document.to_s, document_download_path(document) %>
+    <%= link_to document.to_s, download_document_path(document) %>
   <% else %>
     <%= document.to_s %>
   <% end %>

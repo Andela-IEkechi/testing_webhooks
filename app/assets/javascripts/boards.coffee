@@ -70,8 +70,8 @@ $(document).on "board:ticket:updated", "#{context_name}", (event, ticket)->
   column = $(board).find("td[data-status-id='#{ticket.status.id}']")
   place_ordered_ticket(column, ticket_html)
 
-$ ->
-  #load the board content after the page is loaded
+# we need to load this on a turbolinks event, so we can load boards when the project changes
+$(document).on "turbolinks:load", ->
   for board in context("table")
     fetch_board(board)
     board_id = $(board).data('board-id')
