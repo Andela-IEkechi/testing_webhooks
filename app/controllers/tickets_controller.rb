@@ -4,7 +4,7 @@ class TicketsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json { render json: @tickets.to_json(include: [:status, :assignee, :user, :board])}
+      format.json { render json: @tickets.all.map(&:broadcast_data)}
     end
   end
 

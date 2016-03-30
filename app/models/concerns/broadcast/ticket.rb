@@ -7,7 +7,7 @@ module Broadcast::Ticket
     # after_destroy :broadcast_destroy
 
     def broadcast_data
-      as_json(include: [:status, :assignee, :user, :board])
+      as_json(include: [:status, :assignee, :user, :board], methods: [:cost, :cost_key])
     end
 
     #tell boards and projects there is a new ticket to display

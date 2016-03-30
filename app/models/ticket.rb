@@ -52,6 +52,7 @@ class Ticket < ApplicationRecord
   delegate :user, :to => :first_comment, :prefix => false, :allow_nil => true
   delegate :board, :to => :last_comment, :prefix => false, :allow_nil => true
   delegate :cost, :to => :last_comment, :prefix => false, :allow_nil => true
+  delegate :cost_key, :to => :last_comment, :prefix => false, :allow_nil => true
 
   #move a ticket to a new status and attribute the move to the user provided
   def move!(status, order, user)

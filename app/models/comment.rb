@@ -18,6 +18,14 @@ class Comment < ApplicationRecord
 
   accepts_nested_attributes_for :documents, allow_destroy: true
 
+  def cost_key
+    COSTS.key(cost).to_s
+  end
+
+  def cost_value
+    cost
+  end
+
   private
 
   def set_last_comment

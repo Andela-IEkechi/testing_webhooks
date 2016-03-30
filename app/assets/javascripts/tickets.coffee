@@ -35,7 +35,13 @@ construct_ticket_html = (template, ticket)->
     ticket_html.find(".status").html(ticket.status.name)
   else
     ticket_html.find(".status").html("")
-  ticket_html.find(".cost").html(ticket.cost)
+
+  if ticket.cost == 0
+    ticket_html.find(".cost").html("")
+  else
+    ticket_html.find(".cost").html(ticket.cost_key)
+  ticket_html.find(".cost").attr("data-cost", ticket.cost)
+
 
   return ticket_html[0].outerHTML
 
