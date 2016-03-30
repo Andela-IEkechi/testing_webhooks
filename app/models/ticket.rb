@@ -61,17 +61,22 @@ class Ticket < ApplicationRecord
     return unless project.has_member?(user)
     #move the ticket to the new status, by adding a comment to the ticket
     # be sure to preserve previsous comment values for cost, assignee and board
-    comments.create(
-      user_id: user.id,
-      status_id: status.id,
-      cost: (cost rescue nil),
-      board_id: (board.id rescue nil),
-      assignee_id: (assignee.id rescue nil)
-    )
 
+    #only create a comment if the ticket moved status
+    unless status.id == self.status.id
+      comments.create(
+        user_id: user.id,
+        status_id: status.id,
+        cost: (cost rescue nil),
+        board_id: (board.id rescue nil),
+        assignee_id: (assignee.id rescue nil)
+      )
+    end
+
+    # we always re-order, it's the minimum change
     reorder!(order)
     #possibly need to reload to refresh the interpretation of last_comment
-
+    reload
     broadcast_update
     self
   end

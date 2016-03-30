@@ -53,10 +53,6 @@ place_ordered_ticket = (container, ticket_html)->
   # check to see if there is a ticket we need to prepend outselves to, based on our order
   ticket_after = $(container).find(".ticket")[order] #dont look at the ticket's data-order, that could be stale
   if ticket_after
-    console.log "ticket after"
-    console.log ticket_after
-    console.log "ticket"
-    console.log ticket_html
     $(ticket_after).before(ticket_html)
   else
     #otherwise just add us to the bottom of the container

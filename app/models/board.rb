@@ -3,7 +3,7 @@ class Board < ApplicationRecord
 
   belongs_to :project
   has_many :statuses, through: :project
-  has_many :comments #we assign tickets to boards via comments
+  has_many :comments, -> {where(last: true)} #we assign tickets to boards via comments
   has_many :tickets, -> { distinct }, through: :comments  #dont destroy tickets if the board gets deleted, they just go back in the pool
   has_many :documents, through: :comments
 

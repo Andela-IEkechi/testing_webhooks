@@ -12,7 +12,6 @@ class BoardTicketsChannel < ApplicationCable::Channel
   end
 
   def moved(data)
-    p "moving ticket..."
     #find the ticket
     data = data.with_indifferent_access
     tickets = TicketPolicy::Scope.new(current_user, Ticket).resolve
