@@ -4,7 +4,7 @@ class TicketsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json { render json: @tickets.all.map(&:broadcast_data)}
+      format.json { render json: @tickets.all.map{|ticket| ticket.broadcast_data.merge(edit_url: edit_project_ticket_path(@project, ticket))}}
     end
   end
 

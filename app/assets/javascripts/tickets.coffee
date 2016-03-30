@@ -23,25 +23,29 @@ construct_ticket_html = (template, ticket)->
   ticket_html.attr("data-id", ticket.id)
   ticket_html.find(".id").html(ticket.id)
   ticket_html.find(".name").html(ticket.name)
+
   if ticket.board
     ticket_html.find(".board").html(ticket.board.name)
   else
     ticket_html.find(".board").html("")
+
   if ticket.assignee
     ticket_html.find(".assignee").html(ticket.assignee.email)
   else
     ticket_html.find(".assignee").html("")
+
   if ticket.status
     ticket_html.find(".status").html(ticket.status.name)
   else
     ticket_html.find(".status").html("")
 
+  ticket_html.find(".cost").attr("data-cost", ticket.cost)
   if ticket.cost == 0
     ticket_html.find(".cost").html("")
   else
     ticket_html.find(".cost").html(ticket.cost_key)
-  ticket_html.find(".cost").attr("data-cost", ticket.cost)
 
+  ticket_html.find(".link").attr("href", ticket.edit_url)
 
   return ticket_html[0].outerHTML
 
