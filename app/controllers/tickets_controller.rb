@@ -8,6 +8,13 @@ class TicketsController < ApplicationController
     end
   end
 
+  def edit
+    authorize @ticket
+    respond_to do |format|
+      format.html {render :edit}
+    end
+  end
+
   private
 
   def load_resource

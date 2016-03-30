@@ -14,5 +14,9 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
 
+  def to_s
+    full_name || email
+  end
+
 end
 

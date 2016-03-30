@@ -4,4 +4,12 @@ class TicketPolicy < ApplicationPolicy
       scope
     end
   end
+
+  def update?
+    true
+  end
+
+  def edit?
+    update?
+  end
 end
