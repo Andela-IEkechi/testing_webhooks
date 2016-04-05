@@ -32,6 +32,8 @@ class Ticket < ApplicationRecord
     where(comments: {last: true}).
     where(comments: {board_id: (board.id rescue nil)}) }
 
+  accepts_nested_attributes_for :comments, allow_destroy: true
+
   #Make sure only one comment is marked as being the last
   def set_last_comment!
     return unless last_comment.present?
