@@ -82,7 +82,13 @@
     </div>
 
     <div class="container-fluid">
-      <%= yield %>
+      <% if @project.present? %>
+        <%= render partial: '/layouts/project' %>
+      <% elsif @user.present? %>
+        <%= render partial: '/layouts/user' %>
+      <% elsif @overview.present? || @overviews.present? %>
+        <%= render partial: '/layouts/overview' %>
+      <% end %>
     </div>
 
     <nav class="navbar navbar-fixed-bottom navbar-full navbar-light bg-faded" id="footerNavbar">

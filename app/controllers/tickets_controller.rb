@@ -8,22 +8,43 @@ class TicketsController < ApplicationController
     end
   end
 
-  def edit
+  #we only respond to HTML on new/edit
+  #we only respond to JSON on other actions
+
+  def new
     authorize @ticket
     respond_to do |format|
-      format.html {render :edit}
+      format.html {
+        render :new
+      }
     end
   end
 
-  def update
+  def create
     authorize @ticket
-    binding.pry
-    if @ticket.update_attributes(ticket_params)
-      respond_to do |format|
-        format.html {redirect_to edit_project_ticket_path(@project, @ticket)}
-      end
+    respond_to do |format|
+      format.json {
+        render json: @ticket.broadcast_data
+      }
     end
   end
+
+  # def edit
+  #   authorize @ticket
+  #   respond_to do |format|
+  #     format.html {render :edit}
+  #   end
+  # end
+
+  # def update
+  #   authorize @ticket
+  #   binding.pry
+  #   if @ticket.update_attributes(ticket_params)
+  #     respond_to do |format|
+  #       format.html {redirect_to edit_project_ticket_path(@project, @ticket)}
+  #     end
+  #   end
+  # end
 
   private
 
@@ -33,10 +54,14 @@ class TicketsController < ApplicationController
     super
   end
 
-  def ticket_params
-    params.require(:ticket).permit(:id, :_destroy,
-      comments_attributes: [:id, :_destroy, :user_id, :assignee_id, :cost, :status_id, :board_id, :content, documents_attributes: [:file]]
-      )
-  end
+  # def ticket_params
+  #   params.require(:ticket).permit(
+  #     :id, :_destroy,
+  #     comments_attributes: [
+  #       :id, :_destroy, :user_id, :assignee_id, :cost, :status_id, :board_id, :content, 
+  #       documents_attributes: [:file]
+  #     ]
+  #   )
+  # end
 
 end

@@ -68,10 +68,11 @@ class ProjectsController < ApplicationController
       end
     end
 
-    params.require(:project).permit(:id, :_destroy, :name, :logo,
+    params.require(:project).permit(
+      :id, :_destroy, :name, :logo,
       statuses_attributes: [:id, :_destroy, :name, :open, :order],
       members_attributes: [:id, :_destroy, :user_id, :project_id, :role],
       documents_attributes: [:file]
-      )
+    )
   end
 end
