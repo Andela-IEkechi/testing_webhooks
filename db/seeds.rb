@@ -9,6 +9,7 @@ Project.delete_all
 Account.delete_all
 User.delete_all
 Member.delete_all
+Integration.delete_all
 
 p "creating users@example.com..."
 user = User.create(email: "user@example.com", password: "password")
@@ -27,6 +28,11 @@ p "create some additional users..."
   user = User.create(email: Faker::Internet.email, password: "password")
   user.skip_confirmation_notification!
   user.confirm!
+end
+
+p "create integration keys for all users"
+User.find_each do |u|
+  u.integrations.create(party: Integration::PARTIES.sample, enabled: [true, false].sample)
 end
 
 p "assign new users to projects..."
