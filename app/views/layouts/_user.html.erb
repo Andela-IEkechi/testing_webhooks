@@ -1,29 +1,23 @@
-<h3><%= @user.name %></h3>
+<h3><%= @user.to_s %></h3>
 
-<div class="row">
-  <div class="col-sm-1">
-    <!-- Nav tabs -->
-    <ul class="nav nav-pills nav-stacked" role="tablist">
-      <li class="nav-item text-xs-center">
-        <a class="nav-link" data-toggle="tab" href="#account_tab" role="tab" title="Account"><%= fa_icon "user" %>account</a>
-      </li>
-      <li class="nav-item text-xs-center">
-        <a class="nav-link" data-toggle="tab" href="#settings_tab" role="tab" title="Settings"><%= fa_icon "sliders" %>settings</a>
-      </li>
-      <li class="nav-item text-xs-center">
-        <a class="nav-link" data-toggle="tab" href="#projects_tab" role="tab" title="Projects"><%= fa_icon "folder-open-o" %>projects</a>
-      </li>
-    </ul>
-    <% if @user.avatar.present? %>
-      <%= image_tag @user.avatar_url(:small) %>
-    <% end %>
-  </div>
-  <div class="col-sm-11">
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <div class="tab-pane" id="account_tab" role="tabpanel"><%= render partial: '/users/tabs/account' %></div>
-      <div class="tab-pane" id="settings_tab" role="tabpanel"><%= render partial: '/users/tabs/settings' %></div>
-      <div class="tab-pane" id="projects_tab" role="tabpanel"><%= render partial: '/users/tabs/projects' %></div>
-    </div>
-  </div>
+<div class="col-sm-1">
+  <!-- Nav tabs -->
+  <ul class="nav nav-pills nav-stacked" role="tablist">
+    <li class="nav-item text-xs-center">
+      <a class="nav-link active" data-toggle="tab" href="#settings_tab" role="tab" title="Settings"><%= fa_icon "sliders" %>settings</a>
+    </li>
+    <li class="nav-item text-xs-center">
+      <a class="nav-link" data-toggle="tab" href="#projects_tab" role="tab" title="Projects"><%= fa_icon "folder-open-o" %>projects</a>
+    </li>
+    <li class="nav-item text-xs-center">
+      <a class="nav-link" data-toggle="tab" href="#account_tab" role="tab" title="Account"><%= fa_icon "user" %>account</a>
+    </li>
+  </ul>
+  <% if false && @user.avatar.present? %>
+    <%= image_tag @user.avatar_url(:small) %>
+  <% end %>
+</div>
+
+<div class="col-sm-11">
+  <%= yield %>
 </div>

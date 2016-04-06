@@ -20,52 +20,51 @@
         <a class="navbar-brand" href="#">Conductor</a>
         <ul class="nav navbar-nav">
           <% if current_user %>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <%= @project.name rescue "Projects" %>
-            </a>
-            <div class="dropdown-menu">
-              <% current_user.projects.order(name: :asc).each do |project| %>
-                <%= link_to project.name, project_path(project), class: "dropdown-item" %>
-              <% end %>
-              <% if current_user.projects.any? %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <%= @project.name rescue "Projects" %>
+              </a>
+              <div class="dropdown-menu">
+                <% current_user.projects.order(name: :asc).each do |project| %>
+                  <%= link_to project.name, project_path(project), class: "dropdown-item" %>
+                <% end %>
+                <% if current_user.projects.any? %>
+                  <div class="dropdown-divider"></div>
+                <% end %>
+                <%= link_to "New project", projects_path(), method: 'POST', class: "dropdown-item" %>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <%= (@overview.present? && @overview.persisted? && @overview.name) || "Overviews" %>
+              </a>
+              <div class="dropdown-menu">
+                <% current_user.overviews.order(name: :asc).each do |overview| %>
+                  <%= link_to overview.name, overview_path(overview), class: "dropdown-item" %>
+                <% end %>
+                <% if current_user.overviews.any? %>
+                  <div class="dropdown-divider"></div>
+                <% end %>
+                <%= link_to "New overview", new_overview_path(), class: "dropdown-item" %>
+              </div>
+            </li>
+            <li class="nav-item dropdown pull-xs-right">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <%= current_user.email %>
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="<%= edit_user_path(current_user) %>"><%= fa_icon "gear" %>Settings</a>
                 <div class="dropdown-divider"></div>
-              <% end %>
-              <%= link_to "New project", projects_path(), method: 'POST', class: "dropdown-item" %>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <%= @overview.name rescue "Overviews" %>
-            </a>
-            <div class="dropdown-menu">
-              <% current_user.overviews.order(name: :asc).each do |overview| %>
-                <%= link_to overview.name, overview_path(overview), class: "dropdown-item" %>
-              <% end %>
-              <% if current_user.overviews.any? %>
-                <div class="dropdown-divider"></div>
-              <% end %>
-              <%= link_to "New overview", new_overview_path(), class: "dropdown-item" %>
-            </div>
-          </li>
-          <li class="nav-item dropdown pull-xs-right">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <%= current_user.email %>
-            </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#"><%= fa_icon "gear" %>Settings</a>
-              <div class="dropdown-divider"></div>
-              <%= link_to raw(fa_icon("sign-out") + "Logout"), destroy_user_session_path(), method: :delete, class: "dropdown-item" %>
-            </div>
-          </li>
+                <%= link_to raw(fa_icon("sign-out") + "Logout"), destroy_user_session_path(), method: :delete, class: "dropdown-item" %>
+              </div>
+            </li>
           <% else %>
-          <li class="nav-item hidden-md-down pull-xs-right space-left">
-            <%= link_to "Register", new_user_registration_path(), class: "nav-link" %>
-          </li>
-          <li class="nav-item hidden-md-down pull-xs-right">
-            <%= link_to "Login", new_user_session_path(), class: "nav-link" %>
-          </li>
+            <li class="nav-item hidden-md-down pull-xs-right space-left">
+              <%= link_to "Register", new_user_registration_path(), class: "nav-link" %>
+            </li>
+            <li class="nav-item hidden-md-down pull-xs-right">
+              <%= link_to "Login", new_user_session_path(), class: "nav-link" %>
+            </li>
           <% end %>
         </ul>
       </div>
@@ -83,11 +82,11 @@
 
     <div class="container-fluid">
       <% if @project.present? %>
-        <%= render partial: '/layouts/project' %>
+        <%= render :partial => "/layouts/project" %>
+      <% elsif @overview.present? %>
+        <%= render :partial => "/layouts/overview" %>
       <% elsif @user.present? %>
-        <%= render partial: '/layouts/user' %>
-      <% elsif @overview.present? || @overviews.present? %>
-        <%= render partial: '/layouts/overview' %>
+        <%= render :partial => "/layouts/user" %>
       <% end %>
     </div>
 

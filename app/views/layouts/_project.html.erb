@@ -1,8 +1,7 @@
-<% content_for :heading do %>
-  <h3><%= @project.name %></h3>
-<% end %>
+<h3><%= @project.name %></h3>
 
-<!-- Nav tabs -->
+<div class="col-sm-1">
+  <!-- Nav tabs -->
   <ul class="nav nav-pills nav-stacked" role="tablist">
     <li class="nav-item text-xs-center">
       <a class="nav-link" data-toggle="tab" href="#boards_tab" role="tab" title="Boards"><%= fa_icon "table" %>boards</a>
@@ -20,4 +19,9 @@
   <% if @project.logo.present? %>
     <%= image_tag @project.logo_url(:thumb) %>
   <% end %>
+
+</div>
+
+<div class="col-sm-11">
+  <%= yield %> 
 </div>

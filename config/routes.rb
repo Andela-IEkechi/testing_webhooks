@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   resources :overviews
 
+  resources :users 
+  
   resources :documents, only: [:download] do
     member do
       get 'download' => "documents#download"
