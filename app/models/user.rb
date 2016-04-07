@@ -26,5 +26,6 @@ class User < ApplicationRecord
   attr :project_tab
   attr :ticket_order
   attr :page_size
+
 end
 

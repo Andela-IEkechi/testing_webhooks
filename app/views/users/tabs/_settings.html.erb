@@ -1,7 +1,18 @@
 <%= simple_form_for [@user] do |f| %>
-  <%= f.input :project_tab, collection: [:boards, :tickets, :documents], include_blank: false, hint: "Set which tab is active up when you first view a project." %>
-  <%= f.input :ticket_order, as: :radio_buttons, collection: {ascending: true, descending: false}, hint: "Control how tickets are ordered." %>
-  <%= f.input :page_size, collection: [10,25,50], include_blank: "unlimited", hint: "Control how many items are shown in list." %>
+  <%= f.input :project_tab, 
+      collection: [:boards, :tickets, :documents], 
+      selected: @user.preferences["project_tab"],
+      include_blank: false, 
+      hint: "Set which tab is active up when you first view a project." %>
+  <%= f.input :ticket_order, as: :radio_buttons, 
+      collection: {ascending: true, descending: false}, 
+      checked: [@user.preferences["ticket_order"], true],
+      hint: "Control how tickets are ordered." %>
+  <%= f.input :page_size, 
+      collection: [10,25,50], 
+      selected: @user.preferences["page_size"],
+      include_blank: "unlimited", 
+      hint: "Control how many items are shown in list." %>
 
   <div id="user-integrations">
     <%= f.simple_fields_for :integrations, @user.integrations.all do |i_f| %>
