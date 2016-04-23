@@ -44,11 +44,6 @@ gem 'refile-postgres'
 # auditlogs
 gem 'paper_trail'
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-  gem 'rspec-rails'
-end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
@@ -58,16 +53,25 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'capistrano-rails'
-  gem 'guard-rails'
-  gem 'guard-rspec'
 end
 
 group :test do
   gem 'simplecov', :require => false
-  gem 'factory_girl_rails'
-  gem 'faker'
+  gem 'guard-rails'
+  gem 'guard-rspec'
+  gem 'rspec-rails'
+  gem 'rspec-collection_matchers'
+  gem 'shoulda-matchers'
+  gem 'shoulda-callback-matchers'
+  gem 'database_cleaner'
 end
 
+group :development, :test do
+  gem 'factory_girl_rails'
+  gem 'faker'
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug'
+end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

@@ -24,10 +24,10 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 #ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
-RSpec::Sidekiq.configure do |config|
-  config.warn_when_jobs_not_processed_by_sidekiq = false
-  config.enable_terminal_colours = false
-end
+# RSpec::Sidekiq.configure do |config|
+#   config.warn_when_jobs_not_processed_by_sidekiq = false
+#   config.enable_terminal_colours = false
+# end
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
@@ -56,7 +56,6 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    Timecop.safe_mode = true
     DatabaseCleaner.clean_with(:truncation)
   end
 
@@ -83,4 +82,21 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   #config.order = "random"
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    # Choose a test framework:
+    with.test_framework :rspec
+    # with.test_framework :minitest
+    # with.test_framework :minitest_4
+    # with.test_framework :test_unit
+
+    # Choose one or more libraries:
+    with.library :active_record
+    with.library :active_model
+    with.library :action_controller
+    # Or, choose the following (which implies all of the above):
+    with.library :rails
+  end
 end

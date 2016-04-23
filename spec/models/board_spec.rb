@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Board, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:subject) {create(:board)}
+
+  it { should belong_to(:project) }  
+  it { should have_and_belong_to_many(:tickets) }  
+
+  it { should respond_to(:name) }  
 end

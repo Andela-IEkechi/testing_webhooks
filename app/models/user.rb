@@ -6,7 +6,8 @@ class User < ApplicationRecord
          :confirmable, :omniauthable
 
   has_one :account, dependent: :destroy
+  has_and_belongs_to_many :memberships, dependent: :destroy, class_name: "Member"
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: {case_sensitive: false}
 
 end
