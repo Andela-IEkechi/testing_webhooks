@@ -30,6 +30,12 @@ gem 'redis', '~> 3.0'
 gem 'devise'
 #role based access control
 gem 'pundit'
+#scoped ids
+gem 'sequenced'
+#use slugs for projects
+gem 'friendly_id'
+#store attachemnts
+gem 'refile-postgres'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -45,8 +51,14 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'capistrano-rails'
   gem 'guard-rails'
+  gem 'guard-minitest'
+end
+
+group :test do
+  gem 'simplecov', :require => false
   gem 'factory_girl_rails'
 end
+
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
