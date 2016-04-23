@@ -1,4 +1,0 @@
-Conductor
-=========
-
-Ticketing system

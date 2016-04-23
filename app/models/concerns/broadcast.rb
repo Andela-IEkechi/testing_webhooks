@@ -1,3 +1,0 @@
-module Broadcast
-# placeholder
-end
