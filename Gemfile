@@ -28,6 +28,8 @@ gem 'redis', '~> 3.0'
 
 #user authentication
 gem 'devise'
+gem 'omniauth-github'
+gem 'omniauth-google'
 #role based access control
 gem 'pundit'
 #scoped ids
@@ -35,11 +37,17 @@ gem 'sequenced'
 #use slugs for projects
 gem 'friendly_id'
 #store attachemnts
+gem "refile", require: "refile/rails"
 gem 'refile-postgres'
+# gem "refile-mini_magick" #not rails 5 compatible
+
+# auditlogs
+gem 'paper_trail'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -51,12 +59,13 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'capistrano-rails'
   gem 'guard-rails'
-  gem 'guard-minitest'
+  gem 'guard-rspec'
 end
 
 group :test do
   gem 'simplecov', :require => false
   gem 'factory_girl_rails'
+  gem 'faker'
 end
 
 
