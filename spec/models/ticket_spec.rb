@@ -8,4 +8,45 @@ RSpec.describe Ticket, type: :model do
   it { should belong_to(:parent) }
   it { should have_many(:children) }
   it { should have_and_belong_to_many(:boards) }
+
+  it {should respond_to(:status)}
+  it {should respond_to(:assignee)}
+
+  describe "delegated comment attributes" do
+    describe ".assignee" do
+      before(:each) do
+        create(:comment, ticket: subject, assignee: create(:user))
+      end
+
+      it "is the value on the last comment" do
+        #create a new comment with a different assignee
+        expect {
+          create(:comment, ticket: subject, assignee: create(:user))
+        }.to change{subject.assignee}
+      end
+
+      it "can be nil" do
+        subject.comments.clear
+        expect(subject.assignee).to eq(nil)
+      end
+    end
+
+    describe ".status" do
+      before(:each) do
+        create(:comment, ticket: subject, status: create(:status))
+      end
+
+      it "is the value on the last comment" do
+        #create a new comment with a different assignee
+        expect {
+          create(:comment, ticket: subject, status: create(:status))
+        }.to change{subject.status}
+      end
+
+      it "can be nil" do
+        subject.comments.clear
+        expect(subject.status).to eq(nil)
+      end
+    end
+  end
 end

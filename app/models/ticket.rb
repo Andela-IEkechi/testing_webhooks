@@ -10,9 +10,16 @@ class Ticket < ApplicationRecord
 
   has_and_belongs_to_many :boards
 
+  delegate :assignee, :status, to: :last_comment, allow_nil: true
+
   # Automatically use the sequential ID in URLs
   def to_param
     self.sequential_id.to_s
   end
 
+  private
+
+  def last_comment
+    comments.last
+  end
 end
