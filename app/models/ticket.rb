@@ -22,4 +22,9 @@ class Ticket < ApplicationRecord
   def last_comment
     comments.last
   end
+
+  def creator
+    comments.first.commenter
+  end
+
 end

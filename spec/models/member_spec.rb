@@ -24,5 +24,11 @@ RSpec.describe Member, type: :model do
         expect(roles.count).to eq(1)
       end
     end
+
+    it "#unrestricted" do
+      members = Member.unrestricted
+      roles = members.collect(&:role).select{|role| role == "restricted"}.uniq.compact
+      expect(roles.count).to eq(0)
+    end
   end
 end

@@ -9,4 +9,6 @@ class Member < ApplicationRecord
   ROLES.each do |role_name|
     scope role_name.pluralize.to_sym, ->{where(role: role_name)}
   end
+
+  scope :unrestricted, ->{where.not(role: "restricted")}
 end

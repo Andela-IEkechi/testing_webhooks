@@ -1,7 +1,7 @@
 class ProjectPolicy < ApplicationPolicy
   class Scope < Struct.new(:user, :scope)
     def resolve
-      scope.joins(:members).where(members: {user: user})
+      scope.joins(:members).where(members: {user_id: user.id})
     end
   end
 
