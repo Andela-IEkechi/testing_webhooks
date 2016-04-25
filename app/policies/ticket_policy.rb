@@ -24,9 +24,9 @@ class TicketPolicy < ApplicationPolicy
         # project admins can edit a ticket
         record.project.members.administrators.where(user: user).any? ||
         #the ticket creator can also edit the ticket
-        record.project.members.where(user: record.creator).any? ||
+        (record.project.members.regulars.where(user: record.creator).any? && (record.creator == user)) ||
         #the ticket assignee can also edit the ticket
-        record.project.members.where(user: record.assignee).any?
+        (record.project.members.regulars.where(user: record.assignee).any? && (record.assignee == user))
       )
   end
   
