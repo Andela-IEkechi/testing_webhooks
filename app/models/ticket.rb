@@ -17,14 +17,16 @@ class Ticket < ApplicationRecord
     self.sequential_id.to_s
   end
 
+  def creator
+    comments.first.commenter
+  rescue 
+    nil #there might be no comment on the ticket
+  end
+
   private
 
   def last_comment
     comments.last
-  end
-
-  def creator
-    comments.first.commenter
   end
 
 end

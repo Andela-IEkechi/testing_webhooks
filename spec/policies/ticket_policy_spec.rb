@@ -52,52 +52,85 @@ describe TicketPolicy do
     end
   end
 
-  # permissions :show? do
-  #   it "permits any member" do
-  #     membership = create(:membership, user: user)
-  #     expect(subject).to permit(user, membership.project)
-  #   end
+  permissions :show? do
+    Member::ROLES.each do |role|
+      it "permits #{role}" do
+        membership = create(role.to_sym, user: user)
+        ticket = create(:ticket, project: membership.project)
+        expect(subject).to permit(user, ticket)
+      end
+    end
 
-  #   it "prevents any non-member" do
-  #     membership = create(:membership, user: user)
-  #     other_user = create(:user)
-  #     expect(subject).not_to permit(other_user, membership.project)
-  #   end
-  # end
+    it "prevents non-member" do
+      membership = create(:member, user: user)
+      ticket = create(:ticket, project: membership.project)
+      other_user = create(:user)
+      expect(subject).not_to permit(other_user, ticket)
+    end
+  end
 
-  # permissions :update? do
-  #   ["owner", "administrator"].each do |role|
-  #     it "permits #{role}" do
-  #       membership = create(role.to_sym, user: user)
-  #       expect(subject).to permit(user, membership.project)
-  #     end
-  #   end
+  permissions :update? do
+    (Member::ROLES - ["restricted", "regular"]).each do |role|
+      it "permits #{role}" do
+        membership = create(role.to_sym, user: user)
+        ticket = create(:ticket, project: membership.project)
+        expect(subject).to permit(user, ticket)
+      end
+    end
 
-  #   (Member::ROLES - ["owner", "administrator"]).each do |role|
-  #     it "prevents #{role}" do
-  #       membership = create(role.to_sym, user: user)
-  #       expect(subject).not_to permit(user, membership.project)
-  #     end
-  #   end
+    ["restricted", "regular"].each do |role|
+      it "prevents #{role}" do
+        membership = create(role.to_sym, user: user)
+        ticket = create(:ticket, project: membership.project)
+        expect(subject).not_to permit(user, ticket)
+      end
+    end
 
-  #   it "prevents non-members" do
-  #     ownership = create(:owner, user: user)
-  #     other_user = create(:user)
-  #     expect(subject).not_to permit(other_user, ownership.project)
-  #   end
-  # end
+    it "prevents non-member" do
+      membership = create(:member, user: user)
+      ticket = create(:ticket, project: membership.project)
+      other_user = create(:user)
+      expect(subject).not_to permit(other_user, ticket)
+    end
 
-  # permissions :delete? do
-  #   it "permits owner" do
-  #     ownership = create(:owner, user: user)
-  #     expect(subject).to permit(user, ownership.project)
-  #   end
+    it "permits regular member if they are the ticket creator" do
+      membership = create(:regular, user: user)
+      ticket = create(:ticket, project: membership.project)
+      ticket.comments << create(:comment, commenter: user)
+      expect(subject).to permit(user, ticket)
+    end  
 
-  #   (Member::ROLES - ["owner"]).each do |role|
-  #     it "prevents #{role}" do
-  #       membership = create(role.to_sym, user: user)
-  #       expect(subject).not_to permit(user, membership.project)
-  #     end
-  #   end
-  # end
+    it "permits regular member if they are the ticket assignee" do
+      membership = create(:regular, user: user)
+      ticket = create(:ticket, project: membership.project)
+      ticket.comments << create(:comment, assignee: user)
+      expect(subject).to permit(user, ticket)
+    end    
+  end
+
+  permissions :delete? do
+    (Member::ROLES - ["restricted", "regular"]).each do |role|
+      it "permits #{role}" do
+        membership = create(role.to_sym, user: user)
+        ticket = create(:ticket, project: membership.project)
+        expect(subject).to permit(user, ticket)
+      end
+    end
+
+    ["restricted", "regular"].each do |role|
+      it "prevents #{role}" do
+        membership = create(role.to_sym, user: user)
+        ticket = create(:ticket, project: membership.project)
+        expect(subject).not_to permit(user, ticket)
+      end
+    end
+
+    it "prevents non-member" do
+      membership = create(:member, user: user)
+      ticket = create(:ticket, project: membership.project)
+      other_user = create(:user)
+      expect(subject).not_to permit(other_user, ticket)
+    end
+  end
+
 end

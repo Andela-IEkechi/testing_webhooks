@@ -32,7 +32,7 @@ class TicketPolicy < ApplicationPolicy
   
   def delete?
     return false unless record.is_a?(Ticket)
-    record.members.owners.where(user: user).any?
+    record.project.members.owners.where(user: user).any? || record.project.members.administrators.where(user: user).any?
   end
 
 end

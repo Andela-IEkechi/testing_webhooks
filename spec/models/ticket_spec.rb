@@ -11,6 +11,7 @@ RSpec.describe Ticket, type: :model do
 
   it {should respond_to(:status)}
   it {should respond_to(:assignee)}
+  it {should respond_to(:creator)}
 
   describe "delegated comment attributes" do
     describe ".assignee" do
@@ -47,6 +48,19 @@ RSpec.describe Ticket, type: :model do
         subject.comments.clear
         expect(subject.status).to eq(nil)
       end
+    end
+  end
+
+  describe ".creator" do
+    it "returns the user who logged the first comment" do
+      comment = create(:comment, ticket: subject)
+      assert(comment.commenter.present?, "comment must have a commenter") 
+      expect(subject.creator).to eq(comment.commenter)
+    end
+
+    it "returns nil if there are no comments" do 
+      assert(subject.comments.empty?, 'ticket must not have comments')
+      expect(subject.creator.present?).to eq(false)
     end
   end
 end
