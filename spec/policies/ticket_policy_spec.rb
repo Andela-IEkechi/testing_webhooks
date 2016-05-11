@@ -111,14 +111,14 @@ describe TicketPolicy do
       membership = create(:membership)
       ticket = create(:ticket, project: membership.project)
       ticket.comments << create(:comment, commenter: user)
-      expect(subject).to permit(user, ticket)
+      expect(subject).not_to permit(user, ticket)
     end  
 
     it "prevents non-member ticket assignee" do
       membership = create(:membership)
       ticket = create(:ticket, project: membership.project)
       ticket.comments << create(:comment, assignee: user)
-      expect(subject).to permit(user, ticket)
+      expect(subject).not_to permit(user, ticket)
     end    
   end
 
