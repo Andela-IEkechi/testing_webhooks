@@ -9,6 +9,10 @@ RSpec.describe Member, type: :model do
   it { should respond_to(:role) }  
   it { should validate_inclusion_of(:role).in_array(Member::ROLES) }  
 
+  it "enables paper trail" do
+    is_expected.to be_versioned
+  end  
+    
   describe "scopes" do
     before(:each) do
       #create a bunch of memberships

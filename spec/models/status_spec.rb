@@ -8,4 +8,9 @@ RSpec.describe Status, type: :model do
   it { should respond_to(:name) }
   it { should respond_to(:order) }
   it { should respond_to(:open) }
+
+  it "enables paper trail" do
+    is_expected.to be_versioned
+  end  
+      
 end

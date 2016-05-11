@@ -60,10 +60,11 @@ group :development do
 end
 
 group :test do
+  gem 'rspec', '>=3.5.0.beta3'
   gem 'simplecov', :require => false
   gem 'guard-rails'
   gem 'guard-rspec'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '>= 3.5.0.beta3'
   gem 'rspec-collection_matchers'
   gem 'shoulda-matchers'
   gem 'shoulda-callback-matchers'

@@ -18,6 +18,7 @@ RSpec.describe ProjectsController, type: :controller do
 
         it "returns allowed projects" do
           5.times do
+            #it's not important which role the user has, as long as they have a membership
             create(:member, user: user)
             create(:member)
           end

@@ -11,6 +11,10 @@ RSpec.describe User, type: :model do
   it { should respond_to(:email) }
   it { should respond_to(:name) }
 
+  it "enables paper trail" do
+    is_expected.to be_versioned
+  end
+  
   describe ".account" do
     it "is created after the user is created" do
       expect(subject.account).not_to eq(nil)

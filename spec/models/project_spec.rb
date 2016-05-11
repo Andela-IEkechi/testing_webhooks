@@ -11,4 +11,9 @@ RSpec.describe Project, type: :model do
   it { should respond_to(:name)}
   it { should respond_to(:logo)}
   it { should respond_to(:slug)}
+
+  it "enables paper trail" do
+    is_expected.to be_versioned
+  end  
+      
 end

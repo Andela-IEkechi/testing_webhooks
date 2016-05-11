@@ -14,6 +14,10 @@ RSpec.describe Comment, type: :model do
   it { should respond_to :message}
   it { should respond_to :html}
 
+  it "enables paper trail" do
+    is_expected.to be_versioned
+  end  
+
   describe ".html" do
     it "returns parsed markdown" do
       subject.message = "*bold* **italics** `escaped`"

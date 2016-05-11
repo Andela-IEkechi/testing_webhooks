@@ -13,6 +13,10 @@ RSpec.describe Ticket, type: :model do
   it {should respond_to(:assignee)}
   it {should respond_to(:creator)}
 
+  it "enables paper trail" do
+    is_expected.to be_versioned
+  end  
+    
   describe "delegated comment attributes" do
     describe ".assignee" do
       before(:each) do
