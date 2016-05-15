@@ -122,7 +122,7 @@ describe TicketPolicy do
     end    
   end
 
-  permissions :delete? do
+  permissions :destroy? do
     (Member::ROLES - ["restricted", "regular"]).each do |role|
       it "permits #{role}" do
         membership = create(role.to_sym, user: user)

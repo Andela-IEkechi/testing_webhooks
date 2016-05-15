@@ -19,8 +19,9 @@ class ProjectPolicy < ApplicationPolicy
     record.members.owners.where(user: user).any? || record.members.administrators.where(user: user).any?
   end
   
-  def delete?
+  def destroy?
     return false unless record.is_a?(Project)
+    #NOTE: to delete a project, we need to be an owner. It does not matter if we are the only owner.
     record.members.owners.where(user: user).any?
   end
 

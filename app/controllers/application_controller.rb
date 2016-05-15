@@ -38,11 +38,7 @@ class ApplicationController < ActionController::Base
       when 'index' then
         eval("@#{klass_name.pluralize} = @resource_scope.all")
       when 'show', 'update', 'destroy' then
-        if klass.column_names.include? 'sequential_id'
-          eval("@#{klass_name} = @resource_scope.where(sequential_id: params[:id]).first")
-        else  
-          eval("@#{klass_name} = @resource_scope.find(id: params[:id])")
-        end
+        eval("@#{klass_name} = @resource_scope.find(params[:id])")
         eval("authorize @#{klass_name}")
       when 'create' then
         eval("@#{klass_name} = @resource_scope.new(#{klass_name}_params)")

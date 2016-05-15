@@ -12,6 +12,8 @@ class Ticket < ApplicationRecord
 
   delegate :assignee, :status, to: :last_comment, allow_nil: true
 
+  validates :title, presence: true
+  
   # Automatically use the sequential ID in URLs
   def to_param
     self.sequential_id.to_s

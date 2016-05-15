@@ -63,7 +63,7 @@ describe ProjectPolicy do
     end
   end
 
-  permissions :delete? do
+  permissions :destroy? do
     it "permits owner" do
       ownership = create(:owner, user: user)
       expect(subject).to permit(user, ownership.project)

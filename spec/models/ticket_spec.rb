@@ -9,9 +9,12 @@ RSpec.describe Ticket, type: :model do
   it { should have_many(:children) }
   it { should have_and_belong_to_many(:boards) }
 
-  it {should respond_to(:status)}
-  it {should respond_to(:assignee)}
-  it {should respond_to(:creator)}
+  it { should respond_to(:status) }
+  it { should respond_to(:assignee) }
+  it { should respond_to(:creator) }
+  it { should respond_to(:title) }
+
+  it { should validate_presence_of(:title) }
 
   it "enables paper trail" do
     is_expected.to be_versioned

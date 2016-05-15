@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423172915) do
+ActiveRecord::Schema.define(version: 20160512183527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,36 +21,32 @@ ActiveRecord::Schema.define(version: 20160423172915) do
     t.date     "anniversary_on"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["user_id"], name: "index_accounts_on_user_id", using: :btree
   end
-
-  add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
 
   create_table "attachments", force: :cascade do |t|
     t.integer  "comment_id", null: false
     t.string   "file_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["comment_id"], name: "index_attachments_on_comment_id", using: :btree
   end
-
-  add_index "attachments", ["comment_id"], name: "index_attachments_on_comment_id", using: :btree
 
   create_table "boards", force: :cascade do |t|
     t.integer  "project_id", null: false
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_boards_on_project_id", using: :btree
   end
-
-  add_index "boards", ["project_id"], name: "index_boards_on_project_id", using: :btree
 
   create_table "boards_tickets", id: false, force: :cascade do |t|
     t.integer "board_id",  null: false
     t.integer "ticket_id", null: false
+    t.index ["board_id", "ticket_id"], name: "index_boards_tickets_on_board_id_and_ticket_id", using: :btree
+    t.index ["board_id"], name: "index_boards_tickets_on_board_id", using: :btree
+    t.index ["ticket_id"], name: "index_boards_tickets_on_ticket_id", using: :btree
   end
-
-  add_index "boards_tickets", ["board_id", "ticket_id"], name: "index_boards_tickets_on_board_id_and_ticket_id", using: :btree
-  add_index "boards_tickets", ["board_id"], name: "index_boards_tickets_on_board_id", using: :btree
-  add_index "boards_tickets", ["ticket_id"], name: "index_boards_tickets_on_ticket_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.integer  "ticket_id",    null: false
@@ -60,11 +56,10 @@ ActiveRecord::Schema.define(version: 20160423172915) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "assignee_id"
+    t.index ["commenter_id"], name: "index_comments_on_commenter_id", using: :btree
+    t.index ["status_id"], name: "index_comments_on_status_id", using: :btree
+    t.index ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
   end
-
-  add_index "comments", ["commenter_id"], name: "index_comments_on_commenter_id", using: :btree
-  add_index "comments", ["status_id"], name: "index_comments_on_status_id", using: :btree
-  add_index "comments", ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
 
   create_table "members", force: :cascade do |t|
     t.integer  "project_id", null: false
@@ -73,28 +68,25 @@ ActiveRecord::Schema.define(version: 20160423172915) do
     t.boolean  "confirmed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_members_on_project_id", using: :btree
+    t.index ["user_id"], name: "index_members_on_user_id", using: :btree
   end
-
-  add_index "members", ["project_id"], name: "index_members_on_project_id", using: :btree
-  add_index "members", ["user_id"], name: "index_members_on_user_id", using: :btree
 
   create_table "members_projects", id: false, force: :cascade do |t|
     t.integer "member_id",  null: false
     t.integer "project_id", null: false
+    t.index ["member_id", "project_id"], name: "index_members_projects_on_member_id_and_project_id", using: :btree
+    t.index ["member_id"], name: "index_members_projects_on_member_id", using: :btree
+    t.index ["project_id"], name: "index_members_projects_on_project_id", using: :btree
   end
-
-  add_index "members_projects", ["member_id", "project_id"], name: "index_members_projects_on_member_id_and_project_id", using: :btree
-  add_index "members_projects", ["member_id"], name: "index_members_projects_on_member_id", using: :btree
-  add_index "members_projects", ["project_id"], name: "index_members_projects_on_project_id", using: :btree
 
   create_table "members_users", id: false, force: :cascade do |t|
     t.integer "member_id", null: false
     t.integer "user_id",   null: false
+    t.index ["member_id", "user_id"], name: "index_members_users_on_member_id_and_user_id", using: :btree
+    t.index ["member_id"], name: "index_members_users_on_member_id", using: :btree
+    t.index ["user_id"], name: "index_members_users_on_user_id", using: :btree
   end
-
-  add_index "members_users", ["member_id", "user_id"], name: "index_members_users_on_member_id_and_user_id", using: :btree
-  add_index "members_users", ["member_id"], name: "index_members_users_on_member_id", using: :btree
-  add_index "members_users", ["user_id"], name: "index_members_users_on_user_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.string   "name",       null: false
@@ -106,9 +98,8 @@ ActiveRecord::Schema.define(version: 20160423172915) do
 
   create_table "refile_attachments", force: :cascade do |t|
     t.string "namespace", null: false
+    t.index ["namespace"], name: "index_refile_attachments_on_namespace", using: :btree
   end
-
-  add_index "refile_attachments", ["namespace"], name: "index_refile_attachments_on_namespace", using: :btree
 
   create_table "statuses", force: :cascade do |t|
     t.integer  "project_id",                null: false
@@ -117,9 +108,8 @@ ActiveRecord::Schema.define(version: 20160423172915) do
     t.boolean  "open",       default: true
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.index ["project_id"], name: "index_statuses_on_project_id", using: :btree
   end
-
-  add_index "statuses", ["project_id"], name: "index_statuses_on_project_id", using: :btree
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "project_id",    null: false
@@ -127,10 +117,10 @@ ActiveRecord::Schema.define(version: 20160423172915) do
     t.integer  "sequential_id", null: false
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "title"
+    t.index ["parent_id"], name: "index_tickets_on_parent_id", using: :btree
+    t.index ["project_id"], name: "index_tickets_on_project_id", using: :btree
   end
-
-  add_index "tickets", ["parent_id"], name: "index_tickets_on_parent_id", using: :btree
-  add_index "tickets", ["project_id"], name: "index_tickets_on_project_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -150,11 +140,10 @@ ActiveRecord::Schema.define(version: 20160423172915) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "name"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",  null: false
@@ -163,8 +152,7 @@ ActiveRecord::Schema.define(version: 20160423172915) do
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
-
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
 end

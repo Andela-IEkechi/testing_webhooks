@@ -29,8 +29,8 @@ class ProjectsController < ApplicationController
     end    
   end
 
-  def delete
-    if @project.delete?
+  def destroy
+    if @project.delete
       render json: @project
     else
       render json: {errors: @project.errors.full_messages}, status: 422

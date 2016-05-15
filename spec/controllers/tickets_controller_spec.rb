@@ -16,7 +16,7 @@ RSpec.describe TicketsController, type: :controller do
     Member::ROLES.each do |role|
       context "as #{role}" do    
         it "returns 200 when authorised" do
-          get :index, @params
+          get :index, params: @params
           expect(response.status).to eq(200)
         end
 
@@ -26,7 +26,7 @@ RSpec.describe TicketsController, type: :controller do
             create(:ticket)
           end
 
-          get :index, @params
+          get :index, params: @params
           json = JSON.parse(response.body)
           expect(json.count).to eq(5)
         end
@@ -45,24 +45,23 @@ RSpec.describe TicketsController, type: :controller do
     end
     
     Member::ROLES.each do |role|
-    # ["restricted"].each do |role|
       context "as #{role}" do 
         before(:each) do
           create(role.to_sym, user: user, project: @project)
         end
 
-        it "returns 200 when authorised", :focus do
+        it "returns 200 when authorised" do
           get :show, params: @params 
           expect(response.status).to eq(200)
         end
 
-        it "returns 404 when not found", :focus do
+        it "returns 404 when not found" do
           @params[:id] = "not valid"
           get :show, params: @params 
           expect(response.status).to eq(404)
         end
 
-        it "can be found by it's sequential id", :focus do
+        it "can be found by it's sequential id" do
           @params[:id] = @ticket.sequential_id
           get :show, params: @params 
           expect(response.status).to eq(200)
@@ -84,170 +83,222 @@ RSpec.describe TicketsController, type: :controller do
     end
   end
 
-  # describe "create" do
-  #   before(:each) do
-  #     #set up a project to show
-  #     @project = build(:project)
-  #     @params = {project: @project.attributes}
-  #   end
+  describe "create" do
+    before(:each) do
+      #set up a ticket to show
+      @ticket = build(:ticket, project: @project)
+      @params.merge!(ticket: {title: @ticket.title})
 
-  #   Member::ROLES.each do |role|
-  #     context "as #{role}" do
-  #       it "returns 200 when authorised" do
-  #         post :create, params: @params 
-  #         expect(response.status).to eq(200)
-  #       end    
+      #strip away the project membership
+      @project.members.delete_all      
+    end
 
-  #       it "returns the new project when created" do
-  #         post :create, params: @params 
-  #         expect(Project.friendly.where(name: @project.name).any?).to eq(true)
-  #       end   
+    ["restricted"].each do |role|
+      context "as #{role}" do
+        before(:each) do
+          create(role.to_sym, user: user, project: @project)
+        end
 
-  #       it "creates an associated membership for the user when the new project is created" do
-  #         post :create, params: @params 
-  #         project = Project.friendly.where(name: @project.name).first
-  #         expect(project.members.where(user: user).any?).to eq(true)
-  #       end    
+        it "returns 302 when not authorised" do
+          post :create, params: @params 
+          expect(response.status).to eq(302)
+        end    
 
-  #       it "returns 422 when it failed to create" do
-  #         @params[:project][:name] = nil #invalid
-  #         post :create, params: @params 
-  #         expect(response.status).to eq(422)
-  #       end   
+        it "redirects when not authorised"  do
+          post :create, params: @params 
+          expect(response).to redirect_to(root_path)
+        end   
 
-  #       it "returns error messages when it failed to create" do
-  #         @params[:project][:name] = nil #invalid
-  #         post :create, params: @params 
-  #         json = JSON.parse(response.body)
-  #         expect(json).to eq({"errors"=>["Name can't be blank"]})
-  #       end       
-  #     end       
-  #   end       
-  # end
+        it "does not create a new ticket" do
+          expect {
+            post :create, params: @params 
+          }.not_to change{Ticket.count}
+        end          
+      end       
+    end       
 
-  # describe "update" do
-  #   before(:each) do
-  #     #set up a project to show
-  #     @project = create(:project)
-  #     @params = {id: @project.id, project: {name: "updated project name"}}
-  #   end
+    (Member::ROLES - ["restricted"]).each do |role|
+      context "as #{role}" do
+        before(:each) do
+          create(role.to_sym, user: user, project: @project)
+          assert Ticket.none?, "no tickets expected"
+        end
 
-  #   ["owner", "administrator"].each do |role|
-  #     context "as #{role}" do
-  #       before(:each) do
-  #         create(role.to_sym, user: user, project: @project)
-  #       end
+        it "returns 200 when authorised" do
+          post :create, params: @params 
+          expect(response.status).to eq(200)
+        end    
 
-  #       it "returns 200 when authorised" do
-  #         put :update, params: @params 
-  #         expect(response.status).to eq(200)
-  #       end   
+        it "returns the new ticket when created" do
+          post :create, params: @params 
+          json = JSON.parse(response.body)
+          expect(json).to eq(@project.tickets.first.attributes.as_json)
+        end   
 
-  #       it "can be updated by slug" do
-  #         @params[:id] = @project.slug
-  #         put :update, params: @params 
-  #         expect(response.status).to eq(200)
-  #       end    
+        it "creates a new ticket with the title provided" do
+          post :create, params: @params 
+          json = JSON.parse(response.body)
+          expect(json["title"]).to eq(@ticket.title)
+        end 
 
-  #       it "returns the updated project" do
-  #         put :update, params: @params 
-  #         json = JSON.parse(response.body)
-  #         @project.reload
-  #         expect(json).to eq(JSON.parse(@project.attributes.to_json))
-  #       end   
+        it "associates the newly created ticket with the project" do
+          post :create, params: @params 
+          json = JSON.parse(response.body)
+          expect(@project.tickets.first.project_id).to eq(@project.id)
+        end    
 
-  #       it "returns 422 when it failed to update" do
-  #         @params[:project][:name] = nil #invalid
-  #         put :update, params: @params 
-  #         expect(response.status).to eq(422)
-  #       end 
+        it "creates an associated comment" do
+          post :create, params: @params 
+          ticket = @project.tickets.first
+          expect(ticket.comments.any?).to eq(true)
+        end    
 
-  #       it "returns error messages when it failed to update" do
-  #         @params[:project][:name] = nil #invalid
-  #         put :update, params: @params 
-  #         json = JSON.parse(response.body)
-  #         expect(json).to eq({"errors"=>["Name can't be blank"]})
-  #       end     
-  #     end  
-  #   end   
+        it "associated comment belongs to the user" do
+          post :create, params: @params 
+          ticket = @project.tickets.first
+          expect(ticket.comments.where(commenter_id: user.id).any?).to eq(true)
+        end    
 
-  #   (Member::ROLES - ["owner", "administrator"]).each do |role|
-  #     before(:each) do
-  #       create(role.to_sym, user: user, project: @project)
-  #     end
+        it "returns 422 when it failed to create" do
+          @params[:ticket] = {title: nil} #invalid
+          post :create, params: @params 
+          expect(response.status).to eq(422)
+        end   
 
-  #     context "as #{role}" do
-  #       it "returns 302 when not authorised" do
-  #         put :update, params: @params 
-  #         expect(response.status).to eq(302)
-  #       end  
+        it "returns error messages when it failed to create" do
+          @params[:ticket] = {title: nil} #invalid
+          post :create, params: @params 
+          json = JSON.parse(response.body)
+          expect(json).to eq({"errors"=>["Title can't be blank"]})
+        end       
+      end       
+    end       
+  end
 
-  #       it "leaves the project unchanged" do
-  #         put :update, params: @params 
-  #         @project.reload
-  #         expect(@project.created_at).to eq(@project.updated_at)
-  #       end            
-  #     end    
-  #   end    
-  # end
+  describe "update" do
+    before(:each) do
+      #set up a ticket to show
+      @ticket = create(:ticket, project: @project)
+      #NOTE: @ticket.to_param will return the sequential_id 
+      @params.merge!(id: @ticket.to_param, ticket: {title: "updated ticket title"})
 
-  # describe "delete" do
-  #   before(:each) do
-  #     @project = create(:project)
-  #     @params = {id: @project.id, project: {name: "updated project name"}}
-  #   end
+      #strip away the project membership
+      @project.members.delete_all      
+    end    
 
-  #   ["owner", "administrator"].each do |role|
-  #     context "as #{role}" do
-  #       before(:each) do
-  #         create(role.to_sym, user: user, project: @project)
-  #       end
+    (Member::ROLES - ["owner", "administrator"]).each do |role|
+      before(:each) do
+        create(role.to_sym, user: user, project: @project)
+      end
 
-  #       it "returns 200 when authorised" do
-  #         put :update, params: @params 
-  #         expect(response.status).to eq(200)
-  #       end    
+      context "as #{role}" do
+        it "returns 302 when not authorised" do
+          put :update, params: @params 
+          expect(response.status).to eq(302)
+        end  
 
-  #       it "returns the updated project" do
-  #         put :update, params: @params 
-  #         json = JSON.parse(response.body)
-  #         @project.reload
-  #         expect(json).to eq(JSON.parse(@project.attributes.to_json))
-  #       end   
+        it "leaves the project unchanged" do
+          put :update, params: @params 
+          @project.reload
+          expect(@project.created_at).to eq(@project.updated_at)
+        end            
+      end    
+    end  
 
-  #       it "returns 422 when it failed to update" do
-  #         @params[:project][:name] = nil #invalid
-  #         put :update, params: @params 
-  #         expect(response.status).to eq(422)
-  #       end 
+    ["owner", "administrator"].each do |role|
+      context "as #{role}" do
+        before(:each) do
+          create(role.to_sym, user: user, project: @project)
+        end
 
-  #       it "returns error messages when it failed to update" do
-  #         @params[:project][:name] = nil #invalid
-  #         put :update, params: @params 
-  #         json = JSON.parse(response.body)
-  #         expect(json).to eq({"errors"=>["Name can't be blank"]})
-  #       end     
-  #     end  
-  #   end   
+        it "returns 200 when authorised" do
+          put :update, params: @params 
+          expect(response.status).to eq(200)
+        end   
 
-  #   (Member::ROLES - ["owner", "administrator"]).each do |role|
-  #     before(:each) do
-  #       create(role.to_sym, user: user, project: @project)
-  #     end
+        it "cannot be updated by id (as opposed to sequential_id)" do
+          @params[:id] = @ticket.id
+          put :update, params: @params 
+          expect(response.status).to eq(404)
+        end    
 
-  #     context "as #{role}" do
-  #       it "returns 302 when not authorised" do
-  #         put :update, params: @params 
-  #         expect(response.status).to eq(302)
-  #       end  
+        it "returns the updated ticket" do
+          put :update, params: @params 
+          json = JSON.parse(response.body)
+          @ticket.reload
+          expect(json).to eq(JSON.parse(@ticket.attributes.to_json))
+        end   
 
-  #       it "leaves the project unchanged" do
-  #         put :update, params: @params 
-  #         @project.reload
-  #         expect(@project.created_at).to eq(@project.updated_at)
-  #       end            
-  #     end    
-  #   end 
-  # end
+        it "returns 422 when it failed to update" do
+          @params[:ticket][:title] = nil #invalid
+          put :update, params: @params 
+          expect(response.status).to eq(422)
+        end 
+
+        it "returns error messages when it failed to update" do
+          @params[:ticket][:title] = nil #invalid
+          put :update, params: @params 
+          json = JSON.parse(response.body)
+          expect(json).to eq({"errors"=>["Title can't be blank"]})
+        end     
+      end  
+    end   
+  end
+
+  describe "delete" do
+    before(:each) do
+      #set up a ticket to show
+      @ticket = create(:ticket, project: @project)
+      #NOTE: @ticket.to_param will return the sequential_id 
+      @params.merge!(id: @ticket.to_param)
+
+      #strip away the project membership
+      @project.members.delete_all 
+    end
+
+    (Member::ROLES - ["owner", "administrator"]).each do |role|
+      before(:each) do
+        create(role.to_sym, user: user, project: @project)
+      end
+
+      context "as #{role}" do
+        it "returns 302 when not authorised" do
+          put :destroy, params: @params 
+          expect(response.status).to eq(302)
+        end  
+
+        it "leaves the ticket unchanged" do
+          put :destroy, params: @params 
+          @ticket.reload
+          expect(@ticket.created_at).to eq(@ticket.updated_at)
+        end            
+      end    
+    end 
+
+    ["owner", "administrator"].each do |role|
+      context "as #{role}" do
+        before(:each) do
+          create(role.to_sym, user: user, project: @project)
+        end
+
+        it "returns 200 when authorised" do
+          delete :destroy, params: @params 
+          expect(response.status).to eq(200)
+        end    
+
+        it "deletes the ticket" do
+          expect {
+            delete :destroy, params: @params 
+          }.to change(Ticket, :count).by(-1)
+        end   
+
+        it "returns the deleted ticket" do
+          delete :destroy, params: @params 
+          json = JSON.parse(response.body)
+          expect(json).to eq(JSON.parse(@ticket.attributes.to_json))
+        end    
+      end  
+    end   
+  end
 
 end

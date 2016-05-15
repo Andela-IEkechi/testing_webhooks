@@ -186,60 +186,58 @@ RSpec.describe ProjectsController, type: :controller do
   describe "delete" do
     before(:each) do
       @project = create(:project)
-      @params = {id: @project.id, project: {name: "updated project name"}}
+      @params = {id: @project.id}
     end
 
-    ["owner", "administrator"].each do |role|
-      context "as #{role}" do
-        before(:each) do
-          create(role.to_sym, user: user, project: @project)
-        end
-
-        it "returns 200 when authorised" do
-          put :update, params: @params 
-          expect(response.status).to eq(200)
-        end    
-
-        it "returns the updated project" do
-          put :update, params: @params 
-          json = JSON.parse(response.body)
-          @project.reload
-          expect(json).to eq(JSON.parse(@project.attributes.to_json))
-        end   
-
-        it "returns 422 when it failed to update" do
-          @params[:project][:name] = nil #invalid
-          put :update, params: @params 
-          expect(response.status).to eq(422)
-        end 
-
-        it "returns error messages when it failed to update" do
-          @params[:project][:name] = nil #invalid
-          put :update, params: @params 
-          json = JSON.parse(response.body)
-          expect(json).to eq({"errors"=>["Name can't be blank"]})
-        end     
-      end  
-    end   
-
-    (Member::ROLES - ["owner", "administrator"]).each do |role|
+    (Member::ROLES - ["owner"]).each do |role|
       before(:each) do
         create(role.to_sym, user: user, project: @project)
       end
 
       context "as #{role}" do
         it "returns 302 when not authorised" do
-          put :update, params: @params 
+          put :destroy, params: @params 
           expect(response.status).to eq(302)
         end  
 
         it "leaves the project unchanged" do
-          put :update, params: @params 
+          put :destroy, params: @params 
           @project.reload
           expect(@project.created_at).to eq(@project.updated_at)
         end            
       end    
     end 
+
+    ["owner"].each do |role|
+      context "as #{role}" do
+        before(:each) do
+          create(role.to_sym, user: user, project: @project)
+        end
+
+        it "returns 200 when authorised" do
+          delete :destroy, params: @params 
+          expect(response.status).to eq(200)
+        end    
+
+        it "deletes the project" do
+          expect {
+            delete :destroy, params: @params 
+          }.to change(Project, :count).by(-1)
+        end   
+
+        it "returns the deleted project" do
+          delete :destroy, params: @params 
+          json = JSON.parse(response.body)
+          expect(json).to eq(JSON.parse(@project.attributes.to_json))
+        end   
+
+        it "returns 404 when it can't find the project" do
+          @params[:id] = "000" #invalid project ID to delete
+          delete :destroy, params: @params 
+          expect(response.status).to eq(404)
+        end 
+      end  
+    end   
   end
 
 end

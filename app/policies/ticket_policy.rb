@@ -30,8 +30,9 @@ class TicketPolicy < ApplicationPolicy
       )
   end
   
-  def delete?
+  def destroy?
     return false unless record.is_a?(Ticket)
+    # NOTE: project owners and project administrators may delete a ticket.
     record.project.members.owners.where(user: user).any? || record.project.members.administrators.where(user: user).any?
   end
 
