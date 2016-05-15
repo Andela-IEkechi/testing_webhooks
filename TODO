@@ -1,0 +1,60 @@
+Soft-delete on all models (via application_record)
+
+Comments controller + specs
+
+Attachments on comments: 
+  need to allow multiple attachments per comment.
+  needs to be stored in-app, NOT on s3/disc... the attachments need to reside in the DB (see gem refile-postgres)
+
+Limit users based on accounts:
+  limit as per current conductor ?
+    small: 1gb storage, 5 colaborators, 1 project
+    medium: 5gb storage, 25 colaborators, 5 projects
+    large: 25gb storage, 125 colaborators, 25 projects 
+
+API keys for hooking in to GH etc.
+  need to process commmit hooks, CI builds
+  might also want to look at exposing API endpoints for alowing others to integrate with us (LOW PRIORITY)
+
+Social signon: 
+  Facebook,
+  Twitter, 
+  Github,
+  Google,
+  other?
+
+Ticket tracking (Andre's idea)
+  allow only one ticket open per user. opening another will close the previous.
+  track open/close times for time log report
+  auto-close tickets at end of business (membership config)
+  we will need to set a "current active user" value on the ticket. Combined with the updated_at timestamp this might give us all we need.
+
+tickets statuses:
+  add sytem status: new, open, on hold, invalid, closed
+  custom states per project
+  state ordering per project
+  state colours per project
+
+Ticket tags
+
+Ticket splitting
+
+WYSIWYG editing on comments
+
+Incoming email channel
+  emails should open faux tickets which can be moderated, turned into tickets.
+  automatic response on emails that make it to tickets. (canned, not custom yet)
+
+Boards
+  replaces sprints/features
+  has due date
+  daily status email
+
+Reports
+  time log report
+    per project, per member(s)
+
+
+
+
+
