@@ -43,10 +43,12 @@ gem 'refile-postgres'
 
 # auditlogs
 gem 'paper_trail'
+#soft-delete
+# gem 'paranoia', "~> 2.0" #does not support rails 5 yet
 
-#markdown parsing
-gem 'redcarpet'
-gem 'pygments.rb'
+#markdown parsing - might not use these, want wysiwyg
+# gem 'redcarpet'
+# gem 'pygments.rb'
 
 
 group :development do

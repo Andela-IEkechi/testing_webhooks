@@ -1,4 +1,4 @@
-Soft-delete on all models (via application_record)
+
 
 Comments controller + specs
 
@@ -55,6 +55,9 @@ Reports
     per project, per member(s)
 
 
+Low Priority
+------------
 
-
-
+Soft-delete on all models (via application_record)
+  Gem "paranoia" does this, but is not geared up for active record 5 yet.
+  I think this feature can wait untill it's needed. It's easy enough to add later and a pain in the ass once it's added.

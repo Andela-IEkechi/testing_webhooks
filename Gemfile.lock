@@ -177,7 +177,6 @@ GEM
       activesupport (>= 3.0, < 6.0)
       request_store (~> 1.1)
     pg (0.18.4)
-    posix-spawn (0.3.11)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -185,9 +184,6 @@ GEM
     puma (3.4.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
-    pygments.rb (0.6.3)
-      posix-spawn (~> 0.3.6)
-      yajl-ruby (~> 1.2.0)
     rack (2.0.0.rc1)
       json
     rack-test (0.6.3)
@@ -222,7 +218,6 @@ GEM
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
-    redcarpet (3.3.4)
     redis (3.3.0)
     ref (2.0.0)
     refile (0.3.0)
@@ -316,7 +311,6 @@ GEM
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    yajl-ruby (1.2.1)
 
 PLATFORMS
   ruby
@@ -341,9 +335,7 @@ DEPENDENCIES
   pg
   puma
   pundit
-  pygments.rb
   rails (>= 5.0.0.rc1, < 5.1)
-  redcarpet
   redis (~> 3.0)
   refile
   refile-postgres
