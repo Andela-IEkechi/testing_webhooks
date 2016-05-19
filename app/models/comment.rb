@@ -1,4 +1,5 @@
-require "html_with_pygments"
+# NOTE: might need to remove this down the line 
+# require "html_with_pygments"
 
 class Comment < ApplicationRecord
   belongs_to :ticket
@@ -7,15 +8,16 @@ class Comment < ApplicationRecord
   belongs_to :assignee, class_name: "User", optional: true
   belongs_to :status
 
-  def html
-    markdown = ::Redcarpet::Markdown.new(html_renderer, fenced_code_blocks: true)
-    markdown.render(message || "").strip
-  end
+  # NOTE: rather use wysiwyg editor, not markdown
+  # def html
+  #   markdown = ::Redcarpet::Markdown.new(html_renderer, fenced_code_blocks: true)
+  #   markdown.render(message || "").strip
+  # end
 
   private 
 
-  def html_renderer
-    ::HTMLwithPygments.new(escape_html: true, hard_wrap: true, prettify: true)
-  end
+  # def html_renderer
+  #   ::HTMLwithPygments.new(escape_html: true, hard_wrap: true, prettify: true)
+  # end
 
 end
