@@ -103,9 +103,10 @@ describe CommentsController, type: :controller do
       end
 
       it "records the changes to the comment" do
-        @comment.update_attributes(assignee: assignee_2, status: @status_2)
+        @comment.update_attributes(assignee: assignee_2, status: @status_2, tag_list: "comment, update, delete")
         expect(@comment.tracked_changes["status_id"]).to eq("[#{@status.id}, #{@status_2.id}]")
         expect(@comment.tracked_changes["assignee_id"]).to eq("[#{assignee.id}, #{assignee_2.id}]")
+        expect(@comment.tracked_changes["tag_list"]).to eq("[\"\", [\"comment\", \"update\", \"delete\"]]")
       end
     end
   end
