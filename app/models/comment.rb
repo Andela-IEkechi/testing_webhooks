@@ -9,6 +9,8 @@ class Comment < ApplicationRecord
   belongs_to :status
 
   after_save :update_tracked_changes
+  # NOTE: we should likely define a list of tracked attrs here, so we dont track everything
+  # TRACKED_ATTRS = [:status_id, :assignee_id, :tags] #tags is not yet implemented
 
   # NOTE: rather use wysiwyg editor, not markdown
   # def html
