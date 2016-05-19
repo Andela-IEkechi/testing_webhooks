@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # NOTE: considder having a top level asset path for downloads of assets
+  # resources :assets
+
+
   root to: "home#index"
   # Serve websocket cable requests in-process
   # mount ActionCable.server => '/cable'
