@@ -9,9 +9,6 @@ class CommentsController < ApplicationController
     render json: @comment
   end
 
-  def new
-  end
-
   def create
     @comment.commenter = current_user
     if @comment.valid? && @comment.save

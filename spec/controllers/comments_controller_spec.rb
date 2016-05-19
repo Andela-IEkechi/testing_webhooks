@@ -3,6 +3,7 @@ require 'rails_helper'
 describe CommentsController, type: :controller do
   let(:user) { create(:user) }
   let(:assignee) { create(:user) }
+  let(:assignee_2) { create(:user) }
 
   before(:each) do
     sign_in(user)
@@ -11,7 +12,9 @@ describe CommentsController, type: :controller do
     @membership = create(:member, user: user)
     @project = @membership.project
     @ticket = create(:ticket, project: @project)
-    @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
+    @status = create(:status, project: @project)
+    @status_2 = create(:status, project: @project)
+    @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
     @params = {project_id: @project.id, ticket_id: @ticket.id, id: @comment.id}
   end
 
@@ -83,6 +86,12 @@ describe CommentsController, type: :controller do
       it "does not update without ticket id" do
         @params[:comment][:ticket_id] = nil
         expect {put :update, params: @params}.to raise_error(ActiveRecord::StatementInvalid)
+      end
+
+      it "records the changes to the comment" do
+        @comment.update_attributes(assignee: assignee_2, status: @status_2)
+        expect(@comment.tracked_changes["status_id"]).to eq("[#{@status.id}, #{@status_2.id}]")
+        expect(@comment.tracked_changes["assignee_id"]).to eq("[#{assignee.id}, #{assignee_2.id}]")
       end
     end
   end

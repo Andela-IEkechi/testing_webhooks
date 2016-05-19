@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160512183527) do
+ActiveRecord::Schema.define(version: 20160519090445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "user_id",        null: false
@@ -49,13 +50,14 @@ ActiveRecord::Schema.define(version: 20160512183527) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.integer  "ticket_id",    null: false
+    t.integer  "ticket_id",       null: false
     t.integer  "commenter_id"
     t.integer  "status_id"
     t.text     "message"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "assignee_id"
+    t.hstore   "tracked_changes"
     t.index ["commenter_id"], name: "index_comments_on_commenter_id", using: :btree
     t.index ["status_id"], name: "index_comments_on_status_id", using: :btree
     t.index ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
