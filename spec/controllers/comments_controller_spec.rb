@@ -65,6 +65,20 @@ describe CommentsController, type: :controller do
     end
   end
 
+  describe "create" do
+    before(:each) do
+      @comment = build(:comment)
+      @params = { project_id: @project.id, ticket_id: @ticket.id, comment: attributes_for(:comment) }
+    end
+
+    context "as member" do
+      it "returns 200 when authorised" do
+        post :create, params: @params
+        expect(response.status).to eq(200)
+      end
+    end
+  end
+
   describe "update" do
     before(:each) do
       @params = {project_id: @project.id, ticket_id: @ticket.id,

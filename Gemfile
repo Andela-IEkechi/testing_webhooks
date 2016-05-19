@@ -48,8 +48,8 @@ gem 'paper_trail'
 # gem 'paranoia', "~> 2.0" #does not support rails 5 yet
 
 #markdown parsing - might not use these, want wysiwyg
-# gem 'redcarpet'
-# gem 'pygments.rb'
+gem 'redcarpet'
+gem 'pygments.rb'
 
 
 group :development do
