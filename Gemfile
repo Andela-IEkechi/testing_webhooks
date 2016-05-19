@@ -40,7 +40,8 @@ gem 'friendly_id'
 gem "refile", require: "refile/rails"
 gem 'refile-postgres'
 # gem "refile-mini_magick" #not rails 5 compatible
-
+#tagging
+gem 'acts-as-taggable-on', '~> 3.4'
 # auditlogs
 gem 'paper_trail'
 #soft-delete

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160519090445) do
+ActiveRecord::Schema.define(version: 20160519103914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,7 +44,6 @@ ActiveRecord::Schema.define(version: 20160519090445) do
   create_table "boards_tickets", id: false, force: :cascade do |t|
     t.integer "board_id",  null: false
     t.integer "ticket_id", null: false
-    t.index ["board_id", "ticket_id"], name: "index_boards_tickets_on_board_id_and_ticket_id", using: :btree
     t.index ["board_id"], name: "index_boards_tickets_on_board_id", using: :btree
     t.index ["ticket_id"], name: "index_boards_tickets_on_ticket_id", using: :btree
   end
@@ -53,11 +52,12 @@ ActiveRecord::Schema.define(version: 20160519090445) do
     t.integer  "ticket_id",       null: false
     t.integer  "commenter_id"
     t.integer  "status_id"
+    t.integer  "assignee_id_id"
     t.text     "message"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.integer  "assignee_id"
     t.hstore   "tracked_changes"
+    t.index ["assignee_id_id"], name: "index_comments_on_assignee_id_id", using: :btree
     t.index ["commenter_id"], name: "index_comments_on_commenter_id", using: :btree
     t.index ["status_id"], name: "index_comments_on_status_id", using: :btree
     t.index ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
@@ -77,7 +77,6 @@ ActiveRecord::Schema.define(version: 20160519090445) do
   create_table "members_projects", id: false, force: :cascade do |t|
     t.integer "member_id",  null: false
     t.integer "project_id", null: false
-    t.index ["member_id", "project_id"], name: "index_members_projects_on_member_id_and_project_id", using: :btree
     t.index ["member_id"], name: "index_members_projects_on_member_id", using: :btree
     t.index ["project_id"], name: "index_members_projects_on_project_id", using: :btree
   end
@@ -85,7 +84,6 @@ ActiveRecord::Schema.define(version: 20160519090445) do
   create_table "members_users", id: false, force: :cascade do |t|
     t.integer "member_id", null: false
     t.integer "user_id",   null: false
-    t.index ["member_id", "user_id"], name: "index_members_users_on_member_id_and_user_id", using: :btree
     t.index ["member_id"], name: "index_members_users_on_member_id", using: :btree
     t.index ["user_id"], name: "index_members_users_on_user_id", using: :btree
   end
@@ -111,6 +109,24 @@ ActiveRecord::Schema.define(version: 20160519090445) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.index ["project_id"], name: "index_statuses_on_project_id", using: :btree
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.string   "taggable_type"
+    t.integer  "taggable_id"
+    t.string   "tagger_type"
+    t.integer  "tagger_id"
+    t.string   "context",       limit: 128
+    t.datetime "created_at"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
+    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string  "name"
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
   create_table "tickets", force: :cascade do |t|
