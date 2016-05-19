@@ -24,7 +24,7 @@ class CommentPolicy < ApplicationPolicy
       )
   end
   
-  def delete?
+  def destroy?
     return false unless record.is_a?(Comment)
     record.ticket.project.members.owners.where(user: user).any? || 
     record.ticket.project.members.administrators.where(user: user).any? ||

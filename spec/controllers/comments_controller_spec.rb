@@ -62,4 +62,41 @@ describe CommentsController, type: :controller do
     end
   end
 
+  describe "update" do
+    before(:each) do
+      @params = {project_id: @project.id, ticket_id: @ticket.id,
+                 id: @comment.id, comment: {message: "Updating previous comment"}}
+    end
+    context "as a member" do
+      it "returns 200 when authorised" do
+        put :update, params: @params
+        expect(response.status).to eq(200)
+      end
+
+      it "returns the updated comment" do
+        put :update, params: @params
+        json = JSON.parse(response.body)
+        @comment.reload
+        expect(json).to eq(JSON.parse(@comment.attributes.to_json))
+      end
+
+      it "does not update without ticket id" do
+        @params[:comment][:ticket_id] = nil
+        expect {put :update, params: @params}.to raise_error(ActiveRecord::StatementInvalid)
+      end
+    end
+  end
+
+  describe "delete" do
+    before(:each) do
+      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
+    end
+
+    context "as a member" do
+      it "deletes the comment for a member" do
+        delete :destroy, params: @params
+        expect(response.status).to eq(200)
+      end
+    end
+  end
 end
