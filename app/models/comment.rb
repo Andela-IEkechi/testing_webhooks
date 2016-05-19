@@ -1,4 +1,4 @@
-# require "html_with_pygments"
+require "html_with_pygments"
 
 class Comment < ApplicationRecord
   belongs_to :ticket
@@ -10,8 +10,8 @@ class Comment < ApplicationRecord
   after_save :update_tracked_changes
 
   def html
-    # markdown = ::Redcarpet::Markdown.new(html_renderer, fenced_code_blocks: true)
-    # markdown.render(message || "").strip
+    markdown = ::Redcarpet::Markdown.new(html_renderer, fenced_code_blocks: true)
+    markdown.render(message || "").strip
   end
 
   private
@@ -21,7 +21,7 @@ class Comment < ApplicationRecord
   end
 
   def html_renderer
-    # ::HTMLwithPygments.new(escape_html: true, hard_wrap: true, prettify: true)
+    ::HTMLwithPygments.new(escape_html: true, hard_wrap: true, prettify: true)
   end
 
 end
