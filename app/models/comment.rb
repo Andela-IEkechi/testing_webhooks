@@ -1,6 +1,8 @@
 # require "html_with_pygments"
 
 class Comment < ApplicationRecord
+  acts_as_taggable
+
   belongs_to :ticket
   has_many :attachments, dependent: :destroy
   belongs_to :commenter, class_name: "User"
