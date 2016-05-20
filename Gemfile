@@ -41,6 +41,8 @@ gem "refile", require: "refile/rails"
 gem 'refile-postgres'
 # gem "refile-mini_magick" #not rails 5 compatible
 
+# the diff method is deprecated so we need this
+gem 'activerecord-diff'
 # auditlogs
 gem 'paper_trail'
 #soft-delete
@@ -76,6 +78,7 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'pry'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 end

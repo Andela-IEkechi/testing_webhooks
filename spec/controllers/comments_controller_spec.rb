@@ -101,12 +101,6 @@ describe CommentsController, type: :controller do
         @params[:comment][:ticket_id] = nil
         expect {put :update, params: @params}.to raise_error(ActiveRecord::StatementInvalid)
       end
-
-      it "records the changes to the comment" do
-        @comment.update_attributes(assignee: assignee_2, status: @status_2)
-        expect(@comment.tracked_changes["status_id"]).to eq("[#{@status.id}, #{@status_2.id}]")
-        expect(@comment.tracked_changes["assignee_id"]).to eq("[#{assignee.id}, #{assignee_2.id}]")
-      end
     end
   end
 
