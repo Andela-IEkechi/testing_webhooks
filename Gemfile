@@ -48,8 +48,8 @@ gem 'paper_trail'
 # gem 'paranoia', "~> 2.0" #does not support rails 5 yet
 
 #markdown parsing - might not use these, want wysiwyg
-gem 'redcarpet'
-gem 'pygments.rb'
+# gem 'redcarpet'
+# gem 'pygments.rb'
 
 
 group :development do
@@ -77,7 +77,6 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'pry'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 end
