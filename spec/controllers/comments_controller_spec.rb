@@ -1,20 +1,27 @@
 require 'rails_helper'
 
-describe CommentsController, type: :controller do
+RSpec.describe CommentsController, type: :controller do
   let(:user) { create(:user) }
-  let(:assignee) { create(:user) }
-  let(:assignee_2) { create(:user) }
+
+#dont create anything you dont have to up front.
+  # let(:assignee) { create(:user) }
+  # let(:assignee_2) { create(:user) }
 
   before(:each) do
     sign_in(user)
     @request.env["CONTENT_TYPE"] = "application/json"
 
+#creating these here is ok since we cant test comments without a ticket
     @membership = create(:member, user: user)
     @project = @membership.project
     @ticket = create(:ticket, project: @project)
+
+#dont create these here, create them in the specs where they are needed
     @status = create(:status, project: @project)
     @status_2 = create(:status, project: @project)
     @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
+    
+#this one can stay here, we need it all the time
     @params = {project_id: @project.id, ticket_id: @ticket.id, id: @comment.id}
   end
 
