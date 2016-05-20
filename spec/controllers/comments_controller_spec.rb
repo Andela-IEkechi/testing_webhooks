@@ -25,9 +25,15 @@ RSpec.describe CommentsController, type: :controller do
     @params = {project_id: @project.id, ticket_id: @ticket.id, id: @comment.id}
   end
 
-
+#compare:
+  describe "index" do
+    Member::ROLES.each do |role|
+      context "as #{role}" do   
+#to :
   describe "index" do
     context "as any user who is a member" do
+
+# You need to test each role explicitly      
       it "returns 200 when authorised" do
         get :index, params: @params
         expect(response.status).to eq(200)
