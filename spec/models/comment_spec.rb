@@ -12,6 +12,7 @@ RSpec.describe Comment, type: :model do
   it { should_not validate_presence_of(:assignee)}
   
   it { should respond_to :message}
+  it { should respond_to :previous}
 
   it "enables paper trail" do
     is_expected.to be_versioned

@@ -1,11 +1,8 @@
 # NOTE: might need to remove this down the line 
 # require "html_with_pygments"
-require 'active_record/diff'
 
 class Comment < ApplicationRecord
   include ActiveRecord::Diff
-
-  diff :status, :assignee
 
   belongs_to :ticket
   has_many :attachments, dependent: :destroy
@@ -13,12 +10,8 @@ class Comment < ApplicationRecord
   belongs_to :assignee, class_name: "User", optional: true
   belongs_to :status
 
-  def self.most_recent_comments
-    order('created_at DESC').limit(2)
-  end
-
-  def self.comment_differences
-    most_recent_comments[0].diff(most_recent_comments[1])
+  def previous
+    self.class.first(conditions: ['created_at < ?', self.id], limit: 1, order: "created_at DESC")
   end
 
   # NOTE: we should likely define a list of tracked attrs here, so we dont track everything

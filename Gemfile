@@ -40,9 +40,6 @@ gem 'friendly_id'
 gem "refile", require: "refile/rails"
 gem 'refile-postgres'
 # gem "refile-mini_magick" #not rails 5 compatible
-
-# the diff method is deprecated so we need this
-gem 'activerecord-diff'
 # auditlogs
 gem 'paper_trail'
 #soft-delete
