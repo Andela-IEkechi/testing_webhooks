@@ -13,6 +13,7 @@ RSpec.describe Comment, type: :model do
   
   it { should respond_to :message}
   it { should respond_to :previous}
+  it { should respond_to :tag_list}
 
   it "enables paper trail" do
     is_expected.to be_versioned
@@ -33,10 +34,4 @@ RSpec.describe Comment, type: :model do
   #     expect(subject.html).to eq(sample_html)
   #   end
   # end
-
-  describe ".tracked_changes" do
-    it "contains a diff of changes"
-    it "updates when I delete a preceeding comment"
-    it "contains the diff of attributes: \#{Comment::TRACKED_ATTRS.join(', ')}" #enable the interpolation once we define the constant
-  end
 end

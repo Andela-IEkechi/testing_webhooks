@@ -2,17 +2,17 @@ class CommentsController < ApplicationController
   respond_to :json
 
   def index
-    render json: @comments.to_json(include: :previous)
+    render json: @comments.to_json(include: { :previous => { :methods => :tag_list }, :tag_list => {} })
   end
 
   def show
-    render json: @comment.to_json(include: :previous)
+    render json: @comment.to_json(include: { :previous => { :methods => :tag_list }, :tag_list => {} })
   end
 
   def create
     @comment.commenter = current_user
     if @comment.valid? && @comment.save
-      render json: @comment.to_json(include: :previous)
+      render json: @comment.to_json(include: { :previous => { :methods => :tag_list }, :tag_list => {} })
     else
       render json: {errors: @comment.errors.full_messages}, status: 422
     end
@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
   def update
     @comment.update_attributes(comment_params)
     if @comment.valid? && @comment.save
-      render json: @comment.to_json(include: :previous)
+      render json: @comment.to_json(include: { :previous => { :methods => :tag_list }, :tag_list => {} })
     else
       render json: {errors: @comment.errors.full_messages}, status: 422
     end
