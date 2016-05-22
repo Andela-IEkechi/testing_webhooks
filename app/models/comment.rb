@@ -2,7 +2,6 @@
 # require "html_with_pygments"
 
 class Comment < ApplicationRecord
-  include ActiveRecord::Diff
 
   belongs_to :ticket
   has_many :attachments, dependent: :destroy
@@ -11,7 +10,7 @@ class Comment < ApplicationRecord
   belongs_to :status
 
   def previous
-    self.class.first(conditions: ['created_at < ?', self.id], limit: 1, order: "created_at DESC")
+    self.class.where('created_at < ?', self.created_at).order(created_at: :desc).limit(1).first
   end
 
   # NOTE: we should likely define a list of tracked attrs here, so we dont track everything
