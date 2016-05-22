@@ -10,7 +10,10 @@ class Comment < ApplicationRecord
   belongs_to :assignee, class_name: "User", optional: true
   belongs_to :status
 
-  after_save :update_tracked_changes
+  def previous
+    self.class.where('created_at < ?', self.created_at).order(created_at: :desc).limit(1).first
+  end
+
   # NOTE: we should likely define a list of tracked attrs here, so we dont track everything
   # TRACKED_ATTRS = [:status_id, :assignee_id, :tags] #tags is not yet implemented
 
@@ -20,11 +23,8 @@ class Comment < ApplicationRecord
   #   markdown.render(message || "").strip
   # end
 
-  private
 
-  def update_tracked_changes
-    update_column(:tracked_changes, changes)
-  end
+  private
 
   # def html_renderer
   #   ::HTMLwithPygments.new(escape_html: true, hard_wrap: true, prettify: true)
