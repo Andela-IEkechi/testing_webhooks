@@ -341,7 +341,6 @@ DEPENDENCIES
   omniauth-google
   paper_trail
   pg
-  pry
   puma
   pundit
   rails (>= 5.0.0.rc1, < 5.1)

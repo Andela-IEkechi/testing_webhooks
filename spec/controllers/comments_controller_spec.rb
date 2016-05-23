@@ -4,7 +4,7 @@ RSpec.describe CommentsController, type: :controller do
   let(:user) { create(:user) }
   let(:assignee) { create(:user) }
 
-  before(:each) do
+  before do
     sign_in(user)
     @request.env["CONTENT_TYPE"] = "application/json"
 
@@ -15,9 +15,7 @@ RSpec.describe CommentsController, type: :controller do
 
   describe "index" do
     before(:each) do
-      @status = create(:status, project: @project)
-      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
-      @params = {project_id: @project.id, ticket_id: @ticket.id, id: @comment.id}
+      @params = {project_id: @project.id, ticket_id: @ticket.id}
     end
 
     Member::ROLES.each do |role|
@@ -27,7 +25,7 @@ RSpec.describe CommentsController, type: :controller do
           expect(response.status).to eq(200)
         end
 
-        it "returns created comments" do
+        it "returns allowed comments" do
           5.times do
             create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
             create(:comment)
@@ -35,7 +33,30 @@ RSpec.describe CommentsController, type: :controller do
 
           get :index, params: @params
           json = JSON.parse(response.body)
-          expect(json.count).to eq(6)
+          expect(json.count).to eq(5)
+        end
+
+        it "fails to bring up comments if ticket ID is not provided" do
+          @params[:ticket_id] = nil
+          expect{ get :index, params: @params }.to raise_error(ActionController::UrlGenerationError)
+        end
+
+        it "fails to bring up comments if project ID is not provided" do
+          @params[:project_id] = nil
+          expect{ get :index, params: @params }.to raise_error(ActionController::UrlGenerationError)
+        end
+
+        it "it fails to bring up comments if the ticket and project IDs do not match" do
+          ticket = create(:ticket, project: @project)
+          @params[:ticket_id] = ticket.id
+
+          2.times do
+            create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
+          end
+
+          get :index, params: @params
+          json = JSON.parse(response.body)
+          expect(json.count).to eq(0)
         end
       end
     end
@@ -43,8 +64,7 @@ RSpec.describe CommentsController, type: :controller do
 
   describe "show" do
     before(:each) do
-      @status = create(:status, project: @project)
-      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
+      @comment = create(:comment, ticket: @ticket, assignee: assignee)
       @params = { project_id: @project.id, ticket_id: @ticket.id, id: @comment.id }
     end
 
@@ -66,30 +86,10 @@ RSpec.describe CommentsController, type: :controller do
           expect(response.status).to eq(200)
         end
 
-        # it "returns the comment" do
-        #   get :show, params: @params
-        #   json = JSON.parse(response.body)
-        #   expect(json['message']).to eq(@comment.message)
-        # end
-
-        it "returns diff from previous comment" do
-          @status_2 = create(:status, project: @project, name: "Status2")
-          @assignee_2 = create(:user)
-
-          comment_2 = create(:comment,
-                             ticket: @ticket,
-                             commenter: user,
-                             assignee: @assignee_2,
-                             status: @status_2)
-
-          @params[:id] = comment_2.id
+        it "returns the comment" do
           get :show, params: @params
           json = JSON.parse(response.body)
-
-          expect(json['previous']['id']).to eq(@comment.id)
-          expect(json['previous']['status_id']).to eq(@status.id)
-          expect(json['previous']['assignee_id']).to eq(assignee.id)
-          expect(json['previous']['tag_list']).to eq(@comment.tag_list)
+          expect(json).to eq(JSON.parse(@comment.to_json))
         end
       end
     end
@@ -99,9 +99,10 @@ RSpec.describe CommentsController, type: :controller do
     before(:each) do
       @comment = build(:comment)
       @params = { project_id: @project.id, ticket_id: @ticket.id, comment: attributes_for(:comment) }
+      @comment.commenter = user
     end
 
-    Member::ROLES.each do |role|
+    (Member::ROLES - ["restricted"]).each do |role|
       context "as #{role}" do
         it "returns 200 when authorised" do
           post :create, params: @params
@@ -109,28 +110,73 @@ RSpec.describe CommentsController, type: :controller do
         end
       end
     end
+
+    ["restricted"].each do |role|
+      context "as #{role}" do
+        it "returns 302 when unauthorised" do
+          post :create, params: @params
+          expect(response.status).to eq(302)
+        end
+      end
+    end
   end
 
   describe "update" do
     before(:each) do
-      @status = create(:status, project: @project)
-      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
+      @comment = create(:comment, ticket: @ticket, assignee: assignee)
       @params = { project_id: @project.id, ticket_id: @ticket.id,
-                 id: @comment.id, comment: attributes_for(:comment, message: "Updated message") }
+                 id: @comment.id, comment: attributes_for(:comment) }
+      @comment.commenter = user
     end
-    Member::ROLES.each do |role|
+
+    (Member::ROLES - ["restricted", "regular"]).each do |role|
       context "as #{role}" do
         it "returns 200 when authorised" do
           put :update, params: @params
           expect(response.status).to eq(200)
         end
 
-        # it "returns the updated comment" do
-        #   put :update, params: @params
-        #   json = JSON.parse(response.body)
-        #   @comment.reload
-        #   expect(json).to eq(JSON.parse(@comment.attributes.to_json))
-        # end
+        it "returns the updated comment" do
+          put :update, params: @params
+          json = JSON.parse(response.body)
+          @comment.reload
+          expect(json).to eq(JSON.parse(@comment.attributes.to_json))
+        end
+
+        it "does not update without ticket id" do
+          @params[:ticket_id] = nil
+          expect { put :update, params: @params }.to raise_error(ActionController::UrlGenerationError)
+        end
+
+        it "does not update without project id" do
+          @params[:project_id] = nil
+          expect { put :update, params: @params }.to raise_error(ActionController::UrlGenerationError)
+        end
+      end
+    end
+
+    ["regular"].each do |role|
+      context "as #{role}" do
+        it "returns 302 when not the commenter" do
+          @comment.commenter = create(:user)
+          put :update, params: @params
+          expect(response.status).to eq(302)
+        end
+
+        it "returns 200 when not the commenter" do
+          put :update, params: @params
+          expect(response.status).to eq(200)
+        end
+      end
+    end
+
+
+    ["restricted"].each do |role|
+      context "as #{role}" do
+        it "returns 302 when unauthorised" do
+          put :update, params: @params
+          expect(response.status).to eq(302)
+        end
       end
     end
   end
@@ -139,13 +185,38 @@ RSpec.describe CommentsController, type: :controller do
     before(:each) do
       @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
       @params = { project_id: @project.id, ticket_id: @ticket.id, id: @comment.id }
+      @comment.commenter = user
     end
 
-    Member::ROLES.each do |role|
+    (Member::ROLES - ["restricted", "regular"]).each do |role|
       context "as #{role}" do
         it "deletes the comment for a member" do
           delete :destroy, params: @params
           expect(response.status).to eq(200)
+        end
+      end
+    end
+
+    ["regular"].each do |role|
+      context "as #{role}" do
+        it "returns 200 if user is commenter" do
+          delete :destroy, params: @params
+          expect(response.status).to eq(200)
+        end
+
+        it "returns 302 when not the commenter" do
+          @comment.commenter = create(:user)
+          delete :destroy, params: @params
+          expect(response.status).to eq(302)
+        end
+      end
+    end
+
+    ["restricted"].each do |role|
+      context "as #{role}" do
+        it "returns 302 for restricted users" do
+          delete :destroy, params: @params
+          expect(response.status).to eq(302)
         end
       end
     end
