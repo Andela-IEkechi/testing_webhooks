@@ -15,9 +15,7 @@ RSpec.describe CommentsController, type: :controller do
 
   describe "index" do
     before(:each) do
-      @status = create(:status, project: @project)
-      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
-      @params = {project_id: @project.id, ticket_id: @ticket.id, id: @comment.id}
+      @params = {project_id: @project.id, ticket_id: @ticket.id}
     end
 
     Member::ROLES.each do |role|
@@ -27,7 +25,7 @@ RSpec.describe CommentsController, type: :controller do
           expect(response.status).to eq(200)
         end
 
-        it "returns created comments" do
+        it "returns allowed comments" do
           5.times do
             create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
             create(:comment)
@@ -35,16 +33,19 @@ RSpec.describe CommentsController, type: :controller do
 
           get :index, params: @params
           json = JSON.parse(response.body)
-          expect(json.count).to eq(6)
+          expect(json.count).to eq(5)
         end
       end
     end
+
+    #it "fails to bring up comments if not ticket ID is provided"
+    #it "fails to bring up comments if no proejct ID is provided"
+    #it "fails to bring up comments if the ticket we provide does not match the project that we provide"
   end
 
   describe "show" do
     before(:each) do
-      @status = create(:status, project: @project)
-      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
+      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
       @params = { project_id: @project.id, ticket_id: @ticket.id, id: @comment.id }
     end
 
@@ -69,26 +70,7 @@ RSpec.describe CommentsController, type: :controller do
         it "returns the comment" do
           get :show, params: @params
           json = JSON.parse(response.body)
-          expect(json).to eq(JSON.parse(@comment.attributes.to_json))
-        end
-
-        it "returns diff from previous comment" do
-          @status_2 = create(:status, project: @project, name: "Status2")
-          @assignee_2 = create(:user)
-
-          comment_2 = create(:comment,
-                             ticket: @ticket,
-                             commenter: user,
-                             assignee: @assignee_2,
-                             status: @status_2)
-
-          @params[:id] = comment_2.id
-          get :show, params: @params
-          json = JSON.parse(response.body)
-
-          expect(json['previous']).to eq(JSON.parse(@comment.attributes.to_json))
-          expect(json['previous']['status_id']).to eq(@status.id)
-          expect(json['previous']['assignee_id']).to eq(assignee.id)
+          expect(json).to eq(JSON.parse(@comment.to_json))
         end
       end
     end
@@ -100,6 +82,9 @@ RSpec.describe CommentsController, type: :controller do
       @params = { project_id: @project.id, ticket_id: @ticket.id, comment: attributes_for(:comment) }
     end
 
+    #review note: restricted users should not be able to make comments.
+    #test that it fails for them.
+    #see roles discussion below
     Member::ROLES.each do |role|
       context "as #{role}" do
         it "returns 200 when authorised" do
@@ -117,6 +102,9 @@ RSpec.describe CommentsController, type: :controller do
       @params = { project_id: @project.id, ticket_id: @ticket.id,
                  id: @comment.id, comment: attributes_for(:comment) }
     end
+    
+    # review note: restricted users cannot update comments, test that it fails for them. See ticket controller spec for examples
+    #see roles discussion below
     Member::ROLES.each do |role|
       context "as #{role}" do
         it "returns 200 when authorised" do
@@ -132,9 +120,15 @@ RSpec.describe CommentsController, type: :controller do
         end
 
         it "does not update without ticket id" do
-          @params[:comment][:ticket_id] = nil
+          @params[:ticket_id] = nil
           expect { put :update, params: @params }.to raise_error(ActiveRecord::StatementInvalid)
         end
+
+        # review note: check for project id also
+        # it "does not update without project id" do
+        #   @params[:project_id] = nil
+        #   expect { put :update, params: @params }.to raise_error(ActiveRecord::StatementInvalid)
+        # end
       end
     end
   end
@@ -145,6 +139,8 @@ RSpec.describe CommentsController, type: :controller do
       @params = { project_id: @project.id, ticket_id: @ticket.id, id: @comment.id }
     end
 
+    # review note: again, not for restricted. Also, commenters can only delete their OWN comments (regular)
+    # admins and owners can delete ANYONES comments.
     Member::ROLES.each do |role|
       context "as #{role}" do
         it "deletes the comment for a member" do
@@ -155,3 +151,11 @@ RSpec.describe CommentsController, type: :controller do
     end
   end
 end
+
+
+# review notes: roles discussion:
+
+# owner: can do anything to anything. Can delete/update anyone's comments
+# admin: same as owner
+# regular: can create/update/delete thier OWN comments only
+# can only view comments(index, show), cannot create/update/delete at all. 

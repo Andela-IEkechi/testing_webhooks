@@ -10,7 +10,14 @@ class Comment < ApplicationRecord
   belongs_to :status
 
   def previous
-    self.class.where('created_at < ?', self.created_at).order(created_at: :desc).limit(1).first
+    # retrieve the previous comment if there is one
+    ticket.comments.where('id < ?', self.id).order(id: :desc).limit(1).first
+  rescue
+    nil #there might not be a comment
+  end
+
+  def to_json
+    super(include: :previous)
   end
 
   # NOTE: we should likely define a list of tracked attrs here, so we dont track everything
