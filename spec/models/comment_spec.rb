@@ -52,11 +52,18 @@ RSpec.describe Comment, type: :model do
       expect(JSON.parse(comment.to_json)).to have_key("previous")
     end
 
-    ["status_id", "assignee_id"].each do |att|
+    ["status_id", "assignee_id", "tag_list"].each do |att|
       it "'previous' key contains #{att}" do
         comment = create(:comment, ticket: ticket)
         expect(JSON.parse(comment.to_json)["previous"]).to have_key(att)
       end
+    end
+  end
+
+  describe ".tag_list" do
+    it "returns the tags on a comment" do
+      comment = create(:comment, ticket: ticket, tag_list: ("testing, tags"))
+      expect(comment.tag_list).to eq(["testing", "tags"])
     end
   end
 
