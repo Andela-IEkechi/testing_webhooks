@@ -67,10 +67,37 @@ RSpec.describe CommentsController, type: :controller do
           expect(response.status).to eq(200)
         end
 
+<<<<<<< HEAD
         it "returns the comment" do
           get :show, params: @params
           json = JSON.parse(response.body)
           expect(json).to eq(JSON.parse(@comment.to_json))
+=======
+        # it "returns the comment" do
+        #   get :show, params: @params
+        #   json = JSON.parse(response.body)
+        #   expect(json['message']).to eq(@comment.message)
+        # end
+
+        it "returns diff from previous comment" do
+          @status_2 = create(:status, project: @project, name: "Status2")
+          @assignee_2 = create(:user)
+
+          comment_2 = create(:comment,
+                             ticket: @ticket,
+                             commenter: user,
+                             assignee: @assignee_2,
+                             status: @status_2)
+
+          @params[:id] = comment_2.id
+          get :show, params: @params
+          json = JSON.parse(response.body)
+
+          expect(json['previous']['id']).to eq(@comment.id)
+          expect(json['previous']['status_id']).to eq(@status.id)
+          expect(json['previous']['assignee_id']).to eq(assignee.id)
+          expect(json['previous']['tag_list']).to eq(@comment.tag_list)
+>>>>>>> caa29b8c53b99b13130fd3d0a4d439824582412b
         end
       end
     end
@@ -100,7 +127,7 @@ RSpec.describe CommentsController, type: :controller do
       @status = create(:status, project: @project)
       @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
       @params = { project_id: @project.id, ticket_id: @ticket.id,
-                 id: @comment.id, comment: attributes_for(:comment) }
+                 id: @comment.id, comment: attributes_for(:comment, message: "Updated message") }
     end
     
     # review note: restricted users cannot update comments, test that it fails for them. See ticket controller spec for examples
@@ -128,6 +155,7 @@ RSpec.describe CommentsController, type: :controller do
         # it "does not update without project id" do
         #   @params[:project_id] = nil
         #   expect { put :update, params: @params }.to raise_error(ActiveRecord::StatementInvalid)
+
         # end
       end
     end

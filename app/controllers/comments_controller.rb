@@ -2,11 +2,19 @@ class CommentsController < ApplicationController
   respond_to :json
 
   def index
+<<<<<<< HEAD
     render json: @comments.to_json
   end
 
   def show
     render json: @comment.to_json
+=======
+    render json: @comments.to_json(include: { :previous => { :methods => :tag_list }, :tag_list => {} })
+  end
+
+  def show
+    render json: @comment.to_json(include: { :previous => { :methods => :tag_list }, :tag_list => {} })
+>>>>>>> caa29b8c53b99b13130fd3d0a4d439824582412b
   end
 
   def create

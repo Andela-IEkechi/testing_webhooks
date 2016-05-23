@@ -13,6 +13,7 @@ RSpec.describe Comment, type: :model do
   
   it { should respond_to :message}
   it { should respond_to :previous}
+  it { should respond_to :tag_list}
 
   it "enables paper trail" do
     is_expected.to be_versioned
@@ -37,7 +38,6 @@ RSpec.describe Comment, type: :model do
   #     expect(subject.html).to eq(sample_html)
   #   end
   # end
-
 
   # review notes:
   # describe ".previous" do

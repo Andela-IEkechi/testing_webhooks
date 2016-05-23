@@ -18,7 +18,7 @@ class Comment < ApplicationRecord
   end
 
   def to_json
-    super(include: [:previous, :tag_list])
+    super(include: [:previous {:methods [:tag_list]}, :tag_list])
   end
 
   # NOTE: we should likely define a list of tracked attrs here, so we dont track everything

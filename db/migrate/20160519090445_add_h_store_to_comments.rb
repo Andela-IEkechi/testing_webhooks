@@ -6,5 +6,6 @@ class AddHStoreToComments < ActiveRecord::Migration[5.0]
 
   def down
     remove_column :comments, :tracked_changes
+    execute "drop extension hstore"
   end
 end
