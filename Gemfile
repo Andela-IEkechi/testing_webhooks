@@ -47,10 +47,6 @@ gem 'paper_trail'
 #soft-delete
 # gem 'paranoia', "~> 2.0" #does not support rails 5 yet
 
-#markdown parsing - might not use these, want wysiwyg
-# gem 'redcarpet'
-# gem 'pygments.rb'
-
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
