@@ -79,7 +79,23 @@ describe CommentPolicy do
   end
 
   permissions :update? do
-    (Member::ROLES - ["restricted"]).each do |role|
+    (Member::ROLES - ["restricted", "regular"]).each do |role|
+      it "permits #{role} when commenter" do
+        membership = create(role.to_sym, user: user)
+        ticket = create(:ticket, project: membership.project)
+        comment = create(:comment, ticket: ticket, commenter: user)
+        expect(subject).to permit(user, comment)
+      end
+
+      it "permits #{role} when not commenter" do
+        membership = create(role.to_sym, user: user)
+        ticket = create(:ticket, project: membership.project)
+        comment = create(:comment, ticket: ticket)
+        expect(subject).to permit(user, comment)
+      end
+    end
+
+    ["regular"].each do |role|
       it "permits #{role} when commenter" do
         membership = create(role.to_sym, user: user)
         ticket = create(:ticket, project: membership.project)
@@ -103,12 +119,14 @@ describe CommentPolicy do
         expect(subject).not_to permit(user, comment)
       end
 
+      #review note: admins and owners are allowed
       it "prevents #{role} if not commenter" do
         membership = create(role.to_sym, user: user)
         ticket = create(:ticket, project: membership.project)
         comment = create(:comment, ticket: ticket)
         expect(subject).not_to permit(user, ticket)
       end
+
     end
 
     it "prevents non-member if not commenter" do
@@ -128,7 +146,7 @@ describe CommentPolicy do
     end
   end
 
-  permissions :delete? do
+  permissions :destroy? do
     (Member::ROLES - ["restricted", "regular"]).each do |role|
       it "permits #{role} if commenter" do
         membership = create(role.to_sym, user: user)
@@ -167,7 +185,7 @@ describe CommentPolicy do
         membership = create(role.to_sym, user: user)
         ticket = create(:ticket, project: membership.project)
         comment = create(:comment, ticket: ticket, commenter: user)
-        expect(subject).to permit(user, comment)
+        expect(subject).to_not permit(user, comment)
       end
 
       it "prevents #{role} if not commenter" do

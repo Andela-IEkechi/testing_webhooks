@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160512183527) do
+ActiveRecord::Schema.define(version: 20160519103914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "user_id",        null: false
@@ -49,13 +50,14 @@ ActiveRecord::Schema.define(version: 20160512183527) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.integer  "ticket_id",    null: false
+    t.integer  "ticket_id",       null: false
     t.integer  "commenter_id"
     t.integer  "status_id"
     t.text     "message"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "assignee_id"
+    t.hstore   "tracked_changes"
     t.index ["commenter_id"], name: "index_comments_on_commenter_id", using: :btree
     t.index ["status_id"], name: "index_comments_on_status_id", using: :btree
     t.index ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
@@ -109,6 +111,24 @@ ActiveRecord::Schema.define(version: 20160512183527) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.index ["project_id"], name: "index_statuses_on_project_id", using: :btree
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.string   "taggable_type"
+    t.integer  "taggable_id"
+    t.string   "tagger_type"
+    t.integer  "tagger_id"
+    t.string   "context",       limit: 128
+    t.datetime "created_at"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
+    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string  "name"
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
   create_table "tickets", force: :cascade do |t|

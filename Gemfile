@@ -40,15 +40,10 @@ gem 'friendly_id'
 gem "refile", require: "refile/rails"
 gem 'refile-postgres'
 # gem "refile-mini_magick" #not rails 5 compatible
-
 # auditlogs
 gem 'paper_trail'
 #soft-delete
 # gem 'paranoia', "~> 2.0" #does not support rails 5 yet
-
-#markdown parsing - might not use these, want wysiwyg
-# gem 'redcarpet'
-# gem 'pygments.rb'
 
 
 group :development do
