@@ -20,7 +20,7 @@ RSpec.describe Comment, type: :model do
 
   #review notes: test that the model responds to the tags we mixed in.. something like "tag_list" or the like.
 
-  
+
 
   # NOTE: I've removed the gems for now, this might all need to go later on.
   # it { should respond_to :html}
@@ -51,6 +51,7 @@ RSpec.describe Comment, type: :model do
   #   [:status_id, :assignee_id].each do |att|
   #     it "'previous' key contains #{att}"
   #   end
+  #   it "includes :tag_list"
   # end
 
 end
