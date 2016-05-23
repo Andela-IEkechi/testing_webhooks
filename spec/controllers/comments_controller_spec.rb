@@ -4,7 +4,7 @@ RSpec.describe CommentsController, type: :controller do
   let(:user) { create(:user) }
   let(:assignee) { create(:user) }
 
-  before(:each) do
+  before do
     sign_in(user)
     @request.env["CONTENT_TYPE"] = "application/json"
 
@@ -35,17 +35,36 @@ RSpec.describe CommentsController, type: :controller do
           json = JSON.parse(response.body)
           expect(json.count).to eq(5)
         end
+
+        it "fails to bring up comments if ticket ID is not provided" do
+          @params[:ticket_id] = nil
+          expect{ get :index, params: @params }.to raise_error(ActionController::UrlGenerationError)
+        end
+
+        it "fails to bring up comments if project ID is not provided" do
+          @params[:project_id] = nil
+          expect{ get :index, params: @params }.to raise_error(ActionController::UrlGenerationError)
+        end
+
+        it "it fails to bring up comments if the ticket and project IDs do not match" do
+          ticket = create(:ticket, project: @project)
+          @params[:ticket_id] = ticket.id
+
+          2.times do
+            create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
+          end
+
+          get :index, params: @params
+          json = JSON.parse(response.body)
+          expect(json.count).to eq(0)
+        end
       end
     end
-
-    #it "fails to bring up comments if not ticket ID is provided"
-    #it "fails to bring up comments if no proejct ID is provided"
-    #it "fails to bring up comments if the ticket we provide does not match the project that we provide"
   end
 
   describe "show" do
     before(:each) do
-      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
+      @comment = create(:comment, ticket: @ticket, assignee: assignee)
       @params = { project_id: @project.id, ticket_id: @ticket.id, id: @comment.id }
     end
 
@@ -80,12 +99,10 @@ RSpec.describe CommentsController, type: :controller do
     before(:each) do
       @comment = build(:comment)
       @params = { project_id: @project.id, ticket_id: @ticket.id, comment: attributes_for(:comment) }
+      @comment.commenter = user
     end
 
-    #review note: restricted users should not be able to make comments.
-    #test that it fails for them.
-    #see roles discussion below
-    Member::ROLES.each do |role|
+    (Member::ROLES - ["restricted"]).each do |role|
       context "as #{role}" do
         it "returns 200 when authorised" do
           post :create, params: @params
@@ -93,19 +110,26 @@ RSpec.describe CommentsController, type: :controller do
         end
       end
     end
+
+    ["restricted"].each do |role|
+      context "as #{role}" do
+        it "returns 302 when unauthorised" do
+          post :create, params: @params
+          expect(response.status).to eq(302)
+        end
+      end
+    end
   end
 
   describe "update" do
     before(:each) do
-      @status = create(:status, project: @project)
-      @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee, status: @status)
+      @comment = create(:comment, ticket: @ticket, assignee: assignee)
       @params = { project_id: @project.id, ticket_id: @ticket.id,
                  id: @comment.id, comment: attributes_for(:comment) }
+      @comment.commenter = user
     end
-    
-    # review note: restricted users cannot update comments, test that it fails for them. See ticket controller spec for examples
-    #see roles discussion below
-    Member::ROLES.each do |role|
+
+    (Member::ROLES - ["restricted", "regular"]).each do |role|
       context "as #{role}" do
         it "returns 200 when authorised" do
           put :update, params: @params
@@ -121,14 +145,38 @@ RSpec.describe CommentsController, type: :controller do
 
         it "does not update without ticket id" do
           @params[:ticket_id] = nil
-          expect { put :update, params: @params }.to raise_error(ActiveRecord::StatementInvalid)
+          expect { put :update, params: @params }.to raise_error(ActionController::UrlGenerationError)
         end
 
-        # review note: check for project id also
-        # it "does not update without project id" do
-        #   @params[:project_id] = nil
-        #   expect { put :update, params: @params }.to raise_error(ActiveRecord::StatementInvalid)
-        # end
+        it "does not update without project id" do
+          @params[:project_id] = nil
+          expect { put :update, params: @params }.to raise_error(ActionController::UrlGenerationError)
+        end
+      end
+    end
+
+    ["regular"].each do |role|
+      context "as #{role}" do
+        it "returns 302 when not the commenter" do
+          @comment.commenter = create(:user)
+          put :update, params: @params
+          expect(response.status).to eq(302)
+        end
+
+        it "returns 200 when not the commenter" do
+          put :update, params: @params
+          expect(response.status).to eq(200)
+        end
+      end
+    end
+
+
+    ["restricted"].each do |role|
+      context "as #{role}" do
+        it "returns 302 when unauthorised" do
+          put :update, params: @params
+          expect(response.status).to eq(302)
+        end
       end
     end
   end
@@ -137,11 +185,10 @@ RSpec.describe CommentsController, type: :controller do
     before(:each) do
       @comment = create(:comment, ticket: @ticket, commenter: user, assignee: assignee)
       @params = { project_id: @project.id, ticket_id: @ticket.id, id: @comment.id }
+      @comment.commenter = user
     end
 
-    # review note: again, not for restricted. Also, commenters can only delete their OWN comments (regular)
-    # admins and owners can delete ANYONES comments.
-    Member::ROLES.each do |role|
+    (Member::ROLES - ["restricted", "regular"]).each do |role|
       context "as #{role}" do
         it "deletes the comment for a member" do
           delete :destroy, params: @params
@@ -149,13 +196,29 @@ RSpec.describe CommentsController, type: :controller do
         end
       end
     end
+
+    ["regular"].each do |role|
+      context "as #{role}" do
+        it "returns 200 if user is commenter" do
+          delete :destroy, params: @params
+          expect(response.status).to eq(200)
+        end
+
+        it "returns 302 when not the commenter" do
+          @comment.commenter = create(:user)
+          delete :destroy, params: @params
+          expect(response.status).to eq(302)
+        end
+      end
+    end
+
+    ["restricted"].each do |role|
+      context "as #{role}" do
+        it "returns 302 for restricted users" do
+          delete :destroy, params: @params
+          expect(response.status).to eq(302)
+        end
+      end
+    end
   end
 end
-
-
-# review notes: roles discussion:
-
-# owner: can do anything to anything. Can delete/update anyone's comments
-# admin: same as owner
-# regular: can create/update/delete thier OWN comments only
-# can only view comments(index, show), cannot create/update/delete at all. 
