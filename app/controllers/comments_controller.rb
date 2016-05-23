@@ -2,17 +2,17 @@ class CommentsController < ApplicationController
   respond_to :json
 
   def index
-    render json: @comments
+    render json: @comments.to_json
   end
 
   def show
-    render json: @comment
+    render json: @comment.to_json
   end
 
   def create
     @comment.commenter = current_user
     if @comment.valid? && @comment.save
-      render json: @comment
+      render json: @comment.to_json
     else
       render json: {errors: @comment.errors.full_messages}, status: 422
     end
@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
   def update
     @comment.update_attributes(comment_params)
     if @comment.valid? && @comment.save
-      render json: @comment
+      render json: @comment.to_json
     else
       render json: {errors: @comment.errors.full_messages}, status: 422
     end
@@ -46,18 +46,8 @@ class CommentsController < ApplicationController
 
   def load_resource
     @project = Project.friendly.find(params[:project_id])
-    @ticket = @project.tickets.find(params[:project_id])
+    @ticket = @project.tickets.find(params[:ticket_id])
     @resource_scope = policy_scope(@ticket.comments)
-    case action_name
-      when 'index' then
-        @comments = @resource_scope.all
-      when 'show', 'update', 'destroy' then
-        @comment = @resource_scope.where(id: params[:id]).first
-        raise ActiveRecord::RecordNotFound unless @comment.present?
-        authorize @comment
-      when 'create' then
-        @comment = @resource_scope.new(comment_params)
-        authorize @comment
-    end
+    super  #review note: this should be fine, we are not doing anything odd in loading up the resources
   end
 end

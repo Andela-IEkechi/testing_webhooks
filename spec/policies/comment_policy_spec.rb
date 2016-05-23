@@ -103,12 +103,14 @@ describe CommentPolicy do
         expect(subject).not_to permit(user, comment)
       end
 
+      #review note: admins and owners are allowed
       it "prevents #{role} if not commenter" do
         membership = create(role.to_sym, user: user)
         ticket = create(:ticket, project: membership.project)
         comment = create(:comment, ticket: ticket)
         expect(subject).not_to permit(user, ticket)
       end
+
     end
 
     it "prevents non-member if not commenter" do
