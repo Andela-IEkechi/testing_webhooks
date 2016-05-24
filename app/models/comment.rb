@@ -1,6 +1,3 @@
-# NOTE: might need to remove this down the line 
-# require "html_with_pygments"
-
 class Comment < ApplicationRecord
   acts_as_taggable
 
@@ -22,21 +19,5 @@ class Comment < ApplicationRecord
   def to_json(options = {})
     super(include: [:tag_list, previous: { methods: [:tag_list] }])
   end
-
-  # NOTE: we should likely define a list of tracked attrs here, so we dont track everything
-  # TRACKED_ATTRS = [:status_id, :assignee_id, :tags] #tags is not yet implemented
-
-  # NOTE: rather use wysiwyg editor, not markdown
-  # def html
-  #   markdown = ::Redcarpet::Markdown.new(html_renderer, fenced_code_blocks: true)
-  #   markdown.render(message || "").strip
-  # end
-
-
-  private
-
-  # def html_renderer
-  #   ::HTMLwithPygments.new(escape_html: true, hard_wrap: true, prettify: true)
-  # end
 
 end

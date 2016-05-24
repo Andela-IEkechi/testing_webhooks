@@ -77,7 +77,7 @@ RSpec.describe TicketsController, type: :controller do
           get :show, params: @params 
           json = JSON.parse(response.body)
           # Use this one clever trick to match timestamps. You won't believe what happe... oh fuckit.
-          expect(json).to eq(JSON.parse(@ticket.attributes.to_json))
+          expect(json).to eq(JSON.parse(@ticket.to_json))
         end    
       end
     end
@@ -132,7 +132,7 @@ RSpec.describe TicketsController, type: :controller do
         it "returns the new ticket when created" do
           post :create, params: @params 
           json = JSON.parse(response.body)
-          expect(json).to eq(@project.tickets.first.attributes.as_json)
+          expect(json).to eq(JSON.parse(@project.tickets.first.to_json))
         end   
 
         it "creates a new ticket with the title provided" do
@@ -226,7 +226,7 @@ RSpec.describe TicketsController, type: :controller do
           put :update, params: @params 
           json = JSON.parse(response.body)
           @ticket.reload
-          expect(json).to eq(JSON.parse(@ticket.attributes.to_json))
+          expect(json).to eq(JSON.parse(@ticket.to_json))
         end   
 
         it "returns 422 when it failed to update" do
@@ -295,7 +295,7 @@ RSpec.describe TicketsController, type: :controller do
         it "returns the deleted ticket" do
           delete :destroy, params: @params 
           json = JSON.parse(response.body)
-          expect(json).to eq(JSON.parse(@ticket.attributes.to_json))
+          expect(json).to eq(JSON.parse(@ticket.to_json))
         end    
       end  
     end   
