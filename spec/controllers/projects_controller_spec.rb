@@ -69,8 +69,7 @@ RSpec.describe ProjectsController, type: :controller do
         it "returns the project" do
           get :show, params: @params 
           json = JSON.parse(response.body)
-          # Use this one clever trick to match timestamps. You won't believe what happe... oh fuckit.
-          expect(json).to eq(JSON.parse(@project.attributes.to_json))
+          expect(json).to eq(JSON.parse(@project.to_json))
         end    
       end
     end
@@ -145,7 +144,7 @@ RSpec.describe ProjectsController, type: :controller do
           put :update, params: @params 
           json = JSON.parse(response.body)
           @project.reload
-          expect(json).to eq(JSON.parse(@project.attributes.to_json))
+          expect(json).to eq(JSON.parse(@project.to_json))
         end   
 
         it "returns 422 when it failed to update" do
@@ -228,7 +227,7 @@ RSpec.describe ProjectsController, type: :controller do
         it "returns the deleted project" do
           delete :destroy, params: @params 
           json = JSON.parse(response.body)
-          expect(json).to eq(JSON.parse(@project.attributes.to_json))
+          expect(json).to eq(JSON.parse(@project.to_json))
         end   
 
         it "returns 404 when it can't find the project" do

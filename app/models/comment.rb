@@ -1,4 +1,5 @@
 class Comment < ApplicationRecord
+  acts_as_taggable
 
   belongs_to :ticket
   has_many :attachments, dependent: :destroy
@@ -14,7 +15,7 @@ class Comment < ApplicationRecord
   end
 
   def to_json(options = {})
-    super(include: :previous)
+    super(include: [:tag_list, previous: { methods: [:tag_list] }])
   end
 
 end

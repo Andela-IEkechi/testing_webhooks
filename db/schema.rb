@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 20160519103914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "user_id",        null: false
@@ -44,20 +43,19 @@ ActiveRecord::Schema.define(version: 20160519103914) do
   create_table "boards_tickets", id: false, force: :cascade do |t|
     t.integer "board_id",  null: false
     t.integer "ticket_id", null: false
-    t.index ["board_id", "ticket_id"], name: "index_boards_tickets_on_board_id_and_ticket_id", using: :btree
     t.index ["board_id"], name: "index_boards_tickets_on_board_id", using: :btree
     t.index ["ticket_id"], name: "index_boards_tickets_on_ticket_id", using: :btree
   end
 
   create_table "comments", force: :cascade do |t|
-    t.integer  "ticket_id",       null: false
+    t.integer  "ticket_id",    null: false
     t.integer  "commenter_id"
     t.integer  "status_id"
-    t.text     "message"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
     t.integer  "assignee_id"
-    t.hstore   "tracked_changes"
+    t.text     "message"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["assignee_id"], name: "index_comments_on_assignee_id", using: :btree
     t.index ["commenter_id"], name: "index_comments_on_commenter_id", using: :btree
     t.index ["status_id"], name: "index_comments_on_status_id", using: :btree
     t.index ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
@@ -77,7 +75,6 @@ ActiveRecord::Schema.define(version: 20160519103914) do
   create_table "members_projects", id: false, force: :cascade do |t|
     t.integer "member_id",  null: false
     t.integer "project_id", null: false
-    t.index ["member_id", "project_id"], name: "index_members_projects_on_member_id_and_project_id", using: :btree
     t.index ["member_id"], name: "index_members_projects_on_member_id", using: :btree
     t.index ["project_id"], name: "index_members_projects_on_project_id", using: :btree
   end
@@ -85,7 +82,6 @@ ActiveRecord::Schema.define(version: 20160519103914) do
   create_table "members_users", id: false, force: :cascade do |t|
     t.integer "member_id", null: false
     t.integer "user_id",   null: false
-    t.index ["member_id", "user_id"], name: "index_members_users_on_member_id_and_user_id", using: :btree
     t.index ["member_id"], name: "index_members_users_on_member_id", using: :btree
     t.index ["user_id"], name: "index_members_users_on_user_id", using: :btree
   end

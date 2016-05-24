@@ -145,6 +145,7 @@ RSpec.describe CommentsController, type: :controller do
       @comment = create(:comment, ticket: @ticket, assignee: assignee, commenter: user)
       @params = { project_id: @project.id, ticket_id: @ticket.id,
                  id: @comment.id, comment: attributes_for(:comment) }
+      @comment.commenter = user
     end
 
     (Member::ROLES - ["restricted", "regular"]).each do |role|
@@ -163,7 +164,7 @@ RSpec.describe CommentsController, type: :controller do
           put :update, params: @params
           json = JSON.parse(response.body)
           @comment.reload
-          expect(json).to eq(JSON.parse(@comment.attributes.to_json))
+          expect(json).to eq(JSON.parse(@comment.to_json))
         end
 
         it "does not update without ticket id" do
