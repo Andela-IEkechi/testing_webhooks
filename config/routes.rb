@@ -12,7 +12,9 @@ Rails.application.routes.draw do
     resources :boards
     # tracker is just a view on a board ? 
     resources :tickets do
-      resources :comments
+      resources :comments do
+        resources :attachments
+      end
     end
   end
 
