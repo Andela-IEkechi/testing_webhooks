@@ -14,8 +14,8 @@ class Comment < ApplicationRecord
     nil #there might not be a comment
   end
 
-  def to_json
-    super(include: [:previous {:methods [:tag_list]}, :tag_list])
+  def to_json(options = {})
+    super(include: [:tag_list, previous: { methods: [:tag_list] }])
   end
 
 end

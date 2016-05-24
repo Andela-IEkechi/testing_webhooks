@@ -144,7 +144,8 @@ RSpec.describe CommentsController, type: :controller do
     before(:each) do
       @comment = create(:comment, ticket: @ticket, assignee: assignee, commenter: user)
       @params = { project_id: @project.id, ticket_id: @ticket.id,
-                 id: @comment.id, comment: attributes_for(:comment, message: "Updated message") }
+                 id: @comment.id, comment: attributes_for(:comment) }
+      @comment.commenter = user
     end
 
     (Member::ROLES - ["restricted", "regular"]).each do |role|
@@ -205,12 +206,6 @@ RSpec.describe CommentsController, type: :controller do
           @project.memberships.clear
           @membership = create(:member, user: user, project: @project, role: role)
         end
-
-        # review note: check for project id also
-        # it "does not update without project id" do
-        #   @params[:project_id] = nil
-        #   expect { put :update, params: @params }.to raise_error(ActiveRecord::StatementInvalid)
-        # end
 
         it "returns 302 when unauthorised" do
           put :update, params: @params
