@@ -164,7 +164,7 @@ RSpec.describe CommentsController, type: :controller do
           put :update, params: @params
           json = JSON.parse(response.body)
           @comment.reload
-          expect(json).to eq(JSON.parse(@comment.attributes.to_json))
+          expect(json).to eq(JSON.parse(@comment.to_json))
         end
 
         it "does not update without ticket id" do

@@ -48,14 +48,14 @@ ActiveRecord::Schema.define(version: 20160519103914) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.integer  "ticket_id",      null: false
+    t.integer  "ticket_id",    null: false
     t.integer  "commenter_id"
     t.integer  "status_id"
-    t.integer  "assignee_id_id"
+    t.integer  "assignee_id"
     t.text     "message"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.index ["assignee_id_id"], name: "index_comments_on_assignee_id_id", using: :btree
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["assignee_id"], name: "index_comments_on_assignee_id", using: :btree
     t.index ["commenter_id"], name: "index_comments_on_commenter_id", using: :btree
     t.index ["status_id"], name: "index_comments_on_status_id", using: :btree
     t.index ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
