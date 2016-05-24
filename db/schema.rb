@@ -25,10 +25,13 @@ ActiveRecord::Schema.define(version: 20160519103914) do
   end
 
   create_table "attachments", force: :cascade do |t|
-    t.integer  "comment_id", null: false
+    t.integer  "comment_id",        null: false
     t.string   "file_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "file_filename"
+    t.integer  "file_size"
+    t.string   "file_content_type"
     t.index ["comment_id"], name: "index_attachments_on_comment_id", using: :btree
   end
 
