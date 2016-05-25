@@ -5,6 +5,11 @@ class TicketPolicy < ApplicationPolicy
     end
   end
 
+  def new?
+    # return false unless record.is_a?(Ticket)
+    # record.project.members.unrestricted.where(user: user).any?
+  end
+
   def create?
     return false unless record.is_a?(Ticket)
     record.project.members.unrestricted.where(user: user).any?

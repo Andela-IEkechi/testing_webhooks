@@ -9,11 +9,17 @@ class TicketsController < ApplicationController
     render json: @ticket
   end
 
+  def new
+    if @parent_comment = (Comment.find(params[:comment_id]) rescue nil)
+      @comment.body = parent_comment_body(@parent_comment)
+      @ticket.parent = @parent_comment
+    end
+  end
+
   def create
-    #TODO need to check if current_user MAY create a ticket
     if @ticket.valid? && @ticket.save
       #create a comment in the ticket for the current user
-      comment = @ticket.comments.create(commenter: current_user)
+      @ticket.comments.create(commenter: current_user)
       render json: @ticket
     else
       render json: {errors: @ticket.errors.full_messages}, status: 422
@@ -45,6 +51,12 @@ class TicketsController < ApplicationController
     )
   end
 
+  def parent_comment_body(comment)
+    text = "Split from [##{comment.ticket.scoped_id} - #{comment.ticket.title}](#{project_ticket_url(comment.project, comment.ticket)})\n\n---\n\n"
+    text + comment.body
+  end
+
+
   def load_resource
     #we have to load the project first
     @project = Project.friendly.find(params[:project_id])
@@ -57,6 +69,10 @@ class TicketsController < ApplicationController
       @ticket = @resource_scope.where(sequential_id: params[:id]).first
       raise ActiveRecord::RecordNotFound unless @ticket.present? #the .where().first above won't throw an exception like .find(:id) does
       authorize @ticket
+    when 'new' then
+      @ticket = @resource_scope.build()
+      authorize @ticket
+      @comment = @ticket.comments.build()
     when 'create' then
       @ticket = @resource_scope.new(ticket_params)
       authorize @ticket
