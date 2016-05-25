@@ -1,5 +1,4 @@
 require 'rails_helper'
-require "refile/file_double"
 
 RSpec.describe AttachmentsController, type: :controller do
   let(:user) { create(:user) }
@@ -15,7 +14,7 @@ RSpec.describe AttachmentsController, type: :controller do
 
   describe "index" do
     before(:each) do
-      create(:attachment, comment: @comment, file: Refile::FileDouble.new("dummy", "logo.png", content_type: "image/png"))
+      create(:attachment, comment: @comment)
       @params = { project_id: @project.id, ticket_id: @ticket.id, comment_id: @comment.id }
     end
 

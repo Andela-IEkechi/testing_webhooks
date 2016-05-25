@@ -7,9 +7,6 @@ class Comment < ApplicationRecord
   belongs_to :assignee, class_name: "User", optional: true
   belongs_to :status
 
-  #having issues implementing the master branch of refile considering it's the only way to use this method
-  accepts_attachments_for :attachments
-
   def previous
     # retrieve the previous comment if there is one
     ticket.comments.where('id < ?', self.id).order(id: :desc).limit(1).first
