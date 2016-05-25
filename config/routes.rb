@@ -18,6 +18,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'attach_file', to: 'attachments#attach_file_to_comment'
+  get 'remove_file', to: 'attachments#remove_file_from_comment'
+
   # NOTE: considder having a top level asset path for downloads of assets
   # resources :assets
 

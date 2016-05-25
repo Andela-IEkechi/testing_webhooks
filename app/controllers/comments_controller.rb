@@ -40,7 +40,7 @@ class CommentsController < ApplicationController
   def comment_params
     params.require(:comment).permit(
         :id, :assignee_id, :commenter_id, :ticket_id, :status_id, :_destroy,
-        :message, :tag_list, attachments_files: []
+        :message, :tag_list
     )
   end
 

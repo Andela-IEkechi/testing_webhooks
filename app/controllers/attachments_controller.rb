@@ -9,37 +9,28 @@ class AttachmentsController < ApplicationController
     render json: @attachment
   end
 
-  def create
-    @attachment = Attachment.new(attachment_params)
-    if @attachment.valid? && @attachment.save
-      render json: @attachment
-    else
-      render json: {errors: @attachment.errors.full_messages}, status: 422
-    end
+  def attach_file_to_comment
+    return unless params[:file]
+    @attachment = Attachment.new
+    @attachment.comment = @comment
+    authorize @attachment
+    @attachment.file = StringIO.new(params[:file])
+    @attachment.save
+    render json: @attachment
   end
 
-  def update
-    @attachment.update_attributes(attachment_params)
-    if @attachment.valid? && @attachment.save
-      render json: @attachment
-    else
-      render json: {errors: @attachment.errors.full_messages}, status: 422
-    end
-  end
-
-  def destroy
-    if @attachment.destroy
-      render json: @attachment
-    else
-      render json: {errors: @attachment.errors.full_messages}, status: 422
-    end
+  def remove_file_from_comment
+    return unless params[:file]
+    @attachment = Attachment.new
+    @attachment.comment = @comment
+    authorize @attachment
+    @attachment.file = StringIO.new(params[:file])
+    @attachment.remove_file = true
+    @attachment.save
+    render json: @attachment
   end
 
   private
-
-  def attachment_params
-    params.require(:attachment).permit(:file, :remove_file)
-  end
 
   def load_resource
     @project = Project.friendly.find(params[:project_id])
