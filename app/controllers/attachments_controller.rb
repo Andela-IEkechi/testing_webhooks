@@ -42,7 +42,9 @@ class AttachmentsController < ApplicationController
   end
 
   def load_resource
-    @comment = Comment.find(:comment_id) if params[:comment_id]
+    @project = Project.friendly.find(params[:project_id])
+    @ticket = @project.tickets.find(params[:ticket_id])
+    @comment = @ticket.comments.find(params[:comment_id])
     @resource_scope = policy_scope(@comment.attachments)
     super
   end

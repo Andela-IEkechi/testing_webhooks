@@ -8,7 +8,6 @@ require 'database_cleaner'
 require 'pundit/rspec'
 require 'paper_trail/frameworks/rspec'
 require 'simplecov'
-require "refile/file_double"
 SimpleCov.start 'rails'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
