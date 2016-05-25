@@ -37,7 +37,7 @@ gem 'sequenced'
 #use slugs for projects
 gem 'friendly_id'
 #store attachemnts
-gem 'refile', require: "refile/rails", git: 'https://github.com/refile/refile.git', branch: 'master'
+gem 'refile', require: "refile/rails"
 gem 'refile-postgres'
 # gem "refile-mini_magick" #not rails 5 compatible
 #tagging
