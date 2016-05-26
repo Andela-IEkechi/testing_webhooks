@@ -115,6 +115,19 @@ RSpec.describe TicketsController, type: :controller do
         end
       end
     end
+
+    ["restricted"].each do |role|
+      context "as #{role}" do
+        before(:each) do
+          create(role.to_sym, user: user, project: @project)
+        end
+
+        it "does not split ticket when unauthorised" do
+          get :new, params: @params
+          expect(response.status).to eq(302)
+        end
+      end
+    end
   end
 
   describe "create" do
