@@ -7,7 +7,7 @@ class Comment < ApplicationRecord
   belongs_to :status
 
   has_many :attachments, dependent: :destroy
-  has_many   :split_tickets, order: 'tickets.id ASC', class_name: "Ticket", foreign_key: "parent_id"
+  has_many   :split_tickets,  -> { order 'tickets.id ASC' }, class_name: "Ticket", foreign_key: "parent_id"
 
   def previous
     # retrieve the previous comment if there is one

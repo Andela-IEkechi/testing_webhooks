@@ -83,6 +83,40 @@ RSpec.describe TicketsController, type: :controller do
     end
   end
 
+  describe "new" do
+    before(:each) do
+      ticket = create(:ticket, project: @project)
+      @comment = create(:comment, ticket: ticket)
+      @ticket = build(:ticket, project: @project)
+      @params.merge!(comment_id: @comment.id)
+
+      #strip away the project membership
+      @project.members.delete_all
+    end
+
+    (Member::ROLES - ["restricted"]).each do |role|
+      context "as #{role}" do
+        before(:each) do
+          create(role.to_sym, user: user, project: @project)
+        end
+
+        it "splits ticket when authorised" do
+          get :new, params: @params
+          expect(response.status).to eq(200)
+        end
+
+        it "returns the split ticket" do
+          @controller = TicketsController.new
+
+          get :new, params: @params
+          json = JSON.parse(response.body)
+          expect(json['comments']).not_to be_empty
+          expect(json['comments'][0]['message']).to eq(@controller.send(:parent_comment_message, @comment))
+        end
+      end
+    end
+  end
+
   describe "create" do
     before(:each) do
       #set up a ticket to show

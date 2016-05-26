@@ -11,8 +11,9 @@ class TicketsController < ApplicationController
 
   def new
     if @parent_comment = (Comment.find(params[:comment_id]) rescue nil)
-      @comment.body = parent_comment_body(@parent_comment)
-      @ticket.parent = @parent_comment
+      @comment.message = parent_comment_message(@parent_comment)
+      @ticket.parent_id = @parent_comment.id
+      render json: @ticket.to_json(include: :comments)
     end
   end
 
@@ -51,9 +52,9 @@ class TicketsController < ApplicationController
     )
   end
 
-  def parent_comment_body(comment)
-    text = "Split from [##{comment.ticket.scoped_id} - #{comment.ticket.title}](#{project_ticket_url(comment.project, comment.ticket)})\n\n---\n\n"
-    text + comment.body
+  def parent_comment_message(comment)
+    text = "Split from [##{comment.ticket.sequential_id} - #{comment.ticket.title}](#{project_ticket_url(comment.ticket.project, comment.ticket)})\n\n---\n\n"
+    text + comment.message
   end
 
 
