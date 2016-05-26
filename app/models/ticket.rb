@@ -3,7 +3,7 @@ class Ticket < ApplicationRecord
   belongs_to :project
   acts_as_sequenced scope: :project_id
 
-  has_many   :comments, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :split_tickets, -> { order 'tickets.id ASC' }, through: :comments
 
   has_and_belongs_to_many :boards
