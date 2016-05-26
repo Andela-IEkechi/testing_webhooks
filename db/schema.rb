@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(version: 20160519103914) do
   create_table "statuses", force: :cascade do |t|
     t.integer  "project_id",                null: false
     t.string   "name",                      null: false
-    t.integer  "order",      default: 0
+    t.integer  "position",   default: 0
     t.boolean  "open",       default: true
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
