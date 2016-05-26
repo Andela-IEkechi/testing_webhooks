@@ -5,14 +5,14 @@ RSpec.describe Ticket, type: :model do
 
   it { should belong_to(:project) }
   it { should have_many(:comments) }
-  it { should belong_to(:parent) }
-  it { should have_many(:children) }
+  it { should have_many(:split_tickets).through(:comments) }
   it { should have_and_belong_to_many(:boards) }
 
   it { should respond_to(:status) }
   it { should respond_to(:assignee) }
   it { should respond_to(:creator) }
   it { should respond_to(:title) }
+  it { should respond_to(:split_tickets) }
 
   it { should validate_presence_of(:title) }
 
@@ -68,6 +68,18 @@ RSpec.describe Ticket, type: :model do
     it "returns nil if there are no comments" do 
       assert(subject.comments.empty?, 'ticket must not have comments')
       expect(subject.creator.present?).to eq(false)
+    end
+  end
+
+  describe "split_tickets" do
+    before do
+      comment = create(:comment, ticket: subject)
+      create(:ticket, parent_id: comment.id)
+      create(:ticket, parent_id: comment.id)
+    end
+
+    it "should be sorted by id in ascending order" do
+      expect(subject.split_tickets.first.id).to be < subject.split_tickets.last.id
     end
   end
 end

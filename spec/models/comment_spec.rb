@@ -6,6 +6,7 @@ RSpec.describe Comment, type: :model do
 
   it { should belong_to(:ticket) }
   it { should have_many(:attachments) }
+  it { should have_many(:split_tickets).class_name('Ticket') }
   it { should belong_to(:status) }
   it { should belong_to(:assignee) }
   it { should belong_to(:commenter) }
@@ -15,6 +16,7 @@ RSpec.describe Comment, type: :model do
   it { should respond_to :message}
   it { should respond_to :previous}
   it { should respond_to :tag_list}
+  it { should respond_to :split_tickets}
 
   it "enables paper trail" do
     is_expected.to be_versioned
@@ -49,6 +51,17 @@ RSpec.describe Comment, type: :model do
     it "returns the tags on a comment" do
       comment = create(:comment, ticket: ticket, tag_list: ["testing, tags"])
       expect(comment.tag_list).to eq(["testing", "tags"])
+    end
+  end
+
+  describe "split_tickets" do
+    before do
+      create(:ticket, parent_id: subject.id)
+      create(:ticket, parent_id: subject.id)
+    end
+
+    it "should be sorted by id in ascending order" do
+      expect(subject.split_tickets.first.id).to be < subject.split_tickets.last.id
     end
   end
 
