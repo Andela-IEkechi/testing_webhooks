@@ -10,23 +10,19 @@ class AttachmentPolicy < ApplicationPolicy
     record.comment.ticket.project.members.where(user: user).any?
   end
 
-  def attach_file_to_comment?
+  def attach_file_to_comment? #rename to create
     return false unless record.is_a?(Attachment)
     (
-    record.comment.ticket.project.members.owners.where(user: user).any? ||
-        record.comment.ticket.project.members.administrators.where(user: user).any? ||
-        (record.comment.ticket.project.members.regulars.where(user: record.comment.commenter).any? &&
-            (record.comment.commenter == user))
+      record.comment.ticket.project.members.owners.where(user: user).any? ||
+      record.comment.ticket.project.members.administrators.where(user: user).any? ||
+      (
+        record.comment.ticket.project.members.regulars.where(user: record.comment.commenter).any? &&
+        (record.comment.commenter == user)
+      )
     )
   end
 
-  def remove_file_from_comment?
-    return false unless record.is_a?(Attachment)
-    (
-    record.comment.ticket.project.members.owners.where(user: user).any? ||
-        record.comment.ticket.project.members.administrators.where(user: user).any? ||
-        (record.comment.ticket.project.members.regulars.where(user: record.comment.commenter).any? &&
-            (record.comment.commenter == user))
-    )
+  def remove_file_from_comment? #rename to destroy
+    create?
   end
 end
