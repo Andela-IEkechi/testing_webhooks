@@ -2,10 +2,12 @@ class Comment < ApplicationRecord
   acts_as_taggable
 
   belongs_to :ticket
-  has_many :attachments, dependent: :destroy
   belongs_to :commenter, class_name: "User"
   belongs_to :assignee, class_name: "User", optional: true
   belongs_to :status
+
+  has_many :attachments, dependent: :destroy
+  has_many :split_tickets,  -> { order(id: :asc) }, class_name: "Ticket", foreign_key: "parent_id"
 
   def previous
     # retrieve the previous comment if there is one
