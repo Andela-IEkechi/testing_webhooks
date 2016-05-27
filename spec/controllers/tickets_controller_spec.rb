@@ -83,6 +83,7 @@ RSpec.describe TicketsController, type: :controller do
     end
   end
 
+
   describe "create" do
     before(:each) do
       #set up a ticket to show
@@ -143,12 +144,11 @@ RSpec.describe TicketsController, type: :controller do
 
         it "associates the newly created ticket with the project" do
           post :create, params: @params 
-          json = JSON.parse(response.body)
-          expect(@project.tickets.first.project_id).to eq(@project.id)
+          expect(Ticket.last.project_id).to eq(@project.id)
         end    
 
         it "creates an associated comment" do
-          post :create, params: @params 
+          post :create, params: @params
           ticket = @project.tickets.first
           expect(ticket.comments.any?).to eq(true)
         end    
@@ -157,7 +157,16 @@ RSpec.describe TicketsController, type: :controller do
           post :create, params: @params 
           ticket = @project.tickets.first
           expect(ticket.comments.where(commenter_id: user.id).any?).to eq(true)
-        end    
+        end
+
+        it "creates a split ticket if a parent_id is passed in" do
+          comment = create(:comment, ticket: @ticket)
+
+          @params.merge!(ticket: {title: @ticket.title, parent_id: comment.id})
+          post :create, params: @params
+          expect(@ticket.split_tickets.any?).to eq(true)
+          expect(comment.split_tickets.any?).to eq(true)
+        end
 
         it "returns 422 when it failed to create" do
           @params[:ticket] = {title: nil} #invalid
