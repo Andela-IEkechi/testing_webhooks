@@ -145,7 +145,25 @@ RSpec.describe TicketsController, type: :controller do
         it "associates the newly created ticket with the project" do
           post :create, params: @params 
           expect(Ticket.last.project_id).to eq(@project.id)
-        end    
+        end  
+
+        it "makes a comment if i send the comments attributes" do
+          comment_att = {commenter_id: user.id, message: 'This message for test'}
+          @params[:ticket][:comments_attributes] = [comment_att]
+          post :create, params: @params
+          json = JSON.parse(response.body)
+          ticket = Ticket.find(json['id'])
+          expect(ticket.comments.first.message).to eq(comment_att[:message])
+        end
+
+        it "assigns the comment to the current_user if I omit the commenter_id" do
+          comment_att = {commenter_id: nil, message: 'This message for test'}
+          @params[:ticket][:comments_attributes] = [comment_att]
+          post :create, params: @params
+          json = JSON.parse(response.body)
+          ticket = Ticket.find(json['id'])
+          expect(ticket.comments.first.commenter_id).to eq(user.id)
+        end
 
         it "creates an associated comment" do
           post :create, params: @params

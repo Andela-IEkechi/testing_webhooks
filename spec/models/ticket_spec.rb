@@ -15,6 +15,8 @@ RSpec.describe Ticket, type: :model do
   it { should respond_to(:title) }
   it { should respond_to(:split_tickets) }
 
+  # TODO: test accepts_nested_attributes
+  
   it { should validate_presence_of(:title) }
 
   it "enables paper trail" do

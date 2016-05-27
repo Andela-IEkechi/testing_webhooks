@@ -10,13 +10,9 @@ class TicketsController < ApplicationController
   end
 
   def create
+    @ticket.comments.build unless @ticket.comments.any?
+    @ticket.comments.first.commenter_id ||= current_user.id
     if @ticket.valid? && @ticket.save
-      # for some reason nested attributes aint working via tickets params
-      # review comment: We need to add the comment attributes to the params whitelist below
-      @ticket.comments.create(commenter: current_user,
-                              status_id: params[:status_id],
-                              assignee_id: params[:assignee_id],
-                              message: params[:message])
       render json: @ticket
     else
       render json: {errors: @ticket.errors.full_messages}, status: 422
@@ -44,8 +40,8 @@ class TicketsController < ApplicationController
   def ticket_params
     params.require(:ticket).permit(
       :id, :_destroy,
-      :title, :parent_id
-      # add comments params here to allow us to nest then in the POSTs and PUTs
+      :title, :parent_id,
+      comments_attributes: [:commenter_id, :status_id, :assignee_id, :message]
     )
   end
 

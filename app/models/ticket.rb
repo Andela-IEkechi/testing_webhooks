@@ -13,6 +13,8 @@ class Ticket < ApplicationRecord
 
   validates :title, presence: true
 
+  accepts_nested_attributes_for :comments
+
   # Automatically use the sequential ID in URLs
   def to_param
     self.sequential_id.to_s
