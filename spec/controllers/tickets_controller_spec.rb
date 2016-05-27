@@ -144,7 +144,7 @@ RSpec.describe TicketsController, type: :controller do
 
         it "associates the newly created ticket with the project" do
           post :create, params: @params 
-          expect(@project.tickets.first.project_id).to eq(@project.id)
+          expect(Ticket.last.project_id).to eq(@project.id)
         end    
 
         it "creates an associated comment" do
@@ -159,10 +159,10 @@ RSpec.describe TicketsController, type: :controller do
           expect(ticket.comments.where(commenter_id: user.id).any?).to eq(true)
         end
 
-        it "creates a split ticket if a comment_id is passed in" do
+        it "creates a split ticket if a parent_id is passed in" do
           comment = create(:comment, ticket: @ticket)
 
-          @params.merge!(ticket: {title: @ticket.title}, comment_id: comment.id)
+          @params.merge!(ticket: {title: @ticket.title, parent_id: comment.id})
           post :create, params: @params
           expect(@ticket.split_tickets.any?).to eq(true)
           expect(comment.split_tickets.any?).to eq(true)

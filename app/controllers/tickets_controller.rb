@@ -10,8 +10,9 @@ class TicketsController < ApplicationController
   end
 
   def create
-    parent_comment = Comment.find(params[:comment_id]) if params[:comment_id]
-    @ticket.parent_id = parent_comment.id if parent_comment
+    # review note: Nope. if there is a comment id, it will be passed in with the other attributes for the form that submits for the new ticket
+    # parent_comment = Comment.find(params[:comment_id]) if params[:comment_id]
+    # @ticket.parent_id = parent_comment.id if parent_comment
     if @ticket.valid? && @ticket.save
       # for some reason nested attributes aint working via tickets params
       @ticket.comments.create(commenter: current_user,
@@ -45,7 +46,7 @@ class TicketsController < ApplicationController
   def ticket_params
     params.require(:ticket).permit(
       :id, :_destroy,
-      :title
+      :title, :parent_id
     )
   end
 

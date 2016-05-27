@@ -6,6 +6,7 @@ RSpec.describe Ticket, type: :model do
   it { should belong_to(:project) }
   it { should have_many(:comments) }
   it { should have_many(:split_tickets).through(:comments) }
+  it { should belong_to(:parent).class_name("Ticket") }
   it { should have_and_belong_to_many(:boards) }
 
   it { should respond_to(:status) }
@@ -79,7 +80,7 @@ RSpec.describe Ticket, type: :model do
     end
 
     it "should be sorted by id in ascending order" do
-      expect(subject.split_tickets.first.id).to be < subject.split_tickets.last.id
+      expect(subject.split_tickets.map(&:id)).to eq(subject.split_tickets.map(&:id).sort)
     end
   end
 end

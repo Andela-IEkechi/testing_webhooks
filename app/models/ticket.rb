@@ -5,6 +5,7 @@ class Ticket < ApplicationRecord
 
   has_many :comments, dependent: :destroy
   has_many :split_tickets, -> { order(id: :asc) }, through: :comments
+  belongs_to :parent, class_name: "Ticket"
 
   has_and_belongs_to_many :boards
 
