@@ -24,11 +24,23 @@ ActiveRecord::Schema.define(version: 20160519103914) do
     t.index ["user_id"], name: "index_accounts_on_user_id", using: :btree
   end
 
-  create_table "attachments", force: :cascade do |t|
-    t.integer  "comment_id", null: false
-    t.string   "file_id"
+  create_table "api_keys", force: :cascade do |t|
+    t.string   "name"
+    t.string   "access_key"
+    t.integer  "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_api_keys_on_project_id", using: :btree
+  end
+
+  create_table "attachments", force: :cascade do |t|
+    t.integer  "comment_id",        null: false
+    t.string   "file_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "file_filename"
+    t.integer  "file_size"
+    t.string   "file_content_type"
     t.index ["comment_id"], name: "index_attachments_on_comment_id", using: :btree
   end
 
@@ -171,4 +183,5 @@ ActiveRecord::Schema.define(version: 20160519103914) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
 
+  add_foreign_key "api_keys", "projects"
 end

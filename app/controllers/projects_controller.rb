@@ -42,7 +42,7 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(
       :id, :_destroy,
-      :name
+      :name, api_keys_attributes: [:name, :access_key]
     )
   end
 
