@@ -10,7 +10,7 @@ class AttachmentPolicy < ApplicationPolicy
     record.comment.ticket.project.members.where(user: user).any?
   end
 
-  def attach_file_to_comment? #rename to create
+  def create?
     return false unless record.is_a?(Attachment)
     (
       record.comment.ticket.project.members.owners.where(user: user).any? ||
@@ -22,7 +22,11 @@ class AttachmentPolicy < ApplicationPolicy
     )
   end
 
-  def remove_file_from_comment? #rename to destroy
+  def destroy?
     create?
+  end
+
+  def download?
+    show?
   end
 end

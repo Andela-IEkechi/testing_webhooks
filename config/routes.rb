@@ -13,13 +13,13 @@ Rails.application.routes.draw do
     # tracker is just a view on a board ? 
     resources :tickets do
       resources :comments do
-        resources :attachments
+        resources :attachments do
+          get :download, on: :member
+        end
       end
     end
   end
 
-  get 'attach_file', to: 'attachments#attach_file_to_comment'
-  get 'remove_file', to: 'attachments#remove_file_from_comment'
 
   # NOTE: considder having a top level asset path for downloads of assets
   # resources :assets

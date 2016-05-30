@@ -85,10 +85,10 @@ RSpec.describe AttachmentsController, type: :controller do
     end
   end
 
-  describe "attach_file_to_comment" do
+  describe "create" do
     before(:each) do
       @params = { project_id: @project.id, ticket_id: @ticket.id, comment_id: @comment.id,
-                  file: File.new(File.join(Rails.root, 'spec', 'support', 'peace_essay.zip')) }
+                  attachment: attributes_for(:attachment) }
     end
 
     (Member::ROLES - ["restricted"]).each do |role|
@@ -99,12 +99,12 @@ RSpec.describe AttachmentsController, type: :controller do
         end
 
         it "returns 200 when authorised" do
-          get :attach_file_to_comment, params: @params
+          post :create, params: @params
           expect(response.status).to eq(200)
         end
 
         it "uploads the attached file" do
-          get :attach_file_to_comment, params: @params
+          post :create, params: @params
           expect(@comment.attachments.count).to eq(1)
         end
       end
@@ -118,7 +118,7 @@ RSpec.describe AttachmentsController, type: :controller do
         end
 
         it "returns 302 when unauthorised" do
-          get :attach_file_to_comment, params: @params
+          post :create, params: @params
           expect(response.status).to eq(302)
         end
       end
@@ -126,10 +126,10 @@ RSpec.describe AttachmentsController, type: :controller do
 
   end
 
-  describe "remove_file_from_comment" do
+  describe "destroy" do
     before(:each) do
-      @params = { project_id: @project.id, ticket_id: @ticket.id, comment_id: @comment.id,
-                  file: File.new(File.join(Rails.root, 'spec', 'support', 'peace_essay.zip')) }
+      @attachment = create(:attachment, comment: @comment)
+      @params = { project_id: @project.id, ticket_id: @ticket.id, comment_id: @comment.id, id: @attachment.id }
     end
 
     (Member::ROLES - ["restricted", "regular"]).each do |role|
@@ -140,15 +140,12 @@ RSpec.describe AttachmentsController, type: :controller do
         end
 
         it "returns 200 when authorised" do
-          get :remove_file_from_comment, params: @params
+          delete :destroy, params: @params
           expect(response.status).to eq(200)
         end
 
-        it "no file is attached to the comment" do
-          get :remove_file_from_comment, params: @params
-          json = JSON.parse(response.body)
-          a = @comment.attachments.find(json['id'])
-          expect(a['file_id']).to be_nil
+        it "removes the attachment from the comment" do
+          expect{ delete :destroy, params: @params }.to change(Attachment, :count).by(-1)
         end
       end
     end
@@ -161,14 +158,14 @@ RSpec.describe AttachmentsController, type: :controller do
         end
 
         it "returns 200 when the user is the commenter" do
-          get :remove_file_from_comment, params: @params
+          delete :destroy, params: @params
           expect(response.status).to eq(200)
         end
 
         it "returns 302 when not the commenter" do
           @comment.commenter = create(:user)
           @comment.save
-          get :remove_file_from_comment, params: @params
+          delete :destroy, params: @params
           expect(response.status).to eq(302)
         end
       end
@@ -182,9 +179,37 @@ RSpec.describe AttachmentsController, type: :controller do
         end
 
         it "returns 302 when unauthorised" do
-          get :remove_file_from_comment, params: @params
+          delete :destroy, params: @params
           expect(response.status).to eq(302)
         end
+      end
+    end
+  end
+
+  describe "download" do
+    before(:each) do
+      @attachment = create(:attachment, comment: @comment)
+      @params = { project_id: @project.id, ticket_id: @ticket.id,
+                  comment_id: @comment.id, id: @attachment.id}
+    end
+
+    Member::ROLES.each do |role|
+      context "as #{role}" do
+        before(:each) do
+          @project.memberships.clear
+          @membership = create(:member, user: user, project: @project, role: role)
+        end
+
+        it "returns 200 when authorised" do
+          get :download, params: @params
+          expect(response.status).to eq(200)
+        end
+
+        # it "downloads file when authorised" do
+        #   get :download, params: @params
+        #   controller.expect(:send_data).return(:success)
+        #   # expect(controller).to receive(:send_data) { controller.render nothing: true }
+        # end
       end
     end
   end
