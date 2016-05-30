@@ -77,9 +77,7 @@ RSpec.describe ProjectsController, type: :controller do
 
   describe "create" do
     before(:each) do
-      #set up a project to show
-      @project = build(:project)
-      @params = {project: @project.attributes}
+      @params = { project: attributes_for(:project) }
     end
 
     Member::ROLES.each do |role|
@@ -91,12 +89,12 @@ RSpec.describe ProjectsController, type: :controller do
 
         it "returns the new project when created" do
           post :create, params: @params 
-          expect(Project.friendly.where(name: @project.name).any?).to eq(true)
+          expect(Project.friendly.where(name: @params[:project][:name]).any?).to eq(true)
         end   
 
         it "creates an associated membership for the user when the new project is created" do
           post :create, params: @params 
-          project = Project.friendly.where(name: @project.name).first
+          project = Project.friendly.where(name: @params[:project][:name]).first
           expect(project.members.where(user: user).any?).to eq(true)
         end    
 
@@ -111,8 +109,18 @@ RSpec.describe ProjectsController, type: :controller do
           post :create, params: @params 
           json = JSON.parse(response.body)
           expect(json).to eq({"errors"=>["Name can't be blank"]})
-        end       
-      end       
+        end
+
+        it "makes an api key if i send the api key attributes" do
+          project = build(:project)
+          api_key_attrs = { name: "GitHub", access_key: "y4PkzM4gq1q3BRyQzg4z" }
+          @params[:project][:project_id] = project.id
+          @params[:project][:api_keys_attributes] = [api_key_attrs]
+          post :create, params: @params
+          expect(project.api_keys.first.name).to eq(api_key_attrs[:name])
+          expect(project.api_keys.first.access_key).to eq(api_key_attrs[:access_key])
+        end
+      end
     end       
   end
 
