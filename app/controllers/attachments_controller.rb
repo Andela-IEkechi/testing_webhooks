@@ -28,6 +28,7 @@ class AttachmentsController < ApplicationController
   def download
     # send the file content down here
     send_data(@attachment.file.read, filename: @attachment.filename)
+    head :ok
   end
 
   private

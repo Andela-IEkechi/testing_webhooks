@@ -205,11 +205,10 @@ RSpec.describe AttachmentsController, type: :controller do
           expect(response.status).to eq(200)
         end
 
-        # it "downloads file when authorised" do
-        #   get :download, params: @params
-        #   controller.expect(:send_data).return(:success)
-        #   # expect(controller).to receive(:send_data) { controller.render nothing: true }
-        # end
+        it "downloads file when authorised" do
+          expect(controller).to receive(:send_data) { controller.head :ok }
+          get :download, params: @params
+        end
       end
     end
   end
