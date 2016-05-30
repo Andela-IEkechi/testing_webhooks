@@ -35,7 +35,7 @@ class AttachmentsController < ApplicationController
 
   def attachment_params
     params.require(:attachment).permit(
-        :id, :_destroy, :file, :comment_id, :remove_file
+        :id, :_destroy, :file, :remove_file
     )
   end
 
