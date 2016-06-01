@@ -43,6 +43,8 @@ class ProjectsController < ApplicationController
     params.require(:project).permit(
       :id, :_destroy,
       :name
+      # review note: add in status attributes to allow creating new statuses as part of a project, and to reorder them.
+      
     )
   end
 
