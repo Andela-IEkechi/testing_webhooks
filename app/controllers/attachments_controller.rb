@@ -35,14 +35,13 @@ class AttachmentsController < ApplicationController
 
   def attachment_params
     params.require(:attachment).permit(
-        :id, :_destroy, :file, :remove_file
+        :id, :_destroy, :file, :remove_file, :comment_id
     )
   end
 
   def load_resource
     @project = Project.friendly.find(params[:project_id])
     @ticket = @project.tickets.find(params[:ticket_id])
-
     if params[:comment_id]
       @comment = @ticket.comments.find(params[:comment_id]) 
       @resource_scope = policy_scope(@comment.attachments)

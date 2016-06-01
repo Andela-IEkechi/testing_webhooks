@@ -289,13 +289,14 @@ RSpec.describe AttachmentsController, type: :controller do
       end
     end
 
-    describe "create", :focus do
+    describe "create" do
       before(:each) do
-        @comment = create(:comment, ticket: @ticket)
-        @params = { project_id: @project.id, ticket_id: @ticket.id, attachment: attributes_for(:attachment, comment_id: @comment.id ) }
+        @comment = create(:comment, commenter: user, ticket: @ticket)
+        @attachment = build(:attachment, comment_id: @comment.id)
+        @params = { project_id: @project.id, ticket_id: @ticket.id, attachment: @attachment.attributes }
       end
 
-      (Member::ROLES).each do |role|
+      (Member::ROLES - ["restricted"]).each do |role|
         context "as #{role}" do
           before(:each) do
             @project.memberships.clear
@@ -321,12 +322,13 @@ RSpec.describe AttachmentsController, type: :controller do
       end
     end
 
-    describe "destroy", :focus do
+    describe "destroy" do
       before(:each) do
         3.times do
           create(:attachment, comment: create(:comment, ticket: @ticket ))
         end
-        @attachment = create(:attachment, comment: create(:comment, ticket: @ticket ))
+        @comment = create(:comment, ticket_id: @ticket.id, commenter: user)
+        @attachment = create(:attachment, comment: create(:comment, commenter: user, ticket: @ticket ))
         @params = { project_id: @project.id, ticket_id: @ticket.id, id: @attachment.id }
       end
 
@@ -361,8 +363,8 @@ RSpec.describe AttachmentsController, type: :controller do
           end
 
           it "returns 302 when not the commenter" do
-            @comment.commenter = create(:user)
-            @comment.save
+            @attachment.comment.commenter = create(:user)
+            @attachment.comment.save
             delete :destroy, params: @params
             expect(response.status).to eq(302)
           end
