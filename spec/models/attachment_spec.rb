@@ -7,8 +7,6 @@ RSpec.describe Attachment, type: :model do
   it { should have_one(:ticket).through(:comment) }
   it { should respond_to(:file) }
   it { should respond_to(:filename) }
-  it { should respond_to(:file_size) }
-  it { should respond_to(:file_content_type) }
 
   it "enables paper trail" do
     is_expected.to be_versioned
