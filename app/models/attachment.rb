@@ -1,5 +1,7 @@
 class Attachment < ApplicationRecord
   belongs_to :comment
+  has_one :ticket, through: :comment
+   
   
   attachment :file
 

@@ -6,6 +6,7 @@ RSpec.describe Ticket, type: :model do
   it { should belong_to(:project) }
   it { should have_many(:comments) }
   it { should have_many(:split_tickets).through(:comments) }
+  it { should have_many(:attachments).through(:comments) }
   it { should belong_to(:parent).class_name("Ticket") }
   it { should have_and_belong_to_many(:boards) }
 
@@ -13,8 +14,9 @@ RSpec.describe Ticket, type: :model do
   it { should respond_to(:assignee) }
   it { should respond_to(:creator) }
   it { should respond_to(:title) }
-  it { should respond_to(:split_tickets) }
 
+  it { should accept_nested_attributes_for(:comments) }
+  
   it { should validate_presence_of(:title) }
 
   it "enables paper trail" do

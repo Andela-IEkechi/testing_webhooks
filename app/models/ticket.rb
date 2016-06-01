@@ -5,6 +5,7 @@ class Ticket < ApplicationRecord
 
   has_many :comments, dependent: :destroy
   has_many :split_tickets, -> { order(id: :asc) }, through: :comments
+  has_many :attachments, -> { order(id: :asc) }, through: :comments
   belongs_to :parent, class_name: "Ticket"
 
   has_and_belongs_to_many :boards
@@ -12,6 +13,8 @@ class Ticket < ApplicationRecord
   delegate :assignee, :status, to: :last_comment, allow_nil: true
 
   validates :title, presence: true
+
+  accepts_nested_attributes_for :comments
 
   # Automatically use the sequential ID in URLs
   def to_param

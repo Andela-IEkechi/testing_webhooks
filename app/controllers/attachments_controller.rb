@@ -42,13 +42,20 @@ class AttachmentsController < ApplicationController
   def load_resource
     @project = Project.friendly.find(params[:project_id])
     @ticket = @project.tickets.find(params[:ticket_id])
-    @comment = @ticket.comments.find(params[:comment_id])
-    @resource_scope = policy_scope(@comment.attachments)
+
+    if params[:comment_id]
+      @comment = @ticket.comments.find(params[:comment_id]) 
+      @resource_scope = policy_scope(@comment.attachments)
+    else
+      @resource_scope = policy_scope(@ticket.attachments)
+    end
+
     case action_name
     when 'download' then
       @attachment = @resource_scope.where(id: params[:id]).first
       authorize @attachment
     end
+
     super
   end
 end
