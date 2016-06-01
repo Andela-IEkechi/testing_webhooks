@@ -14,7 +14,7 @@ RSpec.describe Attachment, type: :model do
 
   describe ".filename" do
     it "returns the file name of an attachment" do
-      expect(subject.filename).to eq(subject.file_filename)
+      expect(subject.filename).to eq(File.basename(subject.file.read))
     end
   end
 end

@@ -6,6 +6,6 @@ class Attachment < ApplicationRecord
   attachment :file
 
   def filename
-    file_filename || File.basename(file.read)
+    File.basename(file.read)
   end
 end
