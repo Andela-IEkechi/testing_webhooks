@@ -5,7 +5,7 @@ describe ApiKeyPolicy do
   let(:user) {create(:user)}
 
   permissions ".scope" do
-    it "only allows tickets from membership projects" do
+    it "only allows api keys from membership projects" do
       5.times {
         proj = create(:project)
         3.times {

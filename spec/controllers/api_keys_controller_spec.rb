@@ -110,7 +110,7 @@ RSpec.describe ApiKeysController, type: :controller do
       context "as #{role}" do
         before(:each) do
           create(role.to_sym, user: user, project: @project)
-          assert Ticket.none?, "no tickets expected"
+          assert ApiKey.none?, "no api_keys expected"
         end
 
         it "returns 200 when authorised" do
