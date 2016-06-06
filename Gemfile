@@ -46,6 +46,8 @@ gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'#there's an open
 gem 'paper_trail'
 #soft-delete
 # gem 'paranoia', "~> 2.0" #does not support rails 5 yet
+# create ordered lists
+gem "acts_as_list"
 
 
 group :development do
