@@ -111,14 +111,6 @@ RSpec.describe ProjectsController, type: :controller do
           json = JSON.parse(response.body)
           expect(json).to eq({"errors"=>["Name can't be blank"]})
         end
-
-        it "makes an api key if i send the api key attributes" do
-          @project.api_keys.build(attributes_for(:api_key))
-          post :create, params: @params
-          expect(@project.api_keys.any?).to eq(true)
-          expect(@project.api_keys.first.name).not_to be_nil
-          expect(@project.api_keys.first.access_key).not_to be_nil
-        end
       end
     end       
   end
