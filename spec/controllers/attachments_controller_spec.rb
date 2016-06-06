@@ -211,7 +211,7 @@ RSpec.describe AttachmentsController, type: :controller do
     end
   end
 
-  describe "for tickets", :focus do
+  describe "for tickets" do
     describe "index" do
       before(:each) do
         3.times do
