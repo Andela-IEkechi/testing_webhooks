@@ -73,7 +73,7 @@ end
 
 group :development, :test do
   gem 'factory_girl_rails'
-  gem 'faker'
+  gem 'faker', github: 'stympy/faker'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 end

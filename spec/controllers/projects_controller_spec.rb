@@ -77,9 +77,8 @@ RSpec.describe ProjectsController, type: :controller do
 
   describe "create" do
     before(:each) do
-      #set up a project to show
       @project = build(:project)
-      @params = {project: @project.attributes}
+      @params = { project: @project.attributes }
     end
 
     Member::ROLES.each do |role|
@@ -111,8 +110,8 @@ RSpec.describe ProjectsController, type: :controller do
           post :create, params: @params 
           json = JSON.parse(response.body)
           expect(json).to eq({"errors"=>["Name can't be blank"]})
-        end       
-      end       
+        end
+      end
     end       
   end
 

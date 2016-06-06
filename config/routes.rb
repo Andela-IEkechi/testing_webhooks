@@ -9,8 +9,9 @@ Rails.application.routes.draw do
   resources :projects do
     resources :members
     resources :statuses
+    resources :api_keys
     resources :boards
-    # tracker is just a view on a board ? 
+    # tracker is just a view on a board ?
     resources :tickets do
       resources :comments do
         resources :attachments do
