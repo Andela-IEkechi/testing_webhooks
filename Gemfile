@@ -37,7 +37,7 @@ gem 'sequenced'
 #use slugs for projects
 gem 'friendly_id'
 #store attachemnts
-gem "refile", require: "refile/rails"
+gem 'refile', require: "refile/rails"
 gem 'refile-postgres'
 # gem "refile-mini_magick" #not rails 5 compatible
 #tagging
@@ -46,6 +46,8 @@ gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'#there's an open
 gem 'paper_trail'
 #soft-delete
 # gem 'paranoia', "~> 2.0" #does not support rails 5 yet
+# create ordered lists
+gem "acts_as_list"
 
 
 group :development do
