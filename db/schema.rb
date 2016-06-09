@@ -49,28 +49,43 @@ ActiveRecord::Schema.define(version: 20160531081847) do
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date     "due_on"
     t.index ["project_id"], name: "index_boards_on_project_id", using: :btree
   end
 
   create_table "boards_tickets", id: false, force: :cascade do |t|
-    t.integer "board_id",  null: false
-    t.integer "ticket_id", null: false
+    t.integer "board_id",              null: false
+    t.integer "ticket_id",             null: false
+    t.integer "position",  default: 0
     t.index ["board_id"], name: "index_boards_tickets_on_board_id", using: :btree
     t.index ["ticket_id"], name: "index_boards_tickets_on_ticket_id", using: :btree
   end
 
   create_table "comments", force: :cascade do |t|
-    t.integer  "ticket_id",    null: false
+    t.integer  "ticket_id",       null: false
     t.integer  "commenter_id"
     t.integer  "status_id"
-    t.integer  "assignee_id"
+    t.integer  "assignee_id_id"
     t.text     "message"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.index ["assignee_id"], name: "index_comments_on_assignee_id", using: :btree
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.hstore   "tracked_changes"
+    t.string   "commit_uuid"
+    t.string   "api_key_name"
+    t.index ["assignee_id_id"], name: "index_comments_on_assignee_id_id", using: :btree
     t.index ["commenter_id"], name: "index_comments_on_commenter_id", using: :btree
     t.index ["status_id"], name: "index_comments_on_status_id", using: :btree
     t.index ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
+  end
+
+  create_table "emails", force: :cascade do |t|
+    t.string   "to"
+    t.string   "from"
+    t.string   "subject"
+    t.text     "body"
+    t.string   "files",      default: [],              array: true
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "members", force: :cascade do |t|

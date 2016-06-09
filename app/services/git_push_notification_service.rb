@@ -34,7 +34,7 @@ class GitPushNotificationService
                 message: commit_message(commit),
                 api_key_name: api_key.name,
                 commenter: commit_user,
-                git_commit_uuid: commit['id'],
+                commit_uuid: commit['id'],
                 user_id: (commit_user.try(:id))
                 #we specifically use the regular created_at timestamp, so that new comments don't precede the normal ticket flow.
                 #users with skewed timestamps can really mess with tickets' chronological flow

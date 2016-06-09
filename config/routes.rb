@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post 'api_integrations/git_hub' => 'api_integrations#git_hub'
+
 
   # NOTE: considder having a top level asset path for downloads of assets
   # resources :assets
