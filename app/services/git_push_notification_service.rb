@@ -7,23 +7,21 @@ class GitPushNotificationService
   def make_into_comment
     if api_key = ApiKey.find_by_access_key(@params["token"])
       @project = api_key.project
-      payload = JSON.parse(@params["payload"]) rescue {}
+      payload = JSON.parse(@params) rescue {}
       Rails.logger.info "GitHub payload: #{payload}"
-      extract_attributes(payload, api_key)
+      extract_attributes(payload, api_key.name)
     end
-    Rails.logger.info "Successfully Posted Comment!"
   end
 
-  def extract_attributes payload, api_key
+  def extract_attributes payload, api_key_name
     payload["commits"].each do |commit|
       commit = commit.with_indifferent_access
 
-      if Comment.find_all_by_git_commit_uuid(commit["id" ]).count == 0
+      if Comment.find_all_by_commit_uuid(commit["id" ]).count == 0
         commit_msg = commit["message"]
-
         commit_msg.scan(/\[#(\d+)([^\]]*)\]/).each do |ticket_ref, others|
           #find the ticket the matches
-          ticket = @project.tickets.find_by_scoped_id(ticket_ref.to_i)
+          ticket = @project.tickets.find_by_sequential_id(ticket_ref.to_i)
           if ticket
             #the committer might be a user we know about, so we try and find them
             commit_user = User.find_by_email(commit['author']['email']) rescue nil
@@ -32,12 +30,10 @@ class GitPushNotificationService
             #set up the attrs we want to persist
             attributes = {
                 message: commit_message(commit),
-                api_key_name: api_key.name,
+                api_key_name: api_key_name,
                 commenter: commit_user,
                 commit_uuid: commit['id'],
                 user_id: (commit_user.try(:id))
-                #we specifically use the regular created_at timestamp, so that new comments don't precede the normal ticket flow.
-                #users with skewed timestamps can really mess with tickets' chronological flow
             }.with_indifferent_access
 
             #we need to append the attributes from this commit, to whatever was on the last comment. So we use reverse_merge
@@ -64,6 +60,7 @@ class GitPushNotificationService
 
   def post_comment ticket, attributes
     ticket.comments.create!(attributes)
+    Rails.logger.info "Successfully Posted Comment!"
   end
 
   def commit_message(commit)
