@@ -4,7 +4,15 @@ class ApiIntegrationsController < ApplicationController
   after_action :verify_authorized
 
   def git_hub
-    GitPushNotificationService.new(params).make_into_comment
+    if verify_git_signature(request)
+      GitPushNotificationService.new(params).make_into_comment
+    end
     render head :no_content
   end
+
+  def verify_git_signature(request)
+    signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV['GIT_HOOK_SECRET_TOKEN'], request.body.read)
+    return halt 500, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE'])
+  end
+
 end

@@ -5,15 +5,12 @@ class GitPushNotificationService
   end
 
   def make_into_comment
-    if api_key = ApiKey.find_by_access_key(@params["token"])
-      @project = api_key.project
-      payload = JSON.parse(@params) rescue {}
-      Rails.logger.info "GitHub payload: #{payload}"
-      extract_attributes(payload, api_key.name)
-    end
+    payload = JSON.parse(@params) rescue {}
+    Rails.logger.info "GitHub payload: #{payload.inspect}"
+    extract_attributes(payload)
   end
 
-  def extract_attributes payload, api_key_name
+  def extract_attributes payload
     payload["commits"].each do |commit|
       commit = commit.with_indifferent_access
 
@@ -21,7 +18,7 @@ class GitPushNotificationService
         commit_msg = commit["message"]
         commit_msg.scan(/\[#(\d+)([^\]]*)\]/).each do |ticket_ref, others|
           #find the ticket the matches
-          ticket = @project.tickets.find_by_sequential_id(ticket_ref.to_i)
+          ticket = Ticket.find_by_sequential_id(ticket_ref.to_i)
           if ticket
             #the committer might be a user we know about, so we try and find them
             commit_user = User.find_by_email(commit['author']['email']) rescue nil
@@ -30,7 +27,7 @@ class GitPushNotificationService
             #set up the attrs we want to persist
             attributes = {
                 message: commit_message(commit),
-                api_key_name: api_key_name,
+                api_key_name: "GitHub",
                 commenter: commit_user,
                 commit_uuid: commit['id'],
                 user_id: (commit_user.try(:id))
@@ -72,7 +69,7 @@ class GitPushNotificationService
     others.scan(/([^\s]+):([^\s]+)/).collect do |key, value|
       case key
         when 'assigned', 'assigned', 'assignee', 'user'
-          attributes['assignee_id'] = (ticket.project.members.by_email(value).first.user_id rescue nil)
+          attributes['assignee_id'] = (ticket.project.members.includes(:user).where(email: value).first.id rescue nil)
         when 'board'
           attributes['board_id'] = (ticket.project.boards.find(value).id rescue nil)
         when 'status'
